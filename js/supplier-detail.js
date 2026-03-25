@@ -1,5 +1,5 @@
 // ============================================
-// SUPPLIER DETAIL PAGE - COMPLETE VERSION WITH RATE SUPPLIER
+// SUPPLIER DETAIL PAGE - COMPLETE WITH SEO & ROUTING
 // ============================================
 
 console.log('🚀 Supplier detail page loading...');
@@ -29,14 +29,66 @@ const SupplierDetail = {
     shopUrl: null,
     
     // ============================================
-    // INITIALIZATION
+    // INITIALIZATION - WITH ROUTING SUPPORT
     // ============================================
     async init() {
-        // Get supplier ID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        this.supplierId = urlParams.get('id');
+        console.log('Initializing supplier detail...');
         
+        // Get parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        let supplierId = urlParams.get('id');
+        const supplierSlug = urlParams.get('slug');
+        
+        // Try to get supplier by ID first
+        if (supplierId) {
+            console.log('Found supplier ID in URL:', supplierId);
+            this.supplierId = supplierId;
+        }
+        
+        // If no ID but slug exists, find by slug
+        if (!this.supplierId && supplierSlug) {
+            console.log('Looking up supplier by slug from URL:', supplierSlug);
+            const { data, error } = await sb
+                .from('suppliers')
+                .select('id')
+                .eq('shop_slug', supplierSlug)
+                .maybeSingle();
+            
+            if (!error && data) {
+                this.supplierId = data.id;
+                console.log('Found supplier ID from slug:', this.supplierId);
+            }
+        }
+        
+        // If still no ID, check sessionStorage (from 404.html redirect)
         if (!this.supplierId) {
+            const storedSlug = sessionStorage.getItem('supplier_slug');
+            if (storedSlug) {
+                console.log('Found stored slug in sessionStorage:', storedSlug);
+                const { data, error } = await sb
+                    .from('suppliers')
+                    .select('id, shop_slug')
+                    .eq('shop_slug', storedSlug)
+                    .maybeSingle();
+                
+                if (!error && data) {
+                    this.supplierId = data.id;
+                    console.log('Found supplier from stored slug:', this.supplierId);
+                    // Clean up sessionStorage
+                    sessionStorage.removeItem('supplier_slug');
+                    
+                    // Update URL to clean format (optional)
+                    if (data.shop_slug) {
+                        const newUrl = `/${data.shop_slug}`;
+                        window.history.replaceState({}, '', newUrl);
+                    }
+                }
+            }
+        }
+        
+        // Check if we have a supplier ID
+        if (!this.supplierId) {
+            console.error('No supplier ID or slug found');
             this.showError();
             return;
         }
@@ -56,6 +108,7 @@ const SupplierDetail = {
             ]);
             
             this.renderSupplierHeader();
+            this.updateSEOMetaTags(); // SEO optimization
             this.generateAndRenderShopUrl();
             this.renderBanner();
             this.renderStats();
@@ -85,6 +138,203 @@ const SupplierDetail = {
             console.error('❌ Error initializing:', error);
             this.showError();
         }
+    },
+    
+    // ============================================
+    // SEO OPTIMIZATION FUNCTIONS
+    // ============================================
+    updateSEOMetaTags() {
+        if (!this.supplier) return;
+        
+        const name = this.supplier.business_name;
+        const location = this.supplier.profiles?.location || this.supplier.warehouse_district || 'Uganda';
+        const rating = this.supplier.avg_rating || 0;
+        const reviewCount = this.supplier.review_count || 0;
+        const isVerified = this.supplier.verification_status === 'verified';
+        const slug = this.supplier.shop_slug || this.generateShopUrl().replace('/', '');
+        const fullUrl = `https://schistonline.github.io/${slug}`;
+        
+        // Update page title
+        const title = `${name} - ${isVerified ? 'Verified ' : ''}Supplier | Schist.online Uganda B2B Marketplace`;
+        document.title = title;
+        
+        // Update meta description
+        const description = `Find quality products from ${name}, a ${isVerified ? 'verified' : 'trusted'} supplier in ${location}. ${rating > 0 ? `${rating.toFixed(1)}★ (${reviewCount} reviews)` : 'Shop wholesale prices'} on Schist.online Uganda.`;
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (!metaDesc) {
+            metaDesc = document.createElement('meta');
+            metaDesc.name = 'description';
+            document.head.appendChild(metaDesc);
+        }
+        metaDesc.content = description;
+        
+        // Update meta keywords
+        const keywords = `${name}, supplier, wholesale, ${location}, B2B, Uganda, business, manufacturer, distributor, products, ${this.categoryDisplays.map(c => c.category_name).join(', ')}`;
+        let metaKeywords = document.querySelector('meta[name="keywords"]');
+        if (!metaKeywords) {
+            metaKeywords = document.createElement('meta');
+            metaKeywords.name = 'keywords';
+            document.head.appendChild(metaKeywords);
+        }
+        metaKeywords.content = keywords;
+        
+        // Open Graph / Facebook meta tags
+        let ogTitle = document.querySelector('meta[property="og:title"]');
+        if (!ogTitle) {
+            ogTitle = document.createElement('meta');
+            ogTitle.setAttribute('property', 'og:title');
+            document.head.appendChild(ogTitle);
+        }
+        ogTitle.content = `${name} | Schist.online`;
+        
+        let ogDesc = document.querySelector('meta[property="og:description"]');
+        if (!ogDesc) {
+            ogDesc = document.createElement('meta');
+            ogDesc.setAttribute('property', 'og:description');
+            document.head.appendChild(ogDesc);
+        }
+        ogDesc.content = description;
+        
+        let ogUrl = document.querySelector('meta[property="og:url"]');
+        if (!ogUrl) {
+            ogUrl = document.createElement('meta');
+            ogUrl.setAttribute('property', 'og:url');
+            document.head.appendChild(ogUrl);
+        }
+        ogUrl.content = fullUrl;
+        
+        let ogImage = document.querySelector('meta[property="og:image"]');
+        if (!ogImage) {
+            ogImage = document.createElement('meta');
+            ogImage.setAttribute('property', 'og:image');
+            document.head.appendChild(ogImage);
+        }
+        ogImage.content = this.supplier.profiles?.avatar_url || 'https://schistonline.github.io/images/default-supplier-og.jpg';
+        
+        let ogType = document.querySelector('meta[property="og:type"]');
+        if (!ogType) {
+            ogType = document.createElement('meta');
+            ogType.setAttribute('property', 'og:type');
+            document.head.appendChild(ogType);
+        }
+        ogType.content = 'website';
+        
+        // Twitter Card meta tags
+        let twitterCard = document.querySelector('meta[name="twitter:card"]');
+        if (!twitterCard) {
+            twitterCard = document.createElement('meta');
+            twitterCard.name = 'twitter:card';
+            document.head.appendChild(twitterCard);
+        }
+        twitterCard.content = 'summary_large_image';
+        
+        let twitterTitle = document.querySelector('meta[name="twitter:title"]');
+        if (!twitterTitle) {
+            twitterTitle = document.createElement('meta');
+            twitterTitle.name = 'twitter:title';
+            document.head.appendChild(twitterTitle);
+        }
+        twitterTitle.content = `${name} | Schist.online`;
+        
+        let twitterDesc = document.querySelector('meta[name="twitter:description"]');
+        if (!twitterDesc) {
+            twitterDesc = document.createElement('meta');
+            twitterDesc.name = 'twitter:description';
+            document.head.appendChild(twitterDesc);
+        }
+        twitterDesc.content = description;
+        
+        let twitterImage = document.querySelector('meta[name="twitter:image"]');
+        if (!twitterImage) {
+            twitterImage = document.createElement('meta');
+            twitterImage.name = 'twitter:image';
+            document.head.appendChild(twitterImage);
+        }
+        twitterImage.content = this.supplier.profiles?.avatar_url || 'https://schistonline.github.io/images/default-supplier-og.jpg';
+        
+        // Canonical URL
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+            canonical = document.createElement('link');
+            canonical.rel = 'canonical';
+            document.head.appendChild(canonical);
+        }
+        canonical.href = fullUrl;
+        
+        // Structured Data (JSON-LD) for rich snippets
+        this.updateStructuredData(name, description, fullUrl, rating, reviewCount, location);
+        
+        console.log('✅ SEO meta tags updated for:', name);
+    },
+    
+    updateStructuredData(name, description, url, rating, reviewCount, location) {
+        const structuredData = {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": name,
+            "description": description,
+            "url": url,
+            "telephone": this.supplier.business_phone || "",
+            "email": this.supplier.business_email || "",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": location,
+                "addressCountry": "UG"
+            },
+            "priceRange": "$$",
+            "areaServed": "Uganda",
+            "image": this.supplier.profiles?.avatar_url || "https://schistonline.github.io/images/default-supplier-og.jpg",
+            "brand": {
+                "@type": "Brand",
+                "name": name
+            }
+        };
+        
+        // Add rating if available
+        if (rating > 0) {
+            structuredData.aggregateRating = {
+                "@type": "AggregateRating",
+                "ratingValue": rating,
+                "reviewCount": reviewCount
+            };
+        }
+        
+        // Add opening hours if available
+        if (this.supplier.business_hours) {
+            structuredData.openingHours = this.supplier.business_hours;
+        }
+        
+        // Add products as offers
+        if (this.allProducts && this.allProducts.length > 0) {
+            structuredData.makesOffer = this.allProducts.slice(0, 5).map(product => ({
+                "@type": "Offer",
+                "itemOffered": {
+                    "@type": "Product",
+                    "name": product.title,
+                    "description": product.title,
+                    "price": product.wholesale_price || product.price,
+                    "priceCurrency": "UGX"
+                },
+                "availability": "https://schema.org/InStock"
+            }));
+        }
+        
+        // Remove undefined fields
+        Object.keys(structuredData).forEach(key => {
+            if (structuredData[key] === undefined || structuredData[key] === "") {
+                delete structuredData[key];
+            }
+        });
+        
+        // Update or create JSON-LD script tag
+        let scriptTag = document.getElementById('structuredData');
+        if (!scriptTag) {
+            scriptTag = document.createElement('script');
+            scriptTag.id = 'structuredData';
+            scriptTag.type = 'application/ld+json';
+            document.head.appendChild(scriptTag);
+        }
+        scriptTag.innerHTML = JSON.stringify(structuredData, null, 2);
     },
     
     // ============================================
@@ -283,7 +533,7 @@ const SupplierDetail = {
     getFullShopUrl() {
         const path = this.generateShopUrl();
         if (!path) return null;
-        return window.location.origin + path;
+        return `https://schistonline.github.io${path}`;
     },
     
     generateAndRenderShopUrl() {
@@ -860,7 +1110,7 @@ const SupplierDetail = {
     },
     
     // ============================================
-    // EVENT LISTENERS (UPDATED WITH RATE SUPPLIER)
+    // EVENT LISTENERS
     // ============================================
     setupEventListeners() {
         // Search toggle
@@ -913,9 +1163,7 @@ const SupplierDetail = {
             });
         }
         
-        // ============================================
-        // RATE SUPPLIER BUTTON - FIXED AND WORKING
-        // ============================================
+        // Rate Supplier button
         const rateSupplierBtn = document.getElementById('rateSupplierBtn');
         if (rateSupplierBtn) {
             rateSupplierBtn.addEventListener('click', () => {
@@ -927,8 +1175,6 @@ const SupplierDetail = {
                     this.showToast('Supplier not found', 'error');
                 }
             });
-        } else {
-            console.warn('⚠️ Rate supplier button not found in DOM');
         }
         
         // Send Inquiry button
