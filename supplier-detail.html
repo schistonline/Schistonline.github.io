@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Supplier Details - Schist.online</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-detail.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">Schist<span>.online</span></span>
+            </a>
+            
+            <div class="header-right" id="headerRight">
+                <button class="search-toggle" id="searchToggle">
+                    <i class="fas fa-search"></i>
+                </button>
+                <!-- Share Shop button will be added by JS -->
+            </div>
+        </div>
+        
+        <!-- Search Bar (Hidden by default) -->
+        <div class="search-bar" id="searchBar">
+            <input type="text" placeholder="Search products..." id="searchInput">
+            <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="spinner"></div>
+            <p>Loading supplier details...</p>
+        </div>
+
+        <!-- Supplier Content (Hidden until loaded) -->
+        <div class="supplier-content" id="supplierContent" style="display: none;">
+            <!-- Supplier Header Card -->
+            <div class="supplier-header-card">
+                <div class="supplier-header-compact">
+                    <div class="supplier-logo-compact" id="supplierAvatar">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="supplier-info-compact">
+                        <div class="supplier-name-compact" id="supplierName"></div>
+                        <div class="supplier-stats-compact" id="supplierStats"></div>
+                        <div class="supplier-badges-compact" id="supplierBadges"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shop URL Banner (NEW) -->
+            <div class="shop-url-banner" id="shopUrlBanner" style="display: none;">
+                <div class="shop-url-content">
+                    <i class="fas fa-link"></i>
+                    <div class="shop-url-info">
+                        <span class="shop-url-label">Your Shop URL:</span>
+                        <code class="shop-url-code" id="shopUrlCode"></code>
+                    </div>
+                    <button class="copy-shop-url-btn" id="copyShopUrlBtn">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="tab-nav">
+                <button class="tab-link active" data-tab="home">Home</button>
+                <button class="tab-link" data-tab="products">Products</button>
+                <button class="tab-link" data-tab="profile">Profile</button>
+                <button class="tab-link" data-tab="tips">Tips</button>
+            </div>
+
+            <!-- Tab: Home -->
+            <div class="tab-content active" id="tab-home">
+                <!-- Banner Section -->
+                <div class="banner-section" id="bannerSection" style="display: none;">
+                    <div class="banner-image" id="bannerImage">
+                        <img src="" alt="Supplier Banner">
+                    </div>
+                    <div class="banner-overlay">
+                        <h2 id="bannerTitle"></h2>
+                        <p id="bannerSubtitle"></p>
+                        <a href="#" class="banner-btn" id="bannerButton"></a>
+                    </div>
+                </div>
+
+                <!-- Stats Cards (from database) -->
+                <div class="stats-cards" id="statsCards"></div>
+
+                <!-- Product Categories (from database) -->
+                <div class="product-categories" id="productCategories"></div>
+
+                <!-- Tagline (from database) -->
+                <div class="tagline" id="tagline" style="display: none;"></div>
+
+                <!-- Hot Selling Products Section -->
+                <div class="hot-selling-section" id="hotSellingSection">
+                    <div class="section-header">
+                        <span class="hot-label" id="hotLabel">HOT SELLING PRODUCT</span>
+                        <span class="welcome-label" id="welcomeLabel">WELCOME TO OUR COUNTRY</span>
+                    </div>
+                    
+                    <!-- Products Grid - 2 columns -->
+                    <div class="products-grid" id="hotProductsGrid"></div>
+                </div>
+
+                <!-- New Arrivals Section -->
+                <div class="new-arrivals-section" id="newArrivalsSection">
+                    <h2 class="section-title">New Arrivals</h2>
+                    <div class="products-grid" id="newArrivalsGrid"></div>
+                </div>
+            </div>
+
+            <!-- Tab: Products -->
+            <div class="tab-content" id="tab-products">
+                <div class="products-header">
+                    <h2>All Products</h2>
+                    <div class="products-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="productSearchInput" placeholder="Search products...">
+                    </div>
+                </div>
+                <div class="products-grid" id="allProductsGrid"></div>
+            </div>
+
+            <!-- Tab: Profile -->
+            <div class="tab-content" id="tab-profile">
+                <!-- About Section -->
+                <div class="profile-section">
+                    <h3><i class="fas fa-info-circle"></i> About Us</h3>
+                    <div class="profile-content" id="aboutContent"></div>
+                </div>
+
+                <!-- Mission & Vision -->
+                <div class="profile-row">
+                    <div class="profile-section half">
+                        <h3><i class="fas fa-bullseye"></i> Mission</h3>
+                        <div class="profile-content" id="missionContent"></div>
+                    </div>
+                    <div class="profile-section half">
+                        <h3><i class="fas fa-eye"></i> Vision</h3>
+                        <div class="profile-content" id="visionContent"></div>
+                    </div>
+                </div>
+
+                <!-- Core Values -->
+                <div class="profile-section">
+                    <h3><i class="fas fa-heart"></i> Core Values</h3>
+                    <div class="core-values" id="coreValues"></div>
+                </div>
+
+                <!-- Facilities -->
+                <div class="profile-section">
+                    <h3><i class="fas fa-building"></i> Facilities & Capacity</h3>
+                    <div class="facilities-grid" id="facilities"></div>
+                </div>
+
+                <!-- Certifications -->
+                <div class="profile-section">
+                    <h3><i class="fas fa-certificate"></i> Certifications</h3>
+                    <div class="certifications-grid" id="certifications"></div>
+                </div>
+
+                <!-- Export Markets -->
+                <div class="profile-section">
+                    <h3><i class="fas fa-globe"></i> Export Markets</h3>
+                    <div class="markets-list" id="exportMarkets"></div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="profile-section">
+                    <h3><i class="fas fa-history"></i> Company Timeline</h3>
+                    <div class="timeline" id="timeline"></div>
+                </div>
+            </div>
+
+            <!-- Tab: Tips -->
+            <div class="tab-content" id="tab-tips">
+                <div class="tips-header">
+                    <h2>Expert Tips & Articles</h2>
+                </div>
+                <div class="tips-grid" id="tipsGrid"></div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Supplier Not Found</h3>
+            <p>The supplier you're looking for doesn't exist</p>
+            <a href="suppliers.html" class="back-btn-large">Back to Suppliers</a>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar with Rate Supplier and Send Inquiry -->
+   <!-- Bottom Navigation Bar with Rate Supplier and Send Inquiry -->
+<nav class="bottom-nav">
+    <button class="nav-item" id="rateSupplierBtn">
+        <i class="fas fa-star"></i>
+        <span>Rate Supplier</span>
+    </button>
+    <button class="nav-item" id="sendInquiryBtn">
+        <i class="fas fa-file-invoice"></i>
+        <span>Send Inquiry</span>
+    </button>
+    <button class="nav-item" id="shareShopBottomBtn">
+        <i class="fas fa-share-alt"></i>
+        <span>Share Shop</span>
+    </button>
+</nav>
+
+    <!-- Inquiry Modal (WhatsApp/Email options) -->
+    <div class="modal" id="inquiryModal">
+        <div class="modal-overlay" onclick="closeInquiryModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-paper-plane"></i>
+                    Send Inquiry
+                </h3>
+                <button class="modal-close" onclick="closeInquiryModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Product Summary (if from product context) -->
+                <div class="product-summary-card" id="modalProductSummary" style="display: none;">
+                    <!-- Populated by JS -->
+                </div>
+
+                <p class="modal-description">Choose how you'd like to contact this supplier:</p>
+
+                <!-- WhatsApp Option -->
+                <div class="contact-option" id="modalWhatsAppOption">
+                    <div class="option-header">
+                        <div class="option-icon whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="option-title">
+                            <h4>WhatsApp</h4>
+                            <p>Instant messaging via WhatsApp</p>
+                        </div>
+                    </div>
+                    
+                    <div class="whatsapp-numbers" id="modalWhatsAppNumbers">
+                        <!-- Populated by JS -->
+                    </div>
+                    
+                    <button class="contact-action-btn whatsapp-btn" id="modalSendWhatsAppBtn">
+                        <i class="fab fa-whatsapp"></i>
+                        Send via WhatsApp
+                    </button>
+                </div>
+
+                <!-- Email Option -->
+                <div class="contact-option" id="modalEmailOption">
+                    <div class="option-header">
+                        <div class="option-icon email">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="option-title">
+                            <h4>Email</h4>
+                            <p>Send a detailed inquiry via email</p>
+                        </div>
+                    </div>
+                    
+                    <div class="email-details">
+                        <div class="email-address" id="modalSupplierEmail"></div>
+                        <p class="email-note">Response within 24 hours</p>
+                    </div>
+                    
+                    <a href="#" class="contact-action-btn email-btn" id="modalSendEmailBtn" target="_blank">
+                        <i class="fas fa-envelope"></i>
+                        Send Email
+                    </a>
+                </div>
+
+                <!-- Message Form (for in-app message) -->
+                <div class="contact-option">
+                    <div class="option-header">
+                        <div class="option-icon message">
+                            <i class="fas fa-comment-dots"></i>
+                        </div>
+                        <div class="option-title">
+                            <h4>In-App Message</h4>
+                            <p>Send a message within Schist.online</p>
+                        </div>
+                    </div>
+                    
+                    <div class="message-form">
+                        <textarea class="message-input" id="inquiryMessage" placeholder="Type your message here..."></textarea>
+                        <div class="message-preview" id="inquiryPreview">
+                            <div class="preview-item">
+                                <span class="preview-label">Product:</span>
+                                <span class="preview-value" id="previewProduct">-</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">Quantity:</span>
+                                <span class="preview-value" id="previewQuantity">1</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="contact-action-btn message-btn" id="modalSendMessageBtn">
+                        <i class="fas fa-comment-dots"></i>
+                        Send Message
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+
+    <!-- Share Shop Modal -->
+    <div class="modal" id="shareShopModal">
+        <div class="modal-overlay" onclick="closeShareShopModal()"></div>
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-store"></i>
+                    Share Shop
+                </h3>
+                <button class="modal-close" onclick="closeShareShopModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="share-shop-info">
+                    <p class="share-description">Share this link with customers:</p>
+                    <div class="shop-url-container">
+                        <code class="shop-url-display" id="shareShopUrl"></code>
+                        <button class="copy-url-btn" id="copyShareUrlBtn">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="share-options-grid">
+                    <button class="share-option whatsapp" id="shareWhatsappBtn">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </button>
+                    <button class="share-option facebook" id="shareFacebookBtn">
+                        <i class="fab fa-facebook-f"></i>
+                        <span>Facebook</span>
+                    </button>
+                    <button class="share-option twitter" id="shareTwitterBtn">
+                        <i class="fab fa-twitter"></i>
+                        <span>Twitter</span>
+                    </button>
+                    <button class="share-option email" id="shareEmailBtn">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professional B2B Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Company Info -->
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <div class="logo-cube small">
+                            <div class="cube">
+                                <div class="face front"></div>
+                                <div class="face right"></div>
+                                <div class="face top"></div>
+                            </div>
+                        </div>
+                        <span class="footer-logo-text">Schist<span>.online</span></span>
+                    </div>
+                    <p class="footer-about">Uganda's premier B2B marketplace connecting verified suppliers with serious buyers. Trusted by 5,000+ businesses.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-col">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="how-it-works.html"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                        <li><a href="pricing.html"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+                        <li><a href="become-supplier.html"><i class="fas fa-chevron-right"></i> Become a Supplier</a></li>
+                        <li><a href="help.html"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                    </ul>
+                </div>
+
+                <!-- For Buyers -->
+                <div class="footer-col">
+                    <h4 class="footer-title">For Buyers</h4>
+                    <ul class="footer-links">
+                        <li><a href="how-to-buy.html"><i class="fas fa-chevron-right"></i> How to Buy</a></li>
+                        <li><a href="request-quote.html"><i class="fas fa-chevron-right"></i> Request for Quote</a></li>
+                        <li><a href="supplier-verification.html"><i class="fas fa-chevron-right"></i> Supplier Verification</a></li>
+                        <li><a href="buyer-protection.html"><i class="fas fa-chevron-right"></i> Buyer Protection</a></li>
+                        <li><a href="trade-assurance.html"><i class="fas fa-chevron-right"></i> Trade Assurance</a></li>
+                    </ul>
+                </div>
+
+                <!-- For Suppliers -->
+                <div class="footer-col">
+                    <h4 class="footer-title">For Suppliers</h4>
+                    <ul class="footer-links">
+                        <li><a href="sell-on-schist.html"><i class="fas fa-chevron-right"></i> Sell on Schist</a></li>
+                        <li><a href="supplier-success.html"><i class="fas fa-chevron-right"></i> Supplier Success</a></li>
+                        <li><a href="advertise.html"><i class="fas fa-chevron-right"></i> Advertising</a></li>
+                        <li><a href="logistics-partner.html"><i class="fas fa-chevron-right"></i> Logistics Partner</a></li>
+                        <li><a href="supplier-standards.html"><i class="fas fa-chevron-right"></i> Supplier Standards</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="footer-col">
+                    <h4 class="footer-title">Contact Us</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
+                        <li><i class="fas fa-phone"></i> +256 700 123456</li>
+                        <li><i class="fas fa-envelope"></i> info@schist.online.ug</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 6:00 PM</li>
+                    </ul>
+                    <div class="footer-badge">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=ISO" alt="ISO Certified">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=SSL" alt="SSL Secure">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2026 Schist.online. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+                    <div class="footer-bottom-links">
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="disclaimer.html">Disclaimer</a>
+                        <a href="sitemap.html">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="meta-credit">
+            <span>◆</span> Schist.online
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supplier-detail.js"></script>
+</body>
+</html>
