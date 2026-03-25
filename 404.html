@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schist.online - Supplier Shop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #6B21E5 0%, #9B4DFF 100%);
+        }
+        
+        .redirect-container {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-width: 450px;
+            margin: 20px;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #6B21E5;
+            border-right: 4px solid #9B4DFF;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .supplier-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6B21E5;
+            margin: 15px 0 8px;
+            word-break: break-word;
+        }
+        
+        .supplier-name i {
+            margin-right: 8px;
+            color: #9B4DFF;
+        }
+        
+        .loading-text {
+            color: #6B7280;
+            font-size: 14px;
+            margin-top: 12px;
+        }
+        
+        .supplier-info {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #9CA3AF;
+            background: #F9FAFB;
+            padding: 8px 12px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        
+        .error {
+            color: #EF4444;
+        }
+        
+        .error i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .error h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        
+        .error p {
+            color: #6B7280;
+            margin-bottom: 24px;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: #6B21E5;
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(107, 33, 229, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6B7280;
+        }
+        
+        .btn-secondary:hover {
+            background: #4B5563;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #E5E7EB;
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #6B21E5, #9B4DFF);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="redirect-container" id="redirectContainer">
+        <div class="spinner" id="spinner"></div>
+        <div class="loading-text" id="loadingText">Loading supplier shop...</div>
+        <div id="supplierInfo" class="supplier-info"></div>
+        <div class="progress-bar" id="progressBar" style="display: none;">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // DOM Elements
+        const container = document.getElementById('redirectContainer');
+        const spinner = document.getElementById('spinner');
+        const loadingText = document.getElementById('loadingText');
+        const supplierInfoEl = document.getElementById('supplierInfo');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        
+        // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
+        function updateProgress(percent, message) {
+            if (progressFill && progressBar) {
+                progressBar.style.display = 'block';
+                progressFill.style.width = `${percent}%`;
+            }
+            if (message && loadingText) {
+                loadingText.textContent = message;
+            }
+        }
+        
+        function showError(message) {
+            if (container) {
+                container.innerHTML = `
+                    <div class="error">
+                        <i class="fas fa-store-slash"></i>
+                        <h3>${message}</h3>
+                        <p>The supplier shop you're looking for doesn't exist on Schist.online</p>
+                        <div class="btn-group">
+                            <a href="suppliers.html" class="btn"><i class="fas fa-search"></i> Browse Suppliers</a>
+                            <a href="index.html" class="btn btn-secondary"><i class="fas fa-home"></i> Home</a>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function showSuccess(supplierName) {
+            if (container && supplierName) {
+                // Add supplier name to display
+                const nameElement = document.createElement('div');
+                nameElement.className = 'supplier-name';
+                nameElement.innerHTML = `<i class="fas fa-store"></i> ${escapeHtml(supplierName)}`;
+                container.insertBefore(nameElement, container.children[2]);
+            }
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // ============================================
+        // MAIN LOGIC - GET SLUG FROM URL
+        // ============================================
+        async function loadSupplier() {
+            // Get the path from URL
+            let path = window.location.pathname;
+            
+            // Remove leading slash and any trailing slash
+            let slug = path.replace(/^\/|\/$/g, '');
+            
+            // Also check for query parameter (fallback)
+            const urlParams = new URLSearchParams(window.location.search);
+            const querySlug = urlParams.get('slug');
+            
+            if (querySlug) {
+                slug = querySlug;
+            }
+            
+            // If it's the root or index.html or 404.html, go to homepage
+            if (!slug || slug === '' || slug === 'index.html' || slug === '404.html') {
+                console.log('No slug found, redirecting to homepage');
+                window.location.href = '/index.html';
+                return;
+            }
+            
+            console.log('🔍 Looking for supplier with slug:', slug);
+            
+            // Update display
+            if (supplierInfoEl) {
+                supplierInfoEl.innerHTML = `<i class="fas fa-link"></i> Looking for: ${escapeHtml(slug)}`;
+            }
+            
+            updateProgress(20, 'Checking supplier database...');
+            
+            try {
+                // First, try exact match on shop_slug
+                updateProgress(40, 'Searching for supplier...');
+                
+                let { data: supplier, error } = await sb
+                    .from('suppliers')
+                    .select('id, business_name, shop_slug, verification_status, avg_rating, review_count')
+                    .eq('shop_slug', slug)
+                    .maybeSingle();
+                
+                // If not found, try fuzzy search by business name
+                if (!supplier && !error) {
+                    updateProgress(60, 'No exact match found, trying similar names...');
+                    
+                    // Convert slug back to searchable format
+                    const searchName = slug.replace(/-/g, ' ');
+                    console.log('Trying fuzzy search with:', searchName);
+                    
+                    const { data: fuzzyMatch, error: fuzzyError } = await sb
+                        .from('suppliers')
+                        .select('id, business_name, shop_slug, verification_status, avg_rating, review_count')
+                        .ilike('business_name', `%${searchName}%`)
+                        .limit(1)
+                        .maybeSingle();
+                    
+                    if (!fuzzyError && fuzzyMatch) {
+                        supplier = fuzzyMatch;
+                        console.log('Found fuzzy match:', supplier.business_name);
+                        
+                        // Update info to show we found a similar supplier
+                        if (supplierInfoEl) {
+                            supplierInfoEl.innerHTML = `<i class="fas fa-check-circle"></i> Found: ${escapeHtml(supplier.business_name)}`;
+                        }
+                    }
+                }
+                
+                if (error || !supplier) {
+                    console.log('Supplier not found for slug:', slug);
+                    showError(`Supplier "${slug}" not found`);
+                    return;
+                }
+                
+                console.log('✅ Found supplier:', supplier.business_name);
+                updateProgress(80, 'Redirecting to supplier shop...');
+                
+                // Show supplier name
+                showSuccess(supplier.business_name);
+                
+                if (supplierInfoEl) {
+                    const verifiedIcon = supplier.verification_status === 'verified' ? 
+                        '<i class="fas fa-check-circle" style="color: #10B981;"></i>' : '';
+                    supplierInfoEl.innerHTML = `${verifiedIcon} Verified Supplier • ${supplier.avg_rating ? supplier.avg_rating.toFixed(1) + '★' : 'New Supplier'}`;
+                }
+                
+                // Store the slug in sessionStorage for the supplier detail page to read
+                sessionStorage.setItem('supplier_slug', slug);
+                sessionStorage.setItem('supplier_name', supplier.business_name);
+                
+                updateProgress(100, 'Loading supplier shop...');
+                
+                // Add a small delay to show the progress completion
+                setTimeout(() => {
+                    // Redirect to supplier detail page
+                    window.location.href = `supplier-detail.html?id=${supplier.id}`;
+                }, 800);
+                
+            } catch (error) {
+                console.error('Error loading supplier:', error);
+                showError('Error loading supplier. Please try again.');
+            }
+        }
+        
+        // ============================================
+        // ADDITIONAL: Handle direct links with ID parameter
+        // ============================================
+        function handleDirectId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const supplierId = urlParams.get('id');
+            
+            if (supplierId) {
+                console.log('Direct ID found, redirecting to supplier-detail');
+                window.location.href = `supplier-detail.html?id=${supplierId}`;
+                return true;
+            }
+            return false;
+        }
+        
+        // ============================================
+        // START THE PROCESS
+        // ============================================
+        // Check if it's a direct ID link first
+        if (!handleDirectId()) {
+            // Otherwise, load by slug
+            loadSupplier();
+        }
+        
+        // Optional: Add a timeout to prevent infinite loading
+        setTimeout(() => {
+            if (document.querySelector('.spinner')) {
+                console.warn('Loading timeout, redirecting to homepage');
+                window.location.href = '/index.html';
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
