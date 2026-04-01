@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Management - SourceX Admin</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Admin CSS -->
+    <link rel="stylesheet" href="style/admin-filters.css">
+    
+    <style>
+        /* Admin Filters Specific Styles */
+        .filters-container {
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .filters-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .add-filter-btn {
+            padding: 12px 24px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .add-filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .filter-category-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        
+        .category-tab {
+            padding: 8px 20px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 30px;
+            font-size: 14px;
+            color: var(--gray-700);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        
+        .category-tab:hover {
+            border-color: var(--primary);
+        }
+        
+        .category-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .filter-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s;
+        }
+        
+        .filter-card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+        
+        .filter-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .filter-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .filter-info {
+            flex: 1;
+        }
+        
+        .filter-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+        
+        .filter-category {
+            font-size: 12px;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .filter-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .filter-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            border: none;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .filter-action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .filter-details {
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .detail-label {
+            color: var(--gray-500);
+        }
+        
+        .detail-value {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .filter-options-list {
+            margin-top: 12px;
+            background: var(--gray-100);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .option-item:last-child {
+            border-bottom: none;
+        }
+        
+        .option-value {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+        
+        .badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge.carousel {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .badge.sidebar {
+            background: #E7F5E8;
+            color: var(--secondary);
+        }
+        
+        .badge.modal {
+            background: #FFF3E0;
+            color: var(--accent);
+        }
+        
+        .status-toggle {
+            width: 40px;
+            height: 20px;
+            background: var(--gray-300);
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .status-toggle.active {
+            background: var(--secondary);
+        }
+        
+        .status-toggle::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.2s;
+        }
+        
+        .status-toggle.active::after {
+            left: 22px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--white);
+            border-radius: var(--radius);
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state i {
+            font-size: 64px;
+            color: var(--gray-300);
+            margin-bottom: 16px;
+        }
+        
+        .empty-state h3 {
+            font-size: 20px;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        
+        .empty-state p {
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+        
+        /* Modal Styles */
+        .modal-lg {
+            max-width: 600px;
+        }
+        
+        .form-section {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .form-section h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--dark);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .toggle-label {
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+        
+        .options-container {
+            background: var(--gray-100);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 12px;
+        }
+        
+        .option-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .option-row input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+        }
+        
+        .option-row .color-input {
+            width: 40px;
+            height: 40px;
+            padding: 2px;
+        }
+        
+        .remove-option {
+            color: var(--danger);
+            cursor: pointer;
+        }
+        
+        .add-option-btn {
+            padding: 8px 16px;
+            background: var(--white);
+            border: 1px dashed var(--primary);
+            color: var(--primary);
+            border-radius: 30px;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="header-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">Source<span>X</span></span>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <div class="admin-profile" id="adminProfile">
+                <span class="admin-name" id="adminName">Admin User</span>
+                <div class="admin-avatar" id="adminAvatar">
+                    <span id="adminInitials">AU</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <nav class="sidebar-nav">
+            <a href="admin-dashboard.html" class="nav-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="admin-filters.html" class="nav-item active">
+                <i class="fas fa-filter"></i>
+                <span>Filters</span>
+            </a>
+            <a href="admin-categories.html" class="nav-item">
+                <i class="fas fa-tags"></i>
+                <span>Categories</span>
+            </a>
+            <a href="admin-products.html" class="nav-item">
+                <i class="fas fa-box"></i>
+                <span>Products</span>
+            </a>
+            <a href="admin-suppliers.html" class="nav-item">
+                <i class="fas fa-store"></i>
+                <span>Suppliers</span>
+            </a>
+            <a href="admin-users.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </a>
+            <a href="admin-analytics.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="admin-settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main" id="adminMain">
+        <div class="filters-container">
+            <div class="filters-header">
+                <h1 class="filters-title">
+                    <i class="fas fa-filter" style="color: var(--primary); margin-right: 12px;"></i>
+                    Filter Management
+                </h1>
+                <button class="add-filter-btn" id="addFilterBtn">
+                    <i class="fas fa-plus"></i>
+                    Add New Filter
+                </button>
+            </div>
+
+            <!-- Filter Category Tabs -->
+            <div class="filter-category-tabs" id="categoryTabs">
+                <button class="category-tab active" data-category="all">All Filters</button>
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Filters Grid -->
+            <div class="filters-grid" id="filtersGrid">
+                <!-- Populated by JS -->
+                <div class="empty-state">
+                    <i class="fas fa-filter"></i>
+                    <h3>No filters yet</h3>
+                    <p>Create your first filter to help users refine their search</p>
+                    <button class="add-filter-btn" onclick="openFilterModal()">
+                        <i class="fas fa-plus"></i> Create Filter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Filter Modal -->
+    <div class="modal" id="filterModal">
+        <div class="modal-overlay" onclick="closeFilterModal()"></div>
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Filter</h3>
+                <button class="close-btn" onclick="closeFilterModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="filterForm">
+                    <!-- Basic Information -->
+                    <div class="form-section">
+                        <h4>Basic Information</h4>
+                        
+                        <div class="form-group">
+                            <label>Filter Name (for system)</label>
+                            <input type="text" id="filterName" class="form-input" placeholder="e.g., price_range" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Display Name</label>
+                            <input type="text" id="filterDisplayName" class="form-input" placeholder="e.g., Price Range" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="filterDescription" class="form-textarea" rows="2" placeholder="Brief description of this filter"></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="filterCategory" class="form-select" required>
+                                    <!-- Populated by JS -->
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Filter Type</label>
+                                <select id="filterType" class="form-select" required onchange="toggleFilterOptions()">
+                                    <!-- Populated by JS -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Database Mapping -->
+                    <div class="form-section">
+                        <h4>Database Mapping</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Table Name</label>
+                                <select id="tableName" class="form-select" required>
+                                    <option value="ads">Products (ads)</option>
+                                    <option value="suppliers">Suppliers</option>
+                                    <option value="profiles">User Profiles</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Column Name</label>
+                                <input type="text" id="columnName" class="form-input" placeholder="e.g., wholesale_price" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Data Type</label>
+                            <select id="dataType" class="form-select" required>
+                                <option value="text">Text</option>
+                                <option value="number">Number</option>
+                                <option value="boolean">Boolean</option>
+                                <option value="array">Array</option>
+                                <option value="json">JSON</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Display Settings -->
+                    <div class="form-section">
+                        <h4>Display Settings</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Icon</label>
+                                <input type="text" id="filterIcon" class="form-input" placeholder="fa-filter" value="fa-filter">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Color</label>
+                                <input type="color" id="filterColor" class="form-input" value="#6B21E5">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Display Order</label>
+                            <input type="number" id="displayOrder" class="form-input" value="0">
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <span class="toggle-label">Show in Search Carousel</span>
+                            <div class="status-toggle" id="showInCarousel" onclick="toggleStatus(this)">
+                                <input type="hidden" id="appearsInCarousel" value="true">
+                            </div>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <span class="toggle-label">Show in Sidebar</span>
+                            <div class="status-toggle active" id="showInSidebar" onclick="toggleStatus(this)">
+                                <input type="hidden" id="appearsInSidebar" value="true">
+                            </div>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <span class="toggle-label">Show in Filter Modal</span>
+                            <div class="status-toggle active" id="showInModal" onclick="toggleStatus(this)">
+                                <input type="hidden" id="appearsInModal" value="true">
+                            </div>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <span class="toggle-label">Collapsible</span>
+                            <div class="status-toggle active" id="isCollapsible" onclick="toggleStatus(this)">
+                                <input type="hidden" id="isCollapsible" value="true">
+                            </div>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <span class="toggle-label">Show Search Box</span>
+                            <div class="status-toggle" id="showSearch" onclick="toggleStatus(this)">
+                                <input type="hidden" id="showSearch" value="false">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Range Settings (for range filters) -->
+                    <div class="form-section" id="rangeSettings" style="display: none;">
+                        <h4>Range Settings</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Min Value</label>
+                                <input type="number" id="minValue" class="form-input">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Max Value</label>
+                                <input type="number" id="maxValue" class="form-input">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Step Value</label>
+                            <input type="number" id="stepValue" class="form-input" value="1">
+                        </div>
+                    </div>
+
+                    <!-- Options (for checkbox/radio/dropdown filters) -->
+                    <div class="form-section" id="optionsSettings" style="display: none;">
+                        <h4>Filter Options</h4>
+                        
+                        <div class="options-container" id="optionsContainer">
+                            <div class="option-row">
+                                <input type="text" class="option-value" placeholder="Value (e.g., new)">
+                                <input type="text" class="option-label" placeholder="Label (e.g., New)">
+                                <input type="color" class="color-input" value="#6B21E5">
+                                <i class="fas fa-trash remove-option" onclick="removeOption(this)"></i>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="add-option-btn" onclick="addOption()">
+                            <i class="fas fa-plus"></i> Add Option
+                        </button>
+                    </div>
+
+                    <!-- Category Association -->
+                    <div class="form-section">
+                        <h4>Assigned Categories</h4>
+                        
+                        <div class="categories-checkboxes" id="categoryCheckboxes">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeFilterModal()">Cancel</button>
+                <button class="btn-primary" onclick="saveFilter()">Save Filter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-overlay" onclick="closeDeleteModal()"></div>
+        <div class="modal-content delete-modal">
+            <div class="modal-icon warning">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>Delete Filter?</h3>
+            <p>Are you sure you want to delete this filter? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script/admin-filters.js"></script>
+</body>
+</html>
