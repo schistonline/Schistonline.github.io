@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>New Chat - Schist.online</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #111B21;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .new-chat-header {
+            background: #202C33;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid #2A3942;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #E9EDEF;
+            font-size: 24px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .new-chat-header h1 {
+            color: #E9EDEF;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* Search Bar */
+        .search-section {
+            background: #202C33;
+            padding: 8px 16px;
+        }
+
+        .search-container {
+            background: #2A3942;
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-container i {
+            color: #8696A0;
+            font-size: 18px;
+        }
+
+        .search-container input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #E9EDEF;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .search-container input::placeholder {
+            color: #8696A0;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: #202C33;
+            border-bottom: 1px solid #2A3942;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            color: #8696A0;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: #25D366;
+            border-bottom-color: #25D366;
+        }
+
+        /* Contacts List */
+        .contacts-list {
+            flex: 1;
+            overflow-y: auto;
+            background: #111B21;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #2A3942;
+        }
+
+        .contact-item:hover {
+            background: #2A3942;
+        }
+
+        .contact-item.selected-contact {
+            background: #2A3942;
+        }
+
+        .contact-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-name {
+            color: #E9EDEF;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .contact-details {
+            color: #8696A0;
+            font-size: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .contact-badge {
+            background: #2A3942;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+
+        .verified-badge {
+            color: #25D366;
+        }
+
+        /* Recent Chats */
+        .recent-chat-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #2A3942;
+        }
+
+        .recent-chat-item:hover {
+            background: #2A3942;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 32px;
+            text-align: center;
+            color: #8696A0;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: #8696A0;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #2A3942;
+            border-top-color: #25D366;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #202C33;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            overflow: hidden;
+            animation: modalSlideUp 0.3s ease;
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #2A3942;
+        }
+
+        .modal-header h3 {
+            color: #E9EDEF;
+            font-size: 18px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .message-input-modal {
+            width: 100%;
+            background: #2A3942;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            color: #E9EDEF;
+            font-size: 14px;
+            resize: vertical;
+            font-family: inherit;
+            margin-bottom: 16px;
+        }
+
+        .message-input-modal:focus {
+            outline: none;
+            border: 1px solid #25D366;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-btn.cancel {
+            background: #2A3942;
+            color: #8696A0;
+        }
+
+        .modal-btn.send {
+            background: #25D366;
+            color: #111B21;
+        }
+
+        .modal-btn.send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="new-chat-header">
+        <button class="back-btn" onclick="window.location.href='chat-inbox.html'">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1>New Chat</h1>
+    </div>
+
+    <div class="search-section">
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search by name, phone, or email">
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="suppliers">Suppliers</div>
+        <div class="tab" data-tab="buyers">Buyers</div>
+        <div class="tab" data-tab="recent">Recent</div>
+    </div>
+
+    <div class="contacts-list" id="contactsList">
+        <div class="loading">
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div class="modal" id="messageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Send a message</h3>
+            </div>
+            <div class="modal-body">
+                <textarea class="message-input-modal" id="initialMessage" rows="3" placeholder="Type your message..."></textarea>
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+                    <button class="modal-btn send" onclick="sendInitialMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/new-chat.js"></script>
+</body>
+</html>
