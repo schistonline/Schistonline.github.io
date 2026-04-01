@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Supplier Dashboard - SourceX B2B</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-dashboard.css">
+</head>
+<body>
+    <!-- Loading State -->
+    <div id="loadingState" class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading your dashboard...</p>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <div class="dashboard-container">
+        <!-- Desktop Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">
+                    <div class="logo-cube">
+                        <div class="cube">
+                            <div class="face front"></div>
+                            <div class="face right"></div>
+                            <div class="face top"></div>
+                        </div>
+                    </div>
+                    <span>Source<span>X</span></span>
+                </a>
+            </div>
+            
+            <div class="supplier-info-mini" id="sidebarSupplierInfo">
+                <!-- Dynamic content -->
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="supplier-dashboard.html" class="nav-item active">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="supplier-products.html" class="nav-item">
+                        <i class="fas fa-box"></i>
+                        <span>Products</span>
+                    </a>
+                    <a href="supplier-quotations.html" class="nav-item">
+                        <i class="fas fa-file-invoice"></i>
+                        <span>Quotations</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Business</div>
+                    <a href="supplier-inquiries.html" class="nav-item">
+                        <i class="fas fa-search"></i>
+                        <span>Inquiries</span>
+                    </a>
+                    <a href="supplier-spotlights.html" class="nav-item">
+                        <i class="fas fa-star"></i>
+                        <span>Spotlights</span>
+                    </a>
+                    <a href="supplier-tips.html" class="nav-item">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Tips & Articles</span>
+                    </a>
+                    <a href="supplier-sponsorships.html" class="nav-item">
+                        <i class="fas fa-crown"></i>
+                        <span>Sponsorships</span>
+                    </a>
+                    <a href="supplier-videos.html" class="nav-item">
+                        <i class="fas fa-video"></i>
+                        <span>Product Videos</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Settings</div>
+                    <a href="supplier-company-profile.html" class="nav-item">
+                        <i class="fas fa-building"></i>
+                        <span>Company Profile</span>
+                    </a>
+                    <a href="supplier-storefront.html" class="nav-item">
+                        <i class="fas fa-store"></i>
+                        <span>Storefront</span>
+                    </a>
+                    <a href="supplier-profile.html" class="nav-item">
+                        <i class="fas fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                    <a href="#" class="nav-item" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <a href="index.html" class="mobile-logo">
+                <div class="logo-cube small">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span>Source<span>X</span></span>
+            </a>
+            
+            <button class="search-toggle" id="searchToggle">
+                <i class="fas fa-search"></i>
+            </button>
+        </header>
+
+        <!-- Mobile Sidebar -->
+        <div class="mobile-sidebar" id="mobileSidebar">
+            <div class="mobile-sidebar-header">
+                <div class="supplier-info-mini" id="mobileSupplierInfo">
+                    <!-- Dynamic content -->
+                </div>
+                <button class="close-sidebar" id="closeSidebar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <nav class="mobile-sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="supplier-dashboard.html" class="nav-item active">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="supplier-products.html" class="nav-item">
+                        <i class="fas fa-box"></i>
+                        <span>Products</span>
+                    </a>
+                    <a href="supplier-quotations.html" class="nav-item">
+                        <i class="fas fa-file-invoice"></i>
+                        <span>Quotations</span>
+                    </a>
+                    <a href="supplier-inquiries.html" class="nav-item">
+                        <i class="fas fa-search"></i>
+                        <span>Inquiries</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Marketing</div>
+                    <a href="supplier-spotlights.html" class="nav-item">
+                        <i class="fas fa-star"></i>
+                        <span>Spotlights</span>
+                    </a>
+                    <a href="supplier-tips.html" class="nav-item">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Tips & Articles</span>
+                    </a>
+                    <a href="supplier-sponsorships.html" class="nav-item">
+                        <i class="fas fa-crown"></i>
+                        <span>Sponsorships</span>
+                    </a>
+                    <a href="supplier-videos.html" class="nav-item">
+                        <i class="fas fa-video"></i>
+                        <span>Product Videos</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Settings</div>
+                    <a href="supplier-company-profile.html" class="nav-item">
+                        <i class="fas fa-building"></i>
+                        <span>Company Profile</span>
+                    </a>
+                    <a href="supplier-storefront.html" class="nav-item">
+                        <i class="fas fa-store"></i>
+                        <span>Storefront</span>
+                    </a>
+                    <a href="supplier-profile.html" class="nav-item">
+                        <i class="fas fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                    <a href="#" class="nav-item" id="mobileLogoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Search Bar (Mobile) -->
+        <div class="search-bar" id="searchBar">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search products...">
+                <button class="search-close" id="searchClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <div>
+                    <h1>Welcome back, <span id="supplierName">Supplier</span>! 👋</h1>
+                    <p class="welcome-subtitle" id="currentDate"></p>
+                </div>
+                <div class="supplier-status" id="supplierStatus"></div>
+            </div>
+
+            <!-- Announcements Carousel -->
+            <div class="announcement-section">
+                <div class="swiper announcement-swiper">
+                    <div class="swiper-wrapper" id="announcementWrapper"></div>
+                    <div class="swiper-pagination announcement-pagination"></div>
+                </div>
+            </div>
+
+            <!-- Quick Actions Grid -->
+            <div class="quick-actions-section">
+                <h2>Quick Actions</h2>
+                <div class="quick-actions-grid">
+                    <a href="supplier-products.html?action=add" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: rgba(107, 33, 229, 0.1); color: var(--primary);">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <span>Add Product</span>
+                    </a>
+                    
+                    <a href="supplier-quotations.html?action=create" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--secondary);">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <span>Create Quote</span>
+                    </a>
+                    
+                    <a href="supplier-inquiries.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--accent);">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <span>Inquiries</span>
+                    </a>
+                    
+                    <a href="supplier-spotlights.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: rgba(107, 33, 229, 0.1); color: var(--primary);">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span>Apply Spotlight</span>
+                    </a>
+                    
+                    <a href="supplier-tips.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--accent);">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <span>Write Tip</span>
+                    </a>
+                    
+                    <a href="supplier-videos.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: rgba(139, 92, 246, 0.1); color: #8B5CF6;">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <span>Add Video</span>
+                    </a>
+                    
+                    <a href="supplier-storefront.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: rgba(236, 72, 153, 0.1); color: #EC4899;">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <span>Manage Store</span>
+                    </a>
+                    
+                    <a href="supplier-company-profile.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: rgba(107, 33, 229, 0.1); color: var(--primary);">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <span>Company Profile</span>
+                    </a>
+                    
+                    <a href="supplier-sponsorships.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--secondary);">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <span>Sponsorships</span>
+                    </a>
+                    
+                    <a href="store-preview.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: rgba(139, 92, 246, 0.1); color: #8B5CF6;">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <span>Preview Store</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- KPI Cards (Updated - No Orders) -->
+            <div class="kpi-grid">
+                <div class="kpi-card" onclick="location.href='supplier-quotations.html?status=pending'">
+                    <div class="kpi-icon pending">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <div class="kpi-value" id="pendingQuotes">0</div>
+                        <div class="kpi-label">Pending Quotes</div>
+                    </div>
+                </div>
+                
+                <div class="kpi-card" onclick="location.href='supplier-inquiries.html?status=new'">
+                    <div class="kpi-icon info">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <div class="kpi-value" id="newInquiries">0</div>
+                        <div class="kpi-label">New Inquiries</div>
+                    </div>
+                </div>
+                
+                <div class="kpi-card" onclick="location.href='supplier-products.html'">
+                    <div class="kpi-icon success">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <div class="kpi-value" id="totalProducts">0</div>
+                        <div class="kpi-label">Active Products</div>
+                    </div>
+                </div>
+                
+                <div class="kpi-card" onclick="location.href='supplier-spotlights.html'">
+                    <div class="kpi-icon warning">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <div class="kpi-value" id="spotlightViews">0</div>
+                        <div class="kpi-label">Spotlight Views</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Chart -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2>Performance Overview</h2>
+                    <select class="chart-period" id="chartPeriod">
+                        <option value="week">This Week</option>
+                        <option value="month" selected>This Month</option>
+                        <option value="year">This Year</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Tips Carousel -->
+            <div class="tips-section">
+                <div class="section-header">
+                    <h2>Tips for You</h2>
+                    <a href="supplier-tips.html" class="view-all">View All</a>
+                </div>
+                <div class="swiper tips-swiper">
+                    <div class="swiper-wrapper" id="tipsWrapper"></div>
+                    <div class="swiper-pagination tips-pagination"></div>
+                </div>
+            </div>
+
+            <!-- Recent Activity (Quotes & Inquiries only) -->
+            <div class="activity-section">
+                <div class="section-header">
+                    <h2>Recent Activity</h2>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <div class="activity-list" id="activityList"></div>
+            </div>
+
+            <!-- Bottom Navigation (Mobile) -->
+            <nav class="bottom-nav">
+                <a href="supplier-dashboard.html" class="bottom-nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="supplier-products.html" class="bottom-nav-item">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </a>
+                <a href="supplier-quotations.html" class="bottom-nav-item">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Quotes</span>
+                </a>
+                <a href="supplier-inquiries.html" class="bottom-nav-item">
+                    <i class="fas fa-search"></i>
+                    <span>Inquiries</span>
+                </a>
+                <a href="supplier-profile.html" class="bottom-nav-item">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+        </main>
+    </div>
+
+    <!-- Professional Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <div class="logo-cube small">
+                            <div class="cube">
+                                <div class="face front"></div>
+                                <div class="face right"></div>
+                                <div class="face top"></div>
+                            </div>
+                        </div>
+                        <span class="footer-logo-text">Source<span>X</span></span>
+                    </div>
+                    <p class="footer-about">Uganda's premier B2B marketplace connecting verified suppliers with serious buyers. Trusted by 5,000+ businesses.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="how-it-works.html"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                        <li><a href="pricing.html"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+                        <li><a href="help.html"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-title">For Suppliers</h4>
+                    <ul class="footer-links">
+                        <li><a href="sell-on-sourcex.html"><i class="fas fa-chevron-right"></i> Sell on SourceX</a></li>
+                        <li><a href="supplier-success.html"><i class="fas fa-chevron-right"></i> Supplier Success</a></li>
+                        <li><a href="advertise.html"><i class="fas fa-chevron-right"></i> Advertising</a></li>
+                        <li><a href="supplier-standards.html"><i class="fas fa-chevron-right"></i> Supplier Standards</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-title">Contact Us</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
+                        <li><i class="fas fa-phone"></i> +256 700 123456</li>
+                        <li><i class="fas fa-envelope"></i> info@sourcex.ug</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 6:00 PM</li>
+                    </ul>
+                    <div class="footer-badge">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=ISO" alt="ISO Certified">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=SSL" alt="SSL Secure">
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2026 SourceX. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+                    <div class="footer-bottom-links">
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="disclaimer.html">Disclaimer</a>
+                        <a href="sitemap.html">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="meta-credit">
+            <span>◆</span> Meta AI
+        </div>
+    </footer>
+
+    <!-- Floating Action Button (Mobile) -->
+    <div class="fab-menu">
+        <button class="fab-main" id="fabMain">
+            <i class="fas fa-plus"></i>
+        </button>
+        <div class="fab-options">
+            <a href="supplier-products.html?action=add" class="fab-option" style="background: var(--primary);">
+                <i class="fas fa-plus"></i>
+                <span>Add Product</span>
+            </a>
+            <a href="supplier-quotations.html?action=create" class="fab-option" style="background: var(--secondary);">
+                <i class="fas fa-file-invoice"></i>
+                <span>Create Quote</span>
+            </a>
+            <a href="supplier-tips.html?action=create" class="fab-option" style="background: var(--accent);">
+                <i class="fas fa-lightbulb"></i>
+                <span>Write Tip</span>
+            </a>
+            <a href="supplier-spotlights.html?action=apply" class="fab-option" style="background: var(--info);">
+                <i class="fas fa-star"></i>
+                <span>Apply Spotlight</span>
+            </a>
+            <a href="upload-product-video.html" class="fab-option" style="background: #8B5CF6;">
+                <i class="fas fa-video"></i>
+                <span>Add Video</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="js/supplier-dashboard.js"></script>
+</body>
+</html>
