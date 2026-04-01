@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Store Preview - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Swiper CSS for Carousels -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/store-preview.css">
+</head>
+<body>
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <div class="header-actions">
+                <button class="icon-btn" id="shareStoreBtn">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+                <button class="icon-btn" id="menuBtn">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Store Navigation Tabs -->
+        <div class="store-tabs">
+            <button class="tab-btn active" data-tab="home">Home</button>
+            <button class="tab-btn" data-tab="products">Products</button>
+            <button class="tab-btn" data-tab="about">About</button>
+            <button class="tab-btn" data-tab="reviews">Reviews</button>
+            <button class="tab-btn" data-tab="contact">Contact</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="spinner"></div>
+            <p>Loading store preview...</p>
+        </div>
+
+        <!-- Store Content (Hidden until loaded) -->
+        <div class="store-content" id="storeContent" style="display: none;">
+            <!-- Tab: Home -->
+            <div class="tab-content active" id="tab-home">
+                <!-- Store Banner -->
+                <div class="store-banner" id="storeBanner" style="display: none;">
+                    <div class="banner-image" id="bannerImage">
+                        <img src="" alt="Store Banner">
+                    </div>
+                    <div class="banner-overlay">
+                        <h2 id="bannerTitle"></h2>
+                        <p id="bannerSubtitle"></p>
+                        <a href="#" class="banner-btn" id="bannerButton"></a>
+                    </div>
+                </div>
+
+                <!-- Store Header -->
+                <div class="store-header">
+                    <div class="store-avatar" id="storeAvatar">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="store-info">
+                        <h1 id="storeName">Store Name</h1>
+                        <div class="store-meta" id="storeMeta">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="store-badges" id="storeBadges">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Store Stats -->
+                <div class="store-stats" id="storeStats">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Store Tagline -->
+                <div class="store-tagline" id="storeTagline" style="display: none;">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Product Categories -->
+                <div class="categories-section">
+                    <h3><i class="fas fa-tags"></i> Shop by Category</h3>
+                    <div class="categories-grid" id="categoriesGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Hot Selling Products -->
+                <div class="products-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-fire"></i> <span id="hotSellingTitle">Hot Selling</span></h3>
+                        <a href="#" class="view-all" onclick="switchTab('products')">View All <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="products-grid" id="hotProductsGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- New Arrivals -->
+                <div class="products-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-clock"></i> New Arrivals</h3>
+                        <a href="#" class="view-all" onclick="switchTab('products')">View All <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="products-grid" id="newProductsGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Products -->
+            <div class="tab-content" id="tab-products">
+                <div class="products-header">
+                    <h2>All Products</h2>
+                    <div class="products-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="productSearch" placeholder="Search products...">
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <select id="sortProducts">
+                        <option value="newest">Newest First</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="popular">Most Popular</option>
+                    </select>
+                </div>
+
+                <div class="products-grid" id="allProductsGrid">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="load-more" id="loadMoreProducts" style="display: none;">
+                    <button class="load-more-btn" onclick="loadMoreProducts()">Load More</button>
+                </div>
+            </div>
+
+            <!-- Tab: About -->
+            <div class="tab-content" id="tab-about">
+                <div class="about-section">
+                    <h3><i class="fas fa-info-circle"></i> About Us</h3>
+                    <div class="about-content" id="aboutContent">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h3><i class="fas fa-bullseye"></i> Mission & Vision</h3>
+                    <div class="mission-vision">
+                        <div class="mission-box">
+                            <h4>Our Mission</h4>
+                            <p id="missionText">Loading...</p>
+                        </div>
+                        <div class="vision-box">
+                            <h4>Our Vision</h4>
+                            <p id="visionText">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h3><i class="fas fa-heart"></i> Core Values</h3>
+                    <div class="core-values" id="coreValues">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h3><i class="fas fa-building"></i> Facilities</h3>
+                    <div class="facilities-grid" id="facilities">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h3><i class="fas fa-certificate"></i> Certifications</h3>
+                    <div class="certifications-grid" id="certifications">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h3><i class="fas fa-globe"></i> Export Markets</h3>
+                    <div class="markets-list" id="exportMarkets">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h3><i class="fas fa-history"></i> Company Timeline</h3>
+                    <div class="timeline" id="timeline">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Reviews -->
+            <div class="tab-content" id="tab-reviews">
+                <div class="reviews-header">
+                    <h3>Customer Reviews</h3>
+                    <div class="rating-summary" id="ratingSummary">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="reviews-list" id="reviewsList">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="load-more" id="loadMoreReviews" style="display: none;">
+                    <button class="load-more-btn" onclick="loadMoreReviews()">Load More Reviews</button>
+                </div>
+            </div>
+
+            <!-- Tab: Contact -->
+            <div class="tab-content" id="tab-contact">
+                <div class="contact-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+                    <p id="contactLocation">Loading...</p>
+                </div>
+
+                <div class="contact-section">
+                    <h3><i class="fas fa-phone"></i> Phone</h3>
+                    <p id="contactPhone">Loading...</p>
+                </div>
+
+                <div class="contact-section">
+                    <h3><i class="fas fa-envelope"></i> Email</h3>
+                    <p id="contactEmail">Loading...</p>
+                </div>
+
+                <div class="contact-section">
+                    <h3><i class="fas fa-clock"></i> Business Hours</h3>
+                    <p id="businessHours">Monday - Friday: 8:00 AM - 5:00 PM<br>Saturday: 9:00 AM - 1:00 PM<br>Sunday: Closed</p>
+                </div>
+
+                <div class="contact-section">
+                    <h3><i class="fas fa-map"></i> Warehouse Address</h3>
+                    <p id="warehouseAddress">Loading...</p>
+                </div>
+
+                <div class="contact-actions">
+                    <a href="#" class="contact-btn" id="chatWithSupplier">
+                        <i class="fas fa-comment"></i> Chat with Supplier
+                    </a>
+                    <a href="#" class="contact-btn outline" id="sendInquiry">
+                        <i class="fas fa-file-invoice"></i> Send Inquiry
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Store Not Found</h3>
+            <p>The store you're looking for doesn't exist</p>
+            <button class="btn-primary" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Go Back
+            </button>
+        </div>
+    </main>
+
+    <!-- Quick Action FAB -->
+    <div class="fab-menu">
+        <button class="fab-btn" id="chatFAB" title="Chat with supplier">
+            <i class="fas fa-comment"></i>
+        </button>
+        <button class="fab-btn" id="inquiryFAB" title="Send inquiry">
+            <i class="fas fa-file-invoice"></i>
+        </button>
+    </div>
+
+    <!-- Product Quick View Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Product Details</h3>
+                <button class="modal-close" onclick="closeProductModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="productModalBody">
+                <!-- Populated by JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="addToCart()">Add to Cart</button>
+                <button class="btn-secondary" onclick="buyNow()">Buy Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Share this Store</h3>
+                <button class="modal-close" onclick="closeShareModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="share-options">
+                    <button class="share-option" onclick="shareVia('facebook')">
+                        <i class="fab fa-facebook"></i>
+                        <span>Facebook</span>
+                    </button>
+                    <button class="share-option" onclick="shareVia('twitter')">
+                        <i class="fab fa-twitter"></i>
+                        <span>Twitter</span>
+                    </button>
+                    <button class="share-option" onclick="shareVia('whatsapp')">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </button>
+                    <button class="share-option" onclick="shareVia('telegram')">
+                        <i class="fab fa-telegram"></i>
+                        <span>Telegram</span>
+                    </button>
+                    <button class="share-option" onclick="copyStoreLink()">
+                        <i class="fas fa-link"></i>
+                        <span>Copy Link</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Modal -->
+    <div class="modal" id="menuModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Store Options</h3>
+                <button class="modal-close" onclick="closeMenuModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="menu-options">
+                    <button class="menu-option" onclick="reportStore()">
+                        <i class="fas fa-flag"></i>
+                        <span>Report Store</span>
+                    </button>
+                    <button class="menu-option" onclick="saveStore()">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Save Store</span>
+                    </button>
+                    <button class="menu-option" onclick="getDirections()">
+                        <i class="fas fa-map"></i>
+                        <span>Get Directions</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="js/store-preview.js"></script>
+</body>
+</html>

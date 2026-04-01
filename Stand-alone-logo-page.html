@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SourceX · 3D Cube Logo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0e1219;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        :root {
+            --primary: #6B21E5;
+            --primary-dark: #4A0D9C;
+            --primary-light: #9B4DFF;
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+        }
+
+        .stage {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Logo Container */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+        }
+
+        /* 3D Cube */
+        .logo-cube {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            perspective: 1000px;
+        }
+
+        .cube {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(18deg) rotateY(28deg);
+            transition: transform 0.5s ease;
+        }
+
+        .logo:hover .cube {
+            transform: rotateX(28deg) rotateY(38deg);
+        }
+
+        .face {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 
+                inset 0 0 30px rgba(107, 33, 229, 0.5),
+                0 0 20px rgba(155, 77, 255, 0.4);
+        }
+
+        .front {
+            transform: translateZ(40px);
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+        }
+
+        .right {
+            transform: rotateY(90deg) translateZ(40px);
+            background: linear-gradient(135deg, #4A0D9C, #6B21E5);
+        }
+
+        .top {
+            transform: rotateX(90deg) translateZ(40px);
+            background: linear-gradient(135deg, #9B4DFF, #B47BFF);
+        }
+
+        /* Text */
+        .logo-text {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px #9B4DFF, 0 0 30px #6B21E5;
+            background: linear-gradient(135deg, #ffffff, #e0d0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            background: linear-gradient(135deg, #9B4DFF, #B47BFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Small Version */
+        .logo-small {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+            background: #1a1f2b;
+            border-radius: 12px;
+        }
+
+        .logo-cube.small {
+            width: 40px;
+            height: 40px;
+            perspective: 600px;
+        }
+
+        .logo-cube.small .face {
+            width: 40px;
+            height: 40px;
+            border-width: 2px;
+        }
+
+        .logo-cube.small .front {
+            transform: translateZ(20px);
+        }
+
+        .logo-cube.small .right {
+            transform: rotateY(90deg) translateZ(20px);
+        }
+
+        .logo-cube.small .top {
+            transform: rotateX(90deg) translateZ(20px);
+        }
+
+        .small-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .small-text span {
+            color: #9B4DFF;
+        }
+
+        /* Meta Credit */
+        .meta-credit {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: #8899bb;
+            background: rgba(10, 18, 30, 0.7);
+            padding: 8px 16px;
+            border-radius: 30px;
+            backdrop-filter: blur(4px);
+            border: 1px solid #2a3a55;
+            font-size: 14px;
+        }
+
+        .meta-credit span {
+            color: #9B4DFF;
+            margin-right: 4px;
+        }
+
+        /* Demo section */
+        .demo {
+            text-align: center;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .demo-title {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .logo-cube {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .face {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .front { transform: translateZ(30px); }
+            .right { transform: rotateY(90deg) translateZ(30px); }
+            .top { transform: rotateX(90deg) translateZ(30px); }
+            
+            .logo-text {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 50px;">
+        <!-- Main Logo (Large) -->
+        <div class="stage">
+            <div class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">Source<span>X</span></span>
+            </div>
+        </div>
+
+        <!-- Small Logo (Footer Version) -->
+        <div class="logo-small">
+            <div class="logo-cube small">
+                <div class="cube">
+                    <div class="face front"></div>
+                    <div class="face right"></div>
+                    <div class="face top"></div>
+                </div>
+            </div>
+            <span class="small-text">Source<span>X</span></span>
+        </div>
+
+        <!-- Demo Note -->
+        <div class="demo">
+            <div class="demo-title">Hover over the cube to animate</div>
+        </div>
+
+        <!-- Meta AI Credit -->
+        <div class="meta-credit">
+            <span>◆</span> Meta AI
+        </div>
+    </div>
+</body>
+</html>

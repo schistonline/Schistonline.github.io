@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Discover - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Swiper CSS for Carousels -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/discover.css">
+</head>
+<body>
+    <!-- Simple Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            
+            <button class="search-toggle" id="searchToggle">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        
+        <!-- Search Bar (Hidden by default) -->
+        <div class="search-bar" id="searchBar">
+            <input type="text" placeholder="Search products, suppliers..." id="searchInput">
+            <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+        </div>
+    </header>
+
+    <!-- Hero Stats (Minimal) -->
+    <div class="hero-stats">
+        <div class="stat">
+            <span class="stat-number">50K+</span>
+            <span class="stat-label">PRODUCTS</span>
+        </div>
+        <div class="stat">
+            <span class="stat-number">10K+</span>
+            <span class="stat-label">SUPPLIERS</span>
+        </div>
+        <div class="stat">
+            <span class="stat-number">30+</span>
+            <span class="stat-label">CATEGORIES</span>
+        </div>
+    </div>
+
+    <!-- Category Pills - Only Icons + Conducive Words -->
+    <div class="category-pills" id="categoryPills">
+        <!-- Populated by JS -->
+        <div class="pill-loading">
+            <i class="fas fa-spinner fa-spin"></i>
+        </div>
+    </div>
+
+    <!-- Main Discover Sections - Only Conducive Words as Titles -->
+    <main class="discover-main" id="discoverSections">
+        <!-- Populated by JS -->
+        <div class="loading-sections">
+            <div class="spinner"></div>
+        </div>
+    </main>
+
+    <!-- Simple Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 iBlue B2B. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/discover.js"></script>
+</body>
+</html>

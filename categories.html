@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Categories - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/categories.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="logo">
+                <span class="logo-icon">i</span>
+                <span class="logo-text">blue<span>B2B</span></span>
+            </div>
+            <div class="header-right">
+                <button class="search-btn" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Title -->
+    <div class="page-title">
+        <h1>Categories</h1>
+    </div>
+
+    <!-- Mobile Category Navigation (Side by Side) -->
+    <div class="mobile-category-nav">
+        <!-- Left Column - Main Categories -->
+        <div class="mobile-categories-left">
+            <div class="mobile-categories-list" id="mobileCategoriesList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Right Column - Subcategories -->
+        <div class="mobile-subcategories-right">
+            <div class="mobile-subcategories-header">
+                <h2 id="mobileSelectedCategory">For you</h2>
+            </div>
+            <div class="mobile-subcategories-grid" id="mobileSubcategoriesGrid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Categories Container (Hidden on Mobile) -->
+    <div class="desktop-categories-container">
+        <!-- Left Column - Main Categories -->
+        <div class="main-categories">
+            <div class="categories-list" id="desktopCategoriesList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Right Column - Subcategories -->
+        <div class="subcategories-panel" id="desktopSubcategoriesPanel">
+            <div class="subcategories-header">
+                <h2 id="desktopSelectedCategoryName">For you</h2>
+                <a href="#" class="view-all-link" id="desktopViewAllLink">View all</a>
+            </div>
+            
+            <!-- Curated Section (For you, Featured, Deals) -->
+            <div class="curated-section">
+                <div class="curated-header">
+                    <div class="curated-tab active" onclick="selectCuratedTab('For you')">For you</div>
+                    <div class="curated-tab" onclick="selectCuratedTab('Featured')">Featured</div>
+                    <div class="curated-tab" onclick="selectCuratedTab('Deals')">Deals</div>
+                </div>
+                <div class="curated-items" id="curatedItems"></div>
+            </div>
+
+            <!-- Subcategories Grid -->
+            <div class="subcategories-grid" id="desktopSubcategoriesGrid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="categories.html" class="nav-item active">
+            <i class="fas fa-th-large"></i>
+            <span>Categories</span>
+        </a>
+        <a href="messenger.html" class="nav-item">
+            <i class="fas fa-comment"></i>
+            <span>Messenger</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>My iBlue</span>
+        </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/categories.js"></script>
+</body>
+</html>

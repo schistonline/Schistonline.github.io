@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>My RFQs - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/my-rfqs.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <button class="menu-btn" id="menuToggle">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>My RFQs</h1>
+            <p>Track your Requests for Quotation</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-item" onclick="filterRFQs('all')">
+                <span class="stat-value" id="totalRFQs">0</span>
+                <span class="stat-label">Total</span>
+            </div>
+            <div class="stat-item" onclick="filterRFQs('pending')">
+                <span class="stat-value" id="pendingRFQs">0</span>
+                <span class="stat-label">Pending</span>
+            </div>
+            <div class="stat-item" onclick="filterRFQs('sent')">
+                <span class="stat-value" id="sentRFQs">0</span>
+                <span class="stat-label">Sent</span>
+            </div>
+            <div class="stat-item" onclick="filterRFQs('quoted')">
+                <span class="stat-value" id="quotedRFQs">0</span>
+                <span class="stat-label">Quoted</span>
+            </div>
+            <div class="stat-item" onclick="filterRFQs('expired')">
+                <span class="stat-value" id="expiredRFQs">0</span>
+                <span class="stat-label">Expired</span>
+            </div>
+        </div>
+
+        <!-- Search and Filter Bar -->
+        <div class="search-filter-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by title or RFQ #...">
+            </div>
+            <button class="filter-btn" id="filterBtn">
+                <i class="fas fa-sliders-h"></i>
+            </button>
+        </div>
+
+        <!-- Filter Panel -->
+        <div class="filter-panel" id="filterPanel" style="display: none;">
+            <div class="filter-section">
+                <h4>Status</h4>
+                <div class="filter-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="pending" class="status-filter">
+                        <span>Pending</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="matching" class="status-filter">
+                        <span>Matching</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="sent" class="status-filter">
+                        <span>Sent</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="quoted" class="status-filter">
+                        <span>Quoted</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="expired" class="status-filter">
+                        <span>Expired</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="cancelled" class="status-filter">
+                        <span>Cancelled</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h4>Date Range</h4>
+                <select id="dateRange" class="filter-select">
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                    <option value="custom">Custom Range</option>
+                </select>
+            </div>
+
+            <div id="customDateRange" style="display: none;">
+                <div class="date-inputs">
+                    <input type="date" id="startDate" class="date-input" placeholder="Start Date">
+                    <span>to</span>
+                    <input type="date" id="endDate" class="date-input" placeholder="End Date">
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <button class="apply-btn" id="applyFilters">Apply Filters</button>
+                <button class="reset-btn" id="resetFilters">Reset</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="spinner"></div>
+            <p>Loading your RFQs...</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="all">All</button>
+            <button class="tab-btn" data-tab="pending">Pending</button>
+            <button class="tab-btn" data-tab="sent">Sent</button>
+            <button class="tab-btn" data-tab="quoted">Quoted</button>
+        </div>
+
+        <!-- RFQs List -->
+        <div class="rfqs-list" id="rfqsList"></div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-file-invoice"></i>
+            <h3>No RFQs Found</h3>
+            <p>You haven't created any requests for quotation yet</p>
+            <button class="create-btn" onclick="window.location.href='request-quote-simple.html'">
+                <i class="fas fa-plus"></i> Create New RFQ
+            </button>
+        </div>
+
+        <!-- Load More -->
+        <div class="load-more" id="loadMore" style="display: none;">
+            <button class="load-more-btn" onclick="loadMoreRFQs()">
+                Load More RFQs
+            </button>
+        </div>
+    </main>
+
+    <!-- Quick Action Button -->
+    <div class="quick-action">
+        <button class="fab-btn" onclick="window.location.href='request-quote-simple.html'">
+            <i class="fas fa-plus"></i>
+            <span>New RFQ</span>
+        </button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="my-rfqs.html" class="nav-item active">
+            <i class="fas fa-file-invoice"></i>
+            <span>My RFQs</span>
+        </a>
+        <a href="orders.html" class="nav-item">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Orders</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- RFQ Detail Modal -->
+    <div class="modal" id="rfqModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>RFQ Details</h3>
+                <button class="modal-close" onclick="closeRFQModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="rfqModalBody">
+                <!-- Populated by JS -->
+            </div>
+            <div class="modal-footer" id="rfqModalFooter">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Quotes Modal -->
+    <div class="modal" id="quotesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Quotes Received</h3>
+                <button class="modal-close" onclick="closeQuotesModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="quotesModalBody">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel RFQ Modal -->
+    <div class="modal" id="cancelModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Cancel RFQ</h3>
+                <button class="modal-close" onclick="closeCancelModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="cancel-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p>Are you sure you want to cancel this RFQ?</p>
+                <p class="cancel-warning">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-danger" id="confirmCancelBtn">Yes, Cancel RFQ</button>
+                <button class="btn-secondary" onclick="closeCancelModal()">No, Keep it</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/my-rfqs.js"></script>
+</body>
+</html>

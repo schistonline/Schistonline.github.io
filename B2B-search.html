@@ -2,22 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Suppliers - BuyUganda B2B Marketplace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SourceX B2B - Search Products & Suppliers</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Swiper CSS for Carousels -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/suppliers.css">
+    <link rel="stylesheet" href="css/B2B-search.css">
 </head>
 <body>
-    <!-- Simple Header -->
+    <!-- Header -->
     <header class="header">
-        <div class="header-content">
+        <div class="header-container">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
             <a href="index.html" class="logo">
                 <div class="logo-cube">
                     <div class="cube">
@@ -26,89 +27,85 @@
                         <div class="face top"></div>
                     </div>
                 </div>
-                <span class="logo-text">BuyUganda<span>.online</span></span>
+                <span class="logo-text">Source<span>X</span></span>
             </a>
             
-            <button class="search-toggle" id="searchToggle">
-                <i class="fas fa-search"></i>
-            </button>
-        </div>
-        
-        <!-- Search Bar (Hidden by default) -->
-        <div class="search-bar" id="searchBar">
-            <input type="text" placeholder="Search suppliers..." id="searchInput">
-            <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+            <div class="header-actions">
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- Banner Carousel -->
-    <section class="banner-carousel">
-        <div class="swiper banner-swiper">
-            <div class="swiper-wrapper" id="bannerWrapper">
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Search Form -->
+        <div class="search-section">
+            <form id="searchForm" action="B2B-search-results.html" method="GET">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" 
+                           name="q" 
+                           class="search-input" 
+                           id="searchInput" 
+                           placeholder="Search products, suppliers..." 
+                           autocomplete="off"
+                           autofocus>
+                    <button type="button" class="clear-btn" id="clearSearch">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Cancel Button (as in screenshot) -->
+                <button type="button" class="cancel-btn" onclick="window.history.back()">Cancel</button>
+            </form>
+        </div>
+
+        <!-- Search History Section -->
+        <div class="history-section" id="recentSearchesSection">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-history"></i> Search History
+                </h3>
+                <button class="clear-history-btn" id="clearHistoryBtn" onclick="SearchPage.clearSearchHistory()">
+                    <i class="fas fa-trash-alt"></i> Clear
+                </button>
+            </div>
+            <div class="history-list" id="recentSearchesList">
                 <!-- Populated by JS -->
-                <div class="swiper-slide banner-loading">
-                    <div class="spinner"></div>
+                <div class="history-item loading-item">
+                    <div class="skeleton-text"></div>
                 </div>
             </div>
-            <div class="swiper-pagination"></div>
         </div>
-    </section>
 
-    <!-- Hot Suppliers Carousel -->
-    <section class="hot-suppliers">
-        <div class="section-header">
-            <h2><i class="fas fa-fire" style="color: #F59E0B;"></i> Hot Suppliers</h2>
-            <a href="supplier-results.html?filter=hot" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
-        </div>
-        
-        <div class="hot-suppliers-carousel">
-            <div class="swiper hot-swiper">
-                <div class="swiper-wrapper" id="hotSuppliersWrapper">
-                    <!-- Populated by JS -->
-                    <div class="swiper-slide">
-                        <div class="hot-supplier-card loading-card">
-                            <div class="spinner"></div>
-                        </div>
-                    </div>
+        <!-- Popular Searches Section (as in screenshot) -->
+        <div class="popular-section">
+            <h3 class="section-title">
+                <i class="fas fa-fire"></i> Popular Searches
+            </h3>
+            <div class="popular-list" id="popularSearches">
+                <!-- Populated by JS -->
+                <div class="popular-item loading-item">
+                    <div class="skeleton-text"></div>
                 </div>
-                <div class="swiper-pagination"></div>
             </div>
         </div>
-    </section>
 
-    <!-- Filter Bar -->
-    <div class="filter-bar">
-        <div class="filter-tabs">
-            <button class="filter-tab active" data-filter="all">All Suppliers</button>
-            <button class="filter-tab" data-filter="verified">Verified Only</button>
-            <button class="filter-tab" data-filter="featured">Featured</button>
-        </div>
-        
-        <div class="filter-sort">
-            <select id="sortSelect">
-                <option value="recommended">Recommended</option>
-                <option value="rating">Highest Rated</option>
-                <option value="orders">Most Orders</option>
-                <option value="newest">Newest</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Suppliers Grid -->
-    <main class="suppliers-grid" id="suppliersGrid">
-        <!-- Populated by JS -->
-        <div class="loading-grid">
-            <div class="spinner"></div>
-            <p>Loading suppliers...</p>
+        <!-- Quick Categories -->
+        <div class="quick-categories-section">
+            <h3 class="section-title">
+                <i class="fas fa-tags"></i> Browse Categories
+            </h3>
+            <div class="quick-categories" id="quickCategories">
+                <!-- Populated by JS -->
+            </div>
         </div>
     </main>
 
-    <!-- Load More Button -->
-    <div class="load-more">
-        <button class="load-more-btn" id="loadMoreBtn">Load More Suppliers</button>
-    </div>
-
-    <!-- Professional B2B Footer (same as index.html) -->
+    <!-- Professional B2B Footer -->
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-grid">
@@ -122,7 +119,7 @@
                                 <div class="face top"></div>
                             </div>
                         </div>
-                        <span class="footer-logo-text">BuyUganda<span>.online</span></span>
+                        <span class="footer-logo-text">Source<span>X</span></span>
                     </div>
                     <p class="footer-about">Uganda's premier B2B marketplace connecting verified suppliers with serious buyers. Trusted by 5,000+ businesses.</p>
                     <div class="footer-social">
@@ -161,7 +158,7 @@
                 <div class="footer-col">
                     <h4 class="footer-title">For Suppliers</h4>
                     <ul class="footer-links">
-                        <li><a href="sell-on-BuyUganda.online"><i class="fas fa-chevron-right"></i> Sell on BuyUganda</a></li>
+                        <li><a href="sell-on-sourcex.html"><i class="fas fa-chevron-right"></i> Sell on SourceX</a></li>
                         <li><a href="supplier-success.html"><i class="fas fa-chevron-right"></i> Supplier Success</a></li>
                         <li><a href="advertise.html"><i class="fas fa-chevron-right"></i> Advertising</a></li>
                         <li><a href="logistics-partner.html"><i class="fas fa-chevron-right"></i> Logistics Partner</a></li>
@@ -175,7 +172,7 @@
                     <ul class="footer-contact">
                         <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
                         <li><i class="fas fa-phone"></i> +256 700 123456</li>
-                        <li><i class="fas fa-envelope"></i> info@BuyUganda.ug</li>
+                        <li><i class="fas fa-envelope"></i> info@sourcex.ug</li>
                         <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 6:00 PM</li>
                     </ul>
                     <div class="footer-badge">
@@ -188,7 +185,7 @@
             <!-- Bottom Footer -->
             <div class="footer-bottom">
                 <div class="footer-bottom-content">
-                    <p>&copy; 2026 BuyUganda. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+                    <p>&copy; 2026 SourceX. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
                     <div class="footer-bottom-links">
                         <a href="privacy.html">Privacy Policy</a>
                         <a href="terms.html">Terms of Service</a>
@@ -199,15 +196,43 @@
             </div>
         </div>
 
-        <!-- Meta AI Credit (from logo.html) -->
+        <!-- Meta AI Credit -->
         <div class="meta-credit">
             <span>◆</span> Meta AI
         </div>
     </footer>
 
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="B2B-search.html" class="nav-item active">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>My SourceX</span>
+        </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p id="loadingMessage">Loading...</p>
+    </div>
+
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/suppliers.js"></script>
+    <script src="js/B2B-search.js"></script>
 </body>
 </html>

@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2788760068612820" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hot Supplier Spotlight - iBlue Uganda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #EF4444;
+            --primary-light: #F87171;
+            --secondary: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --dark: #1F2937;
+            --gray: #6B7280;
+            --light-gray: #E5E7EB;
+            --lightest-gray: #F3F4F6;
+            --white: #FFFFFF;
+            --radius: 8px;
+            --radius-lg: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--lightest-gray);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: var(--white);
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray);
+            text-decoration: none;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .back-btn:hover {
+            color: var(--primary);
+        }
+        
+        .supplier-preview {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .supplier-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 32px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        
+        .supplier-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .supplier-details h2 {
+            margin-bottom: 4px;
+            font-size: 20px;
+        }
+        
+        .supplier-verified {
+            color: var(--secondary);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .supplier-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 8px;
+            color: var(--gray);
+            font-size: 13px;
+        }
+        
+        /* Current Spotlights Section */
+        .current-spotlights {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .current-spotlight-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--radius);
+            margin-bottom: 10px;
+            background: var(--lightest-gray);
+        }
+        
+        .spotlight-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--primary);
+        }
+        
+        .spotlight-time-left {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        /* Packages Grid */
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .package-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px 24px;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .package-card.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .package-card.popular::before {
+            content: '🔥 MOST POPULAR';
+            position: absolute;
+            top: 12px;
+            right: -30px;
+            background: var(--warning);
+            color: white;
+            padding: 4px 30px;
+            font-size: 11px;
+            font-weight: bold;
+            transform: rotate(45deg);
+        }
+        
+        .package-badge-preview {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .package-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .package-name {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .package-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .package-price span {
+            font-size: 14px;
+            color: var(--gray);
+            font-weight: normal;
+        }
+        
+        .package-description {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .benefits-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+        
+        .benefits-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .benefits-list li i {
+            color: var(--secondary);
+            font-size: 14px;
+        }
+        
+        .benefits-list li i.fa-fire {
+            color: var(--primary);
+        }
+        
+        /* Payment Section */
+        .payment-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .payment-method {
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .payment-method.selected {
+            border-color: var(--primary);
+            background: rgba(239, 68, 68, 0.05);
+        }
+        
+        .payment-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+        
+        .payment-method.selected .payment-icon {
+            color: var(--primary);
+        }
+        
+        .payment-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .payment-fee {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        /* Total Amount */
+        .total-section {
+            background: var(--lightest-gray);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .total-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            border-top: 1px solid var(--light-gray);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        
+        /* Buttons */
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: var(--light-gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--light-gray);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Messages */
+        .error-message {
+            background: #FEE2E2;
+            color: #991B1B;
+            padding: 12px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .success-message {
+            background: #D1FAE5;
+            color: #065F46;
+            padding: 12px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .info-message {
+            background: #DBEAFE;
+            color: #1E40AF;
+            padding: 12px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideUp 0.3s ease;
+        }
+        
+        @keyframes modalSlideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Mobile Money Instructions */
+        .mm-details {
+            background: var(--lightest-gray);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .mm-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .mm-reference {
+            background: var(--white);
+            padding: 10px;
+            border-radius: var(--radius);
+            font-family: monospace;
+            text-align: center;
+            margin: 10px 0;
+            border: 1px dashed var(--light-gray);
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .copy-btn {
+            background: var(--light-gray);
+            border: none;
+            padding: 5px 10px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .copy-btn:hover {
+            background: var(--gray);
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .supplier-preview {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .packages-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-fire"></i>
+                iBlue Uganda - Hot Suppliers
+            </a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <a onclick="goBack()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+        
+        <h1 style="margin-bottom: 30px; font-size: 28px;">Become a Hot Supplier 🔥</h1>
+        
+        <!-- Messages -->
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+        <div class="info-message" id="infoMessage"></div>
+        
+        <!-- Supplier Preview -->
+        <div class="supplier-preview" id="supplierPreview">
+            <div class="supplier-avatar" id="supplierAvatar">
+                <i class="fas fa-store"></i>
+            </div>
+            <div class="supplier-details">
+                <h2 id="businessName">Loading supplier details...</h2>
+                <div class="supplier-verified" id="verifiedStatus">
+                    <i class="fas fa-check-circle"></i> Verified Supplier
+                </div>
+                <div id="businessLocation" class="supplier-location">Location: Loading...</div>
+                <div class="supplier-stats" id="supplierStats">
+                    <span><i class="fas fa-box"></i> <span id="productCount">0</span> products</span>
+                    <span><i class="fas fa-star"></i> <span id="completionRate">100</span>% completion</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Current Active Spotlights -->
+        <div class="current-spotlights" id="currentSpotlights" style="display: none;">
+            <h3 class="section-title">Your Active Spotlights</h3>
+            <div id="currentSpotlightList"></div>
+        </div>
+        
+        <!-- Spotlight Packages -->
+        <h2 class="section-title">Choose Your Spotlight Package</h2>
+        <div class="packages-grid" id="packagesGrid">
+            <!-- Packages will be loaded here -->
+        </div>
+        
+        <!-- Payment Section -->
+        <div class="payment-section" id="paymentSection" style="display: none;">
+            <h2 class="section-title">Payment Details</h2>
+            
+            <div class="payment-methods">
+                <div class="payment-method" data-method="mobile_money">
+                    <div class="payment-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="payment-name">Mobile Money</div>
+                    <div class="payment-fee">No extra fees</div>
+                </div>
+                
+                <div class="payment-method" data-method="card">
+                    <div class="payment-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="payment-name">Credit/Debit Card</div>
+                    <div class="payment-fee">+2% processing fee</div>
+                </div>
+                
+                <div class="payment-method" data-method="bank">
+                    <div class="payment-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="payment-name">Bank Transfer</div>
+                    <div class="payment-fee">No extra fees</div>
+                </div>
+            </div>
+            
+            <!-- Total Amount -->
+            <div class="total-section">
+                <div class="total-row">
+                    <span>Package Price:</span>
+                    <span id="packagePrice">UGX 0</span>
+                </div>
+                <div class="total-row">
+                    <span>Duration:</span>
+                    <span id="packageDuration">0 days</span>
+                </div>
+                <div class="total-row">
+                    <span>Processing Fee:</span>
+                    <span id="processingFee">UGX 0</span>
+                </div>
+                <div class="total-row total-amount">
+                    <span>Total to Pay:</span>
+                    <span id="totalAmount">UGX 0</span>
+                </div>
+            </div>
+            
+            <!-- Terms Checkbox -->
+            <div style="margin-top: 20px;">
+                <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="termsCheckbox" style="margin-top: 3px;">
+                    <span style="font-size: 14px; color: var(--gray);">
+                        I agree to the <a href="/terms" style="color: var(--primary);">Terms of Service</a> and understand that this spotlight cannot be refunded once activated.
+                    </span>
+                </label>
+            </div>
+            
+            <!-- Pay Button -->
+            <button class="btn" id="payButton" disabled>
+                <i class="fas fa-fire"></i>
+                Activate Hot Supplier Spotlight
+            </button>
+        </div>
+    </div>
+    
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 20px; font-size: 24px;" id="modalTitle">Complete Payment</h2>
+            
+            <div id="mobileMoneyInstructions" style="display: none;">
+                <p style="margin-bottom: 20px;">Please send <strong id="mobileAmount">UGX 0</strong> to:</p>
+                
+                <div class="mm-details">
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <div style="font-size: 14px; color: var(--gray); margin-bottom: 5px;">Send to:</div>
+                        <div class="mm-number" id="mobileNumber">0766379462</div>
+                        <div style="color: var(--gray); font-size: 14px;">MTN Mobile Money</div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <div style="font-size: 14px; color: var(--gray);">Use this reference:</div>
+                            <button class="copy-btn" onclick="copyReference()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="mm-reference" id="mobileReference">SPOT-ABC123</div>
+                    </div>
+                    
+                    <div style="background: #FFF3CD; color: #856404; padding: 10px; border-radius: var(--radius); font-size: 13px;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>IMPORTANT:</strong> Use the exact reference above. Your spotlight will be activated automatically once payment is verified.
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: #FFEBEE; border-radius: var(--radius);">
+                    <h4 style="margin-bottom: 10px; color: #C62828;">📱 How to pay with Mobile Money:</h4>
+                    <ol style="margin-left: 20px; font-size: 14px; color: #B71C1C;">
+                        <li>Dial *165# on your phone</li>
+                        <li>Select option 1: Send Money</li>
+                        <li>Enter merchant number: <strong id="mobileNumberInstruction">0766379462</strong></li>
+                        <li>Enter amount: <strong id="mobileAmountInstruction">UGX 0</strong></li>
+                        <li>Enter reference: <strong id="mobileReferenceInstruction">SPOT-ABC123</strong></li>
+                        <li>Enter your PIN to confirm</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div id="cardPayment" style="display: none;">
+                <p style="margin-bottom: 20px; text-align: center; color: var(--gray);">
+                    <i class="fas fa-credit-card" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
+                    Card payment integration coming soon.
+                </p>
+            </div>
+            
+            <div id="bankInstructions" style="display: none;">
+                <p style="margin-bottom: 20px;">Please transfer <strong id="bankAmount">UGX 0</strong> to:</p>
+                <div style="background: var(--lightest-gray); padding: 20px; border-radius: var(--radius); margin-bottom: 20px;">
+                    <div style="margin-bottom: 10px;">
+                        <strong>Bank:</strong> Absa Bank
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Account Name:</strong> AKATUE701
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Account Number:</strong> 6009706672
+                    </div>
+                    <div>
+                        <strong>Branch:</strong> Kampala Road
+                    </div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <div style="font-size: 14px; color: var(--gray);">Use this reference:</div>
+                        <button class="copy-btn" onclick="copyReference()">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="mm-reference" id="bankReference">SPOT-ABC123</div>
+                </div>
+                <p style="color: var(--gray); font-size: 14px; background: #FFF3CD; padding: 10px; border-radius: var(--radius);">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Include the reference number in your transfer description.
+                </p>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <div style="background: #FFEBEE; padding: 15px; border-radius: var(--radius); margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px; color: #C62828;">⏱️ Payment Status</h4>
+                    <p id="paymentStatusText" style="font-size: 14px; color: #C62828;">
+                        Waiting for payment verification... Your spotlight will be activated automatically within 5-10 minutes.
+                    </p>
+                    <div id="paymentTimer" style="font-size: 13px; margin-top: 10px; color: #B71C1C;">
+                        Reference expires in: <span id="expiryTimer">24:00:00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; display: flex; gap: 10px;">
+                <button class="btn" id="confirmPayment" style="flex: 1; background: var(--secondary);" onclick="handlePaymentComplete()">
+                    <i class="fas fa-check"></i>
+                    I have Sent Payment
+                </button>
+                <button class="btn" style="flex: 1; background: var(--light-gray); color: var(--dark);" id="cancelPayment" onclick="closePaymentModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        // Payment Configuration
+        const BUSINESS_CONFIG = {
+            mobileMoneyNumbers: [
+                { name: 'MTN', number: '0766379462' }
+            ],
+            bankDetails: {
+                bankName: 'Absa Bank',
+                accountName: 'AKATUE701',
+                accountNumber: '6009706672',
+                branch: 'Kampala Road'
+            },
+            companyName: 'iBlue Uganda'
+        };
+        
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // State
+        let currentUser = null;
+        let currentSupplier = null;
+        let selectedPackage = null;
+        let selectedPaymentMethod = 'mobile_money';
+        let packages = [];
+        let currentSpotlights = [];
+        let currentPaymentRequest = null;
+        let verificationInterval = null;
+        let expiryInterval = null;
+        
+        // DOM Elements
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const infoMessage = document.getElementById('infoMessage');
+        const businessName = document.getElementById('businessName');
+        const verifiedStatus = document.getElementById('verifiedStatus');
+        const businessLocation = document.getElementById('businessLocation');
+        const productCount = document.getElementById('productCount');
+        const completionRate = document.getElementById('completionRate');
+        const supplierAvatar = document.getElementById('supplierAvatar');
+        const currentSpotlightsDiv = document.getElementById('currentSpotlights');
+        const currentSpotlightList = document.getElementById('currentSpotlightList');
+        const packagesGrid = document.getElementById('packagesGrid');
+        const paymentSection = document.getElementById('paymentSection');
+        const packagePrice = document.getElementById('packagePrice');
+        const packageDuration = document.getElementById('packageDuration');
+        const processingFee = document.getElementById('processingFee');
+        const totalAmount = document.getElementById('totalAmount');
+        const termsCheckbox = document.getElementById('termsCheckbox');
+        const payButton = document.getElementById('payButton');
+        const paymentModal = document.getElementById('paymentModal');
+        const confirmPayment = document.getElementById('confirmPayment');
+        const cancelPayment = document.getElementById('cancelPayment');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            await checkAuth();
+            await loadSupplierDetails();
+            await loadPackages();
+            await loadCurrentSpotlights();
+            setupEventListeners();
+        });
+        
+        function goBack() {
+            window.location.href = 'supplier-dashboard.html';
+        }
+        
+        async function checkAuth() {
+            try {
+                const { data: { session } } = await sb.auth.getSession();
+                
+                if (!session) {
+                    window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+                    return;
+                }
+                
+                const { data: profile } = await sb
+                    .from('profiles')
+                    .select('id, full_name, email, is_supplier')
+                    .eq('id', session.user.id)
+                    .single();
+                
+                if (!profile || !profile.is_supplier) {
+                    showError('You need to be a registered supplier to access this page');
+                    setTimeout(() => window.location.href = 'become-supplier.html', 3000);
+                    return;
+                }
+                
+                currentUser = profile;
+                
+            } catch (error) {
+                console.error('Auth error:', error);
+                window.location.href = 'login.html';
+            }
+        }
+        
+        async function loadSupplierDetails() {
+            try {
+                const { data: supplier, error } = await sb
+                    .from('suppliers')
+                    .select(`
+                        *,
+                        profiles!suppliers_profile_id_fkey (
+                            avatar_url,
+                            is_verified
+                        )
+                    `)
+                    .eq('profile_id', currentUser.id)
+                    .single();
+                
+                if (error) throw error;
+                
+                if (!supplier) {
+                    showError('Supplier profile not found');
+                    return;
+                }
+                
+                currentSupplier = supplier;
+                
+                // Update UI
+                businessName.textContent = supplier.business_name || 'Your Business';
+                
+                if (supplier.profiles?.is_verified) {
+                    verifiedStatus.innerHTML = '<i class="fas fa-check-circle"></i> Verified Supplier';
+                } else {
+                    verifiedStatus.innerHTML = '<i class="fas fa-clock"></i> Verification Pending';
+                }
+                
+                businessLocation.textContent = `Location: ${supplier.warehouse_district || 'Uganda'}`;
+                
+                if (supplier.profiles?.avatar_url) {
+                    supplierAvatar.innerHTML = `<img src="${supplier.profiles.avatar_url}" alt="${supplier.business_name}">`;
+                }
+                
+                // Load product count
+                const { count } = await sb
+                    .from('supplier_products')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('supplier_id', supplier.id)
+                    .eq('is_active', true);
+                
+                productCount.textContent = count || 0;
+                completionRate.textContent = supplier.completion_rate || 100;
+                
+            } catch (error) {
+                console.error('Error loading supplier:', error);
+                showError('Failed to load supplier details');
+            }
+        }
+        
+        async function loadPackages() {
+            try {
+                const { data, error } = await sb
+                    .from('supplier_spotlight_packages')
+                    .select('*')
+                    .eq('is_active', true)
+                    .order('display_priority');
+                
+                if (error) throw error;
+                
+                packages = data || getDefaultPackages();
+                renderPackages();
+                
+            } catch (error) {
+                console.error('Error loading packages:', error);
+                packages = getDefaultPackages();
+                renderPackages();
+            }
+        }
+        
+        function getDefaultPackages() {
+            return [
+                {
+                    id: 1,
+                    package_name: 'Hot Supplier - Basic',
+                    description: '7 days of featured visibility',
+                    duration_days: 7,
+                    price: 50000,
+                    currency: 'UGX',
+                    display_priority: 3,
+                    badge_text: 'HOT',
+                    badge_color: '#EF4444',
+                    benefits: ['Homepage placement', 'Hot supplier badge', 'Priority in supplier listings', '7 days visibility']
+                },
+                {
+                    id: 2,
+                    package_name: 'Hot Supplier - Premium',
+                    description: '14 days with better positioning',
+                    duration_days: 14,
+                    price: 90000,
+                    currency: 'UGX',
+                    display_priority: 2,
+                    badge_text: 'PREMIUM',
+                    badge_color: '#F59E0B',
+                    benefits: ['Homepage placement', 'Premium badge', 'Higher position', 'Verified supplier badge', '14 days visibility'],
+                    popular: true
+                },
+                {
+                    id: 3,
+                    package_name: 'Hot Supplier - VIP',
+                    description: '30 days with top priority',
+                    duration_days: 30,
+                    price: 150000,
+                    currency: 'UGX',
+                    display_priority: 1,
+                    badge_text: 'VIP 🔥',
+                    badge_color: '#10B981',
+                    benefits: ['Top position on homepage', 'VIP badge', 'Priority support', 'Featured in newsletter', '30 days visibility']
+                }
+            ];
+        }
+        
+        function renderPackages() {
+            let html = '';
+            
+            packages.forEach(pkg => {
+                const isPopular = pkg.popular || pkg.display_priority === 1;
+                
+                html += `
+                    <div class="package-card ${isPopular ? 'popular' : ''}" data-package-id="${pkg.id}">
+                        <div class="package-badge-preview" style="background: ${pkg.badge_color}; color: white;">
+                            🔥 ${pkg.badge_text || 'HOT'}
+                        </div>
+                        
+                        <div class="package-header">
+                            <h3 class="package-name">${pkg.package_name}</h3>
+                            <div class="package-price">
+                                ${pkg.currency} ${pkg.price.toLocaleString()}
+                                <span>/${pkg.duration_days} days</span>
+                            </div>
+                        </div>
+                        
+                        <p class="package-description">${pkg.description || ''}</p>
+                        
+                        <ul class="benefits-list">
+                            ${pkg.benefits.map(benefit => `
+                                <li>
+                                    <i class="fas fa-check"></i> ${benefit}
+                                </li>
+                            `).join('')}
+                        </ul>
+                        
+                        <div style="margin-top: 20px; text-align: center; color: ${pkg.badge_color}; font-size: 13px;">
+                            <i class="fas fa-fire"></i> Estimated ${Math.ceil(pkg.price / pkg.duration_days).toLocaleString()} UGX/day
+                        </div>
+                    </div>
+                `;
+            });
+            
+            packagesGrid.innerHTML = html;
+            
+            document.querySelectorAll('.package-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    selectPackage(parseInt(this.dataset.packageId));
+                });
+            });
+            
+            // Auto-select first package if none selected
+            if (!selectedPackage && packages.length > 0) {
+                selectPackage(packages[0].id);
+            }
+        }
+        
+        function selectPackage(packageId) {
+            selectedPackage = packages.find(p => p.id === packageId);
+            
+            document.querySelectorAll('.package-card').forEach(card => {
+                card.classList.remove('selected');
+                if (parseInt(card.dataset.packageId) === packageId) {
+                    card.classList.add('selected');
+                }
+            });
+            
+            paymentSection.style.display = 'block';
+            updatePricing();
+        }
+        
+        function updatePricing() {
+            if (!selectedPackage) return;
+            
+            const price = selectedPackage.price;
+            const fee = selectedPaymentMethod === 'card' ? price * 0.02 : 0;
+            const total = price + fee;
+            
+            packagePrice.textContent = `${selectedPackage.currency} ${price.toLocaleString()}`;
+            packageDuration.textContent = `${selectedPackage.duration_days} days`;
+            processingFee.textContent = `${selectedPackage.currency} ${fee.toLocaleString()}`;
+            totalAmount.textContent = `${selectedPackage.currency} ${total.toLocaleString()}`;
+            
+            updatePaymentButton();
+        }
+        
+        function setupEventListeners() {
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.addEventListener('click', function() {
+                    selectPaymentMethod(this.dataset.method);
+                });
+            });
+            
+            termsCheckbox.addEventListener('change', updatePaymentButton);
+            payButton.addEventListener('click', initiatePayment);
+            cancelPayment.addEventListener('click', closePaymentModal);
+            
+            selectPaymentMethod('mobile_money');
+        }
+        
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            document.querySelectorAll('.payment-method').forEach(m => {
+                m.classList.remove('selected');
+                if (m.dataset.method === method) {
+                    m.classList.add('selected');
+                }
+            });
+            
+            if (selectedPackage) {
+                updatePricing();
+            }
+        }
+        
+        function updatePaymentButton() {
+            const isReady = selectedPackage && selectedPaymentMethod && termsCheckbox.checked;
+            payButton.disabled = !isReady;
+        }
+        
+        async function loadCurrentSpotlights() {
+            try {
+                if (!currentSupplier) return;
+                
+                const { data: spotlights, error } = await sb
+                    .from('supplier_spotlights')
+                    .select(`
+                        *,
+                        package:package_id (package_name)
+                    `)
+                    .eq('supplier_id', currentSupplier.id)
+                    .eq('is_active', true)
+                    .gt('end_date', new Date().toISOString())
+                    .order('end_date');
+                
+                if (error) throw error;
+                
+                currentSpotlights = spotlights || [];
+                
+                if (currentSpotlights.length > 0) {
+                    currentSpotlightsDiv.style.display = 'block';
+                    renderCurrentSpotlights();
+                }
+                
+            } catch (error) {
+                console.error('Error loading current spotlights:', error);
+            }
+        }
+        
+        function renderCurrentSpotlights() {
+            let html = '';
+            const now = new Date();
+            
+            currentSpotlights.forEach(spotlight => {
+                const endsAt = new Date(spotlight.end_date);
+                const remainingTime = endsAt - now;
+                
+                if (remainingTime > 0) {
+                    const remainingDays = Math.ceil(remainingTime / (1000 * 60 * 60 * 24));
+                    
+                    html += `
+                        <div class="current-spotlight-item">
+                            <div>
+                                <span class="spotlight-badge" style="background: ${spotlight.badge_color}20; color: ${spotlight.badge_color};">
+                                    <i class="fas fa-fire"></i>
+                                    ${spotlight.badge_text || 'HOT'}
+                                </span>
+                                <div class="spotlight-time-left">
+                                    <i class="fas fa-clock"></i> 
+                                    ${remainingDays} days left (ends ${endsAt.toLocaleDateString()})
+                                </div>
+                            </div>
+                            <div>
+                                <span style="font-weight: 600; color: var(--primary);">
+                                    ${spotlight.package?.package_name || 'Spotlight'}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            currentSpotlightList.innerHTML = html || '<p style="color: var(--gray); text-align: center;">No active spotlights</p>';
+        }
+        
+        async function initiatePayment() {
+            try {
+                payButton.innerHTML = '<div class="loading"></div> Initiating...';
+                payButton.disabled = true;
+                
+                let mobileNumber = null;
+                if (selectedPaymentMethod === 'mobile_money') {
+                    mobileNumber = BUSINESS_CONFIG.mobileMoneyNumbers[0]?.number || '0766379462';
+                }
+                
+                // Call the database function to initiate payment
+                const { data, error } = await sb
+                    .rpc('initiate_supplier_spotlight_payment', {
+                        p_supplier_id: currentSupplier.id,
+                        p_package_id: selectedPackage.id,
+                        p_payment_method: selectedPaymentMethod,
+                        p_mobile_number: mobileNumber
+                    });
+                
+                if (error) throw error;
+                
+                if (!data.success) {
+                    throw new Error(data.message);
+                }
+                
+                currentPaymentRequest = data;
+                showPaymentModal();
+                
+            } catch (error) {
+                console.error('Payment initiation error:', error);
+                showError(error.message || 'Failed to initiate payment. Please try again.');
+                
+                payButton.innerHTML = '<i class="fas fa-fire"></i> Activate Hot Supplier Spotlight';
+                payButton.disabled = false;
+            }
+        }
+        
+        function showPaymentModal() {
+            const total = parseFloat(totalAmount.textContent.replace(/[^0-9.]/g, ''));
+            const reference = currentPaymentRequest.reference_number;
+            
+            document.getElementById('mobileMoneyInstructions').style.display = 'none';
+            document.getElementById('cardPayment').style.display = 'none';
+            document.getElementById('bankInstructions').style.display = 'none';
+            
+            if (selectedPaymentMethod === 'mobile_money') {
+                document.getElementById('mobileMoneyInstructions').style.display = 'block';
+                document.getElementById('mobileAmount').textContent = totalAmount.textContent;
+                document.getElementById('mobileAmountInstruction').textContent = totalAmount.textContent;
+                document.getElementById('mobileReference').textContent = reference;
+                document.getElementById('mobileReferenceInstruction').textContent = reference;
+                document.getElementById('mobileNumber').textContent = BUSINESS_CONFIG.mobileMoneyNumbers[0]?.number || '0766379462';
+                document.getElementById('mobileNumberInstruction').textContent = BUSINESS_CONFIG.mobileMoneyNumbers[0]?.number || '0766379462';
+                
+            } else if (selectedPaymentMethod === 'bank') {
+                document.getElementById('bankInstructions').style.display = 'block';
+                document.getElementById('bankAmount').textContent = totalAmount.textContent;
+                document.getElementById('bankReference').textContent = reference;
+                
+            } else if (selectedPaymentMethod === 'card') {
+                document.getElementById('cardPayment').style.display = 'block';
+            }
+            
+            paymentModal.classList.add('active');
+            
+            startPaymentVerification();
+            startExpiryTimer();
+        }
+        
+        function closePaymentModal() {
+            paymentModal.classList.remove('active');
+            
+            if (verificationInterval) {
+                clearInterval(verificationInterval);
+                verificationInterval = null;
+            }
+            
+            if (expiryInterval) {
+                clearInterval(expiryInterval);
+                expiryInterval = null;
+            }
+            
+            payButton.innerHTML = '<i class="fas fa-fire"></i> Activate Hot Supplier Spotlight';
+            payButton.disabled = false;
+            
+            currentPaymentRequest = null;
+        }
+        
+        function startExpiryTimer() {
+            if (expiryInterval) {
+                clearInterval(expiryInterval);
+            }
+            
+            function updateTimer() {
+                if (!currentPaymentRequest || !currentPaymentRequest.expires_at) {
+                    return;
+                }
+                
+                const now = new Date();
+                const expiry = new Date(currentPaymentRequest.expires_at);
+                const diff = expiry - now;
+                
+                if (diff <= 0) {
+                    document.getElementById('expiryTimer').textContent = 'Expired';
+                    showInfo('Payment reference has expired. Please initiate a new payment.');
+                    closePaymentModal();
+                    return;
+                }
+                
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('expiryTimer').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            updateTimer();
+            expiryInterval = setInterval(updateTimer, 1000);
+        }
+        
+        async function startPaymentVerification() {
+            if (verificationInterval) {
+                clearInterval(verificationInterval);
+            }
+            
+            verificationInterval = setInterval(async () => {
+                if (!currentPaymentRequest) {
+                    clearInterval(verificationInterval);
+                    return;
+                }
+                
+                await checkPaymentStatus();
+            }, 5000);
+            
+            await checkPaymentStatus();
+        }
+        
+        async function checkPaymentStatus() {
+            try {
+                if (!currentPaymentRequest) return;
+                
+                const { data: request, error } = await sb
+                    .from('supplier_spotlight_requests')
+                    .select('*')
+                    .eq('reference_number', currentPaymentRequest.reference_number)
+                    .single();
+                
+                if (error) throw error;
+                
+                if (request.status === 'verified') {
+                    clearInterval(verificationInterval);
+                    verificationInterval = null;
+                    
+                    document.getElementById('paymentStatusText').innerHTML = `
+                        <i class="fas fa-check-circle" style="color: #10B981;"></i> 
+                        Payment verified! Activating your spotlight...
+                    `;
+                    
+                    await activateSpotlight(request);
+                    
+                } else if (request.status === 'expired') {
+                    clearInterval(verificationInterval);
+                    verificationInterval = null;
+                    
+                    showInfo('Payment reference has expired. Please initiate a new payment.');
+                    closePaymentModal();
+                }
+                
+            } catch (error) {
+                console.error('Error checking payment status:', error);
+            }
+        }
+        
+        function handlePaymentComplete() {
+            document.getElementById('paymentStatusText').innerHTML = `
+                <i class="fas fa-clock" style="color: #F59E0B;"></i> 
+                Thank you! We are now verifying your payment. This usually takes 5-10 minutes.
+                You will be notified once verified.
+            `;
+            
+            confirmPayment.disabled = true;
+            confirmPayment.style.opacity = '0.5';
+        }
+        
+        async function activateSpotlight(request) {
+            try {
+                showSuccess('Payment verified! Activating your spotlight...');
+                
+                // Refresh current spotlights
+                await loadCurrentSpotlights();
+                
+                paymentModal.classList.remove('active');
+                showSuccess('🎉 Congratulations! Your Hot Supplier spotlight is now active!');
+                
+                // Reset selection
+                selectedPackage = null;
+                paymentSection.style.display = 'none';
+                document.querySelectorAll('.package-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                currentPaymentRequest = null;
+                
+                if (expiryInterval) {
+                    clearInterval(expiryInterval);
+                    expiryInterval = null;
+                }
+                
+            } catch (error) {
+                console.error('Spotlight activation error:', error);
+                showError('Payment was verified but spotlight activation failed. Please contact support.');
+            }
+        }
+        
+        function copyReference() {
+            const reference = document.getElementById('mobileReference')?.textContent || 
+                            document.getElementById('bankReference')?.textContent;
+            
+            if (reference) {
+                navigator.clipboard.writeText(reference);
+                
+                const copyBtn = event.target.closest('.copy-btn');
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            }
+        }
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+            infoMessage.style.display = 'none';
+            
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+            infoMessage.style.display = 'none';
+            
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        function showInfo(message) {
+            infoMessage.textContent = message;
+            infoMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            setTimeout(() => {
+                infoMessage.style.display = 'none';
+            }, 8000);
+        }
+    </script>
+</body>
+</html>

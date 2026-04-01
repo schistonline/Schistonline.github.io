@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Silver Lands - Premium Poultry Uganda | SourceX B2B</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <style>
+        /* Copy all the styles from the gateway page here, plus the additional sections */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #faf9f6;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ffffff;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.5s;
+        }
+
+        .loading-screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .silver-loader {
+            width: 80px;
+            height: 80px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #c6a355;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Main Container */
+        .welcome-container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #1a2e3f 0%, #2c3e4f 100%);
+            color: white;
+            padding: 40px 20px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><path d="M20,30 Q40,15 60,30 T100,30" stroke="white" fill="none" stroke-width="1"/><path d="M10,50 Q30,35 50,50 T90,50" stroke="white" fill="none" stroke-width="1"/><circle cx="30" cy="70" r="3" fill="white"/><circle cx="70" cy="70" r="3" fill="white"/></svg>');
+            background-size: cover;
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #c6a355, #e6c27a);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #1a2e3f;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .logo-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: #e6c27a;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .contact-badge {
+            display: flex;
+            gap: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-size: 14px;
+        }
+
+        .contact-item i {
+            color: #e6c27a;
+        }
+
+        .hero-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero-text h2 span {
+            color: #e6c27a;
+            display: block;
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: #e6c27a;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #e6c27a;
+            color: #1a2e3f;
+            box-shadow: 0 10px 20px rgba(230,194,122,0.3);
+        }
+
+        .btn-primary:hover {
+            background: #d4b168;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(230,194,122,0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #e6c27a;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: #e6c27a;
+            color: #1a2e3f;
+            transform: translateY(-2px);
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+            border: 4px solid #e6c27a;
+        }
+
+        .floating-badge {
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            background: #e6c27a;
+            color: #1a2e3f;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .about-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: #1a2e3f;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: #e6c27a;
+        }
+
+        .section-title p {
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .about-card {
+            text-align: center;
+            padding: 40px 20px;
+            background: #f8fafc;
+            border-radius: 20px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .about-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-color: #e6c27a;
+        }
+
+        .about-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a2e3f, #2c3e4f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+            color: #e6c27a;
+        }
+
+        .about-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a2e3f;
+        }
+
+        .about-card p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .quality-section {
+            background: linear-gradient(135deg, #1a2e3f, #2c3e4f);
+            color: white;
+            padding: 60px 20px;
+        }
+
+        .quality-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .quality-item {
+            text-align: center;
+        }
+
+        .quality-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(230,194,122,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 28px;
+            color: #e6c27a;
+        }
+
+        .quality-item h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .quality-item p {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .batches-preview {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .batches-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .batch-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .batch-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #e6c27a;
+        }
+
+        .batch-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .batch-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #e6c27a;
+            color: #1a2e3f;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .batch-info {
+            padding: 20px;
+        }
+
+        .batch-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a2e3f;
+        }
+
+        .batch-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .batch-price {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1a2e3f;
+            margin-bottom: 15px;
+        }
+
+        .batch-price small {
+            font-size: 12px;
+            font-weight: normal;
+            color: #64748b;
+        }
+
+        .view-batch-btn {
+            width: 100%;
+            padding: 12px;
+            background: #1a2e3f;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .view-batch-btn:hover {
+            background: #2c3e4f;
+        }
+
+        .view-all-link {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .view-all-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 40px;
+            background: transparent;
+            border: 2px solid #1a2e3f;
+            color: #1a2e3f;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .view-all-btn:hover {
+            background: #1a2e3f;
+            color: white;
+        }
+
+        .testimonials-section {
+            background: #f8fafc;
+            padding: 80px 20px;
+        }
+
+        .testimonials-slider {
+            max-width: 1200px;
+            margin: 40px auto 0;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 10px;
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            background: #1a2e3f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e6c27a;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .testimonial-info h4 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .testimonial-info p {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .testimonial-text {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .testimonial-rating {
+            color: #e6c27a;
+        }
+
+        .footer {
+            background: #1a2e3f;
+            color: white;
+            padding: 60px 20px 20px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #e6c27a;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a {
+            color: #ffffff;
+            opacity: 0.8;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-col ul li a:hover {
+            opacity: 1;
+            color: #e6c27a;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .loading-card {
+            background: #f1f5f9;
+            border-radius: 20px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spinner-small {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #e6c27a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @media (max-width: 1024px) {
+            .about-grid, .quality-grid, .batches-grid, .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-main {
+                grid-template-columns: 1fr;
+            }
+            .hero-text {
+                text-align: center;
+            }
+            .hero-text p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .about-grid, .quality-grid, .batches-grid, .footer-content {
+                grid-template-columns: 1fr;
+            }
+            .quality-grid {
+                gap: 20px;
+            }
+            .footer-content {
+                gap: 30px;
+            }
+            .hero-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .contact-badge {
+                flex-direction: column;
+                width: 100%;
+            }
+            .contact-item {
+                width: 100%;
+                justify-content: center;
+            }
+            .floating-badge {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="silver-loader"></div>
+        <p>Silver Lands • Premium Poultry</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="welcome-container" id="mainContent" style="display: none;">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-top">
+                    <div class="logo-area">
+                        <div class="logo-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="logo-text">
+                            <h1>SILVER LANDS</h1>
+                            <p>Premium Poultry Uganda</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-badge">
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>+256 701 234 567</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>+256 701 234 567</span>
+                        </div>
+                        <button class="logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Sign Out</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hero-main">
+                    <div class="hero-text">
+                        <h2>
+                            Uganda's Leading
+                            <span>Poultry Supplier</span>
+                        </h2>
+                        <p>Premium quality broilers, layers, and day-old chicks. Farm-raised with care, delivered with trust.</p>
+                        
+                        <div class="hero-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">15+</div>
+                                <div class="stat-label">Years Experience</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">50K+</div>
+                                <div class="stat-label">Birds Sold</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">100%</div>
+                                <div class="stat-label">Vaccinated</div>
+                            </div>
+                        </div>
+
+                        <div class="hero-buttons">
+                            <a href="poultry-batches.html?supplier=silverlands" class="btn btn-primary">
+                                <i class="fas fa-egg"></i> View Available Batches
+                            </a>
+                            <a href="#about" class="btn btn-outline">
+                                <i class="fas fa-play"></i> Learn More
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="hero-image">
+                        <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800" alt="Silver Lands Poultry">
+                        <div class="floating-badge">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Verified Supplier</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section" id="about">
+            <div class="section-title">
+                <h2>Why Silver Lands?</h2>
+                <p>Quality you can trust, service you deserve</p>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="about-icon">
+                        <i class="fas fa-syringe"></i>
+                    </div>
+                    <h3>100% Vaccinated</h3>
+                    <p>All our birds are fully vaccinated and health-certified by veterinary professionals.</p>
+                </div>
+
+                <div class="about-card">
+                    <div class="about-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Free Delivery</h3>
+                    <p>Free delivery within Kampala for orders above 100 birds. Competitive rates nationwide.</p>
+                </div>
+
+                <div class="about-card">
+                    <div class="about-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3>Farm-Raised</h3>
+                    <p>Raised on natural feed with proper care, ensuring healthy and fast-growing birds.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quality Badges -->
+        <section class="quality-section">
+            <div class="quality-grid">
+                <div class="quality-item">
+                    <div class="quality-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h4>Certified Farm</h4>
+                    <p>Ministry of Agriculture approved</p>
+                </div>
+
+                <div class="quality-item">
+                    <div class="quality-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h4>Lab Tested</h4>
+                    <p>Regular health checks</p>
+                </div>
+
+                <div class="quality-item">
+                    <div class="quality-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h4>Natural Feed</h4>
+                    <p>No growth hormones</p>
+                </div>
+
+                <div class="quality-item">
+                    <div class="quality-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h4>24/7 Support</h4>
+                    <p>Always here to help</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Batches Preview -->
+        <section class="batches-preview">
+            <div class="section-title">
+                <h2>Available Batches</h2>
+                <p>Ready for pickup or delivery</p>
+            </div>
+
+            <div class="batches-grid" id="batchesPreview">
+                <div class="loading-card">
+                    <div class="spinner-small"></div>
+                </div>
+            </div>
+
+            <div class="view-all-link">
+                <a href="poultry-batches.html?supplier=silverlands" class="view-all-btn">
+                    View All Batches <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="testimonials-section">
+            <div class="section-title">
+                <h2>What Our Customers Say</h2>
+                <p>Trusted by businesses across Uganda</p>
+            </div>
+
+            <div class="testimonials-slider">
+                <div class="swiper testimonial-swiper">
+                    <div class="swiper-wrapper" id="testimonialsWrapper">
+                        <div class="swiper-slide">
+                            <div class="testimonial-card">
+                                <div class="testimonial-header">
+                                    <div class="testimonial-avatar">JM</div>
+                                    <div class="testimonial-info">
+                                        <h4>John Mukasa</h4>
+                                        <p>Mukono Poultry Farm</p>
+                                    </div>
+                                </div>
+                                <p class="testimonial-text">"I've been buying from Silver Lands for over 3 years. Their birds are consistently healthy and their delivery is always on time."</p>
+                                <div class="testimonial-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-card">
+                                <div class="testimonial-header">
+                                    <div class="testimonial-avatar">SN</div>
+                                    <div class="testimonial-info">
+                                        <h4>Sarah Nambi</h4>
+                                        <p>Nambi Enterprises</p>
+                                    </div>
+                                </div>
+                                <p class="testimonial-text">"The vaccination program gives me confidence. I've never lost a bird from their batches. Highly recommended!"</p>
+                                <div class="testimonial-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-card">
+                                <div class="testimonial-header">
+                                    <div class="testimonial-avatar">PK</div>
+                                    <div class="testimonial-info">
+                                        <h4>Peter Kigozi</h4>
+                                        <p>Kigozi Farms</p>
+                                    </div>
+                                </div>
+                                <p class="testimonial-text">"Best poultry supplier in Kampala. Fair prices, healthy birds, and excellent customer service."</p>
+                                <div class="testimonial-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h4>Silver Lands</h4>
+                    <p style="opacity: 0.8; margin-bottom: 15px;">Uganda's trusted poultry supplier since 2010.</p>
+                    <div style="display: flex; gap: 15px;">
+                        <a href="#" style="color: white; opacity: 0.8;"><i class="fab fa-facebook"></i></a>
+                        <a href="#" style="color: white; opacity: 0.8;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="color: white; opacity: 0.8;"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="poultry-batches.html?supplier=silverlands">Our Batches</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
+                        <li><i class="fas fa-phone"></i> +256 701 234 567</li>
+                        <li><i class="fab fa-whatsapp"></i> +256 701 234 567</li>
+                        <li><i class="fas fa-envelope"></i> info@silverlands.ug</li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Business Hours</h4>
+                    <ul>
+                        <li>Mon - Fri: 8am - 6pm</li>
+                        <li>Saturday: 9am - 4pm</li>
+                        <li>Sunday: Closed</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Silver Lands. All rights reserved. Powered by SourceX B2B</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Config
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Check authentication - redirect to gateway if not authenticated
+        async function checkAuth() {
+            try {
+                // Use getSession() instead of getUser() to avoid auth errors
+                const { data: { session }, error } = await sb.auth.getSession();
+                
+                // If there's an error or no session, redirect to gateway
+                if (error || !session || !session.user) {
+                    console.log('👤 User not authenticated, redirecting to gateway...');
+                    window.location.href = 'silverlands-gateway.html';
+                    return;
+                }
+                
+                console.log('✅ User authenticated:', session.user.email);
+                showMainContent();
+                loadBatchesPreview();
+                initSwiper();
+                
+            } catch (error) {
+                console.log('Auth check error:', error.message);
+                window.location.href = 'silverlands-gateway.html';
+            }
+        }
+
+        function showMainContent() {
+            document.getElementById('loadingScreen').classList.add('hide');
+            document.getElementById('mainContent').style.display = 'block';
+        }
+
+        // Logout function
+        async function logout() {
+            try {
+                await sb.auth.signOut();
+                window.location.href = 'silverlands-gateway.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        // Initialize Swiper
+        function initSwiper() {
+            new Swiper('.testimonial-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    768: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 }
+                }
+            });
+        }
+
+        // Load batches preview
+        async function loadBatchesPreview() {
+            try {
+                const { data: supplier } = await sb
+                    .from('poultry_suppliers')
+                    .select('id')
+                    .eq('email', 'akatunanuraevra@gmail.com')
+                    .single();
+
+                if (supplier) {
+                    const { data: batches } = await sb
+                        .from('poultry_batches')
+                        .select('*')
+                        .eq('supplier_id', supplier.id)
+                        .eq('status', 'available')
+                        .order('created_at', { ascending: false })
+                        .limit(3);
+
+                    if (batches && batches.length > 0) {
+                        displayBatchesPreview(batches);
+                    } else {
+                        displayFallbackBatches();
+                    }
+                } else {
+                    displayFallbackBatches();
+                }
+            } catch (error) {
+                console.error('Error loading batches:', error);
+                displayFallbackBatches();
+            }
+        }
+
+        function displayBatchesPreview(batches) {
+            const container = document.getElementById('batchesPreview');
+            
+            container.innerHTML = batches.map(batch => `
+                <div class="batch-card">
+                    <div class="batch-image" style="background-image: url('${batch.images?.[0] || 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400'}')">
+                        <div class="batch-badge">${batch.age_weeks || 2} weeks</div>
+                    </div>
+                    <div class="batch-info">
+                        <h3>${batch.title || 'Broiler Batch'}</h3>
+                        <div class="batch-details">
+                            <span><i class="fas fa-weight-scale"></i> ${batch.avg_weight_kg || 2} kg</span>
+                            <span><i class="fas fa-egg"></i> ${batch.available_quantity || 0} left</span>
+                        </div>
+                        <div class="batch-price">
+                            UGX ${(batch.price_per_bird || 2000).toLocaleString()} <small>per bird</small>
+                        </div>
+                        <a href="poultry-index.html?batch=${batch.id}" class="view-batch-btn">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayFallbackBatches() {
+            const container = document.getElementById('batchesPreview');
+            
+            container.innerHTML = `
+                <div class="batch-card">
+                    <div class="batch-image" style="background-image: url('https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400')">
+                        <div class="batch-badge">2 weeks</div>
+                    </div>
+                    <div class="batch-info">
+                        <h3>Broilers - Batch #24</h3>
+                        <div class="batch-details">
+                            <span><i class="fas fa-weight-scale"></i> 2.0 kg</span>
+                            <span><i class="fas fa-egg"></i> 600 left</span>
+                        </div>
+                        <div class="batch-price">
+                            UGX 2,000 <small>per bird</small>
+                        </div>
+                        <a href="poultry-index.html?batch=1" class="view-batch-btn">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+
+                <div class="batch-card">
+                    <div class="batch-image" style="background-image: url('https://images.unsplash.com/photo-1587613991115-3c2c2b6dd8b6?w=400')">
+                        <div class="batch-badge">6 weeks</div>
+                    </div>
+                    <div class="batch-info">
+                        <h3>Layers - Batch #12</h3>
+                        <div class="batch-details">
+                            <span><i class="fas fa-weight-scale"></i> 1.8 kg</span>
+                            <span><i class="fas fa-egg"></i> 350 left</span>
+                        </div>
+                        <div class="batch-price">
+                            UGX 3,500 <small>per bird</small>
+                        </div>
+                        <a href="poultry-index.html?batch=2" class="view-batch-btn">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+
+                <div class="batch-card">
+                    <div class="batch-image" style="background-image: url('https://images.unsplash.com/photo-1604848698035-8c3c5d2a6d3b?w=400')">
+                        <div class="batch-badge">3 weeks</div>
+                    </div>
+                    <div class="batch-info">
+                        <h3>Cobb 500 - Batch #8</h3>
+                        <div class="batch-details">
+                            <span><i class="fas fa-weight-scale"></i> 2.2 kg</span>
+                            <span><i class="fas fa-egg"></i> 200 left</span>
+                        </div>
+                        <div class="batch-price">
+                            UGX 2,800 <small>per bird</small>
+                        </div>
+                        <a href="poultry-index.html?batch=3" class="view-batch-btn">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', logout);
+            }
+            checkAuth();
+        });
+    </script>
+</body>
+</html>

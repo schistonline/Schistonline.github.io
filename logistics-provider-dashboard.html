@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Provider Dashboard | iBlue B2B</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/logistics-provider-dashboard.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading your dashboard...</p>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboardScreen">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="company-info">
+                <div class="company-logo" id="companyLogo">S</div>
+                <div class="company-details">
+                    <h1 id="companyName">Spedag Interfreight</h1>
+                    <p id="providerInfo">Provider Code: SPEDAG • Member since 2026</p>
+                </div>
+            </div>
+            
+            <div class="top-bar-right">
+                <div class="status-badge" id="statusBadge">
+                    <i class="fas fa-circle"></i>
+                    <span>Online - Accepting Orders</span>
+                </div>
+                <div class="date-time" id="currentDateTime"></div>
+                <div class="notification-bell" id="notificationBell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notificationCount">0</span>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <img src="https://ui-avatars.com/api/?name=SP&background=0B4F6C&color=fff&size=40" alt="Profile" class="profile-image">
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="#" onclick="viewProfile()"><i class="fas fa-user"></i> Profile</a>
+                        <a href="#" onclick="viewSettings()"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#" onclick="viewHelp()"><i class="fas fa-question-circle"></i> Help</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Container -->
+        <div class="container">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner" id="welcomeBanner">
+                <div class="welcome-content">
+                    <h2>Welcome back, <span id="welcomeName">Loading...</span>!</h2>
+                    <p>You have <span id="pendingRequestsCount">0</span> new shipping requests waiting for your quote.</p>
+                </div>
+                <button class="btn btn-primary" onclick="switchTab('pending')">
+                    <i class="fas fa-eye"></i> View Requests
+                </button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card" onclick="switchTab('pending')">
+                    <div class="stat-header">
+                        <span class="stat-label">Pending Quotes</span>
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value" id="statPending">0</div>
+                    <div class="stat-change positive" id="pendingChange">
+                        <i class="fas fa-arrow-up"></i> <span>0</span> new today
+                    </div>
+                </div>
+                
+                <div class="stat-card" onclick="switchTab('quoted')">
+                    <div class="stat-header">
+                        <span class="stat-label">Active Quotes</span>
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div class="stat-value" id="statQuoted">0</div>
+                    <div class="stat-change" id="quotedChange">
+                        <span>0</span> awaiting response
+                    </div>
+                </div>
+                
+                <div class="stat-card" onclick="switchTab('active')">
+                    <div class="stat-header">
+                        <span class="stat-label">Active Jobs</span>
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <div class="stat-value" id="statActive">0</div>
+                    <div class="stat-change" id="activeChange">
+                        <i class="fas fa-check"></i> <span>0</span> to deliver
+                    </div>
+                </div>
+                
+                <div class="stat-card" onclick="switchTab('completed')">
+                    <div class="stat-header">
+                        <span class="stat-label">Completed</span>
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-value" id="statCompleted">0</div>
+                    <div class="stat-change positive" id="completedChange">
+                        +<span>0</span> this month
+                    </div>
+                </div>
+                
+                <div class="stat-card stat-card-revenue">
+                    <div class="stat-header">
+                        <span class="stat-label">Revenue (30d)</span>
+                        <i class="fas fa-money-bill"></i>
+                    </div>
+                    <div class="stat-value" id="statRevenue">0</div>
+                    <div class="stat-change positive" id="revenueChange">
+                        <i class="fas fa-arrow-up"></i> <span>0</span>% vs last month
+                    </div>
+                </div>
+                
+                <div class="stat-card stat-card-rating">
+                    <div class="stat-header">
+                        <span class="stat-label">Rating</span>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-value" id="statRating">0.0</div>
+                    <div class="stat-change" id="ratingChange">
+                        <span>0</span> reviews
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-line"></i> Performance Overview</h3>
+                    <div class="chart-filters">
+                        <button class="chart-filter-btn active" onclick="filterChart('week')">Week</button>
+                        <button class="chart-filter-btn" onclick="filterChart('month')">Month</button>
+                        <button class="chart-filter-btn" onclick="filterChart('year')">Year</button>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="ordersChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Communication Center -->
+            <div class="comm-center">
+                <div class="comm-header">
+                    <h3><i class="fas fa-comments"></i> Communication Center</h3>
+                    <p>Reply to customers via any platform</p>
+                </div>
+                
+                <div class="comm-grid">
+                    <a href="#" class="comm-card whatsapp" onclick="openWhatsApp()">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                        <small>Quick replies</small>
+                    </a>
+                    
+                    <a href="#" class="comm-card facebook" onclick="openMessenger()">
+                        <i class="fab fa-facebook-messenger"></i>
+                        <span>Messenger</span>
+                        <small>Chat support</small>
+                    </a>
+                    
+                    <a href="#" class="comm-card telegram" onclick="openTelegram()">
+                        <i class="fab fa-telegram"></i>
+                        <span>Telegram</span>
+                        <small>Instant messages</small>
+                    </a>
+                    
+                    <a href="#" class="comm-card email" onclick="openEmail()">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email</span>
+                        <small>Formal communication</small>
+                    </a>
+                    
+                    <a href="#" class="comm-card sms" onclick="openSMS()">
+                        <i class="fas fa-sms"></i>
+                        <span>SMS</span>
+                        <small>Text messages</small>
+                    </a>
+                    
+                    <a href="#" class="comm-card instagram" onclick="openInstagram()">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram</span>
+                        <small>DM support</small>
+                    </a>
+                    
+                    <a href="#" class="comm-card signal" onclick="openSignal()">
+                        <i class="fas fa-lock"></i>
+                        <span>Signal</span>
+                        <small>Secure chat</small>
+                    </a>
+                    
+                    <a href="#" class="comm-card wechat" onclick="openWeChat()">
+                        <i class="fab fa-weixin"></i>
+                        <span>WeChat</span>
+                        <small>ID: iblueb2b</small>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('pending')">
+                    <i class="fas fa-clock"></i> Pending Requests
+                </div>
+                <div class="tab" onclick="switchTab('quoted')">
+                    <i class="fas fa-file-invoice"></i> My Quotes
+                </div>
+                <div class="tab" onclick="switchTab('active')">
+                    <i class="fas fa-truck"></i> Active Shipments
+                </div>
+                <div class="tab" onclick="switchTab('completed')">
+                    <i class="fas fa-check-circle"></i> Completed
+                </div>
+                <div class="tab" onclick="switchTab('rates')">
+                    <i class="fas fa-tag"></i> My Rates
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h3 id="tableTitle">Pending Shipping Requests</h3>
+                    <div class="table-filters">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Search requests...">
+                        </div>
+                        <select class="filter-select" id="filterSelect">
+                            <option value="all">All Requests</option>
+                            <option value="high">High Priority</option>
+                            <option value="today">Due Today</option>
+                            <option value="express">Express</option>
+                        </select>
+                        <button class="btn-refresh" onclick="loadDashboardData()">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="requestsTable">
+                        <thead>
+                            <tr>
+                                <th>Request #</th>
+                                <th>From → To</th>
+                                <th>Weight</th>
+                                <th>Items</th>
+                                <th>Pickup Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td colspan="7" class="loading-row">
+                                    <div class="spinner-small"></div>
+                                    <p>Loading requests...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <button class="pagination-btn" onclick="prevPage()" id="prevPageBtn" disabled>
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <span class="page-info" id="pageInfo">Page 1 of 1</span>
+                    <button class="pagination-btn" onclick="nextPage()" id="nextPageBtn" disabled>
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="timeline">
+                <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                <div id="timelineContainer">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <div class="view-all-link">
+                    <a href="#" onclick="viewAllActivity()">View All Activity <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quote Modal -->
+    <div id="quoteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-tag"></i> Submit Quote</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="request-summary" id="modalRequestSummary">
+                    <div class="summary-item">
+                        <span class="summary-label">Request #</span>
+                        <span class="summary-value" id="modalRequestNumber">SHIP-2026-0123</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Route</span>
+                        <span class="summary-value" id="modalRoute">Kampala → Gulu</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Weight/Volume</span>
+                        <span class="summary-value" id="modalWeight">500 kg</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Items</span>
+                        <span class="summary-value" id="modalItems">Poultry feed</span>
+                    </div>
+                </div>
+                
+                <form id="quoteForm" onsubmit="event.preventDefault(); submitQuote()">
+                    <div class="form-group">
+                        <label class="required">Quote Amount (UGX)</label>
+                        <input type="number" id="quoteAmount" placeholder="e.g., 750000" min="0" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required">Delivery Days</label>
+                            <input type="number" id="estimatedDays" placeholder="e.g., 3" min="1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Service Type</label>
+                            <select id="serviceType">
+                                <option value="standard">Standard</option>
+                                <option value="express">Express</option>
+                                <option value="economy">Economy</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Additional Notes</label>
+                        <textarea id="quoteNotes" rows="3" placeholder="Any special conditions or information for the buyer..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Valid Until</label>
+                        <input type="date" id="validUntil" min="">
+                    </div>
+                    
+                    <div class="quote-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitQuoteBtn">
+                            <i class="fas fa-paper-plane"></i> Submit Quote
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Panel -->
+    <div id="notificationPanel" class="notification-panel">
+        <div class="notification-header">
+            <h4>Notifications</h4>
+            <button onclick="markAllAsRead()">Mark all as read</button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="js/logistics-provider-dashboard.js"></script>
+</body>
+</html>

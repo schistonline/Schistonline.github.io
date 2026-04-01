@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logistics Partners | iBlue B2B</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { font-family: Arial; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #0B4F6C; color: white; padding: 30px; border-radius: 10px; margin-bottom: 20px; }
+        .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filter-btn { background: white; border: 1px solid #ddd; padding: 10px 20px; border-radius: 30px; cursor: pointer; }
+        .filter-btn.active { background: #0B4F6C; color: white; border-color: #0B4F6C; }
+        .providers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card h3 { color: #0B4F6C; margin-bottom: 10px; }
+        .badge { background: #e0f2fe; color: #0369a1; padding: 3px 10px; border-radius: 20px; font-size: 12px; display: inline-block; margin: 2px; }
+        .route { font-size: 13px; color: #666; margin: 5px 0; }
+        .contact { margin: 15px 0; }
+        .btn { display: block; text-align: center; padding: 10px; border-radius: 5px; text-decoration: none; margin: 5px 0; }
+        .btn-wa { background: #25D366; color: white; }
+        .btn-quote { background: #0B4F6C; color: white; }
+        .loading { text-align: center; padding: 50px; }
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #0B4F6C; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚚 Trusted Logistics Partners</h1>
+            <p>Connect with vetted shipping companies, freight forwarders, and clearing agents</p>
+            <p><small>✈️ Sea • Air • Road • Clearing • Warehousing</small></p>
+        </div>
+
+        <div class="filters" id="filters">
+            <button class="filter-btn active" onclick="filterByService('all')">All</button>
+            <button class="filter-btn" onclick="filterByService('sea_freight')">Sea Freight</button>
+            <button class="filter-btn" onclick="filterByService('air_freight')">Air Freight</button>
+            <button class="filter-btn" onclick="filterByService('road_transport')">Road Transport</button>
+            <button class="filter-btn" onclick="filterByService('clearing')">Clearing</button>
+        </div>
+
+        <div id="providersGrid" class="providers-grid">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading logistics partners...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sb = supabase.createClient(
+            'https://uufhvmmgwzkxvvdbqemz.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc'
+        );
+
+        let allProviders = [];
+
+        async function loadProviders() {
+            const { data, error } = await sb
+                .from('logistics_providers')
+                .select('*')
+                .eq('is_active', true);
+
+            if (error) {
+                console.error('Error loading providers:', error);
+                return;
+            }
+
+            allProviders = data || [];
+            displayProviders(allProviders);
+        }
+
+        function displayProviders(providers) {
+            const grid = document.getElementById('providersGrid');
+            
+            if (providers.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px;">No logistics providers found</div>';
+                return;
+            }
+
+            grid.innerHTML = providers.map(p => `
+                <div class="card">
+                    <h3>${p.company_name}</h3>
+                    <div>
+                        ${(p.services_offered || []).map(s => 
+                            `<span class="badge">${s.replace('_', ' ')}</span>`
+                        ).join('')}
+                    </div>
+                    <div style="margin: 10px 0;">
+                        <small>📍 Covers: ${(p.coverage_areas || []).join(', ')}</small>
+                    </div>
+                    <div class="contact">
+                        <small>💰 Commission: ${p.commission_rate}%</small>
+                    </div>
+                    <a href="request-shipping.html?provider=${p.id}" class="btn btn-quote">
+                        Request Quote
+                    </a>
+                    <a href="#" class="btn btn-wa" onclick="contactWhatsApp('${p.company_name}')">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function filterByService(service) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (service === 'all') {
+                displayProviders(allProviders);
+            } else {
+                const filtered = allProviders.filter(p => 
+                    p.services_offered && p.services_offered.includes(service)
+                );
+                displayProviders(filtered);
+            }
+        }
+
+        function contactWhatsApp(companyName) {
+            // You can replace with actual WhatsApp numbers from your database
+            const message = encodeURIComponent(`Hello, I found you on iBlue B2B and need shipping quotes.`);
+            window.open(`https://wa.me/256700000000?text=${message}`, '_blank');
+        }
+
+        loadProviders();
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</body>
+</html>

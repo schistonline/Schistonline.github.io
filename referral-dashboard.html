@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Refer & Earn - Schist.online</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/referral-dashboard.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">Refer & Earn</span>
+            </div>
+            <div class="header-right">
+                <button class="share-btn" id="shareBtn">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Earnings Summary Cards -->
+    <div class="earnings-summary">
+        <div class="summary-card cash-card">
+            <div class="card-icon">
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="card-content">
+                <span class="card-label">Cash Balance</span>
+                <span class="card-value" id="cashBalance">UGX 0</span>
+                <button class="withdraw-btn" id="withdrawCashBtn">Withdraw</button>
+            </div>
+        </div>
+        
+        <div class="summary-card credit-card">
+            <div class="card-icon">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="card-content">
+                <span class="card-label">Credits Balance</span>
+                <span class="card-value" id="creditBalance">0</span>
+                <span class="credit-value" id="creditValue">UGX 0</span>
+            </div>
+        </div>
+        
+        <div class="summary-card total-card">
+            <div class="card-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="card-content">
+                <span class="card-label">Total Earned</span>
+                <span class="card-value" id="totalEarned">UGX 0</span>
+                <span class="total-referrals" id="totalReferrals">0 referrals</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Code Section -->
+    <div class="referral-code-section">
+        <div class="section-header">
+            <h3><i class="fas fa-link"></i> Your Referral Link</h3>
+            <button class="copy-code-btn" id="copyCodeBtn">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+        </div>
+        <div class="code-container">
+            <div class="referral-code" id="referralCode">Loading...</div>
+            <div class="referral-link" id="referralLink">Loading...</div>
+        </div>
+        
+        <!-- Share Options -->
+        <div class="share-options">
+            <h4>Share via</h4>
+            <div class="share-buttons">
+                <button class="share-whatsapp" id="shareWhatsapp">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+                <button class="share-sms" id="shareSms">
+                    <i class="fas fa-sms"></i> SMS
+                </button>
+                <button class="share-copy" id="shareCopy">
+                    <i class="fas fa-copy"></i> Copy Link
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Stats -->
+    <div class="referral-stats">
+        <div class="stat-item">
+            <span class="stat-value" id="supplierReferrals">0</span>
+            <span class="stat-label">Suppliers Referred</span>
+            <span class="stat-sub" id="verifiedSuppliers">(0 verified)</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-value" id="buyerReferrals">0</span>
+            <span class="stat-label">Buyers Referred</span>
+            <span class="stat-sub">+30 credits each</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-value" id="creditsToNext">1,000</span>
+            <span class="stat-label">Credits to Next</span>
+            <span class="stat-sub">UGX 10,000 payout</span>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="how-it-works">
+        <h3><i class="fas fa-info-circle"></i> How It Works</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-icon">1</div>
+                <div class="step-content">
+                    <strong>Share your link</strong>
+                    <p>Share your unique referral link with friends and business partners</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">2</div>
+                <div class="step-content">
+                    <strong>They sign up</strong>
+                    <p>When they join Schist.online using your link, you earn rewards</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">3</div>
+                <div class="step-content">
+                    <strong>Earn rewards</strong>
+                    <p>Suppliers: UGX 5,000 after verification • Buyers: 30 credits each</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">4</div>
+                <div class="step-content">
+                    <strong>Withdraw</strong>
+                    <p>Cash available instantly | 1,000 credits = UGX 10,000</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Referrals -->
+    <div class="recent-referrals">
+        <div class="section-header">
+            <h3><i class="fas fa-history"></i> Recent Referrals</h3>
+            <a href="referral-history.html" class="view-all">View All</a>
+        </div>
+        <div class="referrals-list" id="recentReferralsList">
+            <div class="loading-skeleton">
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="referral-dashboard.html" class="nav-item active">
+            <i class="fas fa-gift"></i>
+            <span>Refer</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="help.html" class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>My Schist</span>
+        </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p id="loadingMessage">Loading...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/referral-utils.js"></script>
+    <script src="js/referral-dashboard.js"></script>
+</body>
+</html>

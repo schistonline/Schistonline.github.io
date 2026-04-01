@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Help Center - iBlue B2B Platform</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #1e293b;
+            line-height: 1.5;
+            padding-bottom: 80px; /* Space for bottom nav */
+        }
+
+        /* Header */
+        .help-header {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            padding: 24px 16px;
+            text-align: center;
+        }
+
+        .help-header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .help-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Search Bar */
+        .search-container {
+            padding: 16px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 8px 16px;
+            gap: 12px;
+        }
+
+        .search-box i {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 8px 0;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .search-box input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Quick Categories */
+        .categories {
+            padding: 20px 16px 8px;
+            background: white;
+            margin: 8px 0;
+        }
+
+        .categories h2 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .category-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            font-size: 20px;
+            transition: 0.2s;
+        }
+
+        .category-item span {
+            font-size: 11px;
+            color: #475569;
+            text-align: center;
+        }
+
+        .category-item.active .category-icon {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* FAQ Sections */
+        .faq-section {
+            background: white;
+            margin: 8px 16px;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section-header i {
+            font-size: 20px;
+            color: #2563eb;
+            background: #e6f0ff;
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        .section-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .faq-item {
+            margin-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 16px;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .faq-question h4 {
+            font-size: 14px;
+            font-weight: 500;
+            color: #334155;
+            flex: 1;
+            padding-right: 16px;
+        }
+
+        .faq-question i {
+            color: #64748b;
+            font-size: 14px;
+            transition: transform 0.2s;
+        }
+
+        .faq-answer {
+            display: none;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.6;
+            padding-right: 24px;
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        .faq-answer ul {
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+
+        .faq-answer li {
+            margin-bottom: 4px;
+        }
+
+        /* Contact Options */
+        .contact-section {
+            background: white;
+            margin: 16px;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .contact-section h3 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .contact-card {
+            background: #f8fafc;
+            padding: 16px 12px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .contact-card i {
+            font-size: 22px;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+
+        .contact-card h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: #1e293b;
+        }
+
+        .contact-card p {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 16px;
+            background: white;
+            margin: 0 16px 16px;
+            border-radius: 16px;
+        }
+
+        .quick-link {
+            flex: 1 1 calc(50% - 6px);
+            background: #f8fafc;
+            padding: 14px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .quick-link i {
+            color: #2563eb;
+            font-size: 16px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 12px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            border-top: 1px solid #e2e8f0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #94a3b8;
+            font-size: 11px;
+            gap: 4px;
+            transition: 0.2s;
+            flex: 1;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-item.active {
+            color: #2563eb;
+        }
+
+        .nav-item span {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
+            .help-header h1 {
+                font-size: 32px;
+            }
+            
+            .help-header p {
+                font-size: 16px;
+            }
+            
+            .category-grid {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .faq-section {
+                max-width: 800px;
+                margin: 16px auto;
+            }
+            
+            .contact-section {
+                max-width: 800px;
+                margin: 16px auto;
+            }
+            
+            .quick-links {
+                max-width: 800px;
+                margin: 16px auto;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .help-container {
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="help-header">
+        <h1>How can we help you?</h1>
+        <p>Get answers to your questions about iBlue B2B platform</p>
+    </div>
+
+    <!-- Search -->
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search for help articles...">
+            <i class="fas fa-sliders-h"></i>
+        </div>
+    </div>
+
+    <!-- Quick Categories -->
+    <div class="categories">
+        <h2>Popular Topics</h2>
+        <div class="category-grid">
+            <div class="category-item active">
+                <div class="category-icon"><i class="fas fa-user-plus"></i></div>
+                <span>Registration</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon"><i class="fas fa-shopping-cart"></i></div>
+                <span>Buying</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon"><i class="fas fa-boxes"></i></div>
+                <span>Selling</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon"><i class="fas fa-truck"></i></div>
+                <span>Logistics</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Sections -->
+    <div class="help-container">
+        <!-- For Buyers Section -->
+        <div class="faq-section">
+            <div class="section-header">
+                <i class="fas fa-shopping-bag"></i>
+                <h3>For Buyers</h3>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h4>How do I find verified suppliers?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Use our supplier verification filters to find Gold Suppliers with verified business licenses, factory audits, and trade history. Look for the verified badge on supplier profiles.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h4>What payment methods are safe?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    We recommend using iBlue Secure Payment for protection. We accept:
+                    <ul>
+                        <li>• Letter of Credit (L/C)</li>
+                        <li>• Telegraphic Transfer (T/T)</li>
+                        <li>• Western Union</li>
+                        <li>• iBlue Escrow Service</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h4>How do I request a sample?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Click "Request Sample" on any product page. Most suppliers provide samples for a fee, which may be refunded upon bulk order placement.
+                </div>
+            </div>
+        </div>
+
+        <!-- For Suppliers Section -->
+        <div class="faq-section">
+            <div class="section-header">
+                <i class="fas fa-store"></i>
+                <h3>For Suppliers</h3>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h4>How do I get verified as a supplier?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Submit your business license, tax registration, and factory photos. Our verification team will conduct an onsite or virtual audit within 5-7 business days.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h4>What are the selling fees?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Basic listing is free. Premium features start at $999/year including verified status, priority ranking, and RFQ access. Transaction fees apply only for completed sales.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h4>How to manage international orders?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Use our Trade Assurance system to manage orders, track payments, and handle shipping documentation. We provide Incoterms guidance and customs support.
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Guide -->
+        <div class="faq-section">
+            <div class="section-header">
+                <i class="fas fa-user-check"></i>
+                <h3>How to Register</h3>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h4>Step-by-step registration guide</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <ol style="margin-left: 20px;">
+                        <li>Click "Sign Up" on the homepage</li>
+                        <li>Choose account type: Buyer or Supplier</li>
+                        <li>Enter email and create password</li>
+                        <li>Verify email address</li>
+                        <li>Complete company profile</li>
+                        <li>Submit verification documents (for suppliers)</li>
+                        <li>Wait for approval (24-48 hours)</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h4>Documents required for verification</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <ul>
+                        <li>Business registration certificate</li>
+                        <li>Tax identification number</li>
+                        <li>Bank account details</li>
+                        <li>Company photos/video</li>
+                        <li>Product catalog (optional)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logistics Providers -->
+        <div class="faq-section">
+            <div class="section-header">
+                <i class="fas fa-ship"></i>
+                <h3>Logistics & Shipping</h3>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h4>Partner logistics providers</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    We partner with:
+                    <ul>
+                        <li>DHL Express - 2-5 day delivery</li>
+                        <li>FedEx - 3-6 day delivery</li>
+                        <li>UPS - 3-7 day delivery</li>
+                        <li>Maersk - Sea freight</li>
+                        <li>CMA CGM - Container shipping</li>
+                        <li>Local freight forwarders in 50+ countries</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h4>How to calculate shipping costs?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Use our Logistics Calculator tool. Enter product weight, dimensions, and destination for instant quotes from multiple carriers. Bulk shipments get discounted rates.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h4>Track your shipment</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Go to "My Orders" > "Track Shipment" or enter your tracking number on our tracking page. Get real-time updates via SMS and email.
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Contact Links -->
+        <div class="quick-links">
+            <a href="#" class="quick-link">
+                <i class="fas fa-file-alt"></i>
+                <span>User Guide</span>
+            </a>
+            <a href="#" class="quick-link">
+                <i class="fas fa-video"></i>
+                <span>Video Tutorials</span>
+            </a>
+            <a href="#" class="quick-link">
+                <i class="fas fa-comment"></i>
+                <span>Live Chat</span>
+            </a>
+            <a href="#" class="quick-link">
+                <i class="fas fa-envelope"></i>
+                <span>Email Support</span>
+            </a>
+        </div>
+
+        <!-- Contact Options -->
+        <div class="contact-section">
+            <h3>Still need help?</h3>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <i class="fas fa-headset"></i>
+                    <h4>24/7 Support</h4>
+                    <p>+1 (800) 123-4567</p>
+                </div>
+                <div class="contact-card">
+                    <i class="fas fa-envelope-open-text"></i>
+                    <h4>Email</h4>
+                    <p>help@iblue.com</p>
+                </div>
+                <div class="contact-card">
+                    <i class="fas fa-comments"></i>
+                    <h4>Live Chat</h4>
+                    <p>Avg. 2 min response</p>
+                </div>
+                <div class="contact-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h4>Schedule Call</h4>
+                    <p>Book a consultation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="help.html" class="nav-item active">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+        </a>
+        <a href="logistics.html" class="nav-item">
+            <i class="fas fa-truck"></i>
+            <span>Logistics</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>My iBlue</span>
+        </a>
+    </nav>
+
+    <script>
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            
+            // Toggle active class
+            answer.classList.toggle('active');
+            
+            // Rotate icon
+            if (answer.classList.contains('active')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+            
+            // Close other open answers (optional)
+            const allAnswers = document.querySelectorAll('.faq-answer');
+            const allIcons = document.querySelectorAll('.faq-question i');
+            
+            // Uncomment below if you want only one open at a time
+            /*
+            allAnswers.forEach(item => {
+                if (item !== answer && item.classList.contains('active')) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            allIcons.forEach(item => {
+                if (item !== icon && item.style.transform === 'rotate(180deg)') {
+                    item.style.transform = 'rotate(0deg)';
+                }
+            });
+            */
+        }
+
+        // Search functionality (demo)
+        document.querySelector('.search-box input').addEventListener('keyup', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('h4').textContent.toLowerCase();
+                if (question.includes(searchTerm) || searchTerm === '') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

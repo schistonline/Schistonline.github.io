@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Logistics Provider | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo i {
+            font-size: 48px;
+            color: #0B4F6C;
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            color: #1f2937;
+        }
+
+        .logo p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #374151;
+        }
+
+        label i {
+            color: #0B4F6C;
+            width: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0B4F6C;
+            box-shadow: 0 0 0 3px rgba(11,79,108,0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #0B4F6C;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #0a4057;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(11,79,108,0.3);
+        }
+
+        .links {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .links a {
+            color: #0B4F6C;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .demo-credentials {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-truck"></i>
+            <h1>Logistics Provider Login</h1>
+            <p>Access your dashboard to manage shipments</p>
+        </div>
+
+        <div id="alertMessage" class="alert"></div>
+
+        <form onsubmit="event.preventDefault(); login()">
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email or Provider Code</label>
+                <input type="text" id="identifier" placeholder="your@email.com or SPEDAG" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i> Login to Dashboard
+            </button>
+
+            <div class="links">
+                <a href="logistics-register.html">Don't have an account? Register here</a>
+            </div>
+
+            
+        </form>
+    </div>
+
+    <script>
+        const sb = supabase.createClient(
+            'https://uufhvmmgwzkxvvdbqemz.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc'
+        );
+
+        async function login() {
+            const identifier = document.getElementById('identifier').value;
+            const password = document.getElementById('password').value;
+            
+            const loginBtn = document.getElementById('loginBtn');
+            const originalText = loginBtn.innerHTML;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            loginBtn.disabled = true;
+
+            try {
+                let email = identifier;
+
+                // If identifier looks like a provider code (all caps, letters+numbers)
+                if (/^[A-Z0-9]{4,9}$/.test(identifier)) {
+                    // Try to find provider by code
+                    const { data: provider, error: providerError } = await sb
+                        .from('logistics_providers')
+                        .select('email')
+                        .eq('provider_code', identifier)
+                        .single();
+
+                    if (providerError || !provider) {
+                        throw new Error('Provider code not found');
+                    }
+
+                    email = provider.email;
+                }
+
+                const { data, error } = await sb.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) throw error;
+
+                // Redirect to dashboard
+                window.location.href = 'logistics-provider-dashboard.html';
+
+            } catch (error) {
+                showAlert(error.message || 'Invalid credentials', 'error');
+                loginBtn.innerHTML = originalText;
+                loginBtn.disabled = false;
+            }
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertMessage');
+            alert.textContent = message;
+            alert.className = `alert alert-${type} show`;
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

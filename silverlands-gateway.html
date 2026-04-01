@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Silver Lands - Premium Poultry Uganda | SourceX B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #faf9f6;
+            color: #1e293b;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ffffff;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.5s;
+        }
+
+        .loading-screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .silver-loader {
+            width: 80px;
+            height: 80px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #c6a355;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Main Container */
+        .gateway-container {
+            max-width: 100%;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #1a2e3f 0%, #2c3e4f 100%);
+            color: white;
+            padding: 60px 20px 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><path d="M20,30 Q40,15 60,30 T100,30" stroke="white" fill="none" stroke-width="1"/><path d="M10,50 Q30,35 50,50 T90,50" stroke="white" fill="none" stroke-width="1"/><circle cx="30" cy="70" r="3" fill="white"/><circle cx="70" cy="70" r="3" fill="white"/></svg>');
+            background-size: cover;
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #c6a355, #e6c27a);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #1a2e3f;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .logo-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: #e6c27a;
+            letter-spacing: 2px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-outline-light {
+            padding: 10px 24px;
+            background: transparent;
+            border: 2px solid #e6c27a;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline-light:hover {
+            background: #e6c27a;
+            color: #1a2e3f;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary-light {
+            padding: 10px 24px;
+            background: #e6c27a;
+            border: none;
+            border-radius: 40px;
+            color: #1a2e3f;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary-light:hover {
+            background: #d4b168;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230,194,122,0.3);
+        }
+
+        .hero-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .hero-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero-text h2 span {
+            color: #e6c27a;
+            display: block;
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: #e6c27a;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+            border: 4px solid #e6c27a;
+        }
+
+        .floating-badge {
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            background: #e6c27a;
+            color: #1a2e3f;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Access Gate Section */
+        .access-gate {
+            padding: 60px 20px;
+            background: #ffffff;
+            text-align: center;
+        }
+
+        .access-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #f8fafc;
+            border-radius: 30px;
+            padding: 50px 40px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+
+        .access-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #1a2e3f, #2c3e4f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 42px;
+            color: #e6c27a;
+        }
+
+        .access-card h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a2e3f;
+        }
+
+        .access-card p {
+            color: #64748b;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .access-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-access {
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-access-primary {
+            background: linear-gradient(135deg, #1a2e3f, #2c3e4f);
+            color: white;
+        }
+
+        .btn-access-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-access-secondary {
+            background: #e6c27a;
+            color: #1a2e3f;
+        }
+
+        .btn-access-secondary:hover {
+            background: #d4b168;
+            transform: translateY(-2px);
+        }
+
+        /* Features Preview */
+        .features-preview {
+            background: #f8fafc;
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: #1a2e3f;
+            margin-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #e6c27a;
+            margin: 15px auto 0;
+        }
+
+        .section-title p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 20px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: #e6c27a;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #1a2e3f, #2c3e4f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            color: #e6c27a;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a2e3f;
+            color: white;
+            padding: 40px 20px 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer p {
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-main {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-top {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .access-card {
+                padding: 40px 20px;
+            }
+
+            .floating-badge {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .access-buttons {
+                flex-direction: column;
+            }
+            
+            .btn-access {
+                justify-content: center;
+            }
+            
+            .auth-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="silver-loader"></div>
+        <p>Silver Lands • Premium Poultry</p>
+    </div>
+
+    <!-- Main Gateway Content -->
+    <div class="gateway-container" id="mainContent" style="display: none;">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-top">
+                    <div class="logo-area">
+                        <div class="logo-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="logo-text">
+                            <h1>SILVER LANDS</h1>
+                            <p>Premium Poultry Uganda</p>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-buttons" id="authButtons">
+                        <a href="silverlands-login.html" class="btn-outline-light">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </a>
+                        <a href="register.html" class="btn-primary-light">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-main">
+                    <div class="hero-text">
+                        <h2>
+                            Uganda's Leading
+                            <span>Poultry Supplier</span>
+                        </h2>
+                        <p>Premium quality broilers, layers, and day-old chicks. Farm-raised with care, delivered with trust.</p>
+                        
+                        <div class="hero-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">15+</div>
+                                <div class="stat-label">Years Experience</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">50K+</div>
+                                <div class="stat-label">Birds Sold</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">100%</div>
+                                <div class="stat-label">Vaccinated</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-image">
+                        <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800" alt="Silver Lands Poultry">
+                        <div class="floating-badge">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Verified Supplier</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Access Gate Section -->
+        <section class="access-gate">
+            <div class="access-card">
+                <div class="access-icon">
+                    <i class="fas fa-egg"></i>
+                </div>
+                <h2>Access Premium Poultry Products</h2>
+                <p>Sign in to view available batches, place orders, and get exclusive supplier pricing</p>
+                <div class="access-buttons">
+                    <a href="silverlands-login.html" class="btn-access btn-access-primary">
+                        <i class="fas fa-sign-in-alt"></i> Sign In to Your Account
+                    </a>
+                    <a href="register.html" class="btn-access btn-access-secondary">
+                        <i class="fas fa-user-plus"></i> Create Free Account
+                    </a>
+                </div>
+                <p style="margin-top: 20px; font-size: 13px; color: #94a3b8;">
+                    <i class="fas fa-shield-alt"></i> Secure B2B platform • Trusted by 5,000+ businesses
+                </p>
+            </div>
+        </section>
+
+        <!-- Features Preview -->
+        <section class="features-preview">
+            <div class="section-title">
+                <h2>Why Choose Silver Lands?</h2>
+                <p>Quality you can trust, service you deserve</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-syringe"></i>
+                    </div>
+                    <h3>100% Vaccinated</h3>
+                    <p>All birds fully vaccinated and health-certified by veterinary professionals</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Free Delivery</h3>
+                    <p>Free delivery within Kampala for orders above 100 birds. Competitive rates nationwide</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3>Farm-Raised</h3>
+                    <p>Raised on natural feed with proper care, ensuring healthy and fast-growing birds</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2026 Silver Lands. All rights reserved. Powered by SourceX B2B Marketplace</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Hide loading screen after 1 second
+        setTimeout(() => {
+            document.getElementById('loadingScreen').classList.add('hide');
+            document.getElementById('mainContent').style.display = 'block';
+        }, 1000);
+
+        // Check authentication status - with proper error handling
+        async function checkAuth() {
+            try {
+                // Use getSession() instead of getUser() to avoid auth errors
+                const { data: { session }, error } = await sb.auth.getSession();
+                
+                // If there's an error, just show the gateway (user not logged in)
+                if (error) {
+                    console.log('No active session, showing gateway');
+                    return;
+                }
+
+                if (session && session.user) {
+                    // User is authenticated - redirect to silverlands-welcome.html
+                    console.log('✅ User authenticated, redirecting to Silver Lands...');
+                    window.location.href = 'silverlands-welcome.html';
+                } else {
+                    // User not authenticated - show gateway content
+                    console.log('👤 User not authenticated, showing gateway');
+                }
+            } catch (error) {
+                console.log('Auth check error (expected for non-logged users):', error.message);
+                // Don't redirect - just show the gateway
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Small delay to ensure everything is loaded
+            setTimeout(() => {
+                checkAuth();
+            }, 500);
+        });
+    </script>
+</body>
+</html>

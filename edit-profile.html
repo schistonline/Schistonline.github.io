@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Edit Profile - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/edit-profile.css">
+</head>
+<body>
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <button class="menu-btn" id="menuToggle">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>Edit Profile</h1>
+            <p>Update your personal information</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="spinner"></div>
+            <p>Loading profile...</p>
+        </div>
+
+        <!-- Edit Profile Form (Hidden until loaded) -->
+        <div class="edit-profile-content" id="editProfileContent" style="display: none;">
+            <form id="profileForm">
+                <!-- Avatar Section -->
+                <div class="avatar-section">
+                    <div class="avatar-preview" id="avatarPreview">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="avatar-actions">
+                        <button type="button" class="btn-outline" id="changeAvatarBtn">
+                            <i class="fas fa-camera"></i> Change Photo
+                        </button>
+                        <button type="button" class="btn-outline" id="removeAvatarBtn">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                    <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                    <input type="hidden" id="avatarUrl">
+                </div>
+
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h3><i class="fas fa-user"></i> Personal Information</h3>
+                    
+                    <div class="form-group">
+                        <label>Full Name <span class="required">*</span></label>
+                        <input type="text" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" id="email" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="phone" placeholder="+256 700 000000">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" id="location" placeholder="City, District">
+                        </div>
+                        <div class="form-group">
+                            <label>District</label>
+                            <select id="district">
+                                <option value="">Select district</option>
+                                <option value="Kampala">Kampala</option>
+                                <option value="Wakiso">Wakiso</option>
+                                <option value="Mukono">Mukono</option>
+                                <option value="Jinja">Jinja</option>
+                                <option value="Mbarara">Mbarara</option>
+                                <option value="Gulu">Gulu</option>
+                                <option value="Lira">Lira</option>
+                                <option value="Arua">Arua</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Business Information (for suppliers/buyers) -->
+                <div class="form-section">
+                    <h3><i class="fas fa-building"></i> Business Information</h3>
+                    
+                    <div class="form-group">
+                        <label>Business Name</label>
+                        <input type="text" id="businessName" placeholder="Your business name">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Business Type</label>
+                            <select id="businessType">
+                                <option value="">Select type</option>
+                                <option value="Manufacturer">Manufacturer</option>
+                                <option value="Distributor">Distributor</option>
+                                <option value="Wholesaler">Wholesaler</option>
+                                <option value="Retailer">Retailer</option>
+                                <option value="Importer">Importer</option>
+                                <option value="Exporter">Exporter</option>
+                                <option value="Service Provider">Service Provider</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>TIN Number</label>
+                            <input type="text" id="tinNumber" placeholder="Tax Identification Number">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Settings -->
+                <div class="form-section">
+                    <h3><i class="fas fa-cog"></i> Account Settings</h3>
+                    
+                    <div class="form-check">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isSupplier">
+                            <span>I want to sell products on iBlue (become a supplier)</span>
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isBuyer" checked>
+                            <span>I want to buy products on iBlue</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="saveProfileBtn">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="window.history.back()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Error Loading Profile</h3>
+            <p>There was an error loading your profile data</p>
+            <button class="btn-primary" onclick="location.reload()">
+                <i class="fas fa-sync-alt"></i> Try Again
+            </button>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="my-inquiries.html" class="nav-item">
+            <i class="fas fa-file-invoice"></i>
+            <span>Inquiries</span>
+        </a>
+        <a href="orders.html" class="nav-item">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Orders</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/edit-profile.js"></script>
+</body>
+</html>

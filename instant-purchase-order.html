@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Create Purchase Order - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/instant-purchase-order.css">
+</head>
+<body>
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <button class="menu-btn" id="menuToggle">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="step active" id="step1Indicator">
+                <span class="step-number">1</span>
+                <span class="step-label">Supplier</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step2Indicator">
+                <span class="step-number">2</span>
+                <span class="step-label">Products</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step3Indicator">
+                <span class="step-number">3</span>
+                <span class="step-label">Terms</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step4Indicator">
+                <span class="step-number">4</span>
+                <span class="step-label">Review</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+
+        <!-- Step 1: Select Supplier -->
+        <div class="step-content active" id="step1">
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-warehouse"></i>
+                    Select Supplier
+                </h2>
+
+                <!-- Search Suppliers -->
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="supplierSearch" placeholder="Search suppliers...">
+                </div>
+
+                <!-- Suppliers List -->
+                <div class="suppliers-list" id="suppliersList">
+                    <div class="loading-spinner"></div>
+                </div>
+
+                <!-- Manual Entry Toggle -->
+                <button class="manual-toggle" id="showManualSupplier">
+                    <i class="fas fa-plus-circle"></i> Enter supplier details manually
+                </button>
+
+                <!-- Manual Supplier Form -->
+                <div class="manual-supplier-form" id="manualSupplierForm" style="display: none;">
+                    <h3>Manual Supplier Entry</h3>
+                    
+                    <div class="form-group">
+                        <label>Business Name <span class="required">*</span></label>
+                        <input type="text" id="manualBusinessName" placeholder="e.g., ABC Enterprises Ltd">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Contact Person</label>
+                        <input type="text" id="manualContactPerson" placeholder="Full name">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone <span class="required">*</span></label>
+                            <input type="tel" id="manualPhone" placeholder="+256 700 000000">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="manualEmail" placeholder="supplier@example.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea id="manualAddress" rows="2" placeholder="Street, city, district..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <button class="btn-primary" id="saveManualSupplier">Save Supplier</button>
+                        <button class="btn-secondary" id="cancelManualSupplier">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Selected Supplier -->
+                <div class="selected-supplier" id="selectedSupplier" style="display: none;">
+                    <h3>Selected Supplier</h3>
+                    <div class="supplier-card" id="selectedSupplierCard"></div>
+                </div>
+
+                <!-- Continue Button -->
+                <button class="continue-btn" id="continueToStep2" disabled>
+                    Continue <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Add Products -->
+        <div class="step-content" id="step2">
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-boxes"></i>
+                    Add Products
+                </h2>
+
+                <!-- Product Search -->
+                <div class="product-search">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="productSearch" placeholder="Search products...">
+                    </div>
+                </div>
+
+                <!-- Quick Add by SKU -->
+                <div class="quick-add">
+                    <input type="text" id="skuInput" placeholder="Enter SKU">
+                    <button class="btn-primary" id="addBySkuBtn">Add</button>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="products-grid" id="productsGrid"></div>
+
+                <!-- Cart -->
+                <div class="cart-section" id="cartSection" style="display: none;">
+                    <div class="cart-header">
+                        <h3><i class="fas fa-shopping-cart"></i> Cart (<span id="cartCount">0</span>)</h3>
+                        <button class="clear-cart" id="clearCartBtn">Clear</button>
+                    </div>
+                    
+                    <div class="cart-items" id="cartItems"></div>
+                    
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="cartSubtotal">UGX 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step Actions -->
+                <div class="step-actions">
+                    <button class="back-btn-step" id="backToStep1">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="continue-btn" id="continueToStep3" disabled>
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Terms & Payment -->
+        <div class="step-content" id="step3">
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-file-contract"></i>
+                    Terms & Payment
+                </h2>
+
+                <!-- Payment Method -->
+                <div class="form-group">
+                    <label>Payment Method <span class="required">*</span></label>
+                    <select id="paymentMethod" required>
+                        <option value="">Select payment method</option>
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="mobile_money">Mobile Money</option>
+                        <option value="cash_on_delivery">Cash on Delivery</option>
+                        <option value="cheque">Cheque</option>
+                    </select>
+                </div>
+
+                <!-- Payment Terms -->
+                <div class="form-group">
+                    <label>Payment Terms</label>
+                    <select id="paymentTerms">
+                        <option value="advance_full">100% Advance</option>
+                        <option value="advance_partial">50% Advance, 50% on Delivery</option>
+                        <option value="credit_7">7 Days Credit</option>
+                        <option value="credit_15">15 Days Credit</option>
+                        <option value="credit_30">30 Days Credit</option>
+                        <option value="negotiable">Negotiable</option>
+                    </select>
+                </div>
+
+                <!-- Mobile Money Fields -->
+                <div class="conditional-fields" id="mobileMoneyFields" style="display: none;">
+                    <div class="form-group">
+                        <label>Mobile Money Number</label>
+                        <input type="tel" id="mobileMoneyNumber" placeholder="e.g., 0772 123456">
+                    </div>
+                    <div class="form-group">
+                        <label>Network</label>
+                        <select id="mobileMoneyNetwork">
+                            <option value="mtn">MTN Uganda</option>
+                            <option value="airtel">Airtel Uganda</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Bank Transfer Fields -->
+                <div class="conditional-fields" id="bankFields" style="display: none;">
+                    <div class="form-group">
+                        <label>Bank Name</label>
+                        <input type="text" id="bankName" placeholder="e.g., Stanbic Bank">
+                    </div>
+                    <div class="form-group">
+                        <label>Account Number</label>
+                        <input type="text" id="accountNumber" placeholder="Account number">
+                    </div>
+                </div>
+
+                <!-- Delivery Terms - FIXED: Properly included -->
+                <div class="form-group">
+                    <label>Delivery Terms <span class="required">*</span></label>
+                    <select id="deliveryTerms" required>
+                        <option value="">Select delivery terms</option>
+                        <option value="ex_warehouse">Ex-Warehouse</option>
+                        <option value="fob">FOB (Free on Board)</option>
+                        <option value="cif">CIF (Cost, Insurance, Freight)</option>
+                        <option value="door_delivery">Door Delivery</option>
+                        <option value="pickup">Buyer Pickup</option>
+                        <option value="dap">Delivered at Place</option>
+                    </select>
+                </div>
+
+                <!-- Delivery Address -->
+                <div class="form-group">
+                    <label>Delivery Address <span class="required">*</span></label>
+                    <textarea id="deliveryAddress" rows="2" placeholder="Street, building, landmark..." required></textarea>
+                </div>
+
+                <!-- District and Phone -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>District</label>
+                        <select id="deliveryDistrict">
+                            <option value="">Select district</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Phone</label>
+                        <input type="tel" id="deliveryPhone" placeholder="For delivery coordination">
+                    </div>
+                </div>
+
+                <!-- Expected Delivery -->
+                <div class="form-group">
+                    <label>Expected Delivery Date</label>
+                    <input type="date" id="expectedDelivery">
+                </div>
+
+                <!-- Additional Info -->
+                <div class="form-group">
+                    <label>PO Reference (Optional)</label>
+                    <input type="text" id="internalReference" placeholder="Your internal PO number">
+                </div>
+
+                <div class="form-group">
+                    <label>Notes to Supplier</label>
+                    <textarea id="supplierNotes" rows="2" placeholder="Special instructions, quality requirements..."></textarea>
+                </div>
+
+                <!-- Step Actions -->
+                <div class="step-actions">
+                    <button class="back-btn-step" id="backToStep2">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="continue-btn" id="continueToStep4" disabled>
+                        Review Order <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Review & Submit -->
+        <div class="step-content" id="step4">
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-check-circle"></i>
+                    Review Purchase Order
+                </h2>
+
+                <!-- PO Summary -->
+                <div class="po-summary" id="poSummary"></div>
+
+                <!-- Terms Acceptance -->
+                <div class="terms-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="acceptTerms">
+                        <span>I confirm that all information provided is accurate and this purchase order is legally binding</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="acceptTerms2">
+                        <span>I agree to the platform's terms of service</span>
+                    </label>
+                </div>
+
+                <!-- Step Actions -->
+                <div class="step-actions">
+                    <button class="back-btn-step" id="backToStep3">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="submit-btn" id="submitPO" disabled>
+                        <i class="fas fa-paper-plane"></i> Submit Purchase Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="my-inquiries.html" class="nav-item">
+            <i class="fas fa-file-invoice"></i>
+            <span>Inquiries</span>
+        </a>
+        <a href="orders.html" class="nav-item active">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Orders</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Purchase Order Created!</h3>
+            <p id="successMessage">Your PO has been sent to the supplier</p>
+            <div class="po-number" id="poNumberDisplay"></div>
+            <div class="modal-actions">
+                <a href="#" class="btn-primary" id="viewPOBtn">View PO</a>
+                <a href="orders.html" class="btn-secondary">View All Orders</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/instant-purchase-order.js"></script>
+</body>
+</html>

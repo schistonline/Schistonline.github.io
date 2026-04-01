@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Notification Settings - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/notification-settings.css">
+</head>
+<body>
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <button class="save-btn" id="saveSettingsBtn">
+                <i class="fas fa-check"></i>
+                <span>Save</span>
+            </button>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>Notification Settings</h1>
+            <p>Manage how you receive notifications</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="spinner"></div>
+            <p>Loading settings...</p>
+        </div>
+
+        <!-- Settings Content -->
+        <div class="settings-container" id="settingsContainer" style="display: none;">
+            
+            <!-- Push Notifications Section -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h2>Push Notifications</h2>
+                </div>
+                
+                <div class="settings-card">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Enable Push Notifications</h3>
+                            <p>Receive notifications on this device</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="pushEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Sound</h3>
+                            <p>Play sound for new notifications</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="pushSound" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Vibration</h3>
+                            <p>Vibrate on new notifications</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="pushVibrate" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Show Preview</h3>
+                            <p>Show message preview in notifications</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="pushPreview" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>LED Color</h3>
+                            <p>LED notification color (if supported)</p>
+                        </div>
+                        <div class="color-picker">
+                            <input type="color" id="ledColor" value="#0B4F6C">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Notifications Section -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-envelope"></i>
+                    <h2>Email Notifications</h2>
+                </div>
+                
+                <div class="settings-card">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Enable Email Notifications</h3>
+                            <p>Receive notifications via email</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="emailEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Order Updates</h3>
+                            <p>New orders, status changes, deliveries</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="emailOrders" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Inquiry Responses</h3>
+                            <p>Replies to your inquiries</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="emailInquiries" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Quote Notifications</h3>
+                            <p>New quotes, quote updates</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="emailQuotes" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Messages</h3>
+                            <p>New chat messages</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="emailMessages" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Promotions & Offers</h3>
+                            <p>Special offers and promotions</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="emailPromotions">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Weekly Digest</h3>
+                            <p>Weekly summary of your activity</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="emailDigest" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMS Notifications Section -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-sms"></i>
+                    <h2>SMS Notifications</h2>
+                </div>
+                
+                <div class="settings-card">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Enable SMS Notifications</h3>
+                            <p>Receive important updates via SMS</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="smsEnabled">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Phone Number</h3>
+                            <p>For SMS notifications</p>
+                        </div>
+                        <div class="input-field">
+                            <input type="tel" id="smsPhone" placeholder="+256 XXX XXX XXX" value="+256 700 000000">
+                        </div>
+                    </div>
+
+                    <div class="sms-options" id="smsOptions">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3>Order Confirmations</h3>
+                                <p>Get SMS when orders are placed</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="smsOrders" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3>Payment Updates</h3>
+                                <p>Payment received or failed</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="smsPayments" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3>Delivery Updates</h3>
+                                <p>Shipping and delivery status</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="smsDelivery" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- In-App Notifications Section -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-bell"></i>
+                    <h2>In-App Notifications</h2>
+                </div>
+                
+                <div class="settings-card">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Order Notifications</h3>
+                            <p>Orders, updates, deliveries</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="appOrders" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Inquiry Notifications</h3>
+                            <p>Inquiry responses and updates</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="appInquiries" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Quote Notifications</h3>
+                            <p>New quotes, quote responses</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="appQuotes" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Message Notifications</h3>
+                            <p>New chat messages</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="appMessages" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>System Announcements</h3>
+                            <p>Platform updates and news</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="appSystem" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Promotions</h3>
+                            <p>Special offers and deals</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="appPromotions">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiet Hours Section -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-moon"></i>
+                    <h2>Quiet Hours</h2>
+                </div>
+                
+                <div class="settings-card">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Enable Quiet Hours</h3>
+                            <p>Mute notifications during specific hours</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="quietHours">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="quiet-hours-options" id="quietHoursOptions" style="display: none;">
+                        <div class="time-range">
+                            <div class="time-select">
+                                <label>From</label>
+                                <select id="quietStart">
+                                    <option value="22">10:00 PM</option>
+                                    <option value="23">11:00 PM</option>
+                                    <option value="0">12:00 AM</option>
+                                    <option value="1">1:00 AM</option>
+                                    <option value="2">2:00 AM</option>
+                                    <option value="3">3:00 AM</option>
+                                    <option value="4">4:00 AM</option>
+                                    <option value="5">5:00 AM</option>
+                                </select>
+                            </div>
+                            <span class="time-separator">to</span>
+                            <div class="time-select">
+                                <label>To</label>
+                                <select id="quietEnd">
+                                    <option value="6">6:00 AM</option>
+                                    <option value="7">7:00 AM</option>
+                                    <option value="8">8:00 AM</option>
+                                    <option value="9">9:00 AM</option>
+                                    <option value="10">10:00 AM</option>
+                                    <option value="11">11:00 AM</option>
+                                    <option value="12">12:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3>Allow Exceptions</h3>
+                                <p>Allow notifications from important contacts</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="quietExceptions">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3>Repeat Daily</h3>
+                                <p>Apply quiet hours every day</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="quietRepeat" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="days-select" id="quietDays" style="display: none;">
+                            <span class="days-label">Select days:</span>
+                            <div class="day-buttons">
+                                <button class="day-btn" data-day="mon">Mon</button>
+                                <button class="day-btn" data-day="tue">Tue</button>
+                                <button class="day-btn" data-day="wed">Wed</button>
+                                <button class="day-btn" data-day="thu">Thu</button>
+                                <button class="day-btn" data-day="fri">Fri</button>
+                                <button class="day-btn" data-day="sat">Sat</button>
+                                <button class="day-btn" data-day="sun">Sun</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Channels -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <h2>Notification Channels</h2>
+                </div>
+                
+                <div class="settings-card">
+                    <div class="channel-item">
+                        <div class="channel-info">
+                            <i class="fas fa-envelope channel-icon"></i>
+                            <div>
+                                <h3>Email</h3>
+                                <p class="channel-address" id="userEmail">user@example.com</p>
+                            </div>
+                        </div>
+                        <span class="channel-status active">Active</span>
+                    </div>
+
+                    <div class="channel-item">
+                        <div class="channel-info">
+                            <i class="fas fa-phone channel-icon"></i>
+                            <div>
+                                <h3>SMS</h3>
+                                <p class="channel-address" id="userPhone">+256 700 000000</p>
+                            </div>
+                        </div>
+                        <span class="channel-status inactive" id="smsStatus">Inactive</span>
+                    </div>
+
+                    <div class="channel-item">
+                        <div class="channel-info">
+                            <i class="fas fa-mobile-alt channel-icon"></i>
+                            <div>
+                                <h3>Push</h3>
+                                <p class="channel-address">This device</p>
+                            </div>
+                        </div>
+                        <span class="channel-status active">Active</span>
+                    </div>
+
+                    <div class="channel-item">
+                        <div class="channel-info">
+                            <i class="fab fa-whatsapp channel-icon"></i>
+                            <div>
+                                <h3>WhatsApp</h3>
+                                <p class="channel-address">Not connected</p>
+                            </div>
+                        </div>
+                        <button class="connect-btn">Connect</button>
+                    </div>
+
+                    <div class="channel-item">
+                        <div class="channel-info">
+                            <i class="fab fa-telegram channel-icon"></i>
+                            <div>
+                                <h3>Telegram</h3>
+                                <p class="channel-address">Not connected</p>
+                            </div>
+                        </div>
+                        <button class="connect-btn">Connect</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Frequency -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-clock"></i>
+                    <h2>Notification Frequency</h2>
+                </div>
+                
+                <div class="settings-card">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Email Digest Frequency</h3>
+                            <p>How often to receive email summaries</p>
+                        </div>
+                        <select id="digestFrequency" class="frequency-select">
+                            <option value="realtime">Real-time</option>
+                            <option value="hourly">Hourly</option>
+                            <option value="daily" selected>Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="never">Never</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Push Notification Throttling</h3>
+                            <p>Maximum notifications per hour</p>
+                        </div>
+                        <select id="pushThrottling" class="frequency-select">
+                            <option value="10">10 per hour</option>
+                            <option value="20">20 per hour</option>
+                            <option value="50" selected>50 per hour</option>
+                            <option value="100">100 per hour</option>
+                            <option value="unlimited">Unlimited</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification History -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-history"></i>
+                    <h2>Notification History</h2>
+                </div>
+                
+                <div class="settings-card">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Keep Notifications For</h3>
+                            <p>How long to keep notification history</p>
+                        </div>
+                        <select id="historyRetention" class="frequency-select">
+                            <option value="7">7 days</option>
+                            <option value="30" selected>30 days</option>
+                            <option value="90">90 days</option>
+                            <option value="365">1 year</option>
+                            <option value="forever">Forever</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Auto-archive Read Notifications</h3>
+                            <p>Automatically archive after reading</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="autoArchive" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <button class="clear-history-btn" id="clearHistoryBtn">
+                        <i class="fas fa-trash-alt"></i>
+                        Clear Notification History
+                    </button>
+                </div>
+            </div>
+
+            <!-- Blocked Notifications -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <i class="fas fa-ban"></i>
+                    <h2>Blocked Sources</h2>
+                </div>
+                
+                <div class="settings-card">
+                    <div class="blocked-list" id="blockedList">
+                        <!-- Populated by JS -->
+                        <div class="blocked-item">
+                            <div class="blocked-info">
+                                <i class="fas fa-store"></i>
+                                <span>Supplier Name</span>
+                            </div>
+                            <button class="unblock-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="blocked-item">
+                            <div class="blocked-info">
+                                <i class="fas fa-tag"></i>
+                                <span>Promotional offers</span>
+                            </div>
+                            <button class="unblock-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="empty-blocked" style="display: none;">
+                            <i class="fas fa-check-circle"></i>
+                            <p>No blocked sources</p>
+                        </div>
+                    </div>
+
+                    <button class="add-block-btn" id="addBlockBtn">
+                        <i class="fas fa-plus"></i>
+                        Block New Source
+                    </button>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="settings-section danger-zone">
+                <div class="section-header">
+                    <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>
+                    <h2 style="color: var(--danger);">Danger Zone</h2>
+                </div>
+                
+                <div class="settings-card danger-card">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Disable All Notifications</h3>
+                            <p>Turn off all notification channels</p>
+                        </div>
+                        <button class="danger-btn" id="disableAllBtn">
+                            <i class="fas fa-bell-slash"></i>
+                            Disable All
+                        </button>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Reset to Defaults</h3>
+                            <p>Restore default notification settings</p>
+                        </div>
+                        <button class="danger-btn" id="resetDefaultsBtn">
+                            <i class="fas fa-undo-alt"></i>
+                            Reset
+                        </button>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Export Settings</h3>
+                            <p>Download your notification preferences</p>
+                        </div>
+                        <button class="danger-btn" id="exportSettingsBtn">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Block Source Modal -->
+    <div class="modal" id="blockModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Block Notification Source</h3>
+                <button class="modal-close" onclick="closeBlockModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Source Type</label>
+                    <select id="blockType">
+                        <option value="supplier">Supplier</option>
+                        <option value="category">Category</option>
+                        <option value="keyword">Keyword</option>
+                        <option value="type">Notification Type</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="blockValueGroup">
+                    <label>Value</label>
+                    <input type="text" id="blockValue" placeholder="Enter supplier name, category, etc.">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="addBlockedSource()">Block Source</button>
+                <button class="btn-secondary" onclick="closeBlockModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Settings Saved</h3>
+            <p id="successMessage">Your notification preferences have been updated</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="closeSuccessModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirmTitle">Confirm Action</h3>
+                <button class="modal-close" onclick="closeConfirmModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-danger" id="confirmActionBtn">Confirm</button>
+                <button class="btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/notification-settings.js"></script>
+</body>
+</html>

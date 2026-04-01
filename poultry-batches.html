@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Silver Lands - Poultry Batches</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a2e3f 0%, #2c3e4f 100%);
+            color: white;
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #c6a355, #e6c27a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a2e3f;
+            font-size: 18px;
+        }
+
+        .header-logo h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .header-logo p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .contact-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .cart-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #e6c27a;
+            color: #1a2e3f;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1a2e3f 0%, #2c3e4f 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .filter-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            flex: 1;
+        }
+
+        .filter-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-tab {
+            padding: 10px 20px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .filter-tab:hover {
+            background: #e2e8f0;
+        }
+
+        .filter-tab.active {
+            background: #1a2e3f;
+            color: white;
+            border-color: #1a2e3f;
+        }
+
+        .filter-tab.active i {
+            color: #e6c27a;
+        }
+
+        .filter-sort select {
+            padding: 10px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 13px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            max-width: 1200px;
+            margin: 30px auto 20px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a2e3f;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Batches Grid */
+        .batches-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a2e3f;
+        }
+
+        .section-header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .batches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .batch-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .batch-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+            border-color: #c6a355;
+        }
+
+        .batch-image {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .batch-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #e6c27a;
+            color: #1a2e3f;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .batch-badge.sold-out {
+            background: #ef4444;
+            color: white;
+        }
+
+        .batch-badge.ending {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .batch-content {
+            padding: 20px;
+        }
+
+        .batch-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .batch-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a2e3f;
+        }
+
+        .batch-type {
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .batch-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .detail-item {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 2px;
+        }
+
+        .detail-value {
+            font-weight: 700;
+            color: #1a2e3f;
+            font-size: 16px;
+        }
+
+        .vaccine-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin: 12px 0;
+        }
+
+        .vaccine-tag {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .stock-info {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stock-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stock-number {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .stock-number.available {
+            color: #10b981;
+        }
+
+        .stock-number.booked {
+            color: #f59e0b;
+        }
+
+        .stock-label {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .batch-footer {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .price {
+            flex: 1;
+            font-size: 20px;
+            font-weight: 800;
+            color: #1a2e3f;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .price small {
+            font-size: 12px;
+            font-weight: normal;
+            color: #64748b;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #1a2e3f;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2c3e4f;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid #1a2e3f;
+            color: #1a2e3f;
+        }
+
+        .btn-outline:hover {
+            background: #f8fafc;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: #c6a355;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a2e3f;
+        }
+
+        .empty-state p {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .empty-state .btn {
+            display: inline-block;
+        }
+
+        /* Loading */
+        .loading-grid {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #c6a355;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a2e3f;
+            color: white;
+            padding: 40px 20px 20px;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #e6c27a;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+            opacity: 0.8;
+            font-size: 13px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .batches-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-sort select {
+                width: 100%;
+            }
+            
+            .header-left {
+                gap: 10px;
+            }
+            
+            .contact-btn span {
+                display: none;
+            }
+            
+            .contact-btn i {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="back-btn" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div>
+                        <h1>Silver Lands</h1>
+                        <p>Premium Poultry</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="contact-btn" onclick="openContact()">
+                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                    <span>Contact Us</span>
+                </div>
+                <button class="cart-btn" onclick="window.location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h2>Our Poultry Batches</h2>
+        <p>Healthy, vaccinated birds ready for pickup or delivery</p>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" id="statsBar">
+        <div class="stat-card">
+            <div class="stat-value" id="totalBatches">0</div>
+            <div class="stat-label">Total Batches</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="availableBirds">0</div>
+            <div class="stat-label">Available Birds</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="avgPrice">0</div>
+            <div class="stat-label">Avg Price</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="vaccinated">100%</div>
+            <div class="stat-label">Vaccinated</div>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="filter-container">
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All Batches</button>
+                <button class="filter-tab" data-filter="broilers">Broilers</button>
+                <button class="filter-tab" data-filter="layers">Layers</button>
+                <button class="filter-tab" data-filter="cobb">Cobb 500</button>
+                <button class="filter-tab" data-filter="available">Available Now</button>
+            </div>
+            
+            <div class="filter-sort">
+                <select id="sortSelect">
+                    <option value="newest">Newest First</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                    <option value="age">Age: Youngest First</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Batches Grid -->
+    <div class="batches-container">
+        <div class="section-header">
+            <h3>Available Batches</h3>
+            <p id="resultsCount">Loading batches...</p>
+        </div>
+        
+        <div class="batches-grid" id="batchesGrid">
+            <div class="loading-grid">
+                <div class="spinner"></div>
+                <p>Loading batches...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Silver Lands</h4>
+                <p style="opacity: 0.8; font-size: 13px;">Uganda's trusted poultry supplier since 2010. Quality birds, healthy flocks, satisfied customers.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li>About Us</li>
+                    <li>Our Batches</li>
+                    <li>How to Order</li>
+                    <li>FAQs</li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Contact Info</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
+                    <li><i class="fas fa-phone"></i> +256 701 234 567</li>
+                    <li><i class="fab fa-whatsapp"></i> +256 701 234 567</li>
+                    <li><i class="fas fa-envelope"></i> info@silverlands.ug</li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Business Hours</h4>
+                <ul>
+                    <li>Mon-Fri: 8am - 6pm</li>
+                    <li>Sat: 9am - 4pm</li>
+                    <li>Sun: Closed</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 Silver Lands. All rights reserved. Powered by iBlue B2B</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Config
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // State
+        let allBatches = [];
+        let filteredBatches = [];
+        let supplierId = null;
+        let currentFilter = 'all';
+        let currentSort = 'newest';
+
+        // Init - Get supplier from URL
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const supplierParam = urlParams.get('supplier');
+            
+            if (supplierParam === 'silverlands') {
+                await loadSilverLandsBatches();
+            } else {
+                // If no supplier specified, try to find by email
+                await loadSupplierByEmail();
+            }
+        });
+
+        async function loadSupplierByEmail() {
+            try {
+                const { data: supplier, error } = await sb
+                    .from('poultry_suppliers')
+                    .select('id, company_name')
+                    .eq('email', 'akatunanuraevra@gmail.com')
+                    .single();
+
+                if (error) throw error;
+                
+                if (supplier) {
+                    supplierId = supplier.id;
+                    document.querySelector('.header-logo h1').textContent = supplier.company_name || 'Silver Lands';
+                    await loadBatches(supplier.id);
+                } else {
+                    useDemoData();
+                }
+            } catch (error) {
+                console.error('Error finding supplier:', error);
+                useDemoData();
+            }
+        }
+
+        async function loadSilverLandsBatches() {
+            // You can replace this with actual supplier ID lookup
+            await loadSupplierByEmail();
+        }
+
+        async function loadBatches(supplierId) {
+            try {
+                const { data: batches, error } = await sb
+                    .from('poultry_batches')
+                    .select('*')
+                    .eq('supplier_id', supplierId)
+                    .in('status', ['available', 'fully_booked'])
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (batches && batches.length > 0) {
+                    allBatches = batches;
+                    filteredBatches = [...allBatches];
+                    updateStats();
+                    renderBatches();
+                } else {
+                    useDemoData();
+                }
+            } catch (error) {
+                console.error('Error loading batches:', error);
+                useDemoData();
+            }
+        }
+
+        function useDemoData() {
+            // Demo data for Silver Lands
+            allBatches = [
+                {
+                    id: 1,
+                    title: 'Silver Broilers - Batch #24',
+                    bird_type: 'Broilers',
+                    age_weeks: 2,
+                    avg_weight_kg: 2.0,
+                    total_quantity: 1000,
+                    available_quantity: 600,
+                    booked_quantity: 200,
+                    sold_quantity: 200,
+                    price_per_bird: 2000,
+                    distribution_date: '2026-03-20',
+                    images: ['https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=600'],
+                    vaccination_status: ['Newcastle', 'Gumboro', 'Fowl Pox'],
+                    health_certified: true,
+                    status: 'available'
+                },
+                {
+                    id: 2,
+                    title: 'Premium Layers - Batch #12',
+                    bird_type: 'Layers',
+                    age_weeks: 6,
+                    avg_weight_kg: 1.8,
+                    total_quantity: 800,
+                    available_quantity: 350,
+                    booked_quantity: 450,
+                    sold_quantity: 0,
+                    price_per_bird: 3500,
+                    distribution_date: '2026-03-25',
+                    images: ['https://images.unsplash.com/photo-1587613991115-3c2c2b6dd8b6?w=600'],
+                    vaccination_status: ['Newcastle', 'Gumboro'],
+                    health_certified: true,
+                    status: 'available'
+                },
+                {
+                    id: 3,
+                    title: 'Cobb 500 - Batch #8',
+                    bird_type: 'Cobb 500',
+                    age_weeks: 3,
+                    avg_weight_kg: 2.2,
+                    total_quantity: 600,
+                    available_quantity: 0,
+                    booked_quantity: 600,
+                    sold_quantity: 0,
+                    price_per_bird: 2800,
+                    distribution_date: '2026-03-18',
+                    images: ['https://images.unsplash.com/photo-1604848698035-8c3c5d2a6d3b?w=600'],
+                    vaccination_status: ['Newcastle'],
+                    health_certified: false,
+                    status: 'fully_booked'
+                },
+                {
+                    id: 4,
+                    title: 'Silver Broilers - Batch #25',
+                    bird_type: 'Broilers',
+                    age_weeks: 1,
+                    avg_weight_kg: 0.8,
+                    total_quantity: 1200,
+                    available_quantity: 800,
+                    booked_quantity: 400,
+                    sold_quantity: 0,
+                    price_per_bird: 1800,
+                    distribution_date: '2026-03-28',
+                    images: ['https://images.unsplash.com/photo-1527153818091-1a9638521e2a?w=600'],
+                    vaccination_status: ['Newcastle', 'Gumboro'],
+                    health_certified: true,
+                    status: 'available'
+                }
+            ];
+            
+            filteredBatches = [...allBatches];
+            updateStats();
+            renderBatches();
+        }
+
+        function updateStats() {
+            document.getElementById('totalBatches').textContent = allBatches.length;
+            
+            const availableBirds = allBatches.reduce((sum, b) => sum + (b.available_quantity || 0), 0);
+            document.getElementById('availableBirds').textContent = availableBirds.toLocaleString();
+            
+            const avgPrice = Math.round(allBatches.reduce((sum, b) => sum + (b.price_per_bird || 0), 0) / allBatches.length);
+            document.getElementById('avgPrice').textContent = `UGX ${avgPrice.toLocaleString()}`;
+            
+            document.getElementById('resultsCount').textContent = `${filteredBatches.length} batches available`;
+        }
+
+        function renderBatches() {
+            const grid = document.getElementById('batchesGrid');
+            
+            if (filteredBatches.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-egg"></i>
+                        <h3>No Batches Available</h3>
+                        <p>Check back soon for new poultry batches</p>
+                        <button class="btn btn-primary" onclick="window.location.reload()">Refresh</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filteredBatches.map(batch => {
+                const isAvailable = batch.available_quantity > 0;
+                const isEndingSoon = isAvailable && isBatchEndingSoon(batch.distribution_date);
+                const badgeClass = !isAvailable ? 'sold-out' : (isEndingSoon ? 'ending' : '');
+                const badgeText = !isAvailable ? 'Sold Out' : (isEndingSoon ? 'Ending Soon' : `${batch.age_weeks} weeks`);
+                
+                return `
+                    <div class="batch-card" onclick="viewBatch('${batch.id}')">
+                        <div class="batch-image" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url('${batch.images?.[0] || 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=600'}')">
+                            <div class="batch-badge ${badgeClass}">${badgeText}</div>
+                        </div>
+                        
+                        <div class="batch-content">
+                            <div class="batch-header">
+                                <h3 class="batch-title">${batch.title || `${batch.bird_type} Batch`}</h3>
+                                <span class="batch-type">${batch.bird_type || 'Poultry'}</span>
+                            </div>
+                            
+                            <div class="batch-details">
+                                <div class="detail-item">
+                                    <div class="detail-label">Age</div>
+                                    <div class="detail-value">${batch.age_weeks} wks</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Weight</div>
+                                    <div class="detail-value">${batch.avg_weight_kg} kg</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Pickup</div>
+                                    <div class="detail-value">${formatDate(batch.distribution_date)}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Price</div>
+                                    <div class="detail-value">UGX ${batch.price_per_bird.toLocaleString()}</div>
+                                </div>
+                            </div>
+                            
+                            ${batch.vaccination_status ? `
+                                <div class="vaccine-tags">
+                                    ${batch.vaccination_status.map(v => `<span class="vaccine-tag">${v}</span>`).join('')}
+                                    ${batch.health_certified ? '<span class="vaccine-tag" style="background:#dbeafe; color:#1e40af;">✓ Certified</span>' : ''}
+                                </div>
+                            ` : ''}
+                            
+                            <div class="stock-info">
+                                <div class="stock-item">
+                                    <div class="stock-number available">${batch.available_quantity}</div>
+                                    <div class="stock-label">Available</div>
+                                </div>
+                                <div class="stock-item">
+                                    <div class="stock-number booked">${batch.booked_quantity}</div>
+                                    <div class="stock-label">Booked</div>
+                                </div>
+                                <div class="stock-item">
+                                    <div class="stock-number">${batch.total_quantity}</div>
+                                    <div class="stock-label">Total</div>
+                                </div>
+                            </div>
+                            
+                            <div class="batch-footer">
+                                <div class="price">
+                                    UGX ${batch.price_per_bird.toLocaleString()}
+                                    <small>per bird</small>
+                                </div>
+                                <button class="btn btn-primary" onclick="event.stopPropagation(); bookNow('${batch.id}')">
+                                    Book Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function isBatchEndingSoon(distributionDate) {
+            if (!distributionDate) return false;
+            const daysLeft = Math.ceil((new Date(distributionDate) - new Date()) / (1000 * 60 * 60 * 24));
+            return daysLeft <= 3 && daysLeft > 0;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'TBD';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        // Filter and Sort Functions
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                currentFilter = e.target.dataset.filter;
+                applyFilters();
+            });
+        });
+
+        document.getElementById('sortSelect').addEventListener('change', (e) => {
+            currentSort = e.target.value;
+            applySort();
+        });
+
+        function applyFilters() {
+            if (currentFilter === 'all') {
+                filteredBatches = [...allBatches];
+            } else if (currentFilter === 'available') {
+                filteredBatches = allBatches.filter(b => b.available_quantity > 0);
+            } else {
+                filteredBatches = allBatches.filter(b => 
+                    b.bird_type?.toLowerCase().includes(currentFilter)
+                );
+            }
+            
+            applySort();
+        }
+
+        function applySort() {
+            if (currentSort === 'newest') {
+                filteredBatches.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            } else if (currentSort === 'price_low') {
+                filteredBatches.sort((a, b) => a.price_per_bird - b.price_per_bird);
+            } else if (currentSort === 'price_high') {
+                filteredBatches.sort((a, b) => b.price_per_bird - a.price_per_bird);
+            } else if (currentSort === 'age') {
+                filteredBatches.sort((a, b) => a.age_weeks - b.age_weeks);
+            }
+            
+            renderBatches();
+            document.getElementById('resultsCount').textContent = `${filteredBatches.length} batches available`;
+        }
+
+        // Navigation
+        function viewBatch(batchId) {
+            window.location.href = `poultry-index.html?batch=${batchId}`;
+        }
+
+        function bookNow(batchId) {
+            window.location.href = `book-now.html?batch=${batchId}`;
+        }
+
+        function openContact() {
+            window.open('https://wa.me/256701234567', '_blank');
+        }
+
+        // Update cart badge
+        async function updateCartBadge() {
+            const { data: { user } } = await sb.auth.getUser();
+            if (user) {
+                const { count } = await sb
+                    .from('poultry_bookings')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('buyer_id', user.id)
+                    .eq('payment_status', 'pending');
+                
+                document.getElementById('cartBadge').textContent = count || 0;
+            }
+        }
+
+        // Make functions global
+        window.viewBatch = viewBatch;
+        window.bookNow = bookNow;
+        window.openContact = openContact;
+    </script>
+</body>
+</html>

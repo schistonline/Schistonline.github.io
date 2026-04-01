@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saved Ads | iBlue Uganda</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #475569;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #dc2626;
+      --light: #f8fafc;
+      --dark: #1e293b;
+      --gray: #64748b;
+      --light-gray: #e2e8f0;
+      --border: #cbd5e1;
+      --radius: 12px;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    body {
+      background-color: #f1f5f9;
+      color: var(--dark);
+    }
+
+    /* Header */
+    .mobile-header {
+      background: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--dark);
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+      background: var(--light);
+    }
+
+    .header-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .header-subtitle {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-btn {
+      background: var(--light);
+      color: var(--dark);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      position: relative;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .header-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-top: 80px;
+      padding: 16px;
+    }
+
+    /* Saved Stats */
+    .saved-stats {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    @media (min-width: 640px) {
+      .saved-stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .stat-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      border-radius: var(--radius);
+      background: var(--light);
+      transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .stat-card.active .stat-value {
+      color: white;
+    }
+
+    .stat-card.active .stat-label {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(37, 99, 235, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .stat-card.active .stat-icon {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--gray);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    /* Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 8px 0;
+      scrollbar-width: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      font-size: 0.9rem;
+      color: var(--dark);
+      white-space: nowrap;
+      transition: all 0.3s;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover,
+    .tab-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .tab-btn i {
+      font-size: 0.9rem;
+    }
+
+    /* Ads Section */
+    .ads-section {
+      margin-bottom: 80px;
+    }
+
+    .ads-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .ads-count {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    .sort-options {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: white;
+      font-size: 0.9rem;
+      color: var(--dark);
+      cursor: pointer;
+    }
+
+    .ads-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    /* Ad Card */
+    .ad-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: all 0.3s;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+    }
+
+    .ad-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .ad-image {
+      position: relative;
+      padding-top: 75%; /* 4:3 Aspect Ratio */
+      overflow: hidden;
+    }
+
+    .ad-image img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .ad-badges {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 2;
+    }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .badge-featured {
+      background: var(--warning);
+    }
+
+    .badge-negotiable {
+      background: var(--success);
+    }
+
+    .badge-urgent {
+      background: var(--danger);
+    }
+
+    .badge-verified {
+      background: var(--success);
+    }
+
+    .badge-expired {
+      background: var(--gray);
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(220, 38, 38, 0.9);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+      z-index: 2;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .remove-btn:hover {
+      background: var(--danger);
+      transform: scale(1.1);
+    }
+
+    .ad-info {
+      padding: 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ad-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .ad-price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .ad-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    .ad-location,
+    .ad-time {
+      font-size: 0.8rem;
+      color: var(--gray);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .ad-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--light-gray);
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.3s;
+    }
+
+    .btn-chat {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-chat:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-view {
+      background: var(--light);
+      color: var(--dark);
+    }
+
+    .btn-view:hover {
+      background: var(--light-gray);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: var(--radius);
+      margin-top: 20px;
+      box-shadow: var(--shadow);
+      grid-column: 1 / -1;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--light-gray);
+      margin-bottom: 15px;
+    }
+
+    .empty-state h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+
+    .empty-state p {
+      color: var(--gray);
+      margin-bottom: 20px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      z-index: 1000;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--gray);
+      font-size: 0.8rem;
+      gap: 4px;
+      transition: all 0.3s;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-icon {
+      font-size: 1.2rem;
+    }
+
+    /* Post Ad Button */
+    .post-ad-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+      position: fixed;
+      bottom: 70px;
+      right: 20px;
+      z-index: 1001;
+      transition: all 0.3s;
+    }
+
+    .post-ad-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Loading States */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      grid-column: 1 / -1;
+    }
+
+    .spinner {
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(37, 99, 235, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (min-width: 640px) {
+      .ads-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      
+      .main-content {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .ads-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      
+      .bottom-nav {
+        display: none;
+      }
+      
+      .post-ad-btn {
+        bottom: 30px;
+        right: 30px;
+      }
+    }
+
+    /* Bulk Actions */
+    .bulk-actions {
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      box-shadow: var(--shadow);
+      display: none;
+    }
+
+    .bulk-actions.show {
+      display: flex;
+      animation: slideIn 0.3s ease;
+    }
+
+    .select-all {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: var(--dark);
+      cursor: pointer;
+    }
+
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .checkbox.checked {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .bulk-buttons {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s;
+    }
+
+    .btn-danger:hover {
+      background: #b91c1c;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--dark);
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s;
+    }
+
+    .btn-outline:hover {
+      background: var(--light);
+      border-color: var(--primary);
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Header -->
+  <header class="mobile-header">
+    <button class="back-btn" onclick="window.history.back()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    
+    <div class="header-content">
+      <div class="header-title">Saved Ads</div>
+      <div class="header-subtitle" id="savedCount">Loading...</div>
+    </div>
+    
+    <div class="header-actions">
+      <button class="header-btn" onclick="refreshSavedAds()">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+      <button class="header-btn" onclick="toggleBulkActions()">
+        <i class="fas fa-check-double"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Bulk Actions -->
+    <div class="bulk-actions" id="bulkActions">
+      <div class="select-all" onclick="toggleSelectAll()">
+        <div class="checkbox" id="selectAllCheckbox">
+          <i class="fas fa-check" style="font-size: 0.8rem;"></i>
+        </div>
+        <span>Select All</span>
+      </div>
+      <div class="bulk-buttons">
+        <button class="btn-outline" onclick="clearSelection()">
+          <i class="fas fa-times"></i> Clear
+        </button>
+        <button class="btn-danger" onclick="removeSelectedAds()">
+          <i class="fas fa-trash"></i> Remove Selected
+        </button>
+      </div>
+    </div>
+
+    <!-- Saved Stats -->
+    <div class="saved-stats" id="savedStats">
+      <div class="stat-card active" onclick="setTab('all')">
+        <div class="stat-icon">
+          <i class="fas fa-heart"></i>
+        </div>
+        <div class="stat-value" id="totalSaved">0</div>
+        <div class="stat-label">Total Saved</div>
+      </div>
+      
+      <div class="stat-card" onclick="setTab('active')">
+        <div class="stat-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-value" id="activeAds">0</div>
+        <div class="stat-label">Active Ads</div>
+      </div>
+      
+      <div class="stat-card" onclick="setTab('featured')">
+        <div class="stat-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="stat-value" id="featuredAds">0</div>
+        <div class="stat-label">Featured</div>
+      </div>
+      
+      <div class="stat-card" onclick="setTab('expired')">
+        <div class="stat-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="stat-value" id="expiredAds">0</div>
+        <div class="stat-label">Expired</div>
+      </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs" id="filterTabs">
+      <button class="tab-btn active" onclick="setTab('all')">
+        <i class="fas fa-layer-group"></i> All Saved
+      </button>
+      <button class="tab-btn" onclick="setTab('active')">
+        <i class="fas fa-check-circle"></i> Active
+      </button>
+      <button class="tab-btn" onclick="setTab('featured')">
+        <i class="fas fa-star"></i> Featured
+      </button>
+      <button class="tab-btn" onclick="setTab('recent')">
+        <i class="fas fa-history"></i> Recently Added
+      </button>
+      <button class="tab-btn" onclick="setTab('price_low')">
+        <i class="fas fa-arrow-down"></i> Price Low
+      </button>
+      <button class="tab-btn" onclick="setTab('price_high')">
+        <i class="fas fa-arrow-up"></i> Price High
+      </button>
+    </div>
+
+    <!-- Ads Section -->
+    <section class="ads-section">
+      <div class="ads-header">
+        <div>
+          <h2 style="font-size: 1.2rem;">Your Saved Ads</h2>
+          <p class="ads-count" id="filteredCount">Loading...</p>
+        </div>
+        <select class="sort-options" id="sortSelect" onchange="sortAds()">
+          <option value="recent">Recently Added</option>
+          <option value="oldest">Oldest First</option>
+          <option value="price_low">Price: Low to High</option>
+          <option value="price_high">Price: High to Low</option>
+          <option value="expiring">Expiring Soon</option>
+        </select>
+      </div>
+
+      <!-- Ads Grid -->
+      <div class="ads-grid" id="adsGrid">
+        <!-- Saved ads will be loaded here -->
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <i class="fas fa-heart"></i>
+        <h3>No Saved Ads</h3>
+        <p>You haven't saved any ads yet. Start browsing and save your favorites!</p>
+        <button class="btn-primary" onclick="window.location.href='index.html'">
+          Browse Ads
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating Post Ad Button -->
+  <button class="post-ad-btn" onclick="handlePostAd()">
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <i class="fas fa-home nav-icon"></i>
+      <span>Home</span>
+    </a>
+    <a href="categories.html" class="nav-item">
+      <i class="fas fa-th-large nav-icon"></i>
+      <span>Categories</span>
+    </a>
+    <a href="messages.html" class="nav-item">
+      <i class="fas fa-comments nav-icon"></i>
+      <span>Chats</span>
+    </a>
+    <a href="saved.html" class="nav-item active">
+      <i class="fas fa-heart nav-icon"></i>
+      <span>Saved</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <i class="fas fa-user nav-icon"></i>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <script>
+    // Initialize Supabase client
+    const supabaseUrl = "https://uufhvmmgwzkxvvdbqemz.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc";
+    
+    const sb = window.supabase.createClient(supabaseUrl, supabaseKey);
+    
+    // Global variables
+    let currentUser = null;
+    let allSavedAds = [];
+    let filteredAds = [];
+    let currentTab = 'all';
+    let selectedAds = new Set();
+    let isBulkMode = false;
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function() {
+      await checkAuth();
+      await loadSavedAds();
+      setupEventListeners();
+    });
+    
+    // Check authentication
+    async function checkAuth() {
+      const { data: { user }, error } = await sb.auth.getUser();
+      
+      if (error || !user) {
+        window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href);
+        return;
+      }
+      
+      currentUser = user;
+    }
+    
+    // Setup event listeners
+    function setupEventListeners() {
+      // Close bulk actions when clicking outside
+      document.addEventListener('click', function(event) {
+        const bulkActions = document.getElementById('bulkActions');
+        const bulkBtn = document.querySelector('.header-btn:nth-child(2)');
+        
+        if (isBulkMode && 
+            bulkActions && 
+            !bulkActions.contains(event.target) && 
+            bulkBtn && 
+            !bulkBtn.contains(event.target)) {
+          toggleBulkActions();
+        }
+      });
+    }
+    
+    // Load saved ads
+    async function loadSavedAds() {
+      const loading = document.getElementById('loading');
+      const adsGrid = document.getElementById('adsGrid');
+      const emptyState = document.getElementById('emptyState');
+      
+      loading.style.display = 'flex';
+      adsGrid.innerHTML = '';
+      emptyState.style.display = 'none';
+      
+      try {
+        if (!currentUser) {
+          throw new Error('User not authenticated');
+        }
+        
+        // First, get all saved ad IDs for the current user
+        const { data: savedItems, error: savedError } = await sb
+          .from('saved_ads')
+          .select('id, ad_id, created_at')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false });
+        
+        if (savedError) throw savedError;
+        
+        if (!savedItems || savedItems.length === 0) {
+          allSavedAds = [];
+          updateSavedStats();
+          updateAdsCount();
+          renderAds();
+          return;
+        }
+        
+        // Extract ad IDs
+        const adIds = savedItems.map(item => item.ad_id);
+        
+        // Now fetch the actual ads with proper relationship names
+        const { data: ads, error: adsError } = await sb
+          .from('ads')
+          .select(`
+            *,
+            main_category:categories!ads_category_id_fkey(name, slug, icon),
+            profiles(full_name, avatar_url, is_verified)
+          `)
+          .in('id', adIds)
+          .order('created_at', { ascending: false });
+        
+        if (adsError) throw adsError;
+        
+        // Also get promotions for these ads
+        const { data: promotions, error: promError } = await sb
+          .from('ad_promotions')
+          .select('ad_id, promotion_type, is_active, ends_at')
+          .in('ad_id', adIds)
+          .eq('is_active', true)
+          .gt('ends_at', new Date().toISOString());
+        
+        // Combine saved items with ad data
+        const processedAds = [];
+        
+        for (const savedItem of savedItems) {
+          const ad = ads?.find(a => a.id === savedItem.ad_id);
+          
+          if (ad) {
+            // Get promotions for this ad
+            const adPromotions = promotions?.filter(p => p.ad_id === ad.id) || [];
+            
+            // Check for featured promotion
+            const hasFeaturedPromotion = adPromotions.some(p => p.promotion_type === 'featured');
+            
+            processedAds.push({
+              saved_id: savedItem.id,
+              saved_at: savedItem.created_at,
+              ...ad,
+              // Update featured status if there's a promotion
+              is_featured: ad.is_featured || hasFeaturedPromotion,
+              // Add boost_until from promotions if exists
+              boost_until: ad.boost_until || adPromotions.find(p => p.promotion_type === 'boost')?.ends_at
+            });
+          }
+        }
+        
+        allSavedAds = processedAds;
+        
+        // Update stats
+        updateSavedStats();
+        
+        // Apply current tab filter
+        filterAdsByTab();
+        
+        // Update counts
+        updateAdsCount();
+        
+        // Render ads
+        renderAds();
+        
+      } catch (error) {
+        console.error('Error loading saved ads:', error);
+        showError('Failed to load saved ads. Please try again.');
+      } finally {
+        loading.style.display = 'none';
+      }
+    }
+    
+    // Update saved stats
+    function updateSavedStats() {
+      if (!allSavedAds) return;
+      
+      const total = allSavedAds.length;
+      const active = allSavedAds.filter(ad => ad.status === 'active').length;
+      const featured = allSavedAds.filter(ad => ad.is_featured).length;
+      const expired = allSavedAds.filter(ad => 
+        ad.status === 'expired' || 
+        ad.status === 'banned' ||
+        (ad.expires_at && new Date(ad.expires_at) < new Date())
+      ).length;
+      
+      document.getElementById('totalSaved').textContent = total;
+      document.getElementById('activeAds').textContent = active;
+      document.getElementById('featuredAds').textContent = featured;
+      document.getElementById('expiredAds').textContent = expired;
+      
+      document.getElementById('savedCount').textContent = 
+        `${total} saved ad${total !== 1 ? 's' : ''}`;
+    }
+    
+    // Filter ads by current tab
+    function filterAdsByTab() {
+      let filtered = [...allSavedAds];
+      
+      switch (currentTab) {
+        case 'active':
+          filtered = filtered.filter(ad => ad.status === 'active');
+          break;
+        case 'featured':
+          filtered = filtered.filter(ad => ad.is_featured);
+          break;
+        case 'recent':
+          // Show ads saved in last 7 days
+          const weekAgo = new Date();
+          weekAgo.setDate(weekAgo.getDate() - 7);
+          filtered = filtered.filter(ad => new Date(ad.saved_at) > weekAgo);
+          break;
+        case 'price_low':
+          filtered = filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
+          break;
+        case 'price_high':
+          filtered = filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
+          break;
+        case 'expired':
+          filtered = filtered.filter(ad => 
+            ad.status === 'expired' || 
+            ad.status === 'banned' ||
+            (ad.expires_at && new Date(ad.expires_at) < new Date())
+          );
+          break;
+        case 'all':
+        default:
+          // Keep all ads
+          break;
+      }
+      
+      filteredAds = filtered;
+    }
+    
+    // Set active tab
+    function setTab(tabName) {
+      // Update tab buttons
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      event.target.closest('.tab-btn').classList.add('active');
+      
+      // Update stat cards
+      const statCards = document.querySelectorAll('.stat-card');
+      statCards.forEach(card => card.classList.remove('active'));
+      const activeStatCard = Array.from(statCards).find(card => 
+        card.getAttribute('onclick')?.includes(`'${tabName}'`)
+      );
+      if (activeStatCard) activeStatCard.classList.add('active');
+      
+      currentTab = tabName;
+      filterAdsByTab();
+      updateAdsCount();
+      renderAds();
+    }
+    
+    // Render ads
+    function renderAds() {
+      const adsGrid = document.getElementById('adsGrid');
+      const emptyState = document.getElementById('emptyState');
+      
+      if (filteredAds.length === 0) {
+        adsGrid.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+      
+      emptyState.style.display = 'none';
+      adsGrid.innerHTML = '';
+      
+      filteredAds.forEach(ad => {
+        const adCard = createAdCard(ad);
+        adsGrid.appendChild(adCard);
+      });
+    }
+    
+    // Create ad card
+    function createAdCard(ad) {
+      const card = document.createElement('div');
+      card.className = 'ad-card';
+      card.dataset.adId = ad.id;
+      card.dataset.savedId = ad.saved_id;
+      
+      // Format price
+      const formattedPrice = formatPrice(ad.price);
+      
+      // Get first image
+      let imageUrl = 'https://via.placeholder.com/300x225/3b82f6/ffffff?text=No+Image';
+      if (ad.image_urls && ad.image_urls.length > 0 && ad.image_urls[0]) {
+        imageUrl = ad.image_urls[0];
+      }
+      
+      // Time ago (since saved)
+      const savedTimeAgo = getTimeAgo(new Date(ad.saved_at));
+      
+      // Check if ad is expired
+      const isExpired = ad.status === 'expired' || 
+                       ad.status === 'banned' ||
+                       (ad.expires_at && new Date(ad.expires_at) < new Date());
+      
+      // Badges
+      let badgesHTML = '';
+      if (ad.is_featured) {
+        badgesHTML += '<div class="badge badge-featured">Featured</div>';
+      }
+      if (ad.is_negotiable) {
+        badgesHTML += '<div class="badge badge-negotiable">Negotiable</div>';
+      }
+      // Check if ad is urgent (boosted)
+      const isUrgent = ad.boost_until && new Date(ad.boost_until) > new Date();
+      if (isUrgent) {
+        badgesHTML += '<div class="badge badge-urgent">Urgent</div>';
+      }
+      // Verified seller badge
+      if (ad.profiles?.is_verified) {
+        badgesHTML += '<div class="badge badge-verified">Verified</div>';
+      }
+      // Expired badge
+      if (isExpired) {
+        badgesHTML += '<div class="badge badge-expired">Expired</div>';
+      }
+      
+      // Category name
+      const categoryName = ad.main_category?.name || 'Uncategorized';
+      
+      card.innerHTML = `
+        <div class="ad-image">
+          <img src="${imageUrl}" 
+               alt="${ad.title}"
+               loading="lazy"
+               onerror="this.src='https://via.placeholder.com/300x225/64748b/ffffff?text=Image+Not+Found'">
+          <div class="ad-badges">
+            ${badgesHTML}
+          </div>
+          <button class="remove-btn" onclick="removeSavedAd('${ad.saved_id}', event)">
+            <i class="fas fa-times"></i>
+          </button>
+          ${isBulkMode ? `
+            <div class="checkbox" style="position: absolute; top: 8px; left: 8px; z-index: 3; background: white;" 
+                 onclick="toggleSelectAd('${ad.saved_id}', event)">
+              <i class="fas fa-check" style="font-size: 0.8rem;"></i>
+            </div>
+          ` : ''}
+        </div>
+        
+        <div class="ad-info">
+          <h3 class="ad-title">${escapeHtml(ad.title)}</h3>
+          <div class="ad-price">${formattedPrice}</div>
+          
+          <div class="ad-meta">
+            <div class="ad-location">
+              <i class="fas fa-map-marker-alt"></i>
+              ${escapeHtml(ad.district || ad.region || 'Uganda')}
+            </div>
+            <div class="ad-time">
+              <i class="far fa-clock"></i>
+              Saved ${savedTimeAgo}
+            </div>
+            <div class="ad-time" style="font-size: 0.75rem;">
+              <i class="fas fa-tag"></i>
+              ${escapeHtml(categoryName)}
+            </div>
+          </div>
+          
+          <div class="ad-actions">
+            <button class="action-btn btn-view" onclick="window.location.href='ad-detail.html?id=${ad.id}'">
+              <i class="fas fa-eye"></i> View
+            </button>
+            ${!isExpired ? `
+              <button class="action-btn btn-chat" onclick="startChat('${ad.id}')">
+                <i class="fas fa-comment"></i> Chat
+              </button>
+            ` : `
+              <button class="action-btn btn-chat" style="background: var(--gray);" onclick="removeSavedAd('${ad.saved_id}', event)">
+                <i class="fas fa-trash"></i> Remove
+              </button>
+            `}
+          </div>
+        </div>
+      `;
+      
+      // Add click handler for the card (excluding buttons)
+      card.addEventListener('click', function(e) {
+        if (!e.target.closest('button') && !e.target.closest('.checkbox')) {
+          window.location.href = `ad-detail.html?id=${ad.id}`;
+        }
+      });
+      
+      // Update checkbox if selected
+      if (selectedAds.has(ad.saved_id)) {
+        const checkbox = card.querySelector('.checkbox');
+        if (checkbox) {
+          checkbox.classList.add('checked');
+        }
+      }
+      
+      return card;
+    }
+    
+    // Remove saved ad
+    async function removeSavedAd(savedId, event) {
+      if (event) event.stopPropagation();
+      
+      if (!confirm('Remove this ad from your saved list?')) {
+        return;
+      }
+      
+      try {
+        const { error } = await sb
+          .from('saved_ads')
+          .delete()
+          .eq('id', savedId);
+        
+        if (error) throw error;
+        
+        // Remove from local arrays
+        allSavedAds = allSavedAds.filter(ad => ad.saved_id !== savedId);
+        filteredAds = filteredAds.filter(ad => ad.saved_id !== savedId);
+        selectedAds.delete(savedId);
+        
+        // Update UI
+        updateSavedStats();
+        updateAdsCount();
+        renderAds();
+        
+        showNotification('Ad removed from saved list');
+        
+      } catch (error) {
+        console.error('Error removing saved ad:', error);
+        showNotification('Failed to remove ad', 'error');
+      }
+    }
+    
+    // Start chat with seller
+    async function startChat(adId) {
+      try {
+        // Check if chat already exists
+        const { data: existingChats } = await sb
+          .from('messages')
+          .select('id')
+          .eq('ad_id', adId)
+          .eq('sender_id', currentUser.id)
+          .limit(1);
+        
+        if (existingChats && existingChats.length > 0) {
+          window.location.href = `messages.html?id=${existingChats[0].id}`;
+        } else {
+          // Get ad seller info
+          const { data: ad } = await sb
+            .from('ads')
+            .select('seller_id, title')
+            .eq('id', adId)
+            .single();
+          
+          if (ad) {
+            // Create new message thread
+            const { data: newMessage, error } = await sb
+              .from('messages')
+              .insert({
+                sender_id: currentUser.id,
+                receiver_id: ad.seller_id,
+                ad_id: adId,
+                content: `Hello, I'm interested in your saved ad: "${ad.title}"`
+              })
+              .select()
+              .single();
+            
+            if (error) throw error;
+            
+            if (newMessage) {
+              window.location.href = `messages.html?id=${newMessage.id}`;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error starting chat:', error);
+        showNotification('Please login to chat with seller', 'error');
+      }
+    }
+    
+    // Sort ads
+    function sortAds() {
+      const sortBy = document.getElementById('sortSelect').value;
+      
+      filteredAds.sort((a, b) => {
+        switch (sortBy) {
+          case 'recent':
+            return new Date(b.saved_at) - new Date(a.saved_at);
+          case 'oldest':
+            return new Date(a.saved_at) - new Date(b.saved_at);
+          case 'price_low':
+            return (a.price || 0) - (b.price || 0);
+          case 'price_high':
+            return (b.price || 0) - (a.price || 0);
+          case 'expiring':
+            const aExpires = a.expires_at ? new Date(a.expires_at) : new Date('9999-12-31');
+            const bExpires = b.expires_at ? new Date(b.expires_at) : new Date('9999-12-31');
+            return aExpires - bExpires;
+          default:
+            return new Date(b.saved_at) - new Date(a.saved_at);
+        }
+      });
+      
+      renderAds();
+    }
+    
+    // Update ads count
+    function updateAdsCount() {
+      const totalCount = allSavedAds.length;
+      const filteredCount = filteredAds.length;
+      
+      document.getElementById('filteredCount').textContent = 
+        `${filteredCount} ad${filteredCount !== 1 ? 's' : ''} found`;
+    }
+    
+    // Toggle bulk actions mode
+    function toggleBulkActions() {
+      isBulkMode = !isBulkMode;
+      const bulkActions = document.getElementById('bulkActions');
+      
+      if (isBulkMode) {
+        bulkActions.classList.add('show');
+        selectedAds.clear();
+        renderAds(); // Re-render to show checkboxes
+      } else {
+        bulkActions.classList.remove('show');
+        selectedAds.clear();
+        renderAds(); // Re-render to hide checkboxes
+      }
+    }
+    
+    // Toggle select all ads
+    function toggleSelectAll() {
+      const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+      const isChecked = selectAllCheckbox.classList.contains('checked');
+      
+      if (isChecked) {
+        // Deselect all
+        selectedAds.clear();
+        selectAllCheckbox.classList.remove('checked');
+      } else {
+        // Select all visible ads
+        filteredAds.forEach(ad => {
+          selectedAds.add(ad.saved_id);
+        });
+        selectAllCheckbox.classList.add('checked');
+      }
+      
+      // Update checkboxes on cards
+      document.querySelectorAll('.ad-card').forEach(card => {
+        const checkbox = card.querySelector('.checkbox');
+        if (checkbox) {
+          const savedId = card.dataset.savedId;
+          if (selectedAds.has(savedId)) {
+            checkbox.classList.add('checked');
+          } else {
+            checkbox.classList.remove('checked');
+          }
+        }
+      });
+    }
+    
+    // Toggle select individual ad
+    function toggleSelectAd(savedId, event) {
+      if (event) event.stopPropagation();
+      
+      if (selectedAds.has(savedId)) {
+        selectedAds.delete(savedId);
+      } else {
+        selectedAds.add(savedId);
+      }
+      
+      // Update checkbox
+      const checkbox = event.target.closest('.checkbox');
+      checkbox.classList.toggle('checked');
+      
+      // Update select all checkbox
+      const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+      if (selectedAds.size === filteredAds.length) {
+        selectAllCheckbox.classList.add('checked');
+      } else {
+        selectAllCheckbox.classList.remove('checked');
+      }
+    }
+    
+    // Clear selection
+    function clearSelection() {
+      selectedAds.clear();
+      
+      // Update checkboxes
+      document.querySelectorAll('.checkbox').forEach(checkbox => {
+        checkbox.classList.remove('checked');
+      });
+      
+      const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+      selectAllCheckbox.classList.remove('checked');
+    }
+    
+    // Remove selected ads
+    async function removeSelectedAds() {
+      if (selectedAds.size === 0) {
+        showNotification('No ads selected', 'warning');
+        return;
+      }
+      
+      if (!confirm(`Remove ${selectedAds.size} selected ad${selectedAds.size !== 1 ? 's' : ''} from your saved list?`)) {
+        return;
+      }
+      
+      try {
+        // Convert Set to array
+        const savedIds = Array.from(selectedAds);
+        
+        // Delete from database
+        const { error } = await sb
+          .from('saved_ads')
+          .delete()
+          .in('id', savedIds);
+        
+        if (error) throw error;
+        
+        // Remove from local arrays
+        allSavedAds = allSavedAds.filter(ad => !selectedAds.has(ad.saved_id));
+        filteredAds = filteredAds.filter(ad => !selectedAds.has(ad.saved_id));
+        
+        // Clear selection
+        selectedAds.clear();
+        
+        // Update UI
+        updateSavedStats();
+        updateAdsCount();
+        renderAds();
+        
+        // Exit bulk mode
+        toggleBulkActions();
+        
+        showNotification(`${savedIds.length} ad${savedIds.length !== 1 ? 's' : ''} removed`);
+        
+      } catch (error) {
+        console.error('Error removing selected ads:', error);
+        showNotification('Failed to remove ads', 'error');
+      }
+    }
+    
+    // Refresh saved ads
+    function refreshSavedAds() {
+      loadSavedAds();
+      showNotification('Refreshing saved ads...');
+    }
+    
+    // Handle post ad button
+    async function handlePostAd() {
+      try {
+        const { data: { user } } = await sb.auth.getUser();
+        if (!user) {
+          window.location.href = 'login.html?redirect=' + encodeURIComponent('post-ad.html');
+          return;
+        }
+        window.location.href = 'post-ad.html';
+      } catch (error) {
+        console.error('Error checking user:', error);
+        window.location.href = 'login.html';
+      }
+    }
+    
+    // Helper functions
+    function formatPrice(price) {
+      if (!price || price === 0) return 'Price on request';
+      return new Intl.NumberFormat('en-UG', {
+        style: 'currency',
+        currency: 'UGX',
+        minimumFractionDigits: 0
+      }).format(price);
+    }
+    
+    function getTimeAgo(date) {
+      const seconds = Math.floor((new Date() - date) / 1000);
+      
+      let interval = seconds / 31536000;
+      if (interval > 1) return Math.floor(interval) + "y ago";
+      
+      interval = seconds / 2592000;
+      if (interval > 1) return Math.floor(interval) + "mo ago";
+      
+      interval = seconds / 86400;
+      if (interval > 1) return Math.floor(interval) + "d ago";
+      
+      interval = seconds / 3600;
+      if (interval > 1) return Math.floor(interval) + "h ago";
+      
+      interval = seconds / 60;
+      if (interval > 1) return Math.floor(interval) + "m ago";
+      
+      return Math.floor(seconds) + "s ago";
+    }
+    
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    function showError(message) {
+      const adsGrid = document.getElementById('adsGrid');
+      const loading = document.getElementById('loading');
+      
+      loading.style.display = 'none';
+      adsGrid.innerHTML = `
+        <div class="empty-state" style="display: block; grid-column: 1 / -1;">
+          <i class="fas fa-exclamation-circle"></i>
+          <h3>Error Loading Saved Ads</h3>
+          <p>${message}</p>
+          <button class="btn-primary" onclick="loadSavedAds()">
+            <i class="fas fa-redo"></i> Retry
+          </button>
+        </div>
+      `;
+    }
+    
+    function showNotification(message, type = 'success') {
+      // Remove any existing notifications
+      const existingNotifications = document.querySelectorAll('.custom-notification');
+      existingNotifications.forEach(notification => {
+        notification.remove();
+      });
+      
+      const notification = document.createElement('div');
+      notification.className = 'custom-notification';
+      
+      // Get colors based on type
+      let bgColor, icon;
+      switch(type) {
+        case 'error':
+          bgColor = '#dc2626';
+          icon = 'exclamation-circle';
+          break;
+        case 'success':
+          bgColor = '#16a34a';
+          icon = 'check-circle';
+          break;
+        case 'warning':
+          bgColor = '#f59e0b';
+          icon = 'exclamation-triangle';
+          break;
+        default:
+          bgColor = '#2563eb';
+          icon = 'info-circle';
+      }
+      
+      notification.style.cssText = `
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        left: 20px;
+        background: ${bgColor};
+        color: white;
+        padding: 12px 16px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        z-index: 3000;
+        animation: slideIn 0.3s ease;
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 500;
+      `;
+      
+      notification.innerHTML = `<i class="fas fa-${icon}" style="margin-right: 8px;"></i>${message}`;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+      
+      // Add CSS for animations if not already present
+      if (!document.querySelector('#notification-animations')) {
+        const style = document.createElement('style');
+        style.id = 'notification-animations';
+        style.textContent = `
+          @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+          }
+          @keyframes slideOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-20px); opacity: 0; }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+  </script>
+</body>
+</html>

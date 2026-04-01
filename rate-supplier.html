@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Rate Supplier - Schist.online</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/rate-supplier.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="supplier-detail.html" class="back-btn" id="backBtn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">Schist<span>.online</span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Supplier Info Card -->
+        <div class="supplier-info-card" id="supplierInfoCard">
+            <div class="supplier-avatar" id="supplierAvatar">
+                <i class="fas fa-store"></i>
+            </div>
+            <div class="supplier-details">
+                <h2 id="supplierName">Loading...</h2>
+                <div class="supplier-meta" id="supplierMeta">
+                    <span><i class="fas fa-check-circle"></i> Verified Supplier</span>
+                    <span><i class="fas fa-star"></i> 4.8 ★ (124 reviews)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rating Form -->
+        <div class="rating-form-container">
+            <h3 class="form-title">
+                <i class="fas fa-star"></i>
+                Share Your Experience
+            </h3>
+            <p class="form-description">Your feedback helps other buyers make informed decisions</p>
+
+            <form id="ratingForm">
+                <!-- Overall Rating -->
+                <div class="rating-category">
+                    <label class="category-label">Overall Rating <span class="required">*</span></label>
+                    <div class="star-rating" id="overallRating">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                    <div class="rating-hint" id="overallHint">Select a rating</div>
+                </div>
+
+                <!-- Product Quality Rating -->
+                <div class="rating-category">
+                    <label class="category-label">Product Quality <span class="required">*</span></label>
+                    <div class="star-rating" id="qualityRating">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                    <div class="rating-hint" id="qualityHint">Rate the product quality</div>
+                </div>
+
+                <!-- Communication Rating -->
+                <div class="rating-category">
+                    <label class="category-label">Communication <span class="required">*</span></label>
+                    <div class="star-rating" id="communicationRating">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                    <div class="rating-hint" id="communicationHint">Rate the communication with supplier</div>
+                </div>
+
+                <!-- Delivery Rating -->
+                <div class="rating-category">
+                    <label class="category-label">Delivery / Shipping <span class="required">*</span></label>
+                    <div class="star-rating" id="deliveryRating">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                    <div class="rating-hint" id="deliveryHint">Rate the delivery experience</div>
+                </div>
+
+                <!-- Review Title -->
+                <div class="form-group">
+                    <label for="reviewTitle">Review Title <span class="optional">(Optional)</span></label>
+                    <input type="text" id="reviewTitle" class="form-input" placeholder="e.g., Great supplier, will order again!">
+                </div>
+
+                <!-- Review Text -->
+                <div class="form-group">
+                    <label for="reviewText">Your Review <span class="required">*</span></label>
+                    <textarea id="reviewText" rows="5" class="form-input" placeholder="Share your experience with this supplier. What did you like? What could be improved?"></textarea>
+                </div>
+
+                <!-- Order Reference (Optional) -->
+                <div class="form-group">
+                    <label for="orderReference">Order Reference <span class="optional">(Optional)</span></label>
+                    <input type="text" id="orderReference" class="form-input" placeholder="Order number (helps verify purchase)">
+                    <div class="form-hint">If you have an order number, please enter it to verify your purchase</div>
+                </div>
+
+                <!-- Photos Upload -->
+                <div class="form-group">
+                    <label>Upload Photos <span class="optional">(Optional)</span></label>
+                    <div class="photo-upload-area" id="photoUploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click or drag photos here</p>
+                        <span class="upload-hint">Upload up to 5 photos (JPG, PNG)</span>
+                        <input type="file" id="photoUpload" multiple accept="image/jpeg,image/png,image/jpg" style="display: none;">
+                    </div>
+                    <div class="photo-preview" id="photoPreview"></div>
+                </div>
+
+                <!-- Anonymous Option -->
+                <div class="checkbox-group">
+                    <input type="checkbox" id="anonymousReview">
+                    <label for="anonymousReview">
+                        <i class="fas fa-user-secret"></i>
+                        Submit anonymously
+                    </label>
+                    <span class="checkbox-hint">Your name won't be displayed publicly</span>
+                </div>
+
+                <!-- Terms Agreement -->
+                <div class="checkbox-group">
+                    <input type="checkbox" id="termsAgree" required>
+                    <label for="termsAgree">
+                        I confirm this review is based on my genuine experience
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-rating-btn" id="submitRatingBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit Review
+                </button>
+            </form>
+        </div>
+
+        <!-- Recent Reviews Preview -->
+        <div class="recent-reviews-section">
+            <h3 class="section-title">
+                <i class="fas fa-comments"></i>
+                Recent Reviews
+                <span class="reviews-count" id="reviewsCount">(0)</span>
+            </h3>
+            <div class="reviews-list" id="reviewsList">
+                <div class="loading-reviews">
+                    <div class="spinner-small"></div>
+                    <p>Loading reviews...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-overlay" onclick="closeSuccessModal()"></div>
+        <div class="modal-content success-modal">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Review Submitted!</h3>
+            <p>Thank you for sharing your experience. Your review helps other buyers make better decisions.</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="closeSuccessModal()">Continue</button>
+                <a href="supplier-detail.html" class="btn-secondary">Back to Supplier</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/rate-supplier.js"></script>
+</body>
+</html>

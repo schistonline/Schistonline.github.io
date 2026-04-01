@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Search Results - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/suppliers.css">
+    <link rel="stylesheet" href="css/supplier-results.css">
+</head>
+<body>
+    <!-- Header with Back Button -->
+    <header class="header">
+        <div class="header-content">
+            <button class="back-btn" id="backBtn">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            
+            <button class="search-toggle" id="searchToggle">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        
+        <!-- Search Bar (Visible by default on results page) -->
+        <div class="search-bar show" id="searchBar">
+            <input type="text" placeholder="Search suppliers..." id="searchInput" value="">
+            <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+        </div>
+    </header>
+
+    <!-- Results Header -->
+    <div class="results-header">
+        <div class="results-header-left">
+            <h2 id="resultsTitle">Search Results</h2>
+            <p id="resultsCount">0 suppliers found</p>
+        </div>
+        <div class="results-header-right">
+            <button class="filter-toggle-btn" id="filterToggleBtn">
+                <i class="fas fa-filter"></i> Filter
+            </button>
+        </div>
+    </div>
+
+    <!-- Filter Bar (Compact) - Hidden on mobile, shown when filter toggle clicked -->
+    <div class="filter-bar" id="filterBar">
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab" data-filter="verified">Verified</button>
+            <button class="filter-tab" data-filter="featured">Featured</button>
+        </div>
+        
+        <div class="filter-sort">
+            <select id="sortSelect">
+                <option value="recommended">Recommended</option>
+                <option value="rating">Highest Rated</option>
+                <option value="orders">Most Orders</option>
+                <option value="newest">Newest</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Active Filters Display -->
+    <div class="active-filters" id="activeFilters">
+        <!-- Will be populated by JS -->
+    </div>
+
+    <!-- Results Grid -->
+    <main class="suppliers-grid" id="suppliersGrid">
+        <div class="loading-grid">
+            <div class="spinner"></div>
+            <p>Loading results...</p>
+        </div>
+    </main>
+
+    <!-- Load More Button -->
+    <div class="load-more">
+        <button class="load-more-btn" id="loadMoreBtn">Load More Results</button>
+    </div>
+
+    <!-- No Results Template (hidden by default) -->
+    <template id="noResultsTemplate">
+        <div class="no-results">
+            <div class="no-results-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>No suppliers found</h3>
+            <p id="noResultsMessage">Try adjusting your search or filters</p>
+            <div class="no-results-actions">
+                <button class="btn-primary" id="clearFiltersBtn">Clear Filters</button>
+                <a href="suppliers.html" class="btn-secondary">Browse All Suppliers</a>
+            </div>
+        </div>
+    </template>
+
+    <!-- Error Template -->
+    <template id="errorTemplate">
+        <div class="no-results">
+            <div class="no-results-icon" style="color: #ef4444;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>Something went wrong</h3>
+            <p>Failed to load suppliers. Please try again.</p>
+            <div class="no-results-actions">
+                <button class="btn-primary" id="retryBtn">Retry</button>
+                <a href="suppliers.html" class="btn-secondary">Browse All Suppliers</a>
+            </div>
+        </div>
+    </template>
+
+    <!-- Simple Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 iBlue B2B. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supplier-results.js"></script>
+</body>
+</html>

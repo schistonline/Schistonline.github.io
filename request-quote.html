@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Request for Quotation - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/request-quote.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <div class="header-actions">
+                <span class="rfq-badge">Get Quotes</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>Get Multiple Quotes from Verified Suppliers</h1>
+            <p>Post your requirements once and receive quotes from multiple suppliers</p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Your Details</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Product Details</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Requirements</div>
+            </div>
+        </div>
+
+        <!-- Step 1: Buyer Details -->
+        <div class="step-content active" id="step1">
+            <div class="form-card">
+                <h2><i class="fas fa-user-circle"></i> Your Contact Information</h2>
+                <p>Suppliers will use this information to send you quotes</p>
+
+                <div class="form-group">
+                    <label>Your Name <span class="required">*</span></label>
+                    <input type="text" id="buyerName" class="form-control" placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Company Name (Optional)</label>
+                    <input type="text" id="companyName" class="form-control" placeholder="Your business name">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email Address <span class="required">*</span></label>
+                        <input type="email" id="buyerEmail" class="form-control" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <div class="phone-input">
+                            <select id="countryCode" class="country-code">
+                                <option value="+256">+256 (UG)</option>
+                                <option value="+254">+254 (KE)</option>
+                                <option value="+255">+255 (TZ)</option>
+                                <option value="+250">+250 (RW)</option>
+                            </select>
+                            <input type="tel" id="buyerPhone" class="form-control" placeholder="712345678">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>How would you like to receive quotes? <span class="required">*</span></label>
+                    <div class="contact-preference">
+                        <label class="preference-option">
+                            <input type="radio" name="contactPreference" value="email" checked>
+                            <i class="fas fa-envelope"></i>
+                            <span>Email</span>
+                        </label>
+                        <label class="preference-option">
+                            <input type="radio" name="contactPreference" value="whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>WhatsApp</span>
+                        </label>
+                        <label class="preference-option">
+                            <input type="radio" name="contactPreference" value="both">
+                            <i class="fas fa-envelope"></i>
+                            <i class="fab fa-whatsapp"></i>
+                            <span>Both</span>
+                        </label>
+                        <label class="preference-option">
+                            <input type="radio" name="contactPreference" value="platform">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>Platform Only</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-primary" id="continueToStep2">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Product Details -->
+        <div class="step-content" id="step2">
+            <div class="form-card">
+                <h2><i class="fas fa-box"></i> What products do you need?</h2>
+                <p>Add one or more products you want to get quotes for</p>
+
+                <div id="productsContainer">
+                    <!-- Products will be added here dynamically -->
+                </div>
+
+                <button class="add-product-btn" id="addProductBtn">
+                    <i class="fas fa-plus-circle"></i> Add Another Product
+                </button>
+
+                <div class="form-actions">
+                    <button class="btn-secondary" id="backToStep1">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn-primary" id="continueToStep3">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Additional Requirements -->
+        <div class="step-content" id="step3">
+            <div class="form-card">
+                <h2><i class="fas fa-clipboard-list"></i> Additional Requirements</h2>
+                <p>Provide more details to help suppliers quote accurately</p>
+
+                <div class="form-group">
+                    <label>RFQ Title <span class="required">*</span></label>
+                    <input type="text" id="rfqTitle" class="form-control" placeholder="e.g., Bulk order of office furniture">
+                </div>
+
+                <div class="form-group">
+                    <label>Detailed Requirements</label>
+                    <textarea id="rfqDescription" rows="4" class="form-control" 
+                              placeholder="Describe your requirements, quality standards, packaging preferences, etc."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="categoryId" class="form-control">
+                            <option value="">Select category (optional)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Expected Delivery</label>
+                        <input type="date" id="expectedDelivery" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Shipping Address</label>
+                    <textarea id="shippingAddress" rows="2" class="form-control" 
+                              placeholder="Where should the goods be delivered?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>District</label>
+                    <select id="shippingDistrict" class="form-control">
+                        <option value="">Select district</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Attachments (Optional)</label>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload specifications, drawings, or documents</p>
+                        <small>PDF, Images, Excel (Max 10MB)</small>
+                        <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.xls,.xlsx" style="display: none;">
+                    </div>
+                    <div class="file-list" id="fileList"></div>
+                </div>
+
+                <div class="terms-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="acceptTerms">
+                        <span>I confirm that this is a genuine business inquiry</span>
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-secondary" id="backToStep2">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn-primary btn-large" id="submitRfq" disabled>
+                        <i class="fas fa-paper-plane"></i> Submit Request for Quotes
+                    </button>
+                </div>
+
+                <div class="info-note">
+                    <i class="fas fa-info-circle"></i>
+                    Your request will be sent to multiple matching suppliers. You'll receive quotes via your chosen contact method.
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+            <div class="spinner"></div>
+            <p>Finding matching suppliers and sending your request...</p>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Request Sent Successfully!</h3>
+            <p>Your request has been sent to <span id="supplierCount">0</span> matching suppliers</p>
+            <div class="rfq-number" id="rfqNumber">RFQ-2025-00001</div>
+            <p class="info-text">You will receive quotes via your selected contact method</p>
+            <div class="modal-actions">
+                <a href="my-rfqs.html" class="btn-primary">Track Your RFQs</a>
+                <a href="index.html" class="btn-secondary">Browse Products</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/request-quote.js"></script>
+</body>
+</html>

@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Search Videos - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #0B4F6C;
+            --primary-dark: #083b4f;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --white: #FFFFFF;
+            --black: #000000;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 12px rgba(0,0,0,0.15);
+            --radius: 16px;
+            --radius-sm: 12px;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-800);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--white);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .back-btn:active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .search-container {
+            flex: 1;
+            position: relative;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+            font-size: 16px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 14px 14px 14px 48px;
+            border: 1px solid var(--gray-300);
+            border-radius: 30px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(11, 79, 108, 0.1);
+        }
+        
+        .clear-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            display: none;
+        }
+        
+        .clear-btn.show {
+            display: block;
+        }
+        
+        /* Filter Chips */
+        .filter-section {
+            padding: 16px;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .filter-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-chips {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+        
+        .filter-chips::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .chip {
+            padding: 10px 20px;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-700);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .chip:active {
+            background: var(--gray-200);
+        }
+        
+        .chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .chip i {
+            margin-right: 6px;
+            font-size: 12px;
+        }
+        
+        /* Categories Grid */
+        .categories-section {
+            padding: 20px 16px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .section-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .view-all {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        
+        .category-card {
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            padding: 16px 8px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--gray-800);
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+            border: 1px solid var(--gray-200);
+        }
+        
+        .category-card:active {
+            transform: scale(0.95);
+            background: var(--gray-50);
+            border-color: var(--primary);
+        }
+        
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(11, 79, 108, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: var(--primary);
+            font-size: 20px;
+        }
+        
+        .category-name {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .category-count {
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+        
+        /* Trending Searches */
+        .trending-section {
+            padding: 20px 16px;
+            background: var(--white);
+            margin-top: 8px;
+        }
+        
+        .trending-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .trending-header i {
+            color: var(--accent);
+            font-size: 18px;
+        }
+        
+        .trending-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .trending-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .trending-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--gray-100);
+            cursor: pointer;
+        }
+        
+        .trending-item:active {
+            background: var(--gray-50);
+        }
+        
+        .trending-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .trending-rank {
+            width: 24px;
+            height: 24px;
+            background: var(--gray-200);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+        
+        .trending-rank.top-3 {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .trending-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-800);
+        }
+        
+        .trending-count {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+        
+        /* Recent Searches */
+        .recent-section {
+            padding: 20px 16px;
+            background: var(--white);
+            margin-top: 8px;
+        }
+        
+        .recent-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .recent-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .clear-all {
+            color: var(--danger);
+            font-size: 13px;
+            font-weight: 500;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .recent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .recent-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+        
+        .recent-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .recent-info i {
+            color: var(--gray-400);
+            font-size: 16px;
+            width: 24px;
+        }
+        
+        .recent-text {
+            font-size: 15px;
+            color: var(--gray-700);
+        }
+        
+        .remove-recent {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            border-radius: 50%;
+            color: var(--gray-500);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .remove-recent:active {
+            background: var(--gray-100);
+            color: var(--danger);
+        }
+        
+        .empty-recent {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray-500);
+        }
+        
+        .empty-recent i {
+            font-size: 40px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+        
+        .empty-recent p {
+            font-size: 14px;
+        }
+        
+        /* Suggestions Dropdown */
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            margin-top: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .suggestions-dropdown.show {
+            display: block;
+        }
+        
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--gray-100);
+            cursor: pointer;
+        }
+        
+        .suggestion-item:active {
+            background: var(--gray-50);
+        }
+        
+        .suggestion-item i {
+            color: var(--gray-400);
+            font-size: 14px;
+            width: 20px;
+        }
+        
+        .suggestion-text {
+            flex: 1;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+        
+        .suggestion-type {
+            font-size: 11px;
+            color: var(--gray-500);
+            background: var(--gray-100);
+            padding: 4px 8px;
+            border-radius: 20px;
+        }
+        
+        /* Quick Filters */
+        .quick-filters {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .quick-filters::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .quick-filter {
+            padding: 8px 16px;
+            background: var(--gray-100);
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-700);
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid var(--gray-200);
+        }
+        
+        .quick-filter.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Popular Suppliers */
+        .suppliers-section {
+            padding: 20px 16px;
+            background: var(--white);
+            margin-top: 8px;
+        }
+        
+        .suppliers-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 8px 0;
+            scrollbar-width: none;
+        }
+        
+        .suppliers-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .supplier-chip {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 80px;
+            cursor: pointer;
+        }
+        
+        .supplier-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 24px;
+            border: 2px solid var(--white);
+            box-shadow: var(--shadow);
+        }
+        
+        .supplier-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .supplier-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-align: center;
+        }
+        
+        /* Voice Search Button */
+        .voice-search-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--gray-600);
+            cursor: pointer;
+            margin-left: 8px;
+        }
+        
+        .voice-search-btn:active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* Voice Search Modal */
+        .voice-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .voice-modal.show {
+            display: flex;
+        }
+        
+        .voice-content {
+            text-align: center;
+            color: white;
+            padding: 30px;
+        }
+        
+        .voice-wave {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        
+        .voice-wave span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: pulse-wave 1.5s ease-out infinite;
+        }
+        
+        .voice-wave span:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        
+        .voice-wave span:nth-child(3) {
+            animation-delay: 1s;
+        }
+        
+        @keyframes pulse-wave {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            100% {
+                width: 200px;
+                height: 200px;
+                opacity: 0;
+            }
+        }
+        
+        .voice-icon {
+            font-size: 60px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .voice-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .voice-subtext {
+            font-size: 14px;
+            color: var(--gray-400);
+            margin-bottom: 30px;
+        }
+        
+        .voice-cancel {
+            padding: 12px 30px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+        
+        .voice-cancel:active {
+            background: var(--danger);
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 500;
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+        }
+        
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.success { background: var(--secondary); }
+        .toast.error { background: var(--danger); }
+        .toast.info { background: var(--primary); }
+        
+        /* Responsive */
+        @media (min-width: 768px) {
+            body {
+                max-width: 400px;
+                margin: 0 auto;
+                background: #1a1a1a;
+            }
+            
+            .header, .filter-section, .categories-section, 
+            .trending-section, .recent-section, .suppliers-section {
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        /* Safe Area */
+        @supports (padding: max(0px)) {
+            .header {
+                padding-top: max(16px, env(safe-area-inset-top));
+            }
+            
+            .toast {
+                bottom: max(30px, env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" 
+                       placeholder="Search products, suppliers..." autofocus>
+                <button class="clear-btn" id="clearBtn" onclick="clearSearch()">
+                    <i class="fas fa-times-circle"></i>
+                </button>
+                
+                <!-- Suggestions Dropdown -->
+                <div class="suggestions-dropdown" id="suggestionsDropdown"></div>
+            </div>
+            
+            <div class="header-actions">
+                <button class="voice-search-btn" onclick="openVoiceSearch()">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Filters -->
+    <div class="quick-filters" id="quickFilters">
+        <span class="quick-filter active" data-filter="all">All</span>
+        <span class="quick-filter" data-filter="today">Today</span>
+        <span class="quick-filter" data-filter="week">This Week</span>
+        <span class="quick-filter" data-filter="month">This Month</span>
+        <span class="quick-filter" data-filter="trending">Trending</span>
+        <span class="quick-filter" data-filter="most_liked">Most Liked</span>
+        <span class="quick-filter" data-filter="most_viewed">Most Viewed</span>
+    </div>
+    
+    <!-- Filter Chips -->
+    <div class="filter-section">
+        <div class="filter-title">
+            <i class="fas fa-tag"></i>
+            <span>Categories</span>
+        </div>
+        <div class="filter-chips" id="categoryChips">
+            <span class="chip active" data-category="all">All</span>
+            <span class="chip" data-category="electronics">Electronics</span>
+            <span class="chip" data-category="fashion">Fashion</span>
+            <span class="chip" data-category="home">Home & Living</span>
+            <span class="chip" data-category="beauty">Beauty</span>
+            <span class="chip" data-category="sports">Sports</span>
+            <span class="chip" data-category="automotive">Automotive</span>
+            <span class="chip" data-category="food">Food & Beverages</span>
+        </div>
+    </div>
+    
+    <!-- Categories Grid -->
+    <div class="categories-section">
+        <div class="section-header">
+            <h2>Browse Categories</h2>
+            <a href="#" class="view-all">View All</a>
+        </div>
+        <div class="categories-grid" id="categoriesGrid"></div>
+    </div>
+    
+    <!-- Popular Suppliers -->
+    <div class="suppliers-section">
+        <div class="section-header">
+            <h2>Popular Suppliers</h2>
+            <a href="#" class="view-all">View All</a>
+        </div>
+        <div class="suppliers-scroll" id="suppliersScroll"></div>
+    </div>
+    
+    <!-- Trending Searches -->
+    <div class="trending-section">
+        <div class="trending-header">
+            <i class="fas fa-fire"></i>
+            <h3>Trending Now</h3>
+        </div>
+        <div class="trending-list" id="trendingList"></div>
+    </div>
+    
+    <!-- Recent Searches -->
+    <div class="recent-section">
+        <div class="recent-header">
+            <h3>Recent Searches</h3>
+            <button class="clear-all" onclick="clearAllRecent()">Clear All</button>
+        </div>
+        <div class="recent-list" id="recentList"></div>
+    </div>
+    
+    <!-- Voice Search Modal -->
+    <div class="voice-modal" id="voiceModal">
+        <div class="voice-content">
+            <div class="voice-wave">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="voice-icon">
+                <i class="fas fa-microphone"></i>
+            </div>
+            <div class="voice-text">Listening...</div>
+            <div class="voice-subtext">Speak now to search</div>
+            <button class="voice-cancel" onclick="closeVoiceSearch()">Cancel</button>
+        </div>
+    </div>
+    
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/search.js"></script>
+</body>
+</html>

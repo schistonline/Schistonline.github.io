@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>SourceX B2B - Register as Supplier</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-register.css">
+</head>
+<body>
+    <div class="card">
+        <!-- 3D Cube Logo -->
+        <div class="logo-section">
+            <div class="logo-cube">
+                <div class="cube">
+                    <div class="face front"></div>
+                    <div class="face right"></div>
+                    <div class="face top"></div>
+                </div>
+            </div>
+            <div class="logo-text">
+                <h1>Source<span>X</span></h1>
+                <div class="subtitle">Become a Supplier</div>
+            </div>
+        </div>
+
+        <div class="badge-container">
+            <span class="badge">B2B Marketplace</span>
+            <span class="badge badge-supplier">Supplier Registration</span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 50%"></div>
+            </div>
+            <div class="progress-steps">
+                <div class="progress-step active" id="step1Label">
+                    <i class="fas fa-building"></i>
+                    <span>Business Info</span>
+                </div>
+                <div class="progress-step" id="step2Label">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Location Details</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Business Information -->
+        <div class="step active" id="step1">
+            <form id="businessInfoForm">
+                <div class="form-group">
+                    <label class="form-label required">Business Email</label>
+                    <input type="email" class="form-input" id="businessEmail" placeholder="contact@yourbusiness.com">
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Business Name</label>
+                    <input type="text" class="form-input" id="businessName" placeholder="Your registered business name">
+                </div>
+
+                <div class="row-2">
+                    <div class="form-group">
+                        <label class="form-label required">Country Code</label>
+                        <select class="form-select" id="countryCode">
+                            <option value="+256" selected>Uganda (+256)</option>
+                            <option value="+254">Kenya (+254)</option>
+                            <option value="+255">Tanzania (+255)</option>
+                            <option value="+250">Rwanda (+250)</option>
+                            <option value="+257">Burundi (+257)</option>
+                            <option value="+211">South Sudan (+211)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Phone Number</label>
+                        <div class="phone-input-container">
+                            <span class="phone-prefix" id="phonePrefix">+256</span>
+                            <input type="tel" class="form-input phone-number" id="phone" placeholder="712345678">
+                        </div>
+                        <div class="hint">Enter number without country code</div>
+                    </div>
+                </div>
+
+                <div class="row-2">
+                    <div class="form-group">
+                        <label class="form-label">Alternative Phone</label>
+                        <div class="phone-input-container">
+                            <span class="phone-prefix" id="altPhonePrefix">+256</span>
+                            <input type="tel" class="form-input phone-number" id="altPhone" placeholder="712345678">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">
+                            <i class="fab fa-whatsapp" style="color: #25D366;"></i> 
+                            WhatsApp Number
+                        </label>
+                        <div class="phone-input-container whatsapp-container">
+                            <span class="phone-prefix" id="whatsappPrefix">+256</span>
+                            <input type="tel" class="form-input phone-number" id="whatsappNumber" placeholder="712345678" required>
+                        </div>
+                        <div class="hint">
+                            <i class="fas fa-info-circle"></i> 
+                            This will be used for customer negotiations and inquiries
+                        </div>
+                        <div class="error-message" id="whatsappError"></div>
+                    </div>
+                </div>
+
+                <!-- WhatsApp Department Selection (hidden initially) -->
+                <div class="form-group" id="whatsappDepartmentGroup" style="display: none;">
+                    <label class="form-label">
+                        <i class="fas fa-building"></i>
+                        WhatsApp Department (Optional)
+                    </label>
+                    <select class="form-select" id="whatsappDepartment">
+                        <option value="sales">Sales</option>
+                        <option value="support">Customer Support</option>
+                        <option value="orders">Orders</option>
+                        <option value="accounts">Accounts</option>
+                        <option value="general">General</option>
+                    </select>
+                    <div class="hint">Select which department handles this WhatsApp number</div>
+                </div>
+
+                <div class="row-2">
+                    <div class="form-group">
+                        <label class="form-label required">Business Type</label>
+                        <select class="form-select" id="businessType">
+                            <option value="">Select business type</option>
+                            <option value="Manufacturer">Manufacturer</option>
+                            <option value="Wholesaler">Wholesaler</option>
+                            <option value="Distributor">Distributor</option>
+                            <option value="Exporter">Exporter</option>
+                            <option value="Importer">Importer</option>
+                            <option value="Retailer (Bulk)">Retailer (Bulk)</option>
+                            <option value="Service Provider">Service Provider</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Year Established</label>
+                        <input type="number" class="form-input" id="yearEstablished" placeholder="2020" min="1900" max="2026">
+                    </div>
+                </div>
+
+                <div class="row-2">
+                    <div class="form-group">
+                        <label class="form-label">Business Registration No.</label>
+                        <input type="text" class="form-input" id="businessReg" placeholder="Optional">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">TIN Number</label>
+                        <input type="text" class="form-input" id="tinNumber" placeholder="Tax ID (Optional)">
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="acceptTerms" required>
+                    <label for="acceptTerms">I confirm that the information provided is accurate and I agree to the <a href="terms-conditions.html" target="_blank">Terms of Service</a></label>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn btn-primary" id="nextToStep2">Continue to Location Details <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Step 2: Location Details -->
+        <div class="step" id="step2">
+            <form id="locationForm">
+                <div class="verification-badge">
+                    <div class="verification-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="verification-text">
+                        <h3>Business Location Details</h3>
+                        <p>Provide your business location information for verification</p>
+                    </div>
+                </div>
+
+                <!-- Location Search (Optional) -->
+                <div class="form-group">
+                    <label class="form-label">Search Location (Optional)</label>
+                    <div class="location-search-container">
+                        <input type="text" class="form-input" id="locationSearch" placeholder="Search for your business address">
+                        <button type="button" class="btn btn-secondary" id="searchLocationBtn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                    <div class="hint">Optional: Use map to find your location</div>
+                </div>
+
+                <!-- Map Container (Optional) -->
+                <div class="map-container" id="mapContainer">
+                    <div id="map" style="height: 250px; width: 100%; border-radius: 8px;"></div>
+                </div>
+                <div class="hint map-hint">You can click on the map to drop a pin (optional)</div>
+
+                <!-- Manual Address Entry -->
+                <div class="form-group">
+                    <label class="form-label required">Detailed Business Address</label>
+                    <textarea class="form-textarea" id="detailedAddress" rows="3" placeholder="Street address, building name, landmark, etc." required></textarea>
+                </div>
+
+                <div class="row-3">
+                    <div class="form-group">
+                        <label class="form-label required">City/Town</label>
+                        <input type="text" class="form-input" id="city" placeholder="e.g., Kampala" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">District</label>
+                        <select class="form-select" id="district" required>
+                            <option value="">Select district</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Country</label>
+                        <select class="form-select" id="country">
+                            <option value="Uganda" selected>Uganda</option>
+                            <option value="Kenya">Kenya</option>
+                            <option value="Tanzania">Tanzania</option>
+                            <option value="Rwanda">Rwanda</option>
+                            <option value="Burundi">Burundi</option>
+                            <option value="South Sudan">South Sudan</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Business Hours -->
+                <div class="form-group">
+                    <label class="form-label">Business Hours (Optional)</label>
+                    <div class="business-hours">
+                        <div class="hour-row">
+                            <span>Weekdays:</span>
+                            <input type="text" class="form-input" id="weekdayHours" placeholder="e.g., 8:00 AM - 6:00 PM">
+                        </div>
+                        <div class="hour-row">
+                            <span>Weekends:</span>
+                            <input type="text" class="form-input" id="weekendHours" placeholder="e.g., 9:00 AM - 2:00 PM">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Person -->
+                <div class="form-group">
+                    <label class="form-label required">Contact Person Name</label>
+                    <input type="text" class="form-input" id="contactPerson" placeholder="Full name of contact person" required>
+                </div>
+
+                <div class="row-2">
+                    <div class="form-group">
+                        <label class="form-label required">Verification Phone</label>
+                        <div class="phone-input-container">
+                            <span class="phone-prefix" id="verificationPhonePrefix">+256</span>
+                            <input type="tel" class="form-input phone-number" id="verificationPhone" placeholder="712345678" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Preferred Call Time</label>
+                        <select class="form-select" id="callTime">
+                            <option value="morning">Morning (9AM - 12PM)</option>
+                            <option value="afternoon">Afternoon (12PM - 3PM)</option>
+                            <option value="late_afternoon">Late Afternoon (3PM - 6PM)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="verifyLocation" required>
+                    <label for="verifyLocation">I confirm that the business location information provided is accurate</label>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary" id="backToStep1"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button type="button" class="btn btn-primary" id="submitVerification">Submit for Verification <i class="fas fa-check-circle"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Professional Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <p>&copy; 2026 SourceX B2B Marketplace. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="terms.html">Terms</a>
+                    <a href="privacy.html">Privacy</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Application Submitted!</h2>
+            <p>Your supplier application has been submitted successfully.</p>
+            
+            <!-- WhatsApp Preview -->
+            <div class="whatsapp-preview">
+                <i class="fab fa-whatsapp"></i>
+                <p style="margin-top: 10px; font-size: 14px;">
+                    <strong>WhatsApp Business Number:</strong><br>
+                    <span id="previewWhatsapp" style="font-size: 18px; font-weight: 600; color: #075E54;">+256XXXXXXXXX</span>
+                </p>
+                <p class="hint" style="margin-top: 8px;">
+                    <i class="fas fa-clock"></i> 
+                    This will be used for customer negotiations within 24 hours
+                </p>
+            </div>
+            
+            <p class="thank-you-message">Our team will verify your business information within 24-48 hours.</p>
+            <div class="modal-actions">
+                <a href="supplier-dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+                <a href="index.html" class="btn btn-secondary">Browse Marketplace</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p id="loadingMessage">Processing...</p>
+    </div>
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/supplier-register.js"></script>
+</body>
+</html>

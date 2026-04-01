@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sponsored Products - Supplier Dashboard | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-sponsored.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="supplier-dashboard.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+                <span class="supplier-badge">SUPPLIER</span>
+            </a>
+            <div class="header-actions">
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+                <div class="header-icon" id="menuToggle">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <div>
+                <h1>Sponsored Products</h1>
+                <p class="subtitle">Boost your products to reach more buyers</p>
+            </div>
+            <button class="btn-primary" id="createCampaignBtn">
+                <i class="fas fa-plus"></i> New Campaign
+            </button>
+        </div>
+
+        <!-- Balance Card -->
+        <div class="balance-card">
+            <div class="balance-info">
+                <span class="balance-label">Available Balance</span>
+                <span class="balance-amount" id="walletBalance">UGX 0</span>
+            </div>
+            <button class="btn-outline" id="addFundsBtn">
+                <i class="fas fa-plus-circle"></i> Add Funds
+            </button>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="activeCampaigns">0</span>
+                    <span class="stat-label">Active Campaigns</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalImpressions">0</span>
+                    <span class="stat-label">Impressions</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-mouse-pointer"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalClicks">0</span>
+                    <span class="stat-label">Clicks</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalSpent">UGX 0</span>
+                    <span class="stat-label">Total Spent</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="active">Active Campaigns</button>
+            <button class="tab-btn" data-tab="pending">Pending</button>
+            <button class="tab-btn" data-tab="ended">Ended</button>
+            <button class="tab-btn" data-tab="analytics">Analytics</button>
+            <button class="tab-btn" data-tab="packages">Boost Packages</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading campaigns...</p>
+        </div>
+
+        <!-- Active Campaigns Tab -->
+        <div class="tab-content active" id="tab-active">
+            <div class="campaigns-grid" id="activeCampaigns">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Pending Campaigns Tab -->
+        <div class="tab-content" id="tab-pending">
+            <div class="campaigns-grid" id="pendingCampaigns">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Ended Campaigns Tab -->
+        <div class="tab-content" id="tab-ended">
+            <div class="campaigns-grid" id="endedCampaigns">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div class="tab-content" id="tab-analytics">
+            <div class="analytics-dashboard">
+                <!-- Performance Chart -->
+                <div class="chart-card">
+                    <h3>Campaign Performance</h3>
+                    <div class="chart-controls">
+                        <select id="chartPeriod">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30" selected>Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                        </select>
+                    </div>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-label">Average CTR</span>
+                        <span class="metric-value" id="avgCTR">0%</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Cost per Click</span>
+                        <span class="metric-value" id="avgCPC">UGX 0</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Impressions/Day</span>
+                        <span class="metric-value" id="avgImpressions">0</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">ROI</span>
+                        <span class="metric-value" id="roi">0%</span>
+                    </div>
+                </div>
+
+                <!-- Top Performing Products -->
+                <div class="top-products">
+                    <h3>Top Performing Products</h3>
+                    <div class="products-list" id="topProducts">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boost Packages Tab -->
+        <div class="tab-content" id="tab-packages">
+            <div class="packages-grid" id="packagesGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Campaign Modal -->
+    <div class="modal" id="campaignModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Create Sponsored Campaign</h3>
+                <button class="modal-close" onclick="closeCampaignModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="campaignForm" onsubmit="event.preventDefault(); createCampaign();">
+                    <!-- Product Selection -->
+                    <div class="form-group">
+                        <label class="form-label required">Select Product</label>
+                        <select id="campaignProduct" class="form-select" required>
+                            <option value="">Choose a product to promote</option>
+                        </select>
+                    </div>
+
+                    <!-- Package Selection -->
+                    <div class="form-group">
+                        <label class="form-label required">Boost Package</label>
+                        <div class="package-selector" id="packageSelector">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Custom Duration (if no package selected) -->
+                    <div class="custom-duration" id="customDuration" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Duration (days)</label>
+                                <input type="number" id="campaignDuration" min="1" max="90" value="7">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Daily Budget (UGX)</label>
+                                <input type="number" id="dailyBudget" min="1000" step="1000" value="5000">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Campaign Name -->
+                    <div class="form-group">
+                        <label class="form-label">Campaign Name (Optional)</label>
+                        <input type="text" id="campaignName" placeholder="e.g., Holiday Promotion 2026">
+                    </div>
+
+                    <!-- Target Audience -->
+                    <div class="form-group">
+                        <label class="form-label">Target Audience</label>
+                        <select id="targetAudience" class="form-select">
+                            <option value="all">All Buyers</option>
+                            <option value="verified">Verified Buyers Only</option>
+                            <option value="new">New Buyers</option>
+                            <option value="returning">Returning Buyers</option>
+                        </select>
+                    </div>
+
+                    <!-- Target Regions -->
+                    <div class="form-group">
+                        <label class="form-label">Target Regions</label>
+                        <select id="targetRegions" class="form-select" multiple size="3">
+                            <option value="central">Central</option>
+                            <option value="western">Western</option>
+                            <option value="eastern">Eastern</option>
+                            <option value="northern">Northern</option>
+                            <option value="nationwide">Nationwide</option>
+                        </select>
+                        <div class="hint">Hold Ctrl/Cmd to select multiple</div>
+                    </div>
+
+                    <!-- Budget Summary -->
+                    <div class="budget-summary" id="budgetSummary">
+                        <h4>Campaign Summary</h4>
+                        <div class="summary-row">
+                            <span>Duration:</span>
+                            <span id="summaryDuration">7 days</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Daily Budget:</span>
+                            <span id="summaryDaily">UGX 5,000</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total Cost:</span>
+                            <span id="summaryTotal">UGX 35,000</span>
+                        </div>
+                    </div>
+
+                    <!-- Terms -->
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="acceptTerms" required>
+                        <label for="acceptTerms">I agree to the <a href="sponsored-terms.html">Sponsored Products Terms</a></label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="submit" class="btn-primary" id="createCampaignBtn">Create Campaign</button>
+                        <button type="button" class="btn-secondary" onclick="closeCampaignModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Funds Modal -->
+    <div class="modal" id="fundsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Funds to Wallet</h3>
+                <button class="modal-close" onclick="closeFundsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="quick-amounts">
+                    <button class="amount-btn" data-amount="50000">UGX 50,000</button>
+                    <button class="amount-btn" data-amount="100000">UGX 100,000</button>
+                    <button class="amount-btn" data-amount="250000">UGX 250,000</button>
+                    <button class="amount-btn" data-amount="500000">UGX 500,000</button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Custom Amount</label>
+                    <input type="number" id="customAmount" min="10000" step="1000" placeholder="Enter amount">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Payment Method</label>
+                    <select id="paymentMethod" class="form-select">
+                        <option value="mobile_money">Mobile Money</option>
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="card">Credit/Debit Card</option>
+                    </select>
+                </div>
+
+                <!-- Mobile Money Fields -->
+                <div id="mobileMoneyFields">
+                    <div class="form-group">
+                        <label class="form-label">Mobile Money Number</label>
+                        <input type="tel" id="mobileNumber" placeholder="0772 123456">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Network</label>
+                        <select id="mobileNetwork">
+                            <option value="mtn">MTN Uganda</option>
+                            <option value="airtel">Airtel Uganda</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Bank Transfer Fields (hidden by default) -->
+                <div id="bankFields" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Bank Name</label>
+                        <input type="text" id="bankName">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Account Number</label>
+                        <input type="text" id="accountNumber">
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="processPayment()">Proceed to Payment</button>
+                    <button class="btn-secondary" onclick="closeFundsModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campaign Details Modal -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Campaign Details</h3>
+                <button class="modal-close" onclick="closeDetailsModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="campaignDetails">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Pause Campaign Modal -->
+    <div class="modal" id="pauseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Pause Campaign</h3>
+                <button class="modal-close" onclick="closePauseModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to pause this campaign?</p>
+                <p class="text-muted">You can resume it anytime. No further charges will occur while paused.</p>
+                <div class="modal-actions">
+                    <button class="btn-warning" onclick="pauseCampaign()">Pause Campaign</button>
+                    <button class="btn-secondary" onclick="closePauseModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Campaign Modal -->
+    <div class="modal" id="endModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>End Campaign</h3>
+                <button class="modal-close" onclick="closeEndModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="warning-message">Are you sure you want to end this campaign?</p>
+                <p class="warning-detail">This action cannot be undone. Any remaining budget will be refunded to your wallet.</p>
+                <div class="modal-actions">
+                    <button class="btn-danger" onclick="endCampaign()">End Campaign</button>
+                    <button class="btn-secondary" onclick="closeEndModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Campaign created successfully</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="supplier-dashboard.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="supplier-products.html" class="nav-item">
+            <i class="fas fa-box"></i>
+            <span>Products</span>
+        </a>
+        <a href="supplier-sponsored.html" class="nav-item active">
+            <i class="fas fa-bullhorn"></i>
+            <span>Sponsored</span>
+        </a>
+        <a href="supplier-orders.html" class="nav-item">
+            <i class="fas fa-truck"></i>
+            <span>Orders</span>
+        </a>
+        <a href="supplier-profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supplier-sponsored.js"></script>
+</body>
+</html>

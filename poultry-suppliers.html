@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Poultry Suppliers - iBlue B2B</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .logo-circle {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 14px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: #f1f5f9;
+            border-radius: 50%;
+            color: #0B4F6C;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            padding: 40px 16px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: white;
+            padding: 20px;
+            margin: -30px 16px 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 16px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0B4F6C;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            padding: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .filter-tab {
+            padding: 8px 20px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #475569;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .filter-tab.active {
+            background: #0B4F6C;
+            color: white;
+            border-color: #0B4F6C;
+        }
+
+        /* Suppliers Grid */
+        .suppliers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .supplier-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .supplier-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            border-color: #0B4F6C;
+        }
+
+        .supplier-header {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+
+        .verified-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #10b981;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .supplier-avatar {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0B4F6C;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            border: 3px solid white;
+        }
+
+        .supplier-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .supplier-location {
+            font-size: 13px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .supplier-body {
+            padding: 16px;
+        }
+
+        .supplier-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .stat-box {
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-weight: 700;
+            color: #0B4F6C;
+            font-size: 18px;
+        }
+
+        .stat-text {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .supplier-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge i {
+            color: #0B4F6C;
+            font-size: 10px;
+        }
+
+        .badge.primary {
+            background: #e6f2f9;
+            color: #0B4F6C;
+        }
+
+        .supplier-products {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .product-thumb {
+            flex: 1;
+            aspect-ratio: 1;
+            background: #f1f5f9;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .product-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .supplier-footer {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0a4057;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid #0B4F6C;
+            color: #0B4F6C;
+        }
+
+        .btn-outline:hover {
+            background: #f0f9ff;
+        }
+
+        /* Loading */
+        .loading-grid {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #0B4F6C;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 16px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 12px;
+            background: white;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .search-bar {
+                display: none;
+            }
+            
+            .suppliers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search poultry suppliers..." id="searchInput">
+            </div>
+            
+            <div class="header-icons">
+                <button class="icon-btn" onclick="window.location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+                <button class="icon-btn" onclick="window.location.href='profile.html'">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Poultry Suppliers in Uganda</h1>
+        <p>Connect with verified poultry farmers, hatcheries, and distributors across the country</p>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-value" id="totalSuppliers">0</div>
+            <div class="stat-label">Total Suppliers</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="verifiedSuppliers">0</div>
+            <div class="stat-label">Verified</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="activeBatches">0</div>
+            <div class="stat-label">Active Batches</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="avgRating">4.8</div>
+            <div class="stat-label">Avg Rating</div>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-section">
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All Suppliers</button>
+            <button class="filter-tab" data-filter="verified">Verified Only</button>
+            <button class="filter-tab" data-filter="hatchery">Hatcheries</button>
+            <button class="filter-tab" data-filter="farm">Farms</button>
+            <button class="filter-tab" data-filter="distributor">Distributors</button>
+        </div>
+    </div>
+
+    <!-- Suppliers Grid -->
+    <main class="suppliers-grid" id="suppliersGrid">
+        <div class="loading-grid">
+            <div class="spinner"></div>
+            <p>Loading poultry suppliers...</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 iBlue B2B. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Config
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // State
+        let suppliers = [];
+        let filteredSuppliers = [];
+
+        // Load Suppliers
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadSuppliers();
+            setupEventListeners();
+        });
+
+        async function loadSuppliers() {
+            try {
+                const { data, error } = await sb
+                    .from('poultry_suppliers')
+                    .select(`
+                        *,
+                        batches:poultry_batches (
+                            id,
+                            title,
+                            available_quantity,
+                            price_per_bird,
+                            images
+                        )
+                    `)
+                    .eq('is_active', true)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                suppliers = data || [];
+                filteredSuppliers = [...suppliers];
+                
+                updateStats();
+                renderSuppliers();
+                
+            } catch (error) {
+                console.error('Error loading suppliers:', error);
+                // Demo data
+                suppliers = getDemoSuppliers();
+                filteredSuppliers = [...suppliers];
+                renderSuppliers();
+            }
+        }
+
+        // Demo Data
+        function getDemoSuppliers() {
+            return [
+                {
+                    id: 1,
+                    company_name: 'Silver Links Poultry',
+                    business_type: 'farm',
+                    district: 'Kampala',
+                    verification_status: 'verified',
+                    year_established: 2015,
+                    total_birds_sold: 15000,
+                    avg_rating: 4.8,
+                    review_count: 128,
+                    batches: [
+                        { id: 101, title: 'Broilers', available_quantity: 600, price_per_bird: 2000, images: ['https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=100'] },
+                        { id: 102, title: 'Layers', available_quantity: 350, price_per_bird: 3500, images: ['https://images.unsplash.com/photo-1587613991115-3c2c2b6dd8b6?w=100'] }
+                    ]
+                },
+                {
+                    id: 2,
+                    company_name: 'Greenfield Hatchery',
+                    business_type: 'hatchery',
+                    district: 'Wakiso',
+                    verification_status: 'verified',
+                    year_established: 2018,
+                    total_birds_sold: 25000,
+                    avg_rating: 4.9,
+                    review_count: 256,
+                    batches: [
+                        { id: 201, title: 'Day-old Chicks', available_quantity: 1200, price_per_bird: 1500, images: ['https://images.unsplash.com/photo-1604848698035-8c3c5d2a6d3b?w=100'] }
+                    ]
+                },
+                {
+                    id: 3,
+                    company_name: 'Mukono Poultry Farm',
+                    business_type: 'farm',
+                    district: 'Mukono',
+                    verification_status: 'pending',
+                    year_established: 2020,
+                    total_birds_sold: 5000,
+                    avg_rating: 4.5,
+                    review_count: 42,
+                    batches: [
+                        { id: 301, title: 'Cobb 500', available_quantity: 200, price_per_bird: 2800, images: ['https://images.unsplash.com/photo-1527153818091-1a9638521e2a?w=100'] }
+                    ]
+                }
+            ];
+        }
+
+        function updateStats() {
+            document.getElementById('totalSuppliers').textContent = suppliers.length;
+            document.getElementById('verifiedSuppliers').textContent = suppliers.filter(s => s.verification_status === 'verified').length;
+            
+            const totalBatches = suppliers.reduce((sum, s) => sum + (s.batches?.length || 0), 0);
+            document.getElementById('activeBatches').textContent = totalBatches;
+        }
+
+        function renderSuppliers() {
+            const grid = document.getElementById('suppliersGrid');
+            
+            if (filteredSuppliers.length === 0) {
+                grid.innerHTML = `
+                    <div class="loading-grid">
+                        <i class="fas fa-store" style="font-size: 48px; color: #94a3b8; margin-bottom: 16px;"></i>
+                        <p>No suppliers found</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filteredSuppliers.map(supplier => {
+                const totalBirds = supplier.batches?.reduce((sum, b) => sum + (b.available_quantity || 0), 0) || 0;
+                const avgPrice = supplier.batches?.reduce((sum, b) => sum + (b.price_per_bird || 0), 0) / (supplier.batches?.length || 1) || 0;
+                
+                return `
+                    <div class="supplier-card" onclick="viewSupplier('${supplier.id}')">
+                        <div class="supplier-header">
+                            ${supplier.verification_status === 'verified' ? 
+                                '<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
+                            <div class="supplier-avatar">
+                                ${supplier.company_name?.charAt(0) || 'S'}
+                            </div>
+                            <h3>${supplier.company_name}</h3>
+                            <div class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i> ${supplier.district || 'Kampala'}
+                            </div>
+                        </div>
+                        
+                        <div class="supplier-body">
+                            <div class="supplier-stats">
+                                <div class="stat-box">
+                                    <div class="stat-number">${totalBirds}</div>
+                                    <div class="stat-text">Birds Available</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-number">${supplier.batches?.length || 0}</div>
+                                    <div class="stat-text">Active Batches</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-number">${supplier.avg_rating || '4.8'}</div>
+                                    <div class="stat-text">Rating</div>
+                                </div>
+                            </div>
+                            
+                            <div class="supplier-badges">
+                                <span class="badge"><i class="fas fa-tag"></i> UGX ${Math.round(avgPrice).toLocaleString()}/bird</span>
+                                <span class="badge primary"><i class="fas fa-calendar"></i> Est. ${supplier.year_established || 2015}</span>
+                                <span class="badge"><i class="fas fa-check-circle"></i> ${supplier.business_type || 'Farm'}</span>
+                            </div>
+                            
+                            <div class="supplier-products">
+                                ${supplier.batches?.slice(0, 3).map(batch => `
+                                    <div class="product-thumb">
+                                        <img src="${batch.images?.[0] || 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=100'}" alt="">
+                                    </div>
+                                `).join('')}
+                            </div>
+                            
+                            <div class="supplier-footer">
+                                <button class="btn btn-primary" onclick="event.stopPropagation(); viewSupplier('${supplier.id}')">
+                                    View Batches
+                                </button>
+                                <button class="btn btn-outline" onclick="event.stopPropagation(); contactSupplier('${supplier.id}')">
+                                    <i class="fab fa-whatsapp"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Navigation
+        function viewSupplier(supplierId) {
+            window.location.href = `poultry-index.html?supplier=${supplierId}`;
+        }
+
+        function contactSupplier(supplierId) {
+            const supplier = suppliers.find(s => s.id == supplierId);
+            if (supplier?.phone) {
+                window.open(`https://wa.me/${supplier.phone.replace(/\D/g, '')}`, '_blank');
+            }
+        }
+
+        // Filtering
+        function setupEventListeners() {
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    e.target.classList.add('active');
+                    
+                    const filter = e.target.dataset.filter;
+                    applyFilter(filter);
+                });
+            });
+
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const search = e.target.value.toLowerCase();
+                applySearch(search);
+            });
+        }
+
+        function applyFilter(filter) {
+            if (filter === 'all') {
+                filteredSuppliers = [...suppliers];
+            } else if (filter === 'verified') {
+                filteredSuppliers = suppliers.filter(s => s.verification_status === 'verified');
+            } else {
+                filteredSuppliers = suppliers.filter(s => s.business_type === filter);
+            }
+            
+            // Apply current search if any
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            if (search) {
+                filteredSuppliers = filteredSuppliers.filter(s => 
+                    s.company_name.toLowerCase().includes(search)
+                );
+            }
+            
+            renderSuppliers();
+        }
+
+        function applySearch(search) {
+            filteredSuppliers = suppliers.filter(s => 
+                s.company_name.toLowerCase().includes(search)
+            );
+            
+            // Apply current filter if not 'all'
+            const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
+            if (activeFilter !== 'all') {
+                if (activeFilter === 'verified') {
+                    filteredSuppliers = filteredSuppliers.filter(s => s.verification_status === 'verified');
+                } else {
+                    filteredSuppliers = filteredSuppliers.filter(s => s.business_type === activeFilter);
+                }
+            }
+            
+            renderSuppliers();
+        }
+
+        // Make functions global
+        window.viewSupplier = viewSupplier;
+        window.contactSupplier = contactSupplier;
+    </script>
+</body>
+</html>

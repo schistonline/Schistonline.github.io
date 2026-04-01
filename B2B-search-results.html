@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Search Results - SourceX B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Swiper CSS for Carousels -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/B2B-search-results.css">
+</head>
+<body>
+    <!-- Header with Logo -->
+    <header class="header">
+        <div class="header-container">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <a href="index.html" class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">Source<span>X</span></span>
+            </a>
+            
+            <div class="header-actions">
+                <a href="B2B-search.html" class="header-icon">
+                    <i class="fas fa-search"></i>
+                </a>
+                <button class="filter-icon" id="filterBtn">
+                    <i class="fas fa-sliders-h"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Search Query Display -->
+        <div class="search-query" id="searchQuery">
+            <!-- Populated by JS -->
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Filter Carousel Section -->
+        <div class="filter-carousel-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-filter"></i> Filter by Category
+                </h3>
+                <button class="clear-filters-btn" id="clearFiltersBtn" onclick="SearchResults.clearAllFilters()">
+                    <i class="fas fa-times"></i> Clear
+                </button>
+            </div>
+            
+            <div class="swiper filter-swiper">
+                <div class="swiper-wrapper" id="filterCarousel">
+                    <!-- Populated by JS -->
+                    <div class="swiper-slide filter-skeleton"></div>
+                    <div class="swiper-slide filter-skeleton"></div>
+                    <div class="swiper-slide filter-skeleton"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Filters -->
+        <div class="active-filters" id="activeFilters"></div>
+
+        <!-- Results Header -->
+        <div class="results-header">
+            <div class="results-count" id="resultsCount">Loading results...</div>
+            <div class="sort-dropdown">
+                <select id="sortSelect">
+                    <option value="relevance">Sort: Relevance</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                    <option value="newest">Newest First</option>
+                    <option value="popular">Most Popular</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Search Results List - Image Left, Content Right -->
+        <div class="results-list" id="resultsList">
+            <!-- Results loaded by JS -->
+            <div class="skeleton-item">
+                <div class="skeleton-content">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-info">
+                        <div class="skeleton-title"></div>
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-meta"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="skeleton-item">
+                <div class="skeleton-content">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-info">
+                        <div class="skeleton-title"></div>
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-meta"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container" id="loadMoreContainer">
+            <button class="load-more-btn" id="loadMoreBtn">
+                <i class="fas fa-spinner"></i> Load More Results
+            </button>
+        </div>
+
+        <!-- No Results Found -->
+        <div class="no-results" id="noResults" style="display: none;">
+            <i class="fas fa-search"></i>
+            <h3>No products found</h3>
+            <p>Try adjusting your search or filters to find what you're looking for.</p>
+            <div class="recommendations" id="noResultsRecommendations">
+                <h4>You might like:</h4>
+                <div class="recommendation-list" id="recommendationList">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <button class="clear-filters-btn" onclick="SearchResults.clearAllFilters()">
+                <i class="fas fa-times"></i> Clear All Filters
+            </button>
+        </div>
+    </main>
+
+    <!-- Filter Modal (Advanced Filters) -->
+    <div class="modal" id="filterModal">
+        <div class="modal-overlay" onclick="SearchResults.closeFilterModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Advanced Filters</h3>
+                <button class="close-btn" onclick="SearchResults.closeFilterModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Price Range -->
+                <div class="filter-section">
+                    <h4>Price Range (UGX)</h4>
+                    <div class="price-inputs">
+                        <input type="number" id="minPrice" class="price-input" placeholder="Min" min="0">
+                        <span>to</span>
+                        <input type="number" id="maxPrice" class="price-input" placeholder="Max" min="0">
+                    </div>
+                </div>
+
+                <!-- Condition -->
+                <div class="filter-section">
+                    <h4>Condition</h4>
+                    <div class="filter-options">
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="new"> New
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="used"> Used
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="refurbished"> Refurbished
+                        </label>
+                    </div>
+                </div>
+
+                <!-- MOQ -->
+                <div class="filter-section">
+                    <h4>Minimum Order Quantity</h4>
+                    <select id="moqFilter">
+                        <option value="">Any</option>
+                        <option value="1">1+</option>
+                        <option value="10">10+</option>
+                        <option value="50">50+</option>
+                        <option value="100">100+</option>
+                        <option value="500">500+</option>
+                        <option value="1000">1000+</option>
+                    </select>
+                </div>
+
+                <!-- Supplier Verification -->
+                <div class="filter-section">
+                    <h4>Supplier Type</h4>
+                    <div class="filter-options">
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="verified"> Verified Suppliers Only
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="featured"> Featured Suppliers
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="SearchResults.clearAllFilters()">Clear All</button>
+                <button class="btn-primary" onclick="SearchResults.applyFilters()">Apply Filters</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Supplier Modal -->
+    <div class="modal" id="contactModal">
+        <div class="modal-overlay" onclick="SearchResults.closeContactModal()"></div>
+        <div class="modal-content contact-modal">
+            <div class="modal-header">
+                <h3>Contact Supplier</h3>
+                <button class="close-btn" onclick="SearchResults.closeContactModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="supplier-info" id="contactSupplierInfo">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label>Your Name <span class="required">*</span></label>
+                        <input type="text" id="contactName" class="form-input" placeholder="Enter your name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Your Email <span class="required">*</span></label>
+                        <input type="email" id="contactEmail" class="form-input" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Your Phone</label>
+                        <input type="tel" id="contactPhone" class="form-input" placeholder="Enter your phone number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Quantity Needed <span class="required">*</span></label>
+                        <input type="number" id="contactQuantity" class="form-input" placeholder="Enter quantity" min="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Message <span class="required">*</span></label>
+                        <textarea id="contactMessage" class="form-textarea" rows="4" placeholder="I'm interested in this product. Please provide more information..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="contactTerms" required>
+                            <span>I agree to the <a href="terms.html">terms and conditions</a> <span class="required">*</span></span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="SearchResults.closeContactModal()">Cancel</button>
+                <button class="btn-primary" onclick="SearchResults.sendContactMessage()">
+                    <i class="fas fa-paper-plane"></i> Send Inquiry
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-overlay" onclick="SearchResults.closeSuccessModal()"></div>
+        <div class="modal-content success-modal">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Inquiry Sent!</h3>
+            <p id="successMessage">Your inquiry has been sent to the supplier. They will contact you soon.</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="SearchResults.closeSuccessModal()">
+                    Continue Browsing
+                </button>
+                <button class="btn-outline" onclick="SearchResults.redirectToInquiries()">
+                    View My Inquiries
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professional B2B Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Company Info -->
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <div class="logo-cube small">
+                            <div class="cube">
+                                <div class="face front"></div>
+                                <div class="face right"></div>
+                                <div class="face top"></div>
+                            </div>
+                        </div>
+                        <span class="footer-logo-text">Source<span>X</span></span>
+                    </div>
+                    <p class="footer-about">Uganda's premier B2B marketplace connecting verified suppliers with serious buyers. Trusted by 5,000+ businesses.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-col">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="how-it-works.html"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                        <li><a href="pricing.html"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+                        <li><a href="become-supplier.html"><i class="fas fa-chevron-right"></i> Become a Supplier</a></li>
+                        <li><a href="help.html"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                    </ul>
+                </div>
+
+                <!-- For Buyers -->
+                <div class="footer-col">
+                    <h4 class="footer-title">For Buyers</h4>
+                    <ul class="footer-links">
+                        <li><a href="how-to-buy.html"><i class="fas fa-chevron-right"></i> How to Buy</a></li>
+                        <li><a href="request-quote.html"><i class="fas fa-chevron-right"></i> Request for Quote</a></li>
+                        <li><a href="supplier-verification.html"><i class="fas fa-chevron-right"></i> Supplier Verification</a></li>
+                        <li><a href="buyer-protection.html"><i class="fas fa-chevron-right"></i> Buyer Protection</a></li>
+                        <li><a href="trade-assurance.html"><i class="fas fa-chevron-right"></i> Trade Assurance</a></li>
+                    </ul>
+                </div>
+
+                <!-- For Suppliers -->
+                <div class="footer-col">
+                    <h4 class="footer-title">For Suppliers</h4>
+                    <ul class="footer-links">
+                        <li><a href="sell-on-sourcex.html"><i class="fas fa-chevron-right"></i> Sell on SourceX</a></li>
+                        <li><a href="supplier-success.html"><i class="fas fa-chevron-right"></i> Supplier Success</a></li>
+                        <li><a href="advertise.html"><i class="fas fa-chevron-right"></i> Advertising</a></li>
+                        <li><a href="logistics-partner.html"><i class="fas fa-chevron-right"></i> Logistics Partner</a></li>
+                        <li><a href="supplier-standards.html"><i class="fas fa-chevron-right"></i> Supplier Standards</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="footer-col">
+                    <h4 class="footer-title">Contact Us</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
+                        <li><i class="fas fa-phone"></i> +256 700 123456</li>
+                        <li><i class="fas fa-envelope"></i> info@sourcex.ug</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 6:00 PM</li>
+                    </ul>
+                    <div class="footer-badge">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=ISO" alt="ISO Certified">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=SSL" alt="SSL Secure">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2026 SourceX. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+                    <div class="footer-bottom-links">
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="disclaimer.html">Disclaimer</a>
+                        <a href="sitemap.html">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meta AI Credit -->
+        <div class="meta-credit">
+            <span>◆</span> Meta AI
+        </div>
+    </footer>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="B2B-search.html" class="nav-item">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>My SourceX</span>
+        </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p id="loadingMessage">Searching...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="js/B2B-search-results.js"></script>
+</body>
+</html>

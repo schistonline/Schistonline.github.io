@@ -1,0 +1,1188 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Poultry Listing | iBlue B2B</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    
+    <!-- Swiper CSS for carousel -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+            line-height: 1.5;
+        }
+
+        /* Main container */
+        .poultry-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.3s;
+        }
+
+        .loading-screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .pulse-loader {
+            width: 60px;
+            height: 60px;
+            background: #0B4F6C;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+
+        /* Header */
+        .company-header {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .company-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .company-name {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .verified-badge {
+            background: #10b981;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .company-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .company-meta i {
+            margin-right: 4px;
+        }
+
+        /* Marquee */
+        .marquee-container {
+            background: #fbbf24;
+            color: #0B4F6C;
+            padding: 12px 0;
+            overflow: hidden;
+            position: relative;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+            border-bottom: 2px solid #f59e0b;
+        }
+
+        .marquee {
+            white-space: nowrap;
+            animation: scrollMarquee 20s linear infinite;
+        }
+
+        .marquee span {
+            display: inline-block;
+            padding-right: 50px;
+        }
+
+        .marquee i {
+            margin: 0 10px;
+            color: #0B4F6C;
+        }
+
+        @keyframes scrollMarquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Swiper Carousel */
+        .swiper {
+            width: 100%;
+            height: 280px;
+        }
+
+        .swiper-slide {
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .swiper-slide::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+        }
+
+        .swiper-pagination-bullet {
+            width: 8px;
+            height: 8px;
+            background: white;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #fbbf24;
+            width: 24px;
+            border-radius: 12px;
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            color: white;
+            background: rgba(0,0,0,0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .swiper-button-next::after, .swiper-button-prev::after {
+            font-size: 18px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 20px;
+            margin-top: -30px;
+            z-index: 20;
+            position: relative;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 12px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 1px solid rgba(11,79,108,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #64748b;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #0B4F6C;
+            line-height: 1.2;
+        }
+
+        .stat-sub {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* Price Card */
+        .price-card {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin: 0 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(11,79,108,0.3);
+        }
+
+        .price-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .price-value {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .price-unit {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-left: 4px;
+        }
+
+        .price-badge {
+            background: #fbbf24;
+            color: #0B4F6C;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Distribution Section */
+        .distribution-section {
+            background: #f8fafc;
+            border-radius: 24px;
+            margin: 0 20px 20px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: #0B4F6C;
+        }
+
+        .date-display {
+            background: white;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .date-label {
+            font-size: 14px;
+            color: #475569;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .date-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        /* Timer */
+        .timer-container {
+            background: white;
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .timer-label {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            text-align: center;
+        }
+
+        .timer-block {
+            background: #0B4F6C;
+            color: white;
+            border-radius: 12px;
+            padding: 12px 4px;
+        }
+
+        .timer-number {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.2;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-unit {
+            font-size: 11px;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        .timer-expired {
+            background: #ef4444;
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Details Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 0 20px 20px;
+        }
+
+        .detail-item {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .detail-label i {
+            color: #0B4F6C;
+            font-size: 14px;
+        }
+
+        .detail-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .detail-sub {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* Vaccination badges */
+        .vaccine-badge {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 4px 8px;
+            border-radius: 30px;
+            font-size: 11px;
+            display: inline-block;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            padding: 0 20px 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 18px 12px;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+            box-shadow: 0 8px 16px rgba(11,79,108,0.3);
+        }
+
+        .btn-primary:hover {
+            background: #0a4057;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #334155;
+            border: 1.5px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Bottom Sheet Modal */
+        .bottom-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 24px 24px 0 0;
+            padding: 24px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+        }
+
+        .bottom-sheet.show {
+            transform: translateY(0);
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
+
+        .sheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .sheet-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        .sheet-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #334155;
+        }
+
+        label i {
+            color: #0B4F6C;
+            width: 20px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 15px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #0B4F6C;
+            box-shadow: 0 0 0 3px rgba(11,79,108,0.1);
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .whatsapp-btn:hover {
+            background: #20b358;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(37,211,102,0.3);
+        }
+
+        /* Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .modal-overlay.show {
+            display: block;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            background: #0f172a;
+            color: white;
+            padding: 16px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: #10b981;
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+
+        /* Error state */
+        .error-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .error-state i {
+            font-size: 48px;
+            color: #ef4444;
+            margin-bottom: 16px;
+        }
+
+        .error-state h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .error-state p {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .error-state .btn {
+            display: inline-block;
+            width: auto;
+            padding: 12px 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="pulse-loader"></div>
+        <p style="color: #0B4F6C; font-weight: 600;">Loading poultry details...</p>
+    </div>
+
+    <div class="poultry-container" id="poultryContainer" style="display: none;">
+        <!-- Dynamic content will be populated by JavaScript -->
+    </div>
+
+    <!-- Bottom Sheet Modal for Inquiry -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeInquirySheet()"></div>
+    
+    <div class="bottom-sheet" id="inquirySheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h3><i class="fab fa-whatsapp" style="color: #25D366;"></i> Send Inquiry</h3>
+            <div class="sheet-close" onclick="closeInquirySheet()">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        
+        <form id="inquiryForm" onsubmit="event.preventDefault(); sendWhatsAppInquiry()">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Your Name</label>
+                <input type="text" id="inquirerName" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-phone"></i> Phone Number</label>
+                <input type="tel" id="inquirerPhone" placeholder="+256 712 345678" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-drumstick-bite"></i> Quantity Interested</label>
+                <input type="number" id="inquiryQuantity" placeholder="e.g., 50 birds" min="1">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-calendar"></i> Preferred Pickup Date</label>
+                <input type="date" id="preferredDate">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-comment"></i> Your Message</label>
+                <textarea id="inquiryMessage" rows="3" placeholder="I'm interested in your poultry. Please provide more information..." required></textarea>
+            </div>
+
+            <div id="inquiryBatchInfo" style="background: #f8fafc; padding: 12px; border-radius: 12px; margin: 16px 0; font-size: 13px; display: none;">
+                <!-- Will show batch info -->
+            </div>
+
+            <button type="submit" class="whatsapp-btn" id="sendInquiryBtn">
+                <i class="fab fa-whatsapp"></i> Send via WhatsApp
+            </button>
+        </form>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <script>
+        // ============================================
+        // SUPABASE CONFIG
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE
+        // ============================================
+        let currentBatch = null;
+        let currentSupplier = null;
+        let timerInterval = null;
+        let swiper = null;
+
+        // ============================================
+        // INIT - Get batch ID from URL
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const batchId = urlParams.get('batch') || 1;
+            
+            await loadBatchData(batchId);
+        });
+
+        // ============================================
+        // LOAD DATA FROM DATABASE
+        // ============================================
+        async function loadBatchData(batchId) {
+            try {
+                // Fetch batch with supplier info
+                const { data: batch, error } = await sb
+                    .from('poultry_batches')
+                    .select(`
+                        *,
+                        supplier:poultry_suppliers (*)
+                    `)
+                    .eq('id', batchId)
+                    .single();
+
+                if (error) throw error;
+                
+                currentBatch = batch;
+                currentSupplier = batch.supplier;
+                
+                // Render the page with real data
+                renderPage();
+                
+                // Start countdown timer based on distribution date
+                startCountdownTimer(batch.distribution_date);
+                
+                // Hide loading screen
+                document.getElementById('loadingScreen').classList.add('hide');
+                document.getElementById('poultryContainer').style.display = 'block';
+                
+                // Initialize carousel after images are loaded
+                setTimeout(initSwiper, 100);
+                
+            } catch (error) {
+                console.error('Error loading batch:', error);
+                showErrorState();
+            }
+        }
+
+        // ============================================
+        // RENDER PAGE WITH DYNAMIC DATA
+        // ============================================
+        function renderPage() {
+            const container = document.getElementById('poultryContainer');
+            
+            // Format distribution date
+            const distDate = currentBatch.distribution_date 
+                ? new Date(currentBatch.distribution_date).toLocaleDateString('en-US', {
+                    month: 'numeric',
+                    day: 'numeric',
+                    year: 'numeric'
+                }) 
+                : 'TBD';
+            
+            // Generate vaccination badges
+            const vaccines = currentBatch.vaccination_status || ['Newcastle', 'Gumboro'];
+            const vaccineHtml = vaccines.map(v => 
+                `<span class="vaccine-badge"><i class="fas fa-syringe"></i> ${v}</span>`
+            ).join('');
+
+            // Build images array for carousel
+            const images = currentBatch.images && currentBatch.images.length > 0 
+                ? currentBatch.images 
+                : ['https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800'];
+
+            container.innerHTML = `
+                <!-- Company Header -->
+                <div class="company-header">
+                    <div class="company-row">
+                        <div class="company-name">${escapeHtml(currentSupplier?.company_name || 'Poultry Farm')}</div>
+                        ${currentSupplier?.verification_status === 'verified' ? 
+                            '<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
+                    </div>
+                    <div class="company-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(currentSupplier?.district || 'Kampala')}</span>
+                        <span><i class="fas fa-phone"></i> ${escapeHtml(currentSupplier?.phone || '+256 XXX XXX')}</span>
+                    </div>
+                </div>
+
+                <!-- Marquee -->
+                <div class="marquee-container">
+                    <div class="marquee">
+                        <span>
+                            <i class="fas fa-star"></i> ${escapeHtml(currentSupplier?.tagline || 'QUALITY POULTRY SUPPLIER')} 
+                            <i class="fas fa-star"></i> ${escapeHtml(currentSupplier?.tagline || 'QUALITY POULTRY SUPPLIER')} 
+                            <i class="fas fa-star"></i> ${escapeHtml(currentSupplier?.tagline || 'QUALITY POULTRY SUPPLIER')}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Image Carousel -->
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        ${images.map(img => `
+                            <div class="swiper-slide" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url('${img}')"></div>
+                        `).join('')}
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">AVAILABLE STOCK</div>
+                        <div class="stat-value" id="availableStock">${currentBatch.available_quantity || 0}</div>
+                        <div class="stat-sub">birds ready</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">BOOKED</div>
+                        <div class="stat-value" id="bookedStock">${currentBatch.booked_quantity || 0}</div>
+                        <div class="stat-sub">reserved</div>
+                    </div>
+                </div>
+
+                <!-- Price Card -->
+                <div class="price-card">
+                    <div>
+                        <div class="price-label">AFFORDABLE PRICE</div>
+                        <div>
+                            <span class="price-value">${(currentBatch.price_per_bird || 2000).toLocaleString()}</span>
+                            <span class="price-unit">UGX @</span>
+                        </div>
+                    </div>
+                    <div class="price-badge">🔥 BEST DEAL</div>
+                </div>
+
+                <!-- Distribution Section -->
+                <div class="distribution-section">
+                    <div class="section-title">
+                        <i class="fas fa-calendar-alt"></i> DISTRIBUTION DETAILS
+                    </div>
+                    
+                    <div class="date-display">
+                        <span class="date-label"><i class="far fa-calendar"></i> Distribution Day</span>
+                        <span class="date-value">${distDate}</span>
+                    </div>
+                    
+                    <div class="timer-container">
+                        <div class="timer-label">
+                            <i class="fas fa-hourglass-half"></i> Time Remaining
+                        </div>
+                        <div id="timerDisplay" class="timer-grid">
+                            <div class="timer-block">
+                                <div class="timer-number" id="timerDays">00</div>
+                                <div class="timer-unit">DAYS</div>
+                            </div>
+                            <div class="timer-block">
+                                <div class="timer-number" id="timerHours">00</div>
+                                <div class="timer-unit">HOURS</div>
+                            </div>
+                            <div class="timer-block">
+                                <div class="timer-number" id="timerMinutes">00</div>
+                                <div class="timer-unit">MIN</div>
+                            </div>
+                            <div class="timer-block">
+                                <div class="timer-number" id="timerSeconds">00</div>
+                                <div class="timer-unit">SEC</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bird Details -->
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-calendar-week"></i> AGE</div>
+                        <div class="detail-value">${currentBatch.age_weeks || 2} WEEKS</div>
+                        <div class="detail-sub">healthy birds</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-ruler"></i> SIZE</div>
+                        <div class="detail-value">${currentBatch.size_category || 'Medium'}</div>
+                        <div class="detail-sub">uniform</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-weight-scale"></i> NET WEIGHT</div>
+                        <div class="detail-value">${currentBatch.avg_weight_kg || 2} KG</div>
+                        <div class="detail-sub">average</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-syringe"></i> VACCINATED</div>
+                        <div class="detail-value vaccine-badges">${vaccineHtml}</div>
+                        <div class="detail-sub">${currentBatch.health_certified ? 'Health certified' : 'Standard'}</div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <a href="book-now.html?batch=${currentBatch.id}" class="btn btn-primary">
+                        <i class="fas fa-shopping-cart"></i> BOOK NOW
+                    </a>
+                    <button class="btn btn-secondary" onclick="openInquirySheet()">
+                        <i class="fas fa-question-circle"></i> SEND INQUIRY
+                    </button>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // COUNTDOWN TIMER (Driven by distribution date)
+        // ============================================
+        function startCountdownTimer(distributionDate) {
+            if (!distributionDate) return;
+            
+            const targetDate = new Date(distributionDate).getTime();
+            
+            // Clear any existing timer
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    // Timer expired
+                    document.getElementById('timerDisplay').innerHTML = `
+                        <div class="timer-expired">
+                            <i class="fas fa-check-circle"></i> Distribution in progress
+                        </div>
+                    `;
+                    clearInterval(timerInterval);
+                    return;
+                }
+
+                // Calculate time units
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Update display
+                document.getElementById('timerDays').textContent = String(days).padStart(2, '0');
+                document.getElementById('timerHours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('timerMinutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('timerSeconds').textContent = String(seconds).padStart(2, '0');
+            }, 1000);
+        }
+
+        // ============================================
+        // SWIPER CAROUSEL INIT
+        // ============================================
+        function initSwiper() {
+            swiper = new Swiper('.swiper', {
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+        }
+
+        // ============================================
+        // BOTTOM SHEET INQUIRY
+        // ============================================
+        function openInquirySheet() {
+            document.getElementById('modalOverlay').classList.add('show');
+            document.getElementById('inquirySheet').classList.add('show');
+            
+            // Pre-fill batch info
+            const batchInfo = document.getElementById('inquiryBatchInfo');
+            batchInfo.style.display = 'block';
+            batchInfo.innerHTML = `
+                <strong>${escapeHtml(currentBatch?.title || 'Poultry Batch')}</strong><br>
+                <small>Available: ${currentBatch?.available_quantity || 0} birds | Price: UGX ${(currentBatch?.price_per_bird || 2000).toLocaleString()} each</small>
+            `;
+            
+            // Set min date for pickup
+            if (currentBatch?.distribution_date) {
+                document.getElementById('preferredDate').min = currentBatch.distribution_date.split('T')[0];
+            }
+        }
+
+        function closeInquirySheet() {
+            document.getElementById('modalOverlay').classList.remove('show');
+            document.getElementById('inquirySheet').classList.remove('show');
+        }
+
+        // ============================================
+        // SEND WHATSAPP INQUIRY
+        // ============================================
+        async function sendWhatsAppInquiry() {
+            const name = document.getElementById('inquirerName').value;
+            const phone = document.getElementById('inquirerPhone').value;
+            const quantity = document.getElementById('inquiryQuantity').value;
+            const preferredDate = document.getElementById('preferredDate').value;
+            const message = document.getElementById('inquiryMessage').value;
+
+            if (!name || !phone || !message) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+
+            // Format phone number
+            const cleanPhone = phone.replace(/\D/g, '');
+            const formattedPhone = cleanPhone.startsWith('256') ? cleanPhone : '256' + cleanPhone.replace(/^0/, '');
+
+            // Get supplier's WhatsApp
+            const supplierWhatsApp = currentSupplier?.whatsapp_number || currentSupplier?.phone || '256701234567';
+            const cleanSupplierWhatsApp = supplierWhatsApp.replace(/\D/g, '');
+
+            // Format WhatsApp message
+            const whatsappMessage = encodeURIComponent(
+                `*Poultry Inquiry from iBlue B2B*\n\n` +
+                `*Batch:* ${currentBatch?.title || 'Poultry Batch'}\n` +
+                `*Name:* ${name}\n` +
+                `*Phone:* ${phone}\n` +
+                `${quantity ? `*Quantity:* ${quantity} birds\n` : ''}` +
+                `${preferredDate ? `*Preferred Pickup:* ${new Date(preferredDate).toLocaleDateString()}\n` : ''}\n` +
+                `*Message:* ${message}\n\n` +
+                `_Sent via iBlue B2B Marketplace_`
+            );
+
+            // Open WhatsApp
+            window.open(`https://wa.me/${cleanSupplierWhatsApp}?text=${whatsappMessage}`, '_blank');
+
+            // Save inquiry to database if user is logged in
+            try {
+                const { data: { user } } = await sb.auth.getUser();
+                
+                if (user) {
+                    await sb
+                        .from('poultry_inquiries')
+                        .insert({
+                            inquirer_id: user.id,
+                            inquirer_name: name,
+                            inquirer_phone: phone,
+                            batch_id: currentBatch?.id,
+                            supplier_id: currentSupplier?.id,
+                            subject: 'Poultry Inquiry',
+                            message: message,
+                            quantity_interest: quantity || null,
+                            preferred_pickup_date: preferredDate || null,
+                            whatsapp_sent: true,
+                            whatsapp_sent_at: new Date().toISOString()
+                        });
+                }
+            } catch (error) {
+                console.error('Error saving inquiry:', error);
+            }
+
+            showToast('Inquiry sent via WhatsApp!', 'success');
+            closeInquirySheet();
+        }
+
+        // ============================================
+        // ERROR HANDLING
+        // ============================================
+        function showErrorState() {
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.getElementById('poultryContainer').innerHTML = `
+                <div class="error-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Oops! Something went wrong</h3>
+                    <p>We couldn't load the poultry details. Please try again.</p>
+                    <button class="btn btn-primary" onclick="location.reload()">
+                        <i class="fas fa-redo"></i> Retry
+                    </button>
+                </div>
+            `;
+            document.getElementById('poultryContainer').style.display = 'block';
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Close sheet on overlay click
+        document.getElementById('modalOverlay').addEventListener('click', closeInquirySheet);
+
+        // Cleanup timer on page unload
+        window.addEventListener('beforeunload', () => {
+            if (timerInterval) clearInterval(timerInterval);
+        });
+    </script>
+</body>
+</html>

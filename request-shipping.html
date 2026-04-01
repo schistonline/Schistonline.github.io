@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Shipping Quotes | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid #e0e0e0;
+            background: white;
+        }
+
+        .progress-step.active {
+            border-color: #0B4F6C;
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .progress-step.completed {
+            border-color: #10b981;
+            background: #10b981;
+            color: white;
+        }
+
+        .step-label {
+            position: absolute;
+            top: 45px;
+            font-size: 12px;
+            color: #6b7280;
+            transform: translateX(-50%);
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-card h2 {
+            color: #1f2937;
+            margin-bottom: 20px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-card h2 i {
+            color: #0B4F6C;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        label i {
+            color: #0B4F6C;
+            width: 20px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #0B4F6C;
+            box-shadow: 0 0 0 3px rgba(11,79,108,0.1);
+        }
+
+        .weight-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .weight-input-group select {
+            width: 100px;
+        }
+
+        .provider-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .provider-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .provider-card:hover {
+            border-color: #0B4F6C;
+            background: #f0f9ff;
+        }
+
+        .provider-card.selected {
+            border-color: #0B4F6C;
+            background: #e6f2f9;
+        }
+
+        .provider-card input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .provider-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .provider-services {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0a4057;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(11,79,108,0.2);
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .summary-box {
+            background: #f0f9ff;
+            border-left: 4px solid #0B4F6C;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .summary-box h3 {
+            color: #0B4F6C;
+            margin-bottom: 15px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0B4F6C;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .success-check {
+            color: #10b981;
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 640px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-truck"></i> Request Shipping Quotes</h1>
+            <p>Get competitive quotes from multiple logistics partners</p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div style="position: relative; margin: 30px 0;">
+            <div class="progress-bar">
+                <div class="progress-step active" id="step1" style="left: 0%;">1</div>
+                <div class="progress-step" id="step2" style="left: 50%;">2</div>
+                <div class="progress-step" id="step3" style="left: 100%;">3</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px; padding: 0 10px;">
+                <span style="font-size: 12px; color: #0B4F6C; font-weight: 600;">Shipment Details</span>
+                <span style="font-size: 12px; color: #6b7280;">Select Providers</span>
+                <span style="font-size: 12px; color: #6b7280;">Review & Submit</span>
+            </div>
+        </div>
+
+        <!-- Step 1: Shipment Details -->
+        <div id="step1Form" class="form-card">
+            <h2><i class="fas fa-box"></i> Shipment Details</h2>
+            
+            <div class="form-grid">
+                <!-- Origin -->
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Origin Location *</label>
+                    <input type="text" id="originLocation" placeholder="e.g., UgaChick, Kampala" required>
+                </div>
+                
+                <!-- Origin District -->
+                <div class="form-group">
+                    <label><i class="fas fa-map"></i> Origin District *</label>
+                    <select id="originDistrict" required>
+                        <option value="">Select district</option>
+                        <option value="Kampala">Kampala</option>
+                        <option value="Wakiso">Wakiso</option>
+                        <option value="Mukono">Mukono</option>
+                        <option value="Jinja">Jinja</option>
+                        <option value="Mbarara">Mbarara</option>
+                        <option value="Gulu">Gulu</option>
+                        <option value="Mbale">Mbale</option>
+                        <option value="Masaka">Masaka</option>
+                        <option value="Arua">Arua</option>
+                        <option value="Lira">Lira</option>
+                    </select>
+                </div>
+                
+                <!-- Destination -->
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Destination Location *</label>
+                    <input type="text" id="destLocation" placeholder="e.g., Shop in Gulu" required>
+                </div>
+                
+                <!-- Destination District -->
+                <div class="form-group">
+                    <label><i class="fas fa-map"></i> Destination District *</label>
+                    <select id="destDistrict" required>
+                        <option value="">Select district</option>
+                        <option value="Kampala">Kampala</option>
+                        <option value="Wakiso">Wakiso</option>
+                        <option value="Mukono">Mukono</option>
+                        <option value="Jinja">Jinja</option>
+                        <option value="Mbarara">Mbarara</option>
+                        <option value="Gulu">Gulu</option>
+                        <option value="Mbale">Mbale</option>
+                        <option value="Masaka">Masaka</option>
+                        <option value="Arua">Arua</option>
+                        <option value="Lira">Lira</option>
+                    </select>
+                </div>
+                
+                <!-- Weight -->
+                <div class="form-group">
+                    <label><i class="fas fa-weight"></i> Estimated Weight *</label>
+                    <div class="weight-input-group">
+                        <input type="number" id="weight" placeholder="Weight" min="0.1" step="0.1" required style="flex: 1;">
+                        <select id="weightUnit" style="width: 100px;">
+                            <option value="kg">kg</option>
+                            <option value="ton">ton</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Volume (Optional) -->
+                <div class="form-group">
+                    <label><i class="fas fa-cube"></i> Volume (CBM) <span style="font-weight: normal; color: #6b7280;">(optional)</span></label>
+                    <input type="number" id="volume" placeholder="Cubic meters" step="0.01">
+                </div>
+                
+                <!-- Item Description -->
+                <div class="form-group full-width">
+                    <label><i class="fas fa-tag"></i> Item Description *</label>
+                    <textarea id="description" rows="3" placeholder="What are you shipping? (e.g., 50 bags of poultry feed)" required></textarea>
+                </div>
+                
+                <!-- Special Requirements -->
+                <div class="form-group full-width">
+                    <label><i class="fas fa-exclamation-triangle"></i> Special Requirements <span style="font-weight: normal; color: #6b7280;">(optional)</span></label>
+                    <textarea id="requirements" rows="2" placeholder="Fragile, perishable, hazardous, etc."></textarea>
+                </div>
+                
+                <!-- Pickup Date -->
+                <div class="form-group">
+                    <label><i class="fas fa-calendar"></i> Pickup Date</label>
+                    <input type="date" id="pickupDate" min="">
+                </div>
+                
+                <!-- Delivery Date (Optional) -->
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-check"></i> Need by (optional)</label>
+                    <input type="date" id="deliveryDate">
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="goToStep2()">
+                    Next: Select Providers <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Select Providers -->
+        <div id="step2Form" class="form-card hidden">
+            <h2><i class="fas fa-truck"></i> Select Logistics Partners</h2>
+            
+            <p style="color: #6b7280; margin-bottom: 20px;">Choose which providers you want to request quotes from:</p>
+            
+            <div id="providerList" class="provider-options">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading logistics providers...</p>
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-top: 20px;">
+                <label>
+                    <input type="checkbox" id="selectAll" onchange="toggleAllProviders()">
+                    Select All Providers
+                </label>
+            </div>
+            
+            <div class="button-group" style="justify-content: space-between;">
+                <button class="btn btn-secondary" onclick="goToStep1()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-primary" onclick="goToStep3()">
+                    Next: Review Request <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Review & Submit -->
+        <div id="step3Form" class="form-card hidden">
+            <h2><i class="fas fa-check-circle"></i> Review Your Request</h2>
+            
+            <div class="summary-box">
+                <h3><i class="fas fa-box"></i> Shipment Details</h3>
+                <div class="summary-item">
+                    <span class="summary-label">From:</span>
+                    <span class="summary-value" id="reviewOrigin">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">To:</span>
+                    <span class="summary-value" id="reviewDestination">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Weight:</span>
+                    <span class="summary-value" id="reviewWeight">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Description:</span>
+                    <span class="summary-value" id="reviewDesc">-</span>
+                </div>
+            </div>
+            
+            <div class="summary-box">
+                <h3><i class="fas fa-truck"></i> Selected Providers</h3>
+                <div id="selectedProvidersList">
+                    <p style="color: #6b7280;">No providers selected</p>
+                </div>
+            </div>
+            
+            <div class="button-group" style="justify-content: space-between;">
+                <button class="btn btn-secondary" onclick="goToStep2()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success" onclick="submitRequest()">
+                    <i class="fas fa-paper-plane"></i> Submit Request
+                </button>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="form-card hidden">
+            <div style="text-align: center; padding: 30px;">
+                <div class="success-check">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 style="color: #065f46; margin-bottom: 15px;">Request Sent Successfully!</h2>
+                <p style="color: #4b5563; margin-bottom: 20px;">Your shipping request has been sent to the selected providers. They will contact you with quotes within 24 hours.</p>
+                <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                    <p><strong>Request Number:</strong> <span id="requestNumber">SHIP-2026-0001</span></p>
+                    <p><small>Save this number for reference</small></p>
+                </div>
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <a href="logistics-directory.html" class="btn btn-secondary">
+                        <i class="fas fa-truck"></i> Back to Directory
+                    </a>
+                    <a href="compare-quotes.html" class="btn btn-primary">
+                        <i class="fas fa-chart-bar"></i> View Quotes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sb = supabase.createClient(
+            'https://uufhvmmgwzkxvvdbqemz.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc'
+        );
+
+        // State
+        let providers = [];
+        let selectedProviders = new Set();
+        let currentRequestId = null;
+
+        // Set minimum date for pickup
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('pickupDate').min = today;
+            loadProviders();
+        });
+
+        // Load providers from database
+        async function loadProviders() {
+            const { data, error } = await sb
+                .from('logistics_providers')
+                .select('id, company_name, services_offered, coverage_areas')
+                .eq('is_active', true);
+
+            if (error) {
+                console.error('Error loading providers:', error);
+                document.getElementById('providerList').innerHTML = 
+                    '<p style="color: #dc2626; text-align: center;">Error loading providers</p>';
+                return;
+            }
+
+            providers = data || [];
+            displayProviders();
+        }
+
+        function displayProviders() {
+            const list = document.getElementById('providerList');
+            
+            if (providers.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #6b7280;">No logistics providers available</p>';
+                return;
+            }
+
+            list.innerHTML = providers.map(p => `
+                <div class="provider-card" onclick="toggleProvider('${p.id}')">
+                    <input type="checkbox" id="provider-${p.id}" value="${p.id}" onchange="event.stopPropagation()">
+                    <div class="provider-name">${p.company_name}</div>
+                    <div class="provider-services">
+                        ${(p.services_offered || []).map(s => s.replace('_', ' ')).join(' • ')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleProvider(providerId) {
+            const checkbox = document.getElementById(`provider-${providerId}`);
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                selectedProviders.add(providerId);
+            } else {
+                selectedProviders.delete(providerId);
+            }
+            
+            document.querySelectorAll('.provider-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            selectedProviders.forEach(id => {
+                document.getElementById(`provider-${id}`)?.closest('.provider-card')?.classList.add('selected');
+            });
+        }
+
+        function toggleAllProviders() {
+            const selectAll = document.getElementById('selectAll').checked;
+            
+            if (selectAll) {
+                providers.forEach(p => {
+                    selectedProviders.add(p.id);
+                    const checkbox = document.getElementById(`provider-${p.id}`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            } else {
+                selectedProviders.clear();
+                providers.forEach(p => {
+                    const checkbox = document.getElementById(`provider-${p.id}`);
+                    if (checkbox) checkbox.checked = false;
+                });
+            }
+            
+            document.querySelectorAll('.provider-card').forEach(card => {
+                card.classList.toggle('selected', selectAll);
+            });
+        }
+
+        function goToStep1() {
+            document.getElementById('step1Form').classList.remove('hidden');
+            document.getElementById('step2Form').classList.add('hidden');
+            document.getElementById('step3Form').classList.add('hidden');
+            
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step3').classList.remove('active');
+        }
+
+        function goToStep2() {
+            // Validate step 1
+            if (!validateStep1()) return;
+            
+            document.getElementById('step1Form').classList.add('hidden');
+            document.getElementById('step2Form').classList.remove('hidden');
+            
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step2').classList.add('active');
+        }
+
+        function goToStep3() {
+            if (selectedProviders.size === 0) {
+                alert('Please select at least one logistics provider');
+                return;
+            }
+            
+            // Update review
+            document.getElementById('reviewOrigin').textContent = 
+                `${document.getElementById('originLocation').value} (${document.getElementById('originDistrict').value})`;
+            document.getElementById('reviewDestination').textContent = 
+                `${document.getElementById('destLocation').value} (${document.getElementById('destDistrict').value})`;
+            
+            const weight = document.getElementById('weight').value;
+            const unit = document.getElementById('weightUnit').value;
+            document.getElementById('reviewWeight').textContent = `${weight} ${unit}`;
+            document.getElementById('reviewDesc').textContent = document.getElementById('description').value;
+            
+            // Show selected providers
+            const selectedNames = providers
+                .filter(p => selectedProviders.has(p.id))
+                .map(p => p.company_name)
+                .join('<br>');
+            document.getElementById('selectedProvidersList').innerHTML = 
+                `<p style="color: #0B4F6C;">${selectedNames}</p>`;
+            
+            document.getElementById('step2Form').classList.add('hidden');
+            document.getElementById('step3Form').classList.remove('hidden');
+            
+            document.getElementById('step2').classList.add('completed');
+            document.getElementById('step3').classList.add('active');
+        }
+
+        function validateStep1() {
+            const required = ['originLocation', 'originDistrict', 'destLocation', 'destDistrict', 'weight', 'description'];
+            
+            for (let id of required) {
+                const el = document.getElementById(id);
+                if (!el.value) {
+                    alert('Please fill in all required fields');
+                    el.focus();
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        async function submitRequest() {
+            const weight = document.getElementById('weight').value;
+            const weightUnit = document.getElementById('weightUnit').value;
+            
+            // Convert to kg if needed
+            const weightKg = weightUnit === 'ton' ? weight * 1000 : weight;
+            
+            // Create request number
+            const requestNumber = 'SHIP-' + Date.now();
+            
+            // Get current user (you'll need to implement auth)
+            const { data: { user } } = await sb.auth.getUser();
+            
+            if (!user) {
+                alert('Please login to request shipping');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Get product ID from URL if exists
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('product');
+            
+            // Insert shipment request
+            const { data, error } = await sb
+                .from('shipment_requests')
+                .insert({
+                    request_number: requestNumber,
+                    buyer_id: user.id,
+                    origin_location: document.getElementById('originLocation').value,
+                    origin_district: document.getElementById('originDistrict').value,
+                    destination_location: document.getElementById('destLocation').value,
+                    destination_district: document.getElementById('destDistrict').value,
+                    estimated_weight_kg: weightKg,
+                    estimated_volume_cbm: document.getElementById('volume').value || null,
+                    item_description: document.getElementById('description').value,
+                    special_requirements: document.getElementById('requirements').value || null,
+                    requested_pickup_date: document.getElementById('pickupDate').value || null,
+                    requested_delivery_date: document.getElementById('deliveryDate').value || null,
+                    status: 'quoting'
+                })
+                .select()
+                .single();
+            
+            if (error) {
+                console.error('Error creating request:', error);
+                alert('Failed to create shipping request: ' + error.message);
+                return;
+            }
+            
+            currentRequestId = data.id;
+            
+            // Create quotes for selected providers
+            const quotes = Array.from(selectedProviders).map(providerId => ({
+                request_id: data.id,
+                provider_id: providerId,
+                status: 'pending',
+                valid_until: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
+            }));
+            
+            const { error: quotesError } = await sb
+                .from('shipment_quotes')
+                .insert(quotes);
+            
+            if (quotesError) {
+                console.error('Error creating quotes:', quotesError);
+            }
+            
+            // Show success
+            document.getElementById('step3Form').classList.add('hidden');
+            document.getElementById('successMessage').classList.remove('hidden');
+            document.getElementById('requestNumber').textContent = requestNumber;
+            
+            // Store request ID for quote comparison
+            localStorage.setItem('currentShipmentRequest', requestNumber);
+        }
+
+        // Parse URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const providerId = urlParams.get('provider');
+        if (providerId) {
+            // Pre-select this provider when page loads
+            setTimeout(() => {
+                toggleProvider(providerId);
+            }, 500);
+        }
+    </script>
+</body>
+</html>

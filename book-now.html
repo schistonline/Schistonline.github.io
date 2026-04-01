@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Book Poultry | iBlue B2B</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+            line-height: 1.5;
+        }
+
+        .booking-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        .booking-header {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .header-badge {
+            background: #fbbf24;
+            color: #0B4F6C;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .progress-section {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 40px;
+            right: 40px;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .step {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            border: 2px solid #e2e8f0;
+            color: #94a3b8;
+        }
+
+        .step.active {
+            border-color: #0B4F6C;
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .step.completed {
+            border-color: #10b981;
+            background: #10b981;
+            color: white;
+        }
+
+        .step-label {
+            position: absolute;
+            top: 40px;
+            font-size: 11px;
+            color: #64748b;
+            white-space: nowrap;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .batch-summary {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 0 20px 20px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            gap: 12px;
+        }
+
+        .batch-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background-size: cover;
+            background-position: center;
+            background-color: #e2e8f0;
+            flex-shrink: 0;
+        }
+
+        .batch-info {
+            flex: 1;
+        }
+
+        .batch-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .batch-meta {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .batch-price {
+            font-weight: 700;
+            color: #0B4F6C;
+            font-size: 18px;
+        }
+
+        .form-section {
+            padding: 0 20px 20px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title span {
+            background: #0B4F6C;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #475569;
+        }
+
+        label.required::after {
+            content: '*';
+            color: #ef4444;
+            margin-left: 4px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0B4F6C;
+        }
+
+        input.error {
+            border-color: #ef4444;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .quantity-btn {
+            width: 50px;
+            height: 50px;
+            background: #f8fafc;
+            border: none;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #0B4F6C;
+        }
+
+        .quantity-input {
+            flex: 1;
+            border: none;
+            border-left: 1.5px solid #e2e8f0;
+            border-right: 1.5px solid #e2e8f0;
+            text-align: center;
+            font-weight: 700;
+            font-size: 18px;
+            padding: 12px;
+        }
+
+        .stock-info {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .price-summary {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            color: white;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .summary-row.total {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .login-prompt {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .login-prompt i {
+            font-size: 24px;
+            color: #f59e0b;
+        }
+
+        .login-prompt a {
+            color: #0B4F6C;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .payment-options {
+            margin: 20px 0;
+        }
+
+        .payment-option {
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .payment-option:hover {
+            border-color: #0B4F6C;
+            background: #f0f9ff;
+        }
+
+        .payment-option.selected {
+            border-color: #0B4F6C;
+            background: #f0f9ff;
+        }
+
+        .payment-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #0B4F6C;
+        }
+
+        .payment-info {
+            flex: 1;
+        }
+
+        .payment-title {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .payment-desc {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .payment-icon {
+            width: 40px;
+            text-align: center;
+            font-size: 24px;
+            color: #0B4F6C;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin: 30px 0 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+            box-shadow: 0 8px 16px rgba(11,79,108,0.3);
+        }
+
+        .btn-primary:hover {
+            background: #0a4057;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .pesapal-container {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .pesapal-btn {
+            background: #0066CC;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 300px;
+            transition: all 0.2s;
+        }
+
+        .pesapal-btn:hover {
+            background: #0052a3;
+            transform: translateY(-2px);
+        }
+
+        .pesapal-btn i {
+            font-size: 20px;
+        }
+
+        .pesapal-note {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #d1fae5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: #10b981;
+        }
+
+        .warning-icon {
+            width: 80px;
+            height: 80px;
+            background: #fef3c7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: #f59e0b;
+        }
+
+        .booking-number {
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            color: #0B4F6C;
+            margin: 20px 0;
+            letter-spacing: 1px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        .pesapal-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .pesapal-modal.show {
+            display: flex;
+        }
+
+        .pesapal-modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        .pesapal-header {
+            padding: 16px 20px;
+            background: #0B4F6C;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pesapal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .pesapal-iframe-container {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .pesapal-iframe-container iframe {
+            width: 100%;
+            height: 300px;
+            border: none;
+        }
+
+        .pesapal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .spinner {
+            border: 3px solid #f1f5f9;
+            border-top: 3px solid #0B4F6C;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            background: #0f172a;
+            color: white;
+            padding: 16px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: #10b981;
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+
+        .toast.info {
+            background: #0B4F6C;
+        }
+    </style>
+</head>
+<body>
+    <div class="booking-container">
+        <!-- Header -->
+        <div class="booking-header">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="header-title">
+                <h1>Book Poultry</h1>
+                <p><i class="far fa-clock"></i> Limited stock</p>
+            </div>
+            <div class="header-badge" id="stockBadge">0 left</div>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="progress-section">
+            <div class="progress-steps">
+                <div class="step active" id="step1">1</div>
+                <div class="step" id="step2">2</div>
+                <div class="step" id="step3">3</div>
+                <div class="step-label" style="left: 16%;">Details</div>
+                <div class="step-label" style="left: 50%;">Payment</div>
+                <div class="step-label" style="left: 84%;">Done</div>
+            </div>
+        </div>
+
+        <!-- Step 1: Booking Details -->
+        <div id="step1Content">
+            <!-- Batch Summary -->
+            <div class="form-section">
+                <div id="batchSummary" class="batch-summary">
+                    <div class="loading" style="padding: 20px;">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login Prompt -->
+            <div class="form-section">
+                <div class="login-prompt" id="loginPrompt">
+                    <i class="fas fa-user-lock"></i>
+                    <p>Already have an account? <a href="poultry-login.html">Login</a> for faster booking</p>
+                </div>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="form-section">
+                <div class="section-title">
+                    <span>1</span> Your Information
+                </div>
+
+                <div class="form-group">
+                    <label class="required">Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                    <div class="error-message" id="nameError">Please enter your name</div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required">Phone</label>
+                        <input type="tel" id="phone" placeholder="+256 XXX XXXXXX" required>
+                        <div class="error-message" id="phoneError">Valid phone required</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="optional">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quantity -->
+            <div class="form-section">
+                <div class="section-title">
+                    <span>2</span> Quantity
+                </div>
+
+                <div class="form-group">
+                    <label class="required">Number of Birds</label>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="decrementQuantity()">−</button>
+                        <input type="number" id="quantity" class="quantity-input" value="10" min="1" max="100" onchange="updatePrice()">
+                        <button class="quantity-btn" onclick="incrementQuantity()">+</button>
+                    </div>
+                    <div class="stock-info">
+                        <span>Available: <span id="availableStock">0</span></span>
+                        <span>Min: 1, Max: 100</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Continue Button -->
+            <div class="form-section">
+                <button class="btn btn-primary" onclick="goToStep2()" style="width: 100%;" id="continueBtn">
+                    Continue to Payment Options <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Payment Choice -->
+        <div id="step2Content" style="display: none;">
+            <div class="form-section">
+                <div class="section-title">
+                    <span>2</span> Choose Payment Method
+                </div>
+
+                <!-- Summary -->
+                <div class="price-summary" style="background: #f8fafc; color: #0f172a;">
+                    <div class="summary-row">
+                        <span>Batch</span>
+                        <span id="confirmBatchTitle">Loading...</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Quantity</span>
+                        <span id="confirmQuantity">10 birds</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Price per bird</span>
+                        <span id="confirmUnitPrice">UGX 2,000</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="confirmTotal">UGX 20,000</span>
+                    </div>
+                </div>
+
+                <!-- Payment Options -->
+                <div class="payment-options">
+                    <div class="payment-option selected" onclick="selectPayment('now')">
+                        <input type="radio" name="payment" value="now" checked>
+                        <div class="payment-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="payment-info">
+                            <div class="payment-title">Pay Now</div>
+                            <div class="payment-desc">Pay immediately via Pesapal</div>
+                        </div>
+                    </div>
+
+                    <div class="payment-option" onclick="selectPayment('later')">
+                        <input type="radio" name="payment" value="later">
+                        <div class="payment-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="payment-info">
+                            <div class="payment-title">Pay Later</div>
+                            <div class="payment-desc">Supplier will call to discuss payment</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Info Summary -->
+                <div style="background: #f8fafc; padding: 16px; border-radius: 12px; margin: 16px 0;">
+                    <p><strong><i class="fas fa-user"></i> Name:</strong> <span id="confirmName"></span></p>
+                    <p><strong><i class="fas fa-phone"></i> Phone:</strong> <span id="confirmPhone"></span></p>
+                    <p><strong><i class="fas fa-envelope"></i> Email:</strong> <span id="confirmEmail">Not provided</span></p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="form-section">
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="backToStep1()">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn btn-primary" onclick="submitBooking()" id="submitBookingBtn">
+                        <i class="fas fa-check"></i> Complete Booking
+                    </button>
+                </div>
+                <p style="text-align: center; margin-top: 12px; font-size: 12px; color: #94a3b8;">
+                    <i class="fas fa-shield-alt"></i> Your booking will be sent to the supplier
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 3: Success - Pay Now -->
+        <div id="step3PayNowContent" style="display: none;">
+            <div class="form-section" style="text-align: center; padding: 40px 20px;">
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h2>Booking Confirmed!</h2>
+                <p>Your booking has been submitted</p>
+                
+                <div class="booking-number" id="bookingNumberDisplayPayNow">BOK-20260315-1234</div>
+                
+                <div style="background: #f8fafc; padding: 20px; border-radius: 16px; margin: 20px 0; text-align: left;">
+                    <p><strong>Booking Details</strong></p>
+                    <p><i class="fas fa-drumstick-bite"></i> Quantity: <span id="successQuantityPayNow">10</span> birds</p>
+                    <p><i class="fas fa-money-bill"></i> Total: UGX <span id="successTotalPayNow">20,000</span></p>
+                </div>
+
+                <!-- Pesapal Payment Button -->
+                <div class="pesapal-container">
+                    <button class="pesapal-btn" onclick="openPesapal()" id="payNowBtn">
+                        <i class="fas fa-credit-card"></i> Pay with Pesapal
+                    </button>
+                    <p class="pesapal-note">
+                        <i class="fas fa-lock"></i> Secure payment by Pesapal
+                    </p>
+                </div>
+
+                <div class="modal-actions">
+                    <a href="poultry-suppliers.html" class="btn btn-secondary">
+                        <i class="fas fa-store"></i> More Suppliers
+                    </a>
+                    <a href="poultry-index.html?batch=1" class="btn btn-primary">
+                        <i class="fas fa-home"></i> Back to Farm
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Success - Pay Later -->
+        <div id="step3PayLaterContent" style="display: none;">
+            <div class="form-section" style="text-align: center; padding: 40px 20px;">
+                <div class="warning-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <h2>Booking Received!</h2>
+                <p>We'll contact you shortly</p>
+                
+                <div class="booking-number" id="bookingNumberDisplayPayLater">BOK-20260315-1234</div>
+                
+                <div style="background: #f8fafc; padding: 20px; border-radius: 16px; margin: 20px 0; text-align: left;">
+                    <p><strong>Booking Details</strong></p>
+                    <p><i class="fas fa-drumstick-bite"></i> Quantity: <span id="successQuantityPayLater">10</span> birds</p>
+                    <p><i class="fas fa-money-bill"></i> Total: UGX <span id="successTotalPayLater">20,000</span></p>
+                </div>
+
+                <div style="background: #fef3c7; border: 1px solid #fde68a; border-radius: 12px; padding: 20px; margin: 20px 0;">
+                    <p style="color: #92400e;">
+                        <i class="fas fa-clock"></i> 
+                        <strong>The supplier will call you within 24 hours to discuss payment.</strong>
+                    </p>
+                    <p style="color: #92400e; margin-top: 8px; font-size: 13px;">
+                        Please keep your phone nearby.
+                    </p>
+                </div>
+
+                <div class="modal-actions">
+                    <a href="poultry-suppliers.html" class="btn btn-secondary">
+                        <i class="fas fa-store"></i> More Suppliers
+                    </a>
+                    <a href="poultry-index.html?batch=1" class="btn btn-primary">
+                        <i class="fas fa-home"></i> Back to Farm
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pesapal Modal -->
+    <div class="pesapal-modal" id="pesapalModal">
+        <div class="pesapal-modal-content">
+            <div class="pesapal-header">
+                <h3>Pay with Pesapal</h3>
+                <button class="pesapal-close" onclick="closePesapal()">&times;</button>
+            </div>
+            <div class="pesapal-iframe-container">
+                <iframe 
+                    src="https://store.pesapal.com/embed-code?pageUrl=https://store.pesapal.com/boastyourshop" 
+                    width="100%" 
+                    height="300" 
+                    frameborder="0" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="pesapal-footer">
+                <i class="fas fa-lock"></i> Payment processed securely by Pesapal
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ===== SUPABASE CONFIG =====
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ===== STATE =====
+        let currentBatch = null;
+        let currentSupplier = null;
+        let currentUser = null;
+        let currentBooking = null;
+        let quantity = 10;
+        let paymentMethod = 'now'; // 'now' or 'later'
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const batchId = urlParams.get('batch');
+            
+            if (!batchId) {
+                showToast('No batch specified', 'error');
+                setTimeout(() => window.location.href = 'poultry-suppliers.html', 2000);
+                return;
+            }
+            
+            await loadBatchData(batchId);
+        });
+
+        async function checkAuth() {
+            const { data: { user } } = await sb.auth.getUser();
+            currentUser = user;
+            
+            if (user) {
+                document.getElementById('loginPrompt').style.display = 'none';
+                
+                const { data: profile } = await sb
+                    .from('profiles')
+                    .select('full_name, phone')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profile) {
+                    document.getElementById('fullName').value = profile.full_name || '';
+                    document.getElementById('phone').value = profile.phone || '';
+                }
+            }
+        }
+
+        async function loadBatchData(batchId) {
+            try {
+                const { data: batch, error } = await sb
+                    .from('poultry_batches')
+                    .select(`
+                        *,
+                        supplier:poultry_suppliers (*)
+                    `)
+                    .eq('id', batchId)
+                    .single();
+
+                if (error) throw error;
+                
+                currentBatch = batch;
+                currentSupplier = batch.supplier;
+                updateBatchSummary();
+                
+            } catch (error) {
+                console.error('Error loading batch:', error);
+                showToast('Failed to load batch details', 'error');
+            }
+        }
+
+        function updateBatchSummary() {
+            document.getElementById('stockBadge').textContent = `${currentBatch?.available_quantity || 0} left`;
+            document.getElementById('availableStock').textContent = currentBatch?.available_quantity || 0;
+            
+            const imageUrl = currentBatch?.images?.[0] || 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=200';
+            const pickupDate = currentBatch?.distribution_date ? new Date(currentBatch.distribution_date).toLocaleDateString() : 'TBD';
+            
+            document.getElementById('batchSummary').innerHTML = `
+                <div class="batch-image" style="background-image: url('${imageUrl}')"></div>
+                <div class="batch-info">
+                    <div class="batch-title">${currentBatch?.title || 'Poultry Batch'}</div>
+                    <div class="batch-meta"><i class="fas fa-map-pin"></i> ${currentSupplier?.district || 'Kampala'}</div>
+                    <div class="batch-meta"><i class="fas fa-calendar"></i> Pickup: ${pickupDate}</div>
+                    <div class="batch-price">UGX ${(currentBatch?.price_per_bird || 2000).toLocaleString()} <small>per bird</small></div>
+                </div>
+            `;
+            
+            document.getElementById('confirmBatchTitle').textContent = currentBatch?.title || 'Poultry Batch';
+            document.getElementById('confirmUnitPrice').textContent = `UGX ${(currentBatch?.price_per_bird || 2000).toLocaleString()}`;
+            
+            updatePrice();
+        }
+
+        function incrementQuantity() {
+            const input = document.getElementById('quantity');
+            const max = Math.min(parseInt(input.getAttribute('max')) || 100, currentBatch?.available_quantity || 100);
+            const currentValue = parseInt(input.value) || 0;
+            
+            if (currentValue < max) {
+                input.value = currentValue + 1;
+                quantity = currentValue + 1;
+                updatePrice();
+            }
+        }
+
+        function decrementQuantity() {
+            const input = document.getElementById('quantity');
+            const min = parseInt(input.getAttribute('min')) || 1;
+            const currentValue = parseInt(input.value) || 0;
+            
+            if (currentValue > min) {
+                input.value = currentValue - 1;
+                quantity = currentValue - 1;
+                updatePrice();
+            }
+        }
+
+        function updatePrice() {
+            quantity = parseInt(document.getElementById('quantity').value) || 1;
+            const price = currentBatch?.price_per_bird || 2000;
+            const total = quantity * price;
+            
+            document.getElementById('confirmQuantity').textContent = `${quantity} birds`;
+            document.getElementById('confirmTotal').textContent = `UGX ${total.toLocaleString()}`;
+            
+            // Update success screens
+            document.getElementById('successQuantityPayNow').textContent = quantity;
+            document.getElementById('successTotalPayNow').textContent = total.toLocaleString();
+            document.getElementById('successQuantityPayLater').textContent = quantity;
+            document.getElementById('successTotalPayLater').textContent = total.toLocaleString();
+        }
+
+        function selectPayment(method) {
+            paymentMethod = method;
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            document.querySelector(`input[value="${method}"]`).checked = true;
+        }
+
+        function validateStep1() {
+            const name = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            
+            let isValid = true;
+            
+            if (!name) {
+                document.getElementById('fullName').classList.add('error');
+                document.getElementById('nameError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('fullName').classList.remove('error');
+                document.getElementById('nameError').classList.remove('show');
+            }
+            
+            const phoneRegex = /^(\+256|0)[0-9]{9}$/;
+            if (!phone || !phoneRegex.test(phone.replace(/\s/g, ''))) {
+                document.getElementById('phone').classList.add('error');
+                document.getElementById('phoneError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('phone').classList.remove('error');
+                document.getElementById('phoneError').classList.remove('show');
+            }
+            
+            quantity = parseInt(document.getElementById('quantity').value) || 0;
+            if (quantity < 1) {
+                showToast('Please enter a valid quantity', 'error');
+                isValid = false;
+            }
+            
+            if (quantity > (currentBatch?.available_quantity || 999)) {
+                showToast(`Only ${currentBatch?.available_quantity} birds available`, 'error');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        function goToStep2() {
+            if (!validateStep1()) return;
+            
+            document.getElementById('confirmName').textContent = document.getElementById('fullName').value;
+            document.getElementById('confirmPhone').textContent = document.getElementById('phone').value;
+            document.getElementById('confirmEmail').textContent = document.getElementById('email').value || 'Not provided';
+            
+            document.getElementById('step1Content').style.display = 'none';
+            document.getElementById('step2Content').style.display = 'block';
+            
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step2').classList.add('active');
+        }
+
+        function backToStep1() {
+            document.getElementById('step1Content').style.display = 'block';
+            document.getElementById('step2Content').style.display = 'none';
+            
+            document.getElementById('step1').classList.remove('completed');
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('step2').classList.remove('active');
+        }
+
+        async function submitBooking() {
+            if (!currentUser) {
+                showToast('Please login to book', 'error');
+                setTimeout(() => {
+                    window.location.href = `poultry-login.html?redirect=book-now.html?batch=${currentBatch?.id}`;
+                }, 2000);
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBookingBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.disabled = true;
+            
+            try {
+                quantity = parseInt(document.getElementById('quantity').value) || 1;
+                const price = currentBatch?.price_per_bird || 2000;
+                const total = quantity * price;
+                
+                const bookingNumber = 'BOK-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + 
+                                   Math.floor(1000 + Math.random() * 9000);
+                
+                const bookingData = {
+                    booking_number: bookingNumber,
+                    buyer_id: currentUser.id,
+                    buyer_name: document.getElementById('fullName').value,
+                    buyer_phone: document.getElementById('phone').value,
+                    buyer_email: document.getElementById('email').value || null,
+                    batch_id: currentBatch.id,
+                    supplier_id: currentSupplier.id,
+                    quantity: quantity,
+                    unit_price: price,
+                    total_amount: total,
+                    payment_status: 'pending',
+                    payment_method: paymentMethod === 'now' ? 'pesapal' : 'offline',
+                    booking_status: 'confirmed',
+                    notes: paymentMethod === 'later' ? 'Customer will pay later - needs call' : null,
+                    created_at: new Date().toISOString()
+                };
+                
+                console.log('Submitting booking:', bookingData);
+                
+                const { data, error } = await sb
+                    .from('poultry_bookings')
+                    .insert([bookingData])
+                    .select();
+                
+                if (error) throw error;
+                
+                if (!data || data.length === 0) {
+                    throw new Error('No data returned');
+                }
+                
+                currentBooking = data[0];
+                console.log('Booking created:', currentBooking);
+                
+                // Update batch quantity
+                await sb
+                    .from('poultry_batches')
+                    .update({
+                        available_quantity: currentBatch.available_quantity - quantity,
+                        booked_quantity: (currentBatch.booked_quantity || 0) + quantity
+                    })
+                    .eq('id', currentBatch.id);
+                
+                // Show appropriate success screen based on payment method
+                showSuccess(currentBooking, paymentMethod);
+                
+            } catch (error) {
+                console.error('Booking error:', error);
+                showToast('Booking failed: ' + error.message, 'error');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        function showSuccess(booking, method) {
+            document.getElementById('step2Content').style.display = 'none';
+            
+            if (method === 'now') {
+                document.getElementById('step3PayNowContent').style.display = 'block';
+                document.getElementById('bookingNumberDisplayPayNow').textContent = booking.booking_number;
+            } else {
+                document.getElementById('step3PayLaterContent').style.display = 'block';
+                document.getElementById('bookingNumberDisplayPayLater').textContent = booking.booking_number;
+            }
+            
+            document.getElementById('step2').classList.add('completed');
+            document.getElementById('step3').classList.add('active');
+        }
+
+        // ===== PESAPAL FUNCTIONS =====
+        function openPesapal() {
+            document.getElementById('pesapalModal').classList.add('show');
+        }
+
+        function closePesapal() {
+            document.getElementById('pesapalModal').classList.remove('show');
+        }
+
+        // ===== UTILITIES =====
+        function goBack() {
+            window.history.back();
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Make functions global
+        window.incrementQuantity = incrementQuantity;
+        window.decrementQuantity = decrementQuantity;
+        window.selectPayment = selectPayment;
+        window.goToStep2 = goToStep2;
+        window.backToStep1 = backToStep1;
+        window.submitBooking = submitBooking;
+        window.openPesapal = openPesapal;
+        window.closePesapal = closePesapal;
+        window.goBack = goBack;
+    </script>
+</body>
+</html>

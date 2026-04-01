@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Manage Tips - Supplier Dashboard | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Quill Rich Text Editor CSS - Multiple CDN sources for reliability -->
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@1.3.6/dist/quill.snow.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-tips.css">
+    
+    <style>
+        /* Ensure Quill loads properly */
+        #editor-container {
+            margin-bottom: 20px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            min-height: 300px;
+        }
+        
+        .ql-container {
+            font-size: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 300px;
+        }
+        
+        .ql-editor {
+            min-height: 300px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .ql-toolbar {
+            background: var(--gray-50);
+            border: none !important;
+            border-bottom: 1px solid var(--gray-300) !important;
+        }
+        
+        /* Editor loading state */
+        .editor-loading {
+            padding: 40px;
+            text-align: center;
+            background: var(--gray-50);
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius);
+            color: var(--gray-500);
+        }
+        
+        .editor-loading .spinner-small {
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        /* Fallback editor */
+        .fallback-editor {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+        }
+        
+        .fallback-editor:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(11, 79, 108, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-store"></i> iBlue B2B</h2>
+                <p>Supplier Dashboard</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="supplier-dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i> Overview
+                </a>
+                <a href="supplier-products.html" class="nav-item">
+                    <i class="fas fa-box"></i> Products
+                </a>
+                <a href="supplier-orders.html" class="nav-item">
+                    <i class="fas fa-truck"></i> Orders
+                </a>
+                <a href="supplier-quotations.html" class="nav-item">
+                    <i class="fas fa-file-invoice"></i> Quotations
+                </a>
+                <a href="supplier-storefront.html" class="nav-item">
+                    <i class="fas fa-palette"></i> Storefront
+                </a>
+                <a href="supplier-tips.html" class="nav-item active">
+                    <i class="fas fa-lightbulb"></i> Tips & Articles
+                </a>
+                <a href="supplier-company-profile.html" class="nav-item">
+                    <i class="fas fa-building"></i> Company Profile
+                </a>
+                <a href="supplier-inquiries.html" class="nav-item">
+                    <i class="fas fa-search"></i> Inquiries
+                </a>
+                <hr>
+                <a href="supplier-detail.html" class="nav-item" target="_blank">
+                    <i class="fas fa-eye"></i> Preview Store
+                </a>
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i> Exit Dashboard
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="content-header">
+                <div class="header-title">
+                    <h1>Tips & Articles</h1>
+                    <p>Share expertise and build trust with buyers</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" onclick="SupplierTips.refreshTips()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="btn btn-primary" onclick="SupplierTips.openTipModal()">
+                        <i class="fas fa-plus"></i> New Tip
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Total Tips</h3>
+                        <div class="stat-number" id="totalTips">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Published</h3>
+                        <div class="stat-number" id="publishedTips">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Drafts</h3>
+                        <div class="stat-number" id="draftTips">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Total Views</h3>
+                        <div class="stat-number" id="totalViews">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search tips by title...">
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="published">Published</button>
+                    <button class="filter-btn" data-filter="draft">Drafts</button>
+                </div>
+            </div>
+
+            <!-- Tips Grid -->
+            <div class="tips-grid" id="tipsGrid">
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState">
+                    <div class="spinner"></div>
+                    <p>Loading tips...</p>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="fas fa-lightbulb"></i>
+                <h3>No tips yet</h3>
+                <p>Create your first tip to share expertise with buyers</p>
+                <button class="btn btn-primary" onclick="SupplierTips.openTipModal()">
+                    <i class="fas fa-plus"></i> Create Your First Tip
+                </button>
+            </div>
+
+            <!-- Load More -->
+            <div class="load-more" id="loadMore" style="display: none;">
+                <button class="load-more-btn" onclick="SupplierTips.loadMoreTips()">
+                    Load More Tips
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Tip Editor Modal -->
+    <div class="modal" id="tipModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 id="modalTitle">Create New Tip</h3>
+                <button class="modal-close" onclick="SupplierTips.closeTipModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="tipForm" onsubmit="return false;">
+                    <input type="hidden" id="tipId">
+                    <input type="hidden" id="featuredImageUrl">
+
+                    <!-- Basic Info -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-info-circle"></i> Basic Information</h4>
+                        
+                        <div class="form-group">
+                            <label>Title <span class="required">*</span></label>
+                            <input type="text" id="tipTitle" placeholder="e.g., 5 Tips for Buying Electronics Wholesale" maxlength="200" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="tipCategory">
+                                    <option value="general">General</option>
+                                    <option value="buying">Buying Tips</option>
+                                    <option value="selling">Selling Tips</option>
+                                    <option value="product">Product Care</option>
+                                    <option value="industry">Industry News</option>
+                                    <option value="trends">Market Trends</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Reading Time (minutes)</label>
+                                <input type="number" id="readTime" min="1" value="3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Featured Image -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-image"></i> Featured Image</h4>
+                        
+                        <div class="image-upload-area" id="featuredImageUpload">
+                            <input type="file" id="featuredImage" accept="image/*" style="display: none;">
+                            <div class="upload-preview" id="featuredImagePreview">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Click to upload featured image</p>
+                                <small>Recommended: 1200x630px (will be compressed)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Excerpt -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-align-left"></i> Excerpt</h4>
+                        <div class="form-group">
+                            <textarea id="tipExcerpt" rows="3" placeholder="Brief summary of your tip (max 200 characters)" maxlength="200"></textarea>
+                            <small class="char-counter"><span id="excerptCount">0</span>/200</small>
+                        </div>
+                    </div>
+
+                    <!-- Content - Rich Text Editor -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-edit"></i> Content <span class="required">*</span></h4>
+                        <div id="editor-container"></div>
+                        <textarea id="tipContent" style="display: none;"></textarea>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-tags"></i> Tags</h4>
+                        <div class="form-group">
+                            <input type="text" id="tipTags" placeholder="Enter tags separated by commas (e.g., electronics, wholesale, buying guide)">
+                            <small>Helps buyers find your tips</small>
+                        </div>
+                    </div>
+
+                    <!-- SEO Section -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-chart-line"></i> SEO Settings</h4>
+                        
+                        <div class="form-group">
+                            <label>Meta Title</label>
+                            <input type="text" id="metaTitle" placeholder="SEO title (leave empty to use tip title)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Meta Description</label>
+                            <textarea id="metaDescription" rows="2" placeholder="SEO meta description"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Publishing Options -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-globe"></i> Publishing</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select id="tipStatus">
+                                    <option value="draft">Draft</option>
+                                    <option value="published">Publish Now</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Schedule (Optional)</label>
+                                <input type="datetime-local" id="scheduledDate">
+                            </div>
+                        </div>
+
+                        <div class="form-check">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="featuredTip">
+                                <span>Feature this tip (appears in featured section)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Preview Section -->
+                    <div class="preview-section">
+                        <h4>Preview</h4>
+                        <div class="tip-preview-card" id="tipPreview">
+                            <div class="preview-header">
+                                <span class="preview-category" id="previewCategory">General</span>
+                                <span class="preview-date">Just now</span>
+                            </div>
+                            <h3 class="preview-title" id="previewTitle">Tip Title</h3>
+                            <p class="preview-excerpt" id="previewExcerpt">Your excerpt will appear here...</p>
+                            <div class="preview-footer">
+                                <span><i class="far fa-clock"></i> <span id="previewReadTime">3</span> min read</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="SupplierTips.saveTipAsDraft()">Save as Draft</button>
+                <button class="btn btn-primary" onclick="SupplierTips.publishTip()">Publish</button>
+                <button class="btn btn-secondary" onclick="SupplierTips.closeTipModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Tip</h3>
+                <button class="modal-close" onclick="SupplierTips.closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="delete-message">Are you sure you want to delete "<span id="deleteTipName"></span>"?</p>
+                <p class="delete-warning">This action cannot be undone.</p>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                    <button class="btn btn-secondary" onclick="SupplierTips.closeDeleteModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Tip Modal -->
+    <div class="modal" id="viewTipModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 id="viewTipTitle">Tip Details</h3>
+                <button class="modal-close" onclick="SupplierTips.closeViewTipModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="viewTipBody">
+                <!-- Populated by JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="SupplierTips.editFromView()">Edit</button>
+                <button class="btn btn-secondary" onclick="SupplierTips.closeViewTipModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Tip saved successfully</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="SupplierTips.closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts - Load in correct order with fallbacks -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Try multiple Quill CDNs -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        // Fallback if first Quill CDN fails
+        window.quillLoadAttempt = 1;
+        window.quillMaxAttempts = 3;
+        
+        function checkQuillLoaded() {
+            if (typeof Quill !== 'undefined') {
+                console.log('✅ Quill loaded successfully');
+                return true;
+            }
+            
+            if (window.quillLoadAttempt < window.quillMaxAttempts) {
+                window.quillLoadAttempt++;
+                console.log(`⚠️ Quill not loaded, attempt ${window.quillLoadAttempt}...`);
+                
+                // Try alternative CDN
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/quill@1.3.6/dist/quill.min.js';
+                script.onload = checkQuillLoaded;
+                document.head.appendChild(script);
+            } else {
+                console.error('❌ Quill failed to load from all CDNs');
+            }
+        }
+        
+        // Check if Quill loaded after a short delay
+        setTimeout(checkQuillLoaded, 500);
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/supplier-tips.js"></script>
+</body>
+</html>

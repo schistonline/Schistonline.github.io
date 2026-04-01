@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Report – iBlue Uganda</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    /* ===== MOBILE-FIRST RESET ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    html {
+      font-size: 16px;
+      height: -webkit-fill-available;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.5;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      padding-bottom: 20px;
+    }
+
+    /* ===== COLOR VARIABLES ===== */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #dbeafe;
+      --secondary: #64748b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      
+      --bg-white: #ffffff;
+      --bg-light: #f8fafc;
+      --bg-gray: #f1f5f9;
+      --bg-dark: #0f172a;
+      
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
+      
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-light: #94a3b8;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      
+      --radius-sm: 8px;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      
+      --spacing-xs: 0.25rem;
+      --spacing-sm: 0.5rem;
+      --spacing: 0.75rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.25rem;
+      --spacing-xl: 1.5rem;
+      --spacing-2xl: 2rem;
+    }
+
+    /* ===== SAFE AREA INSETS ===== */
+    @supports (padding: max(0px)) {
+      .safe-top {
+        padding-top: max(0.75rem, env(safe-area-inset-top));
+      }
+      .safe-bottom {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+      }
+      .safe-left {
+        padding-left: max(0.75rem, env(safe-area-inset-left));
+      }
+      .safe-right {
+        padding-right: max(0.75rem, env(safe-area-inset-right));
+      }
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border);
+      padding: var(--spacing) var(--spacing-md);
+      padding-top: env(safe-area-inset-top);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 60px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .back-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: none;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: var(--radius-full);
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .back-btn:active {
+      background: var(--bg-light);
+      color: var(--primary);
+      transform: scale(0.95);
+    }
+
+    .back-btn i {
+      font-size: 1.2rem;
+    }
+
+    .header-title {
+      flex: 1;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+
+    .home-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: var(--radius-full);
+      transition: all 0.2s;
+    }
+
+    .home-btn:active {
+      background: var(--primary-dark);
+      transform: scale(0.95);
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: var(--spacing-md);
+    }
+
+    /* ===== REPORT CARD ===== */
+    .report-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      box-shadow: var(--shadow);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .report-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(239, 68, 68, 0.1);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--spacing-lg);
+      color: var(--danger);
+      font-size: 1.8rem;
+    }
+
+    .report-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: var(--spacing-sm);
+      color: var(--text-primary);
+    }
+
+    .report-subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: var(--spacing-xl);
+      padding-bottom: var(--spacing-lg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ===== AD PREVIEW ===== */
+    .ad-preview {
+      background: var(--bg-light);
+      border-radius: var(--radius);
+      padding: var(--spacing-md);
+      margin-bottom: var(--spacing-xl);
+      display: flex;
+      gap: var(--spacing-md);
+      align-items: center;
+    }
+
+    .ad-preview-image {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius);
+      background: var(--bg-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-light);
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+
+    .ad-preview-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ad-preview-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .ad-preview-price {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .ad-preview-seller {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* ===== USER PREVIEW ===== */
+    .user-preview {
+      background: var(--bg-light);
+      border-radius: var(--radius);
+      padding: var(--spacing-md);
+      margin-bottom: var(--spacing-xl);
+      display: flex;
+      gap: var(--spacing-md);
+      align-items: center;
+    }
+
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+    }
+
+    .user-detail {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 2px;
+    }
+
+    .verified-badge {
+      color: var(--success);
+      font-size: 0.85rem;
+    }
+
+    /* ===== FORM ===== */
+    .form-group {
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+      color: var(--text-primary);
+    }
+
+    .form-label i {
+      color: var(--primary);
+      margin-right: 6px;
+    }
+
+    .required-star {
+      color: var(--danger);
+      margin-left: 4px;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      background: var(--bg-light);
+      border-radius: var(--radius);
+      padding: var(--spacing-md);
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      padding: var(--spacing-sm) var(--spacing-md);
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .radio-option:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .radio-option input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      margin-right: var(--spacing-md);
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .radio-content {
+      flex: 1;
+    }
+
+    .radio-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .radio-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .textarea-wrapper {
+      background: var(--bg-light);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .textarea-wrapper:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .report-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: var(--spacing-md);
+      border: none;
+      background: transparent;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .report-textarea:focus {
+      outline: none;
+    }
+
+    .report-textarea::placeholder {
+      color: var(--text-light);
+    }
+
+    .char-counter {
+      text-align: right;
+      font-size: 0.75rem;
+      color: var(--text-light);
+      padding: var(--spacing-xs) var(--spacing-md) var(--spacing-sm);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ===== FILE ATTACHMENT ===== */
+    .attachment-area {
+      background: var(--bg-light);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: var(--spacing-lg);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .attachment-area:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .attachment-area i {
+      font-size: 2rem;
+      color: var(--text-light);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .attachment-title {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .attachment-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .attachment-preview {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--spacing-sm);
+      margin-top: var(--spacing-sm);
+    }
+
+    .attachment-name {
+      flex: 1;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .attachment-remove {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: none;
+      color: var(--danger);
+      cursor: pointer;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .attachment-remove:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* ===== ACTION BUTTONS ===== */
+    .action-buttons {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-xl);
+    }
+
+    .btn {
+      flex: 1;
+      height: 50px;
+      border: none;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #dc2626;
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background: var(--bg-light);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-gray);
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ===== INFO MESSAGE ===== */
+    .info-message {
+      background: rgba(37, 99, 235, 0.1);
+      border-left: 4px solid var(--primary);
+      padding: var(--spacing-md);
+      border-radius: var(--radius);
+      margin-top: var(--spacing-lg);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .info-message i {
+      color: var(--primary);
+      margin-right: 6px;
+    }
+
+    /* ===== SUCCESS STATE ===== */
+    .success-state {
+      text-align: center;
+      padding: var(--spacing-2xl) var(--spacing-xl);
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(16, 185, 129, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--spacing-lg);
+      color: var(--success);
+      font-size: 2.5rem;
+    }
+
+    .success-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .success-message {
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-xl);
+      font-size: 1rem;
+    }
+
+    .report-number {
+      background: var(--bg-light);
+      padding: var(--spacing-md);
+      border-radius: var(--radius);
+      font-family: monospace;
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    /* ===== LOADING ===== */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-2xl);
+      gap: var(--spacing);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--bg-gray);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ===== ERROR STATE ===== */
+    .error-state {
+      text-align: center;
+      padding: var(--spacing-2xl) var(--spacing-xl);
+    }
+
+    .error-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(239, 68, 68, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--spacing-lg);
+      color: var(--danger);
+      font-size: 2.5rem;
+    }
+
+    .error-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .error-message {
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    /* ===== NOTIFICATION ===== */
+    .notification-toast {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      left: 20px;
+      background: var(--primary);
+      color: white;
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      z-index: 3000;
+      animation: slideIn 0.3s ease;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes slideOut {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-20px); opacity: 0; }
+    }
+
+    /* ===== HIDDEN UTILITY ===== */
+    .hidden {
+      display: none !important;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (min-width: 768px) {
+      .container {
+        padding: var(--spacing-xl);
+      }
+      
+      .radio-group {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .notification-toast {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+    }
+
+    /* ===== DARK MODE SUPPORT ===== */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary: #3b82f6;
+        --primary-dark: #1d4ed8;
+        --primary-light: #1e3a8a;
+        
+        --bg-white: #0f172a;
+        --bg-light: #1e293b;
+        --bg-gray: #334155;
+        --bg-dark: #020617;
+        
+        --border: #334155;
+        --border-dark: #475569;
+        
+        --text-primary: #f1f5f9;
+        --text-secondary: #cbd5e1;
+        --text-light: #94a3b8;
+      }
+      
+      .radio-option,
+      .ad-preview,
+      .user-preview,
+      .textarea-wrapper,
+      .attachment-area {
+        background: var(--bg-gray);
+      }
+    }
+
+    /* ===== TOUCH OPTIMIZATIONS ===== */
+    @media (hover: none) and (pointer: coarse) {
+      .btn,
+      .back-btn,
+      .home-btn,
+      .radio-option,
+      .attachment-area {
+        min-height: 44px;
+      }
+      
+      .report-textarea,
+      input {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <button class="back-btn" onclick="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <div class="header-title">Report</div>
+    <div class="header-actions">
+      <button class="home-btn" onclick="window.location.href='index.html'">
+        <i class="fas fa-home"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Loading State -->
+    <div id="loadingState" class="loading">
+      <div class="spinner"></div>
+      <div class="loading-text">Loading...</div>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="error-state hidden">
+      <div class="error-icon">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <h2 class="error-title">Something Went Wrong</h2>
+      <p class="error-message" id="errorMessage">Unable to load report data</p>
+      <button class="btn btn-primary" onclick="window.location.href='index.html'">
+        <i class="fas fa-home"></i> Go Home
+      </button>
+    </div>
+
+    <!-- Report Form -->
+    <div id="reportForm" class="hidden">
+      <div class="report-card">
+        <div class="report-icon">
+          <i class="fas fa-flag"></i>
+        </div>
+        <h1 class="report-title">Report a Problem</h1>
+        <p class="report-subtitle">Help us keep iBlue Uganda safe and trustworthy</p>
+
+        <!-- Ad Preview (shown when reporting an ad) -->
+        <div id="adPreviewContainer" class="hidden">
+          <div id="adPreview" class="ad-preview">
+            <!-- Dynamic ad preview will be inserted here -->
+          </div>
+        </div>
+
+        <!-- User Preview (shown when reporting a user) -->
+        <div id="userPreviewContainer" class="hidden">
+          <div id="userPreview" class="user-preview">
+            <!-- Dynamic user preview will be inserted here -->
+          </div>
+        </div>
+
+        <!-- Report Form -->
+        <form id="reportFormElement" onsubmit="submitReport(event)">
+          <!-- Report Type (Hidden - Determined by URL) -->
+          <input type="hidden" id="reportType" name="reportType">
+          <input type="hidden" id="targetId" name="targetId">
+
+          <!-- Reason Selection -->
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-exclamation-triangle"></i> Reason for Report
+              <span class="required-star">*</span>
+            </label>
+            <div class="radio-group" id="reasonGroup">
+              <!-- Reasons will be populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Additional Details -->
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-pencil-alt"></i> Additional Details
+            </label>
+            <div class="textarea-wrapper">
+              <textarea 
+                class="report-textarea" 
+                id="additionalDetails" 
+                placeholder="Please provide any additional information that might help us investigate this issue..."
+                maxlength="500"
+              ></textarea>
+              <div class="char-counter">
+                <span id="charCount">0</span>/500 characters
+              </div>
+            </div>
+          </div>
+
+          <!-- File Attachment (Optional) -->
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-paperclip"></i> Attach Evidence (Optional)
+            </label>
+            <div id="attachmentArea" class="attachment-area" onclick="triggerFileUpload()">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <div class="attachment-title">Click to upload files</div>
+              <div class="attachment-subtitle">Screenshots, images, or documents</div>
+            </div>
+            <input 
+              type="file" 
+              id="fileUpload" 
+              class="hidden" 
+              accept="image/*,.pdf,.doc,.docx"
+              onchange="handleFileSelect(event)"
+            >
+            <div id="attachmentPreview" class="hidden">
+              <!-- Attachment preview will be shown here -->
+            </div>
+          </div>
+
+          <!-- Info Message -->
+          <div class="info-message">
+            <i class="fas fa-info-circle"></i>
+            Your report will be reviewed by our team within 24 hours. All reports are confidential.
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button type="button" class="btn btn-secondary" onclick="goBack()">
+              <i class="fas fa-times"></i> Cancel
+            </button>
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+              <i class="fas fa-flag"></i> Submit Report
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Success State -->
+    <div id="successState" class="hidden">
+      <div class="report-card">
+        <div class="success-state">
+          <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h2 class="success-title">Report Submitted</h2>
+          <p class="success-message">
+            Thank you for helping keep iBlue Uganda safe. Our team will review your report and take appropriate action.
+          </p>
+          <div class="report-number" id="reportNumber">
+            #IB-2024-0000
+          </div>
+          <div class="action-buttons">
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+              <i class="fas fa-home"></i> Home
+            </button>
+            <button class="btn btn-primary" onclick="window.location.href='messages.html'">
+              <i class="fas fa-comment"></i> Messages
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // SUPABASE CONFIGURATION
+    // ============================================
+    const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // ============================================
+    // GLOBAL VARIABLES
+    // ============================================
+    let currentUser = null;
+    let reportType = null;
+    let targetId = null;
+    let targetData = null;
+    let selectedFile = null;
+    let isSubmitting = false;
+
+    // Report reasons based on database schema
+    const REPORT_REASONS = [
+      {
+        id: 'spam',
+        title: 'Spam',
+        description: 'Misleading, repetitive, or irrelevant content'
+      },
+      {
+        id: 'fake',
+        title: 'Fake or Counterfeit',
+        description: 'Item is not authentic or misrepresented'
+      },
+      {
+        id: 'scam',
+        title: 'Scam or Fraud',
+        description: 'Attempting to defraud or deceive'
+      },
+      {
+        id: 'wrong_category',
+        title: 'Wrong Category',
+        description: 'Listed in an incorrect category'
+      },
+      {
+        id: 'wrong_price',
+        title: 'Wrong Price',
+        description: 'Price is misleading or incorrect'
+      },
+      {
+        id: 'sold',
+        title: 'Already Sold',
+        description: 'Item is no longer available'
+      },
+      {
+        id: 'duplicate',
+        title: 'Duplicate Ad',
+        description: 'Same item posted multiple times'
+      },
+      {
+        id: 'offensive',
+        title: 'Offensive Content',
+        description: 'Contains inappropriate or offensive material'
+      },
+      {
+        id: 'personal_info',
+        title: 'Personal Information',
+        description: 'Contains private contact or personal details'
+      },
+      {
+        id: 'prohibited_item',
+        title: 'Prohibited Item',
+        description: 'Item is not allowed on iBlue Uganda'
+      },
+      {
+        id: 'other',
+        title: 'Other',
+        description: 'Something else not listed above'
+      }
+    ];
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Check URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      reportType = urlParams.get('type');
+      targetId = urlParams.get('ad_id') || urlParams.get('user_id');
+      
+      // Determine report type from URL
+      if (urlParams.get('ad_id')) {
+        reportType = 'ad';
+        targetId = urlParams.get('ad_id');
+      } else if (urlParams.get('user_id')) {
+        reportType = 'user';
+        targetId = urlParams.get('user_id');
+      }
+
+      if (!reportType || !targetId) {
+        showError('Invalid report request. Missing target information.');
+        return;
+      }
+
+      // Check authentication
+      await checkAuth();
+      
+      // Load target data
+      await loadTargetData();
+      
+      // Setup event listeners
+      setupEventListeners();
+    });
+
+    // ============================================
+    // AUTHENTICATION
+    // ============================================
+    async function checkAuth() {
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        
+        if (!session) {
+          // Redirect to login
+          window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+          return;
+        }
+        
+        const { data: profile } = await sb
+          .from('profiles')
+          .select('id, full_name')
+          .eq('id', session.user.id)
+          .single();
+        
+        if (profile) {
+          currentUser = {
+            id: profile.id,
+            name: profile.full_name || 'User'
+          };
+        }
+      } catch (error) {
+        console.error('Auth error:', error);
+        showError('Authentication failed. Please login again.');
+      }
+    }
+
+    // ============================================
+    // LOAD TARGET DATA
+    // ============================================
+    async function loadTargetData() {
+      try {
+        showLoading();
+
+        if (reportType === 'ad') {
+          await loadAdData();
+        } else if (reportType === 'user') {
+          await loadUserData();
+        }
+
+        // Populate report reasons
+        populateReasons();
+        
+        // Hide loading, show form
+        hideLoading();
+        document.getElementById('reportForm').classList.remove('hidden');
+        
+      } catch (error) {
+        console.error('Error loading target data:', error);
+        showError('Failed to load report data. Please try again.');
+      }
+    }
+
+    async function loadAdData() {
+      const { data: ad, error } = await sb
+        .from('ads')
+        .select(`
+          id,
+          title,
+          price,
+          currency,
+          image_urls,
+          seller_id,
+          profiles!ads_seller_id_fkey (
+            full_name,
+            is_verified
+          )
+        `)
+        .eq('id', targetId)
+        .single();
+
+      if (error || !ad) {
+        throw new Error('Ad not found');
+      }
+
+      targetData = ad;
+      
+      // Show ad preview
+      document.getElementById('reportType').value = 'ad';
+      document.getElementById('targetId').value = targetId;
+      
+      const adPreview = document.getElementById('adPreview');
+      const imageUrl = ad.image_urls?.[0] || null;
+      const price = ad.price ? formatPrice(ad.price, ad.currency) : 'Price on request';
+      const sellerName = ad.profiles?.full_name || 'Anonymous Seller';
+      
+      adPreview.innerHTML = `
+        <img src="${imageUrl || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=200&auto=format&fit=crop'}" 
+             class="ad-preview-image" 
+             alt="${escapeHtml(ad.title)}"
+             onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=200&auto=format&fit=crop'">
+        <div class="ad-preview-info">
+          <div class="ad-preview-title">${escapeHtml(ad.title)}</div>
+          <div class="ad-preview-price">${price}</div>
+          <div class="ad-preview-seller">
+            <i class="fas fa-user"></i> ${escapeHtml(sellerName)}
+            ${ad.profiles?.is_verified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i></span>' : ''}
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('adPreviewContainer').classList.remove('hidden');
+    }
+
+    async function loadUserData() {
+      const { data: user, error } = await sb
+        .from('profiles')
+        .select(`
+          id,
+          full_name,
+          location,
+          is_verified,
+          created_at,
+          total_ads
+        `)
+        .eq('id', targetId)
+        .single();
+
+      if (error || !user) {
+        throw new Error('User not found');
+      }
+
+      targetData = user;
+      
+      // Show user preview
+      document.getElementById('reportType').value = 'user';
+      document.getElementById('targetId').value = targetId;
+      
+      const userPreview = document.getElementById('userPreview');
+      const initials = getInitials(user.full_name || 'User');
+      const memberSince = user.created_at ? new Date(user.created_at).getFullYear() : 'N/A';
+      
+      userPreview.innerHTML = `
+        <div class="user-avatar">${initials}</div>
+        <div class="user-info">
+          <div class="user-name">${escapeHtml(user.full_name || 'Anonymous User')}</div>
+          <div class="user-detail">
+            <i class="fas fa-map-marker-alt"></i> ${escapeHtml(user.location || 'Uganda')}
+          </div>
+          <div class="user-detail">
+            <i class="fas fa-clock"></i> Member since ${memberSince}
+          </div>
+          <div class="user-detail">
+            <i class="fas fa-bullhorn"></i> ${user.total_ads || 0} ads
+            ${user.is_verified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('userPreviewContainer').classList.remove('hidden');
+    }
+
+    // ============================================
+    // POPULATE REPORT REASONS
+    // ============================================
+    function populateReasons() {
+      const reasonGroup = document.getElementById('reasonGroup');
+      reasonGroup.innerHTML = '';
+      
+      REPORT_REASONS.forEach(reason => {
+        const div = document.createElement('div');
+        div.className = 'radio-option';
+        div.innerHTML = `
+          <input type="radio" name="reason" id="reason_${reason.id}" value="${reason.id}" required>
+          <div class="radio-content">
+            <div class="radio-title">${reason.title}</div>
+            <div class="radio-desc">${reason.description}</div>
+          </div>
+        `;
+        reasonGroup.appendChild(div);
+      });
+    }
+
+    // ============================================
+    // EVENT LISTENERS
+    // ============================================
+    function setupEventListeners() {
+      // Character counter for textarea
+      const textarea = document.getElementById('additionalDetails');
+      textarea.addEventListener('input', function() {
+        const count = this.value.length;
+        document.getElementById('charCount').textContent = count;
+        
+        // Visual warning when approaching limit
+        const counter = document.querySelector('.char-counter');
+        if (count > 450) {
+          counter.style.color = 'var(--warning)';
+        } else if (count > 490) {
+          counter.style.color = 'var(--danger)';
+        } else {
+          counter.style.color = 'var(--text-light)';
+        }
+      });
+    }
+
+    // ============================================
+    // FILE UPLOAD HANDLING
+    // ============================================
+    function triggerFileUpload() {
+      document.getElementById('fileUpload').click();
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showNotification('File size must be less than 5MB', 'error');
+        return;
+      }
+      
+      selectedFile = file;
+      
+      const preview = document.getElementById('attachmentPreview');
+      preview.innerHTML = `
+        <div class="attachment-preview">
+          <i class="fas fa-file"></i>
+          <span class="attachment-name">${escapeHtml(file.name)}</span>
+          <button type="button" class="attachment-remove" onclick="removeAttachment()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `;
+      preview.classList.remove('hidden');
+      
+      // Update attachment area
+      const attachmentArea = document.getElementById('attachmentArea');
+      attachmentArea.style.borderColor = 'var(--success)';
+      attachmentArea.style.background = 'rgba(16, 185, 129, 0.1)';
+    }
+
+    function removeAttachment() {
+      selectedFile = null;
+      document.getElementById('fileUpload').value = '';
+      document.getElementById('attachmentPreview').classList.add('hidden');
+      
+      const attachmentArea = document.getElementById('attachmentArea');
+      attachmentArea.style.borderColor = '';
+      attachmentArea.style.background = '';
+    }
+
+    // ============================================
+    // SUBMIT REPORT
+    // ============================================
+    async function submitReport(event) {
+      event.preventDefault();
+      
+      if (isSubmitting) return;
+      
+      // Get selected reason
+      const selectedReason = document.querySelector('input[name="reason"]:checked');
+      if (!selectedReason) {
+        showNotification('Please select a reason for reporting', 'warning');
+        return;
+      }
+      
+      try {
+        isSubmitting = true;
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        
+        // Prepare report data
+        const reportData = {
+          reporter_id: currentUser.id,
+          reason: selectedReason.value,
+          description: document.getElementById('additionalDetails').value.trim() || null,
+          status: 'pending',
+          created_at: new Date().toISOString()
+        };
+
+        // Add target based on report type
+        if (reportType === 'ad') {
+          reportData.reported_ad_id = parseInt(targetId);
+        } else if (reportType === 'user') {
+          reportData.reported_user_id = targetId;
+        }
+
+        // Submit to Supabase
+        const { data: report, error } = await sb
+          .from('reports')
+          .insert(reportData)
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        // Handle file attachment if exists
+        if (selectedFile) {
+          await uploadAttachment(report.id);
+        }
+
+        // Create notification for admin (optional)
+        await notifyAdmins(report.id);
+
+        // Show success state
+        showSuccess(report.id);
+        
+      } catch (error) {
+        console.error('Error submitting report:', error);
+        showNotification('Failed to submit report. Please try again.', 'error');
+      } finally {
+        isSubmitting = false;
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-flag"></i> Submit Report';
+      }
+    }
+
+    async function uploadAttachment(reportId) {
+      if (!selectedFile) return;
+      
+      try {
+        const fileExt = selectedFile.name.split('.').pop();
+        const fileName = `report_${reportId}_${Date.now()}.${fileExt}`;
+        const filePath = `reports/${fileName}`;
+        
+        const { error: uploadError } = await sb.storage
+          .from('report-attachments')
+          .upload(filePath, selectedFile);
+        
+        if (uploadError) {
+          console.error('Error uploading file:', uploadError);
+        } else {
+          // Get public URL
+          const { data: { publicUrl } } = sb.storage
+            .from('report-attachments')
+            .getPublicUrl(filePath);
+          
+          // Update report with attachment URL
+          await sb
+            .from('reports')
+            .update({ admin_notes: `Attachment: ${publicUrl}` })
+            .eq('id', reportId);
+        }
+      } catch (error) {
+        console.error('Error in file upload:', error);
+      }
+    }
+
+    async function notifyAdmins(reportId) {
+      try {
+        // Get admin users
+        const { data: admins } = await sb
+          .from('profiles')
+          .select('id')
+          .eq('is_admin', true);
+        
+        if (admins && admins.length > 0) {
+          const notifications = admins.map(admin => ({
+            user_id: admin.id,
+            type: 'admin_alert',
+            title: 'New Report Submitted',
+            message: `A new report (#${reportId}) has been submitted and requires review.`,
+            link: `/admin/reports.html?id=${reportId}`,
+            is_read: false,
+            created_at: new Date().toISOString()
+          }));
+          
+          await sb.from('notifications').insert(notifications);
+        }
+      } catch (error) {
+        console.error('Error notifying admins:', error);
+      }
+    }
+
+    // ============================================
+    // UI STATE MANAGEMENT
+    // ============================================
+    function showSuccess(reportId) {
+      document.getElementById('reportForm').classList.add('hidden');
+      
+      const reportNumber = `#IB-${new Date().getFullYear()}-${String(reportId).padStart(4, '0')}`;
+      document.getElementById('reportNumber').textContent = reportNumber;
+      
+      document.getElementById('successState').classList.remove('hidden');
+    }
+
+    function showLoading() {
+      document.getElementById('loadingState').classList.remove('hidden');
+      document.getElementById('errorState').classList.add('hidden');
+      document.getElementById('reportForm').classList.add('hidden');
+      document.getElementById('successState').classList.add('hidden');
+    }
+
+    function hideLoading() {
+      document.getElementById('loadingState').classList.add('hidden');
+    }
+
+    function showError(message) {
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('reportForm').classList.add('hidden');
+      document.getElementById('successState').classList.add('hidden');
+      
+      document.getElementById('errorMessage').textContent = message || 'Unable to load report data';
+      document.getElementById('errorState').classList.remove('hidden');
+    }
+
+    // ============================================
+    // UTILITY FUNCTIONS
+    // ============================================
+    function goBack() {
+      if (document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    function getInitials(name) {
+      if (!name) return 'U';
+      return name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase()
+        .substring(0, 2);
+    }
+
+    function formatPrice(price, currency = 'UGX') {
+      if (!price) return 'Price on request';
+      
+      if (currency === 'UGX') {
+        return new Intl.NumberFormat('en-UG', {
+          style: 'currency',
+          currency: 'UGX',
+          minimumFractionDigits: 0
+        }).format(price);
+      }
+      
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: 0
+      }).format(price);
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function showNotification(message, type = 'success') {
+      // Remove existing notifications
+      const existingNotifications = document.querySelectorAll('.notification-toast');
+      existingNotifications.forEach(n => n.remove());
+      
+      const notification = document.createElement('div');
+      notification.className = 'notification-toast';
+      
+      let icon = 'check-circle';
+      if (type === 'error') icon = 'exclamation-circle';
+      if (type === 'warning') icon = 'exclamation-triangle';
+      
+      notification.innerHTML = `<i class="fas fa-${icon}" style="margin-right: 8px;"></i>${message}`;
+      
+      // Set background color based on type
+      if (type === 'error') notification.style.background = 'var(--danger)';
+      if (type === 'warning') notification.style.background = 'var(--warning)';
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.remove();
+          }
+        }, 300);
+      }, 3000);
+    }
+
+    // ============================================
+    // GLOBAL EXPORTS
+    // ============================================
+    window.goBack = goBack;
+    window.submitReport = submitReport;
+    window.triggerFileUpload = triggerFileUpload;
+    window.handleFileSelect = handleFileSelect;
+    window.removeAttachment = removeAttachment;
+    window.showNotification = showNotification;
+    window.escapeHtml = escapeHtml;
+    window.formatPrice = formatPrice;
+    window.getInitials = getInitials;
+  </script>
+</body>
+</html>

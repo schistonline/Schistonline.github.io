@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Contact Supplier - SourceX B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-contact.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="header-title">Contact Supplier</div>
+        <div class="header-actions">
+            <div class="step-indicator">Step 2 of 2</div>
+        </div>
+    </header>
+
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading contact options...</p>
+        </div>
+
+        <!-- Contact Content (hidden initially) -->
+        <div id="contactContent" style="display: none;">
+            <!-- INLINE INQUIRY FORM (shown when no pendingInquiry) -->
+            <div id="inquiryFormSection" class="inquiry-form-section" style="display: none;">
+                <div class="card">
+                    <h3>Your Information</h3>
+                    <p class="form-note">Please provide your contact details so the supplier can reach you.</p>
+                    <div id="inlineProductSummary" class="product-summary"></div>
+                    <form id="inlineInquiryForm">
+                        <div class="form-group">
+                            <label for="inlineName">Full Name *</label>
+                            <input type="text" id="inlineName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inlineEmail">Email *</label>
+                            <input type="email" id="inlineEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inlinePhone">Phone Number</label>
+                            <input type="tel" id="inlinePhone">
+                        </div>
+                        <div class="form-group">
+                            <label for="inlineMessage">Message</label>
+                            <textarea id="inlineMessage" rows="3" placeholder="Any specific questions?"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="submitInquiryBtn">Continue to Contact Options</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Regular Inquiry Summary (shown after form is filled) -->
+            <div class="summary-card" id="summaryCard" style="display: none;">
+                <h3>Inquiry Summary</h3>
+                <div class="product-summary" id="productSummary"></div>
+                <div class="inquiry-details" id="inquiryDetails"></div>
+                <button class="edit-btn" id="editInquiryBtn">
+                    <i class="fas fa-pencil-alt"></i> Edit Inquiry
+                </button>
+            </div>
+
+            <!-- Supplier Info Card -->
+            <div class="supplier-card">
+                <div class="supplier-header">
+                    <div class="supplier-avatar" id="supplierAvatar">
+                        <span id="supplierInitials"></span>
+                    </div>
+                    <div class="supplier-info">
+                        <h2 id="supplierName"></h2>
+                        <p id="supplierLocation"></p>
+                        <span class="verified-badge" id="verifiedBadge" style="display: none;">
+                            <i class="fas fa-check-circle"></i> Verified Supplier
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Methods Section -->
+            <div class="contact-section">
+                <h3 class="section-title">Choose Contact Method</h3>
+                
+                <!-- WhatsApp Option -->
+                <div class="contact-option" id="whatsappOption" style="display: none;">
+                    <div class="option-header">
+                        <div class="option-icon whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="option-title">
+                            <h4>WhatsApp</h4>
+                            <p>Instant messaging via WhatsApp</p>
+                        </div>
+                    </div>
+                    
+                    <div class="whatsapp-numbers" id="whatsappNumbers"></div>
+                    
+                    <button class="contact-action-btn whatsapp-btn" id="sendWhatsAppBtn">
+                        <i class="fab fa-whatsapp"></i>
+                        Continue with WhatsApp
+                    </button>
+                </div>
+
+                <!-- Phone Call Option -->
+                <div class="contact-option" id="phoneOption" style="display: none;">
+                    <div class="option-header">
+                        <div class="option-icon phone">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="option-title">
+                            <h4>Phone Call</h4>
+                            <p>Speak directly with the supplier</p>
+                        </div>
+                    </div>
+                    
+                    <div class="phone-details">
+                        <div class="phone-number" id="supplierPhone"></div>
+                        <p class="phone-note">Available during business hours</p>
+                    </div>
+                    
+                    <a href="#" class="contact-action-btn phone-btn" id="callBtn">
+                        <i class="fas fa-phone-alt"></i>
+                        Call Now
+                    </a>
+                </div>
+
+                <!-- Email Option -->
+                <div class="contact-option" id="emailOption" style="display: none;">
+                    <div class="option-header">
+                        <div class="option-icon email">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="option-title">
+                            <h4>Email</h4>
+                            <p>Send a detailed inquiry via email</p>
+                        </div>
+                    </div>
+                    
+                    <div class="email-details">
+                        <div class="email-address" id="supplierEmail"></div>
+                        <p class="email-note">Response within 24 hours</p>
+                    </div>
+                    
+                    <a href="#" class="contact-action-btn email-btn" id="emailBtn">
+                        <i class="fas fa-envelope"></i>
+                        Send Email
+                    </a>
+                </div>
+
+                <!-- In-App Message Option -->
+                <div class="contact-option" id="messageOption">
+                    <div class="option-header">
+                        <div class="option-icon message">
+                            <i class="fas fa-comment-dots"></i>
+                        </div>
+                        <div class="option-title">
+                            <h4>In-App Message</h4>
+                            <p>Send a message within SourceX</p>
+                        </div>
+                    </div>
+                    
+                    <button class="contact-action-btn message-btn" id="sendMessageBtn">
+                        <i class="fas fa-comment-dots"></i>
+                        Send Message
+                    </button>
+                </div>
+            </div>
+
+            <!-- Save for Later Option -->
+            <div class="save-section">
+                <button class="save-for-later-btn" id="saveForLaterBtn">
+                    <i class="far fa-bookmark"></i>
+                    Save for Later
+                </button>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Something went wrong</h3>
+            <p id="errorMessage"></p>
+            <button class="btn btn-primary" onclick="window.history.back()">Go Back</button>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-overlay" onclick="closeSuccessModal()"></div>
+        <div class="modal-content success-modal">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Inquiry Sent!</h3>
+            <p id="successMessage">Your inquiry has been sent successfully.</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="redirectToHome()">
+                    Browse More Products
+                </button>
+                <button class="btn btn-outline" onclick="redirectToSaved()">
+                    View Saved Items
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supplier-contact.js"></script>
+</body>
+</html>

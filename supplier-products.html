@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Manage Products - Supplier Dashboard | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-products.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-store"></i> iBlue B2B</h2>
+                <p>Supplier Dashboard</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="supplier-dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i> Overview
+                </a>
+                <a href="supplier-products.html" class="nav-item active">
+                    <i class="fas fa-box"></i> Products
+                </a>
+                <a href="supplier-orders.html" class="nav-item">
+                    <i class="fas fa-truck"></i> Orders
+                </a>
+                <a href="supplier-quotations.html" class="nav-item">
+                    <i class="fas fa-file-invoice"></i> Quotations
+                </a>
+                <a href="supplier-storefront.html" class="nav-item">
+                    <i class="fas fa-palette"></i> Storefront
+                </a>
+                <a href="supplier-tips.html" class="nav-item">
+                    <i class="fas fa-lightbulb"></i> Tips & Articles
+                </a>
+                <a href="supplier-company-profile.html" class="nav-item">
+                    <i class="fas fa-building"></i> Company Profile
+                </a>
+                <a href="supplier-inquiries.html" class="nav-item">
+                    <i class="fas fa-search"></i> Inquiries
+                </a>
+                <hr>
+                <a href="supplier-detail.html" class="nav-item" target="_blank">
+                    <i class="fas fa-eye"></i> Preview Store
+                </a>
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i> Exit Dashboard
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="content-header">
+                <div class="header-title">
+                    <h1>Manage Products</h1>
+                    <p>Add, edit, and manage your product listings</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" onclick="SupplierProducts.exportProducts()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-primary" onclick="SupplierProducts.openProductModal()">
+                        <i class="fas fa-plus"></i> New Product
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Total Products</h3>
+                        <div class="stat-number" id="totalProducts">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Active</h3>
+                        <div class="stat-number" id="activeProducts">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Low Stock</h3>
+                        <div class="stat-number" id="lowStockProducts">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Categories</h3>
+                        <div class="stat-number" id="totalCategories">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search products...">
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="active">Active</button>
+                    <button class="filter-btn" data-filter="draft">Draft</button>
+                    <button class="filter-btn" data-filter="lowstock">Low Stock</button>
+                </div>
+                <button class="filter-btn-icon" id="filterBtn">
+                    <i class="fas fa-sliders-h"></i>
+                </button>
+            </div>
+
+            <!-- Filter Panel (Hidden by default) -->
+            <div class="filter-panel" id="filterPanel" style="display: none;">
+                <div class="filter-section">
+                    <h4>Categories</h4>
+                    <div class="filter-options" id="categoryFilters">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h4>Price Range</h4>
+                    <div class="price-range">
+                        <input type="number" id="minPrice" placeholder="Min" min="0">
+                        <span>to</span>
+                        <input type="number" id="maxPrice" placeholder="Max" min="0">
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h4>Stock Status</h4>
+                    <select id="stockStatus">
+                        <option value="all">All</option>
+                        <option value="in_stock">In Stock</option>
+                        <option value="low_stock">Low Stock</option>
+                        <option value="out_of_stock">Out of Stock</option>
+                    </select>
+                </div>
+
+                <div class="filter-actions">
+                    <button class="btn-apply" onclick="SupplierProducts.applyFilters()">Apply</button>
+                    <button class="btn-reset" onclick="SupplierProducts.resetFilters()">Reset</button>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" id="productsGrid">
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState">
+                    <div class="spinner"></div>
+                    <p>Loading products...</p>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="fas fa-box-open"></i>
+                <h3>No products found</h3>
+                <p>Get started by adding your first product</p>
+                <button class="btn btn-primary" onclick="SupplierProducts.openProductModal()">
+                    <i class="fas fa-plus"></i> Add Product
+                </button>
+            </div>
+
+            <!-- Load More -->
+            <div class="load-more" id="loadMore" style="display: none;">
+                <button class="load-more-btn" onclick="SupplierProducts.loadMoreProducts()">
+                    Load More Products
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Modal (Add/Edit) -->
+    <div class="modal" id="productModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Product</h3>
+                <button class="modal-close" onclick="SupplierProducts.closeProductModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm" onsubmit="return false;">
+                    <input type="hidden" id="productId">
+
+                    <!-- Basic Info -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-info-circle"></i> Basic Information</h4>
+                        
+                        <div class="form-group">
+                            <label>Product Title <span class="required">*</span></label>
+                            <input type="text" id="productTitle" placeholder="e.g., Samsung Galaxy A15 128GB" maxlength="200" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description <span class="required">*</span></label>
+                            <textarea id="productDescription" rows="4" placeholder="Detailed description of your product..." required></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Category <span class="required">*</span></label>
+                                <select id="productCategory" required>
+                                    <option value="">Select category</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Subcategory</label>
+                                <select id="productSubcategory">
+                                    <option value="">Select subcategory</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>SKU (Stock Keeping Unit)</label>
+                                <input type="text" id="productSku" placeholder="e.g., SAM-A15-BLK">
+                            </div>
+                            <div class="form-group">
+                                <label>Brand</label>
+                                <input type="text" id="productBrand" placeholder="e.g., Samsung">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Model</label>
+                                <input type="text" id="productModel" placeholder="e.g., A15">
+                            </div>
+                            <div class="form-group">
+                                <label>Condition</label>
+                                <select id="productCondition">
+                                    <option value="new">New</option>
+                                    <option value="used">Used</option>
+                                    <option value="refurbished">Refurbished</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tags</label>
+                            <input type="text" id="productTags" placeholder="Enter tags separated by commas (e.g., smartphone, 4G, android)">
+                        </div>
+                    </div>
+
+                    <!-- Pricing & Stock -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-tag"></i> Pricing & Stock</h4>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Regular Price (UGX) <span class="required">*</span></label>
+                                <input type="number" id="regularPrice" min="0" step="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Wholesale Price (UGX)</label>
+                                <input type="number" id="wholesalePrice" min="0" step="100">
+                                <small>Price for bulk buyers</small>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Stock Quantity <span class="required">*</span></label>
+                                <input type="number" id="stockQuantity" min="0" value="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Low Stock Threshold</label>
+                                <input type="number" id="lowStockThreshold" min="1" value="10">
+                                <small>Alert when stock is below this</small>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Minimum Order Quantity (MOQ)</label>
+                                <input type="number" id="moq" min="1" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label>Maximum Order Quantity</label>
+                                <input type="number" id="maxOrderQty" min="0">
+                                <small>Leave empty for no limit</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Images -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-images"></i> Product Images</h4>
+                        
+                        <div class="image-upload-area" id="productImagesUpload">
+                            <input type="file" id="productImages" accept="image/*" multiple style="display: none;">
+                            <div class="upload-preview" id="imagesPreview">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Click to upload product images</p>
+                                <small>You can select multiple images (Max 5)</small>
+                            </div>
+                        </div>
+                        
+                        <div class="image-list" id="imageList"></div>
+                        <input type="hidden" id="imageUrls" value="[]">
+                    </div>
+
+                    <!-- Bulk Pricing Tiers -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h4><i class="fas fa-layer-group"></i> Bulk Pricing Tiers</h4>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="SupplierProducts.addBulkTier()">
+                                <i class="fas fa-plus"></i> Add Tier
+                            </button>
+                        </div>
+                        
+                        <div id="bulkTiersContainer"></div>
+                        <p class="text-muted">Set different prices for larger quantities</p>
+                    </div>
+
+                    <!-- Shipping & Delivery -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-truck"></i> Shipping & Delivery</h4>
+
+                        <div class="form-group">
+                            <label>Lead Time (days)</label>
+                            <input type="number" id="leadTime" min="1" value="3">
+                            <small>How many days to prepare the order</small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Region</label>
+                                <input type="text" id="region" value="Central" placeholder="e.g., Central">
+                            </div>
+                            <div class="form-group">
+                                <label>District</label>
+                                <input type="text" id="district" value="Kampala" placeholder="e.g., Kampala">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Specific Location</label>
+                            <input type="text" id="specificLocation" placeholder="Street address, building...">
+                        </div>
+                    </div>
+
+                    <!-- SEO -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-chart-line"></i> SEO</h4>
+                        
+                        <div class="form-group">
+                            <label>Meta Title</label>
+                            <input type="text" id="metaTitle" placeholder="SEO title (leave empty to use product title)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Meta Description</label>
+                            <textarea id="metaDescription" rows="2" placeholder="SEO meta description"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="form-section">
+                        <div class="form-check">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="isActive" checked>
+                                <span>Active (visible to buyers)</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="isBulkOnly">
+                                <span>Bulk Only (hide regular price)</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="isNegotiable">
+                                <span>Price Negotiable</span>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="SupplierProducts.saveAsDraft()">Save as Draft</button>
+                <button class="btn btn-primary" onclick="SupplierProducts.saveAndPublish()">Publish</button>
+                <button class="btn btn-secondary" onclick="SupplierProducts.closeProductModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Product</h3>
+                <button class="modal-close" onclick="SupplierProducts.closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="delete-message">Are you sure you want to delete "<span id="deleteProductName"></span>"?</p>
+                <p class="delete-warning">This action cannot be undone.</p>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                    <button class="btn btn-secondary" onclick="SupplierProducts.closeDeleteModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Product Modal -->
+    <div class="modal" id="viewProductModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 id="viewProductTitle">Product Details</h3>
+                <button class="modal-close" onclick="SupplierProducts.closeViewModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="viewProductBody">
+                <!-- Populated by JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="SupplierProducts.editFromView()">Edit</button>
+                <button class="btn btn-secondary" onclick="SupplierProducts.closeViewModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Pricing Tier Template -->
+    <template id="bulkTierTemplate">
+        <div class="bulk-tier-item">
+            <div class="bulk-tier-fields">
+                <input type="number" class="tier-min-qty" placeholder="Min Qty" min="1">
+                <input type="number" class="tier-max-qty" placeholder="Max Qty (optional)" min="1">
+                <input type="number" class="tier-price" placeholder="Price per unit" min="0" step="100">
+                <input type="number" class="tier-discount" placeholder="Discount %" min="0" max="100" step="0.1">
+            </div>
+            <button type="button" class="btn-icon btn-danger remove-tier" onclick="SupplierProducts.removeBulkTier(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </template>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supplier-products.js"></script>
+</body>
+</html>

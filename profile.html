@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>My Profile - SourceX B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">Source<span>X</span></span>
+            </a>
+            <button class="menu-btn" id="menuToggle">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>My Profile</h1>
+            <p>Manage your account and view activity</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="spinner"></div>
+            <p>Loading profile...</p>
+        </div>
+
+        <!-- Profile Content (Hidden until loaded) -->
+        <div class="profile-content" id="profileContent" style="display: none;">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="profile-info">
+                    <h2 id="profileName">Loading...</h2>
+                    <p id="profileEmail">Loading...</p>
+                    <div class="profile-badges" id="profileBadges">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                <button class="edit-profile-btn" id="editProfileBtn">
+                    <i class="fas fa-pen"></i>
+                </button>
+            </div>
+
+            <!-- Profile Stats -->
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <span class="stat-value" id="memberSince">2026</span>
+                    <span class="stat-label">Member Since</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="profileInquiries">0</span>
+                    <span class="stat-label">Inquiries</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="profileProducts">0</span>
+                    <span class="stat-label">Products</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="profileListings">0</span>
+                    <span class="stat-label">Listings</span>
+                </div>
+            </div>
+
+            <!-- Account Details Section (shows active account types) -->
+            <div class="account-types-section">
+                <h3><i class="fas fa-user-circle"></i> Account Types</h3>
+                <div class="account-types-grid" id="accountTypesGrid">
+                    <!-- Populated by JS - shows all account types the user has -->
+                </div>
+            </div>
+
+            <!-- Role-Specific Dashboard (based on primary account type) -->
+            <div class="dashboard-section" id="dashboardSection">
+                <!-- Dynamic dashboard based on account type -->
+            </div>
+
+            <!-- Available Accounts to Activate -->
+            <div class="available-accounts-section">
+                <h3><i class="fas fa-plus-circle"></i> Available Account Types</h3>
+                <div class="available-accounts-grid" id="availableAccountsGrid">
+                    <!-- Populated by JS - shows account types user can sign up for -->
+                </div>
+            </div>
+
+            <!-- Quick Actions Grid (Common for all users) -->
+            <div class="actions-grid">
+                <!-- Messenger -->
+                <a href="chat.html" class="action-card">
+                    <div class="action-icon messenger">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <div class="action-content">
+                        <h4>Messages</h4>
+                        <p>Chat with suppliers and buyers</p>
+                    </div>
+                    <span class="action-badge" id="messageBadge">0</span>
+                </a>
+
+                <!-- My Inquiries -->
+                <a href="my-inquiries.html" class="action-card">
+                    <div class="action-icon inquiry">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div class="action-content">
+                        <h4>My Inquiries</h4>
+                        <p>Track your buying requests</p>
+                    </div>
+                    <span class="action-badge" id="inquiryBadge">0</span>
+                </a>
+
+                <!-- Saved Items -->
+                <a href="saved-items.html" class="action-card">
+                    <div class="action-icon saved">
+                        <i class="fas fa-bookmark"></i>
+                    </div>
+                    <div class="action-content">
+                        <h4>Saved Items</h4>
+                        <p>Products you've saved</p>
+                    </div>
+                    <span class="action-badge" id="savedBadge">0</span>
+                </a>
+
+                <!-- Notifications -->
+                <a href="notifications.html" class="action-card">
+                    <div class="action-icon notification">
+                        <i class="far fa-bell"></i>
+                    </div>
+                    <div class="action-content">
+                        <h4>Notifications</h4>
+                        <p>Stay updated</p>
+                    </div>
+                    <span class="action-badge" id="notificationBadge">0</span>
+                </a>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                <div class="activity-list" id="activityList">
+                    <!-- Populated by JS -->
+                    <div class="loading-spinner"></div>
+                </div>
+                <a href="#" class="view-all-link">View All Activity</a>
+            </div>
+
+            <!-- Account Settings -->
+            <div class="settings-section">
+                <h3><i class="fas fa-cog"></i> Account Settings</h3>
+                <div class="settings-list">
+                    <a href="edit-profile.html" class="setting-item">
+                        <i class="fas fa-user-edit"></i>
+                        <span>Edit Profile</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    <a href="change-password.html" class="setting-item">
+                        <i class="fas fa-lock"></i>
+                        <span>Change Password</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    <a href="notification-settings.html" class="setting-item">
+                        <i class="fas fa-bell"></i>
+                        <span>Notification Settings</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    <a href="payment-methods.html" class="setting-item">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Payment Methods</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    <a href="address-book.html" class="setting-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Address Book</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    <button class="setting-item logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Delete Account -->
+            <div class="danger-zone">
+                <button class="delete-account-btn" id="deleteAccountBtn">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Delete Account
+                </button>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Profile Not Found</h3>
+            <p>There was an error loading your profile</p>
+            <button class="btn-primary" onclick="location.reload()">
+                <i class="fas fa-sync-alt"></i> Try Again
+            </button>
+        </div>
+    </main>
+
+    <!-- Professional B2B Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <div class="logo-cube small">
+                            <div class="cube">
+                                <div class="face front"></div>
+                                <div class="face right"></div>
+                                <div class="face top"></div>
+                            </div>
+                        </div>
+                        <span class="footer-logo-text">Source<span>X</span></span>
+                    </div>
+                    <p class="footer-about">Uganda's premier B2B marketplace connecting verified suppliers with serious buyers. Trusted by 5,000+ businesses.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="how-it-works.html"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                        <li><a href="pricing.html"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+                        <li><a href="become-supplier.html"><i class="fas fa-chevron-right"></i> Become a Supplier</a></li>
+                        <li><a href="help.html"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-title">For Buyers</h4>
+                    <ul class="footer-links">
+                        <li><a href="how-to-buy.html"><i class="fas fa-chevron-right"></i> How to Buy</a></li>
+                        <li><a href="request-quote.html"><i class="fas fa-chevron-right"></i> Request for Quote</a></li>
+                        <li><a href="supplier-verification.html"><i class="fas fa-chevron-right"></i> Supplier Verification</a></li>
+                        <li><a href="buyer-protection.html"><i class="fas fa-chevron-right"></i> Buyer Protection</a></li>
+                        <li><a href="trade-assurance.html"><i class="fas fa-chevron-right"></i> Trade Assurance</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-title">For Suppliers</h4>
+                    <ul class="footer-links">
+                        <li><a href="sell-on-sourcex.html"><i class="fas fa-chevron-right"></i> Sell on SourceX</a></li>
+                        <li><a href="supplier-success.html"><i class="fas fa-chevron-right"></i> Supplier Success</a></li>
+                        <li><a href="advertise.html"><i class="fas fa-chevron-right"></i> Advertising</a></li>
+                        <li><a href="logistics-partner.html"><i class="fas fa-chevron-right"></i> Logistics Partner</a></li>
+                        <li><a href="supplier-standards.html"><i class="fas fa-chevron-right"></i> Supplier Standards</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-title">Contact Us</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
+                        <li><i class="fas fa-phone"></i> +256 700 123456</li>
+                        <li><i class="fas fa-envelope"></i> info@sourcex.ug</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 6:00 PM</li>
+                    </ul>
+                    <div class="footer-badge">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=ISO" alt="ISO Certified">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=SSL" alt="SSL Secure">
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2026 SourceX. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+                    <div class="footer-bottom-links">
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="disclaimer.html">Disclaimer</a>
+                        <a href="sitemap.html">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="meta-credit">
+            <span>◆</span> Meta AI
+        </div>
+    </footer>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="my-inquiries.html" class="nav-item">
+            <i class="fas fa-file-invoice"></i>
+            <span>Inquiries</span>
+        </a>
+        <a href="saved-items.html" class="nav-item">
+            <i class="fas fa-bookmark"></i>
+            <span>Saved</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Delete Account Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Account</h3>
+                <button class="modal-close" onclick="ProfileManager.closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="delete-message">Are you sure you want to delete your account?</p>
+                <p class="delete-warning">This action cannot be undone. All your data will be permanently removed.</p>
+                
+                <div class="form-group">
+                    <label>Please type "DELETE" to confirm</label>
+                    <input type="text" id="deleteConfirm" placeholder="DELETE">
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-danger" id="confirmDeleteBtn" disabled>Permanently Delete</button>
+                    <button class="btn-secondary" onclick="ProfileManager.closeDeleteModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

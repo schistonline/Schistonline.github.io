@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Manage Inquiries - Supplier Dashboard | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-inquiries.css">
+</head>
+<body>
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="supplier-dashboard.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <button class="menu-btn" id="menuToggle">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>Buyer Inquiries</h1>
+            <p>Browse and respond to requests</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-item" onclick="filterInquiries('all')">
+                <span class="stat-value" id="totalInquiries">0</span>
+                <span class="stat-label">Total</span>
+            </div>
+            <div class="stat-item" onclick="filterInquiries('new')">
+                <span class="stat-value" id="newInquiries">0</span>
+                <span class="stat-label">New</span>
+            </div>
+            <div class="stat-item" onclick="filterInquiries('quoted')">
+                <span class="stat-value" id="quotedInquiries">0</span>
+                <span class="stat-label">Quoted</span>
+            </div>
+            <div class="stat-item" onclick="filterInquiries('urgent')">
+                <span class="stat-value" id="urgentInquiries">0</span>
+                <span class="stat-label">Urgent</span>
+            </div>
+        </div>
+
+        <!-- Search and Filter Bar -->
+        <div class="search-filter-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by buyer or product...">
+            </div>
+            <button class="filter-btn" id="filterBtn">
+                <i class="fas fa-sliders-h"></i>
+            </button>
+        </div>
+
+        <!-- Filter Panel -->
+        <div class="filter-panel" id="filterPanel" style="display: none;">
+            <div class="filter-section">
+                <h4>Status</h4>
+                <div class="filter-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="new" class="status-filter">
+                        <span>New</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="quoted" class="status-filter">
+                        <span>Quoted</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="urgent" class="status-filter">
+                        <span>Urgent</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="expiring" class="status-filter">
+                        <span>Expiring Soon</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h4>Category</h4>
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                </select>
+            </div>
+
+            <div class="filter-section">
+                <h4>Date Range</h4>
+                <select id="dateRange">
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                </select>
+            </div>
+
+            <div class="filter-actions">
+                <button class="apply-btn" id="applyFilters">Apply</button>
+                <button class="reset-btn" id="resetFilters">Reset</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="spinner"></div>
+            <p>Loading inquiries...</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="all">All</button>
+            <button class="tab-btn" data-tab="new">New</button>
+            <button class="tab-btn" data-tab="quoted">Quoted</button>
+            <button class="tab-btn" data-tab="urgent">Urgent</button>
+        </div>
+
+        <!-- Inquiries List -->
+        <div class="inquiries-list" id="inquiriesList">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-inbox"></i>
+            <h3>No inquiries found</h3>
+            <p>When buyers send inquiries, they'll appear here</p>
+            <button class="refresh-btn" onclick="loadInquiries()">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+
+        <!-- Load More -->
+        <div class="load-more" id="loadMore" style="display: none;">
+            <button class="load-more-btn" onclick="loadMoreInquiries()">
+                Load More
+            </button>
+        </div>
+    </main>
+
+    <!-- Inquiry Detail Modal -->
+    <div class="modal" id="inquiryModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Inquiry Details</h3>
+                <button class="modal-close" onclick="closeInquiryModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="inquiryModalBody">
+                <!-- Populated by JS -->
+            </div>
+            <div class="modal-footer" id="inquiryModalFooter">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Quote Modal -->
+    <div class="modal" id="quickQuoteModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Create Quick Quote</h3>
+                <button class="modal-close" onclick="closeQuickQuoteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="quickQuoteForm">
+                    <input type="hidden" id="quickQuoteInquiryId">
+                    
+                    <!-- Buyer Info -->
+                    <div class="buyer-info-card" id="quickQuoteBuyerInfo">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Quote Items -->
+                    <div class="form-section">
+                        <h4>Items</h4>
+                        <div id="quickQuoteItemsContainer"></div>
+                    </div>
+
+                    <!-- Terms -->
+                    <div class="form-section">
+                        <h4>Terms</h4>
+                        
+                        <div class="form-group">
+                            <label>Valid Until <span class="required">*</span></label>
+                            <input type="date" id="quickQuoteValidUntil" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Payment Terms</label>
+                                <select id="quickQuotePaymentTerms">
+                                    <option value="advance_full">100% Advance</option>
+                                    <option value="advance_partial">50% Advance</option>
+                                    <option value="credit_7">7 Days Credit</option>
+                                    <option value="credit_15">15 Days Credit</option>
+                                    <option value="credit_30">30 Days Credit</option>
+                                    <option value="negotiable">Negotiable</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Delivery Terms</label>
+                                <select id="quickQuoteDeliveryTerms">
+                                    <option value="ex_warehouse">Ex-Warehouse</option>
+                                    <option value="fob">FOB</option>
+                                    <option value="cif">CIF</option>
+                                    <option value="door_delivery">Door Delivery</option>
+                                    <option value="pickup">Buyer Pickup</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Lead Time (days)</label>
+                            <input type="number" id="quickQuoteLeadTime" min="1" value="7">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Additional Notes</label>
+                            <textarea id="quickQuoteNotes" rows="3" placeholder="Warranty, specifications, etc."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="quote-summary">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="quickQuoteSubtotal">UGX 0</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span id="quickQuoteTotal">UGX 0</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-success" onclick="sendQuickQuote()">Send Quote</button>
+                <button class="btn-secondary" onclick="closeQuickQuoteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <button class="action-btn primary" onclick="refreshInquiries()">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="supplier-dashboard.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="supplier-products.html" class="nav-item">
+            <i class="fas fa-box"></i>
+            <span>Products</span>
+        </a>
+        <a href="supplier-orders.html" class="nav-item">
+            <i class="fas fa-truck"></i>
+            <span>Orders</span>
+        </a>
+        <a href="supplier-quotations.html" class="nav-item">
+            <i class="fas fa-file-invoice"></i>
+            <span>Quotes</span>
+        </a>
+        <a href="supplier-inquiries.html" class="nav-item active">
+            <i class="fas fa-search"></i>
+            <span>Inquiries</span>
+        </a>
+    </nav>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supplier-inquiries.js"></script>
+</body>
+</html>

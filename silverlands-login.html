@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Silver Lands Login | Premium Poultry Uganda</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #c6a355;
+            --primary-dark: #b38f3a;
+            --primary-light: #e6c27a;
+            --secondary: #1a2e3f;
+            --accent: #e6c27a;
+            --danger: #EF4444;
+            --dark: #1e293b;
+            --gray-700: #334155;
+            --gray-500: #64748b;
+            --gray-300: #cbd5e1;
+            --gray-200: #e2e8f0;
+            --gray-100: #f8fafc;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a2e3f 0%, #2c3e4f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+            margin: 0;
+            padding: 20px;
+            background-attachment: fixed;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><path d="M20,30 Q40,15 60,30 T100,30" stroke="white" fill="none" stroke-width="1"/><path d="M10,50 Q30,35 50,50 T90,50" stroke="white" fill="none" stroke-width="1"/><circle cx="30" cy="70" r="3" fill="white"/><circle cx="70" cy="70" r="3" fill="white"/></svg>');
+            background-size: cover;
+            pointer-events: none;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 2.5rem 2rem;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(230, 194, 122, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Logo Section */
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #c6a355, #e6c27a);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 32px;
+            color: #1a2e3f;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .logo-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #c6a355, #e6c27a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--gray-500);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .brand-tag {
+            font-size: 0.95rem;
+            color: var(--gray-500);
+            margin-bottom: 1.5rem;
+            border-bottom: 1.5px solid rgba(198, 163, 85, 0.2);
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .brand-tag i {
+            color: var(--primary);
+        }
+
+        .redirect-message {
+            background: rgba(230, 194, 122, 0.1);
+            color: var(--primary-dark);
+            padding: 12px 16px;
+            border-radius: 40px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            text-align: center;
+            border-left: 4px solid var(--primary);
+            display: none;
+        }
+
+        .redirect-message.show {
+            display: block;
+        }
+
+        .redirect-message i {
+            margin-right: 8px;
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            color: #0a5c46;
+            padding: 12px 16px;
+            border-radius: 40px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            text-align: center;
+            border-left: 4px solid #10B981;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 18px;
+            margin-bottom: 1rem;
+            border-radius: 18px;
+            border: 1.5px solid var(--gray-200);
+            background: var(--white);
+            font-size: 1rem;
+            line-height: 1.4;
+            color: var(--dark);
+            transition: border 0.15s, box-shadow 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            outline: 0;
+            box-shadow: 0 0 0 4px rgba(198, 163, 85, 0.12);
+        }
+
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 50px white inset;
+            -webkit-text-fill-color: var(--dark);
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 0 5px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            margin-bottom: 0;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .remember-me label {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            cursor: pointer;
+            font-weight: 500;
+            user-select: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px 18px;
+            border: none;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.3px;
+            background: linear-gradient(135deg, #c6a355, #e6c27a);
+            color: #1a2e3f;
+            box-shadow: 0 10px 18px -8px rgba(198, 163, 85, 0.4);
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        button:active {
+            transform: scale(0.98);
+            box-shadow: 0 5px 12px -6px rgba(198, 163, 85, 0.5);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0 0;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .auth-links a {
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 0;
+            transition: color 0.2s;
+        }
+
+        .auth-links a:hover {
+            color: var(--primary);
+        }
+
+        .auth-links .register-link {
+            background: rgba(198, 163, 85, 0.1);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .auth-links .register-link:hover {
+            background: rgba(198, 163, 85, 0.2);
+        }
+
+        .poultry-note {
+            background: rgba(26, 46, 63, 0.05);
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin: 1.5rem 0 0.5rem;
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(198, 163, 85, 0.2);
+        }
+
+        .poultry-note i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .msg {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+            transition: opacity 0.2s;
+            line-height: 1.4;
+        }
+
+        .msg.show {
+            display: block;
+        }
+
+        .msg.error {
+            background: #FEF2F2;
+            color: #991B1B;
+            border-left: 6px solid var(--danger);
+        }
+
+        .msg.info {
+            background: rgba(198, 163, 85, 0.1);
+            color: var(--primary-dark);
+            border-left: 6px solid var(--primary);
+        }
+
+        .msg.success {
+            background: #E7F5E8;
+            color: #0a5c46;
+            border-left: 6px solid #10B981;
+        }
+
+        .back-to-home {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .back-to-home:hover {
+            color: var(--primary);
+        }
+
+        .back-to-home i {
+            margin-right: 5px;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 1.8rem 1.5rem;
+            }
+            
+            .logo-icon {
+                width: 55px;
+                height: 55px;
+                font-size: 26px;
+            }
+            
+            .logo-text h1 {
+                font-size: 24px;
+            }
+            
+            .auth-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <div class="logo-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <div class="logo-text">
+                <h1>SILVER LANDS</h1>
+                <p>Premium Poultry Uganda</p>
+            </div>
+        </div>
+        
+        <div class="brand-tag">
+            <i class="fas fa-egg"></i>
+            <span>Access Premium Poultry Products</span>
+        </div>
+        
+        <!-- Redirect Message -->
+        <div id="redirectMessage" class="redirect-message">
+            <i class="fas fa-info-circle"></i>
+            <span id="redirectMessageText">Please sign in to access Silver Lands</span>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle"></i>
+            <span id="successMessageText">Account created! Please check your email to verify.</span>
+        </div>
+        
+        <input id="email" type="email" placeholder="Email address" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" />
+        <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+        
+        <div class="remember-me">
+            <input type="checkbox" id="rememberMe" checked>
+            <label for="rememberMe">Keep me signed in</label>
+        </div>
+        
+        <button id="loginBtn">
+            <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+            Sign in to Silver Lands
+        </button>
+        
+        <!-- Auth Links -->
+        <div class="auth-links">
+            <a href="silverlands-forgot-password.html" class="forgot-link">
+                <i class="fas fa-lock" style="margin-right: 4px;"></i>
+                Forgot password?
+            </a>
+            <a href="silverlands-register.html" class="register-link">
+                Create Account <i class="fas fa-arrow-right" style="margin-left: 4px;"></i>
+            </a>
+        </div>
+
+        <!-- Poultry Note -->
+        <div class="poultry-note">
+            <i class="fas fa-dove"></i>
+            <div>
+                <strong>Access premium poultry products</strong> — Sign in to view available batches, place orders, and get exclusive pricing
+            </div>
+        </div>
+
+        <a href="silverlands-gateway.html" class="back-to-home">
+            <i class="fas fa-arrow-left"></i> Back to Silver Lands
+        </a>
+        
+        <div id="msg" class="msg" role="status"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        (function() {
+            "use strict";
+
+            // Supabase Configuration
+            const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+            
+            // Storage Keys
+            const STORAGE_KEYS = {
+                SAVED_EMAIL: 'silverlands_saved_email',
+                REMEMBER_ME: 'silverlands_remember_me',
+                SESSION_EXPIRY: 'silverlands_session_expiry',
+                INTENDED_PAGE: 'silverlands_intended_page'
+            };
+
+            // DOM Elements
+            const msgEl = document.getElementById('msg');
+            const redirectMessageEl = document.getElementById('redirectMessage');
+            const redirectMessageText = document.getElementById('redirectMessageText');
+            const successMessageEl = document.getElementById('successMessage');
+            const successMessageText = document.getElementById('successMessageText');
+            const loginBtn = document.getElementById('loginBtn');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const rememberMeCheckbox = document.getElementById('rememberMe');
+
+            // Initialize Supabase
+            let sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+                auth: {
+                    autoRefreshToken: true,
+                    persistSession: true,
+                    detectSessionInUrl: true
+                }
+            });
+
+            // Helper Functions
+            function showMessage(text, type = 'error') {
+                if (!msgEl) return;
+                msgEl.textContent = text;
+                msgEl.className = 'msg show ' + type;
+                setTimeout(() => msgEl.classList.remove('show'), 5000);
+            }
+
+            function showSuccessMessage(text) {
+                if (!successMessageEl || !successMessageText) return;
+                successMessageText.textContent = text;
+                successMessageEl.classList.add('show');
+                setTimeout(() => successMessageEl.classList.remove('show'), 5000);
+            }
+
+            function validateEmail(email) {
+                return /^\S+@\S+\.\S+$/.test(email);
+            }
+
+            function getIntendedRedirect() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirectParam = urlParams.get('redirect');
+                
+                if (redirectParam) {
+                    sessionStorage.setItem(STORAGE_KEYS.INTENDED_PAGE, redirectParam);
+                    return redirectParam;
+                }
+                return sessionStorage.getItem(STORAGE_KEYS.INTENDED_PAGE);
+            }
+
+            function showRedirectMessage(redirectUrl) {
+                if (!redirectUrl || !redirectMessageEl || !redirectMessageText) return;
+                
+                if (redirectUrl.includes('silverlands')) {
+                    redirectMessageText.innerHTML = `<i class="fas fa-egg"></i> Please sign in to access Silver Lands Premium Poultry`;
+                } else {
+                    redirectMessageText.innerHTML = `<i class="fas fa-info-circle"></i> Please sign in to continue`;
+                }
+                redirectMessageEl.classList.add('show');
+            }
+
+            function clearIntendedRedirect() {
+                sessionStorage.removeItem(STORAGE_KEYS.INTENDED_PAGE);
+            }
+
+            // Handle Successful Login - Redirect to Silver Lands
+            async function handleSuccessfulLogin(user) {
+                try {
+                    let redirectUrl = getIntendedRedirect();
+                    
+                    if (!redirectUrl) {
+                        redirectUrl = 'silverlands-welcome.html';
+                    }
+
+                    clearIntendedRedirect();
+
+                    if (rememberMeCheckbox.checked) {
+                        const expiresAt = new Date();
+                        expiresAt.setDate(expiresAt.getDate() + 30);
+                        localStorage.setItem(STORAGE_KEYS.SESSION_EXPIRY, expiresAt.toISOString());
+                        localStorage.setItem(STORAGE_KEYS.SAVED_EMAIL, emailInput.value.trim());
+                        localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'true');
+                    } else {
+                        localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'false');
+                    }
+
+                    showMessage('✓ Login successful! Redirecting to Silver Lands...', 'success');
+
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 1500);
+
+                } catch (error) {
+                    console.error('Error in post-login handling:', error);
+                    window.location.href = 'silverlands-welcome.html';
+                }
+            }
+
+            // Login Handler
+            async function loginHandler(e) {
+                e.preventDefault();
+
+                const email = emailInput.value.trim();
+                const password = passwordInput.value.trim();
+
+                if (!email) {
+                    showMessage('📧 Email is required', 'error');
+                    emailInput.focus();
+                    return;
+                }
+
+                if (!password) {
+                    showMessage('🔒 Password is required', 'error');
+                    passwordInput.focus();
+                    return;
+                }
+
+                if (!validateEmail(email)) {
+                    showMessage('Please enter a valid email address', 'error');
+                    emailInput.focus();
+                    return;
+                }
+
+                loginBtn.disabled = true;
+                loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i> Signing in...';
+
+                try {
+                    const { data, error } = await sb.auth.signInWithPassword({
+                        email: email,
+                        password: password
+                    });
+
+                    if (error) {
+                        if (error.message.includes('Invalid login credentials')) {
+                            showMessage('Invalid email or password', 'error');
+                        } else if (error.message.includes('Email not confirmed')) {
+                            showMessage('Please verify your email first. Check your inbox.', 'info');
+                        } else {
+                            showMessage(error.message, 'error');
+                        }
+
+                        loginBtn.disabled = false;
+                        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to Silver Lands';
+                        return;
+                    }
+
+                    if (data?.user) {
+                        await handleSuccessfulLogin(data.user);
+                    }
+
+                } catch (err) {
+                    console.error('Login error:', err);
+                    showMessage('Network error. Please try again.', 'error');
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to Silver Lands';
+                }
+            }
+
+            // Check Existing Session
+            async function checkExistingSession() {
+                try {
+                    const { data: { session }, error } = await sb.auth.getSession();
+
+                    if (error) {
+                        console.error('Session check error:', error);
+                        return;
+                    }
+
+                    if (session?.user) {
+                        const rememberMe = localStorage.getItem(STORAGE_KEYS.REMEMBER_ME) === 'true';
+                        
+                        if (rememberMe) {
+                            const expiryStr = localStorage.getItem(STORAGE_KEYS.SESSION_EXPIRY);
+                            if (expiryStr) {
+                                const expiryDate = new Date(expiryStr);
+                                if (new Date() > expiryDate) {
+                                    await sb.auth.signOut();
+                                    localStorage.removeItem(STORAGE_KEYS.SAVED_EMAIL);
+                                    localStorage.removeItem(STORAGE_KEYS.SESSION_EXPIRY);
+                                    return;
+                                }
+                            }
+                        }
+
+                        const redirectUrl = getIntendedRedirect();
+                        
+                        if (redirectUrl) {
+                            clearIntendedRedirect();
+                            showMessage('✓ You are already logged in. Redirecting...', 'success');
+                            setTimeout(() => window.location.href = redirectUrl, 1500);
+                        } else {
+                            window.location.href = 'silverlands-welcome.html';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Session check error:', error);
+                }
+            }
+
+            // Load Saved Credentials
+            function loadSavedCredentials() {
+                const rememberMe = localStorage.getItem(STORAGE_KEYS.REMEMBER_ME) === 'true';
+                const savedEmail = localStorage.getItem(STORAGE_KEYS.SAVED_EMAIL);
+                
+                if (rememberMe && savedEmail) {
+                    const expiryStr = localStorage.getItem(STORAGE_KEYS.SESSION_EXPIRY);
+                    if (expiryStr) {
+                        const expiryDate = new Date(expiryStr);
+                        if (new Date() > expiryDate) {
+                            localStorage.removeItem(STORAGE_KEYS.SAVED_EMAIL);
+                            localStorage.removeItem(STORAGE_KEYS.SESSION_EXPIRY);
+                            localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'false');
+                            rememberMeCheckbox.checked = false;
+                            return;
+                        }
+                    }
+                    
+                    emailInput.value = savedEmail;
+                    rememberMeCheckbox.checked = true;
+                }
+            }
+
+            // Check for Registration Success
+            function checkRegistrationSuccess() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const registered = urlParams.get('registered');
+                const verified = urlParams.get('verified');
+                
+                if (registered === 'success') {
+                    showSuccessMessage('Account created successfully! Please check your email to verify.');
+                } else if (verified === 'true') {
+                    showSuccessMessage('Email verified successfully! You can now log in.');
+                }
+            }
+
+            // Initialize
+            document.addEventListener('DOMContentLoaded', async () => {
+                loadSavedCredentials();
+                checkRegistrationSuccess();
+
+                const intendedRedirect = getIntendedRedirect();
+                if (intendedRedirect) {
+                    showRedirectMessage(intendedRedirect);
+                }
+
+                await checkExistingSession();
+
+                // Focus email field
+                emailInput.focus();
+            });
+
+            // Event Listeners
+            loginBtn.addEventListener('click', loginHandler);
+
+            emailInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    passwordInput.focus();
+                }
+            });
+
+            passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    loginHandler(e);
+                }
+            });
+
+            emailInput.addEventListener('input', () => {
+                successMessageEl.classList.remove('show');
+            });
+
+            passwordInput.addEventListener('input', () => {
+                successMessageEl.classList.remove('show');
+            });
+
+            window.addEventListener('pageshow', () => {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to Silver Lands';
+            });
+
+        })();
+    </script>
+</body>
+</html>

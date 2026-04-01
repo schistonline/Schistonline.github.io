@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SourceX - Product Details</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/B2B-product-detail.css">
+    
+    <style>
+        /* Additional Chat Button Styles */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #4A0D9C;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #6B21E5;
+            color: #6B21E5;
+        }
+        
+        .btn-outline:hover {
+            background: #6B21E5;
+            color: white;
+        }
+        
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        
+        .btn-whatsapp:hover {
+            background: #075E54;
+        }
+        
+        /* Quick Inquiry Modal Styles */
+        .preset-message-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #F3F4F6;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .preset-message-btn:hover {
+            background: #6B21E5;
+            color: white;
+            border-color: #6B21E5;
+            transform: translateX(4px);
+        }
+        
+        /* Quick Inquiry Badge on Product */
+        .quick-inquiry-badge {
+            position: fixed;
+            bottom: 100px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            z-index: 90;
+            transition: transform 0.2s;
+        }
+        
+        .quick-inquiry-badge:hover {
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .quick-inquiry-badge {
+                bottom: 90px;
+                right: 12px;
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+        }
+        
+        /* Product Summary in Chat Preview */
+        .product-summary-preview {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: #F3F4F6;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border-left: 4px solid #6B21E5;
+        }
+        
+        .product-summary-preview img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        
+        .product-summary-preview h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #1F2937;
+        }
+        
+        .product-summary-preview p {
+            font-size: 12px;
+            color: #6B7280;
+            margin-bottom: 2px;
+        }
+        
+        .product-summary-preview .price {
+            color: #EF4444;
+            font-weight: 700;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="header-title">Product Details</div>
+        <div class="header-actions">
+            <button class="header-icon" id="shareBtn">
+                <i class="far fa-share-square"></i>
+            </button>
+            <button class="header-icon" id="saveBtn">
+                <i class="far fa-bookmark"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="skeleton-gallery"></div>
+            <div class="skeleton-content">
+                <div class="skeleton-title"></div>
+                <div class="skeleton-price"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text" style="width: 60%;"></div>
+            </div>
+        </div>
+
+        <!-- Product Content (hidden initially) -->
+        <div id="productContent" style="display: none;">
+            <!-- Image Gallery with Swiper -->
+            <div class="gallery-section">
+                <div class="swiper gallery-swiper">
+                    <div class="swiper-wrapper" id="galleryWrapper">
+                        <!-- Images loaded by JS -->
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                
+                <!-- Badges -->
+                <div class="badges-container" id="badgesContainer">
+                    <span class="badge featured" id="featuredBadge" style="display: none;">FEATURED</span>
+                    <span class="badge urgent" id="urgentBadge" style="display: none;">URGENT</span>
+                    <span class="badge verified" id="verifiedBadge" style="display: none;">VERIFIED</span>
+                    <span class="badge bulk" id="bulkBadge" style="display: none;">BULK ONLY</span>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-section">
+                <h1 class="product-title" id="productTitle"></h1>
+                
+                <div class="product-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="productLocation"></span>
+                    </span>
+                    <span class="meta-item">
+                        <i class="far fa-clock"></i>
+                        <span id="postedDate"></span>
+                    </span>
+                    <span class="meta-item">
+                        <i class="far fa-eye"></i>
+                        <span id="viewCount">0</span> views
+                    </span>
+                </div>
+
+                <!-- Price Section -->
+                <div class="price-section">
+                    <div class="price-block">
+                        <span class="price-label">Wholesale Price</span>
+                        <div class="price-wrapper">
+                            <span class="currency">UGX</span>
+                            <span class="price" id="wholesalePrice"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="retail-price-block" id="retailPriceBlock" style="display: none;">
+                        <span class="price-label">Retail Price</span>
+                        <span class="retail-price" id="retailPrice"></span>
+                        <span class="savings-badge" id="savingsBadge"></span>
+                    </div>
+                </div>
+
+                <!-- Color Variants Section -->
+                <div class="variant-section" id="colorVariantSection" style="display: none;">
+                    <div class="variant-label">
+                        <span>Color:</span>
+                        <span class="selected-variant" id="selectedColor">Select Color</span>
+                    </div>
+                    <div class="color-options" id="colorOptions">
+                        <!-- Color options will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- MOQ and Stock -->
+                <div class="stock-section">
+                    <div class="stock-item">
+                        <i class="fas fa-boxes"></i>
+                        <div class="stock-info">
+                            <span class="stock-label">Minimum Order</span>
+                            <span class="stock-value" id="moqValue">1</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stock-item">
+                        <i class="fas fa-warehouse"></i>
+                        <div class="stock-info">
+                            <span class="stock-label">Available Stock</span>
+                            <span class="stock-value" id="stockValue"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="stock-item">
+                        <i class="fas fa-clock"></i>
+                        <div class="stock-info">
+                            <span class="stock-label">Lead Time</span>
+                            <span class="stock-value" id="leadTimeValue"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Negotiable Badge -->
+                <div class="negotiable-badge" id="negotiableBadge" style="display: none;">
+                    <i class="fas fa-handshake"></i> Price Negotiable
+                </div>
+            </div>
+
+            <!-- Bulk Pricing Table -->
+            <div class="bulk-pricing-section" id="bulkPricingSection">
+                <h2 class="section-title">
+                    <i class="fas fa-tags"></i>
+                    Bulk Pricing Tiers
+                </h2>
+                <div class="bulk-pricing-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Quantity</th>
+                                <th>Price Per Unit</th>
+                                <th>Total Price</th>
+                                <th>Savings</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bulkPricingBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Product Videos Section -->
+            <div class="videos-section" id="videosSection" style="display: none;">
+                <h2 class="section-title">
+                    <i class="fas fa-video"></i>
+                    Product Videos
+                </h2>
+                <div class="videos-grid" id="videosGrid">
+                    <!-- Videos will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Product Specifications -->
+            <div class="specs-section">
+                <h2 class="section-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    Specifications
+                </h2>
+                <div class="specs-grid" id="specsGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Product Description -->
+            <div class="description-section">
+                <h2 class="section-title">
+                    <i class="fas fa-file-alt"></i>
+                    Description
+                </h2>
+                <div class="description-content" id="productDescription"></div>
+            </div>
+
+            <!-- Tags -->
+            <div class="tags-section" id="tagsSection" style="display: none;">
+                <h2 class="section-title">
+                    <i class="fas fa-tags"></i>
+                    Tags
+                </h2>
+                <div class="tags-container" id="tagsContainer"></div>
+            </div>
+
+            <!-- Supplier Information - Clickable to supplier detail -->
+            <div class="supplier-section">
+                <h2 class="section-title">
+                    <i class="fas fa-store"></i>
+                    Supplier Information
+                </h2>
+                
+                <a href="#" class="supplier-card-link" id="supplierDetailLink">
+                    <div class="supplier-card">
+                        <div class="supplier-avatar" id="supplierAvatar">
+                            <span id="supplierInitials">BS</span>
+                            <span class="verified-badge" id="supplierVerifiedBadge" style="display: none;">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </div>
+                        
+                        <div class="supplier-details">
+                            <h3 class="supplier-name" id="supplierName"></h3>
+                            <div class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="supplierLocation"></span>
+                            </div>
+                            
+                            <div class="supplier-stats">
+                                <div class="stat">
+                                    <span class="stat-value" id="supplierProducts">0</span>
+                                    <span class="stat-label">Products</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value" id="supplierOrders">0</span>
+                                    <span class="stat-label">Orders</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value" id="supplierRating">0.0</span>
+                                    <span class="stat-label">Rating</span>
+                                </div>
+                            </div>
+                            
+                            <div class="supplier-badges">
+                                <span class="response-badge" id="responseTime">
+                                    <i class="fas fa-clock"></i> Response: <span>~2h</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Related Products -->
+            <div class="related-section" id="relatedSection">
+                <h2 class="section-title">
+                    <i class="fas fa-tshirt"></i>
+                    You May Also Like
+                </h2>
+                <div class="swiper related-swiper">
+                    <div class="swiper-wrapper" id="relatedWrapper">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Action Bar - With Chat Buttons -->
+    <!-- Bottom Action Bar - With Chat Buttons -->
+<div class="action-bar">
+    <div class="quantity-selector">
+        <button class="quantity-btn" id="decrementQty">-</button>
+        <input type="number" class="quantity-input" id="quantity" value="1" min="1" readonly>
+        <button class="quantity-btn" id="incrementQty">+</button>
+    </div>
+    
+    <div class="action-buttons">
+        <button class="btn btn-outline" id="quickInquiryBtn">
+            <i class="fas fa-paper-plane"></i>
+            Send Inquiry
+        </button>
+        <button class="btn btn-primary" id="contactSupplierBtn">
+            <i class="fas fa-comment-dots"></i>
+            Contact Supplier
+        </button>
+    </div>
+</div>
+
+    <!-- Floating Quick Inquiry Button (Mobile Optimized) -->
+    <div class="quick-inquiry-badge" id="floatingQuickInquiry">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+
+    <!-- Professional B2B Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Company Info -->
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <div class="logo-cube small">
+                            <div class="cube">
+                                <div class="face front"></div>
+                                <div class="face right"></div>
+                                <div class="face top"></div>
+                            </div>
+                        </div>
+                        <span class="footer-logo-text">Source<span>X</span></span>
+                    </div>
+                    <p class="footer-about">Uganda's premier B2B marketplace connecting verified suppliers with serious buyers. Trusted by 5,000+ businesses.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-col">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="how-it-works.html"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                        <li><a href="pricing.html"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+                        <li><a href="become-supplier.html"><i class="fas fa-chevron-right"></i> Become a Supplier</a></li>
+                        <li><a href="help.html"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                    </ul>
+                </div>
+
+                <!-- For Buyers -->
+                <div class="footer-col">
+                    <h4 class="footer-title">For Buyers</h4>
+                    <ul class="footer-links">
+                        <li><a href="how-to-buy.html"><i class="fas fa-chevron-right"></i> How to Buy</a></li>
+                        <li><a href="request-quote.html"><i class="fas fa-chevron-right"></i> Request for Quote</a></li>
+                        <li><a href="supplier-verification.html"><i class="fas fa-chevron-right"></i> Supplier Verification</a></li>
+                        <li><a href="buyer-protection.html"><i class="fas fa-chevron-right"></i> Buyer Protection</a></li>
+                        <li><a href="trade-assurance.html"><i class="fas fa-chevron-right"></i> Trade Assurance</a></li>
+                    </ul>
+                </div>
+
+                <!-- For Suppliers -->
+                <div class="footer-col">
+                    <h4 class="footer-title">For Suppliers</h4>
+                    <ul class="footer-links">
+                        <li><a href="sell-on-sourcex.html"><i class="fas fa-chevron-right"></i> Sell on SourceX</a></li>
+                        <li><a href="supplier-success.html"><i class="fas fa-chevron-right"></i> Supplier Success</a></li>
+                        <li><a href="advertise.html"><i class="fas fa-chevron-right"></i> Advertising</a></li>
+                        <li><a href="logistics-partner.html"><i class="fas fa-chevron-right"></i> Logistics Partner</a></li>
+                        <li><a href="supplier-standards.html"><i class="fas fa-chevron-right"></i> Supplier Standards</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="footer-col">
+                    <h4 class="footer-title">Contact Us</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
+                        <li><i class="fas fa-phone"></i> +256 700 123456</li>
+                        <li><i class="fas fa-envelope"></i> info@sourcex.ug</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 6:00 PM</li>
+                    </ul>
+                    <div class="footer-badge">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=ISO" alt="ISO Certified">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=SSL" alt="SSL Secure">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2026 SourceX. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+                    <div class="footer-bottom-links">
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="disclaimer.html">Disclaimer</a>
+                        <a href="sitemap.html">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meta AI Credit -->
+        <div class="meta-credit">
+            <span>◆</span> Meta AI
+        </div>
+    </footer>
+
+    <!-- Video Player Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-overlay" onclick="ProductDetail.closeVideoModal()"></div>
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-video"></i>
+                    Product Video
+                </h3>
+                <button class="modal-close" onclick="ProductDetail.closeVideoModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="video-container" id="videoPlayerContainer">
+                    <!-- Video will be inserted here -->
+                </div>
+                <div class="video-info" id="videoInfo"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Inquiry Modal -->
+    <div class="modal" id="quickInquiryModal">
+        <div class="modal-overlay" onclick="ProductDetail.closeQuickInquiryModal()"></div>
+        <div class="modal-content" style="max-width: 500px; bottom: auto; top: 50%; transform: translateY(-50%); border-radius: 16px;">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-comment-dots"></i>
+                    Quick Inquiry
+                </h3>
+                <button class="modal-close" onclick="ProductDetail.closeQuickInquiryModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="product-summary-preview" id="productSummaryPreview" style="display: none;">
+                    <!-- Product summary will be inserted here -->
+                </div>
+                <p style="margin-bottom: 16px; color: #6B7280;">
+                    Choose a preset question or type your own:
+                </p>
+                <div id="presetMessagesList" style="margin-bottom: 20px;">
+                    <!-- Preset messages loaded by JS -->
+                </div>
+                <textarea id="customMessageInput" class="form-textarea" placeholder="Or type your own message..." rows="4"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="ProductDetail.closeQuickInquiryModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="ProductDetail.sendCustomInquiry()">
+                    <i class="fas fa-paper-plane"></i> Send Inquiry
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-overlay" onclick="ProductDetail.closeSuccessModal()"></div>
+        <div class="modal-content success-modal">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Your message has been sent to the supplier.</p>
+            <button class="btn btn-primary" onclick="ProductDetail.closeSuccessModal()">Continue Browsing</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="js/B2B-product-detail.js"></script>
+</body>
+</html>

@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register as Logistics Provider | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /* Left Side - Branding */
+        .brand-side {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand-header {
+            margin-bottom: 40px;
+        }
+
+        .brand-logo {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo i {
+            font-size: 40px;
+        }
+
+        .brand-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .brand-description {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .feature-item i {
+            width: 24px;
+            color: #F59E0B;
+        }
+
+        .testimonial {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .testimonial-author {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .stats-mini {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .stat-mini-item {
+            text-align: center;
+        }
+
+        .stat-mini-value {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-mini-label {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        /* Right Side - Registration Form */
+        .form-side {
+            padding: 40px;
+            background: white;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            font-size: 24px;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .login-link {
+            color: #0B4F6C;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Session Alert */
+        .session-alert {
+            background: #dbeafe;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .session-alert.show {
+            display: block;
+        }
+
+        .session-alert i {
+            color: #1e40af;
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .session-message {
+            color: #1e40af;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .session-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: 1;
+        }
+
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            border: 2px solid #e5e7eb;
+            color: #9ca3af;
+        }
+
+        .progress-step.active {
+            border-color: #0B4F6C;
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .progress-step.completed {
+            border-color: #10b981;
+            background: #10b981;
+            color: white;
+        }
+
+        .step-label {
+            position: absolute;
+            top: 40px;
+            font-size: 11px;
+            color: #6b7280;
+            transform: translateX(-50%);
+        }
+
+        /* Form Steps */
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #374151;
+        }
+
+        label i {
+            color: #0B4F6C;
+            width: 18px;
+        }
+
+        .required::after {
+            content: '*';
+            color: #dc2626;
+            margin-left: 4px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #0B4F6C;
+            box-shadow: 0 0 0 3px rgba(11,79,108,0.1);
+        }
+
+        input.error, select.error {
+            border-color: #dc2626;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 11px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Password Strength */
+        .password-strength {
+            margin-top: 8px;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+        }
+
+        .strength-fill.weak { width: 33%; background: #dc2626; }
+        .strength-fill.medium { width: 66%; background: #f59e0b; }
+        .strength-fill.strong { width: 100%; background: #10b981; }
+
+        .strength-text {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        /* Service Tags */
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .service-tag {
+            background: #f3f4f6;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .service-tag:hover {
+            background: #e5e7eb;
+        }
+
+        .service-tag.selected {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        /* Coverage Options */
+        .coverage-options {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .coverage-options label {
+            font-weight: normal;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .coverage-options input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0a4057;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(11,79,108,0.3);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Terms */
+        .terms {
+            margin: 20px 0;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .terms input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        .terms a {
+            color: #0B4F6C;
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* Verification Box */
+        .verification-box {
+            text-align: center;
+            padding: 40px 30px;
+            background: #f9fafb;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .verification-icon {
+            font-size: 48px;
+            color: #0B4F6C;
+            margin-bottom: 15px;
+        }
+
+        .verification-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .verification-text {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .resend-link {
+            color: #0B4F6C;
+            text-decoration: none;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .resend-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .register-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .brand-side {
+                display: none;
+            }
+            
+            .form-side {
+                padding: 30px 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .service-tags {
+                justify-content: center;
+            }
+            
+            .session-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <!-- Left Side - Branding -->
+        <div class="brand-side">
+            <div>
+                <div class="brand-header">
+                    <div class="brand-logo">
+                        <i class="fas fa-truck"></i>
+                        <span>iBlue B2B</span>
+                    </div>
+                    <div class="brand-title">
+                        Join Our Logistics<br>Partner Network
+                    </div>
+                    <div class="brand-description">
+                        Connect with thousands of businesses needing shipping services across Uganda and East Africa.
+                    </div>
+                </div>
+
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Receive shipping requests directly from verified businesses</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Multi-platform communication (WhatsApp, Messenger, Email, SMS)</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Professional dashboard to manage all shipments</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Real-time tracking and updates</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>No monthly fees - pay only 3-5% commission on completed shipments</span>
+                    </li>
+                </ul>
+
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        "Since joining iBlue B2B, we've received over 50 shipping requests in just 2 months. The dashboard makes it easy to manage everything."
+                    </div>
+                    <div class="testimonial-author">
+                        — Sarah K., Spedag Interfreight Uganda
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-mini">
+                <div class="stat-mini-item">
+                    <div class="stat-mini-value">500+</div>
+                    <div class="stat-mini-label">Shipments Completed</div>
+                </div>
+                <div class="stat-mini-item">
+                    <div class="stat-mini-value">45+</div>
+                    <div class="stat-mini-label">Active Partners</div>
+                </div>
+                <div class="stat-mini-item">
+                    <div class="stat-mini-value">24/7</div>
+                    <div class="stat-mini-label">Support</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Registration Form -->
+        <div class="form-side">
+            <div class="form-header">
+                <h2>Create Your Account</h2>
+                <p>
+                    Already registered? 
+                    <a href="logistics-login.html" class="login-link">Login here</a>
+                </p>
+            </div>
+
+            <!-- Session Alert - Shows if already logged in -->
+            <div id="sessionAlert" class="session-alert">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="sessionMessage" class="session-message">You're already logged in</span>
+                </div>
+                <div class="session-buttons">
+                    <button class="btn btn-secondary btn-sm" onclick="continueToDashboard()">
+                        <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="continueRegistration()">
+                        <i class="fas fa-user-plus"></i> Register New Account
+                    </button>
+                </div>
+            </div>
+
+            <!-- Alert Messages -->
+            <div id="alertMessage" class="alert"></div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-step active" id="step1">1</div>
+                <div class="progress-step" id="step2">2</div>
+                <div class="progress-step" id="step3">3</div>
+                <div style="position: absolute; top: 40px; left: 8%;" class="step-label">Account</div>
+                <div style="position: absolute; top: 40px; left: 50%; transform: translateX(-50%);" class="step-label">Company</div>
+                <div style="position: absolute; top: 40px; right: 8%;" class="step-label">Services</div>
+            </div>
+
+            <!-- Step 1: Account Information -->
+            <div id="step1Form" class="form-step active">
+                <form id="accountForm" onsubmit="event.preventDefault(); validateStep1()">
+                    <div class="form-group">
+                        <label class="required">
+                            <i class="fas fa-envelope"></i> Email Address
+                        </label>
+                        <input type="email" id="email" placeholder="company@example.com" required>
+                        <div id="emailError" class="error-message">Please enter a valid email</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            <input type="password" id="password" placeholder="••••••••" required>
+                            <div id="passwordError" class="error-message">Password must be at least 8 characters</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">
+                                <i class="fas fa-lock"></i> Confirm Password
+                            </label>
+                            <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                            <div id="confirmError" class="error-message">Passwords do not match</div>
+                        </div>
+                    </div>
+
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <div class="strength-text" id="strengthText">Enter a password</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">
+                            <i class="fas fa-phone"></i> Phone Number
+                        </label>
+                        <input type="tel" id="phone" placeholder="+256 712 345678" required>
+                        <div id="phoneError" class="error-message">Please enter a valid Ugandan phone number</div>
+                    </div>
+
+                    <div class="terms">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms" style="display: inline; margin-left: 5px;">
+                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="step1Btn">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Step 2: Company Information -->
+            <div id="step2Form" class="form-step">
+                <form id="companyForm" onsubmit="event.preventDefault(); validateStep2()">
+                    <div class="form-group">
+                        <label class="required">
+                            <i class="fas fa-building"></i> Company Name
+                        </label>
+                        <input type="text" id="companyName" placeholder="e.g., Spedag Interfreight Uganda Ltd" required>
+                        <div id="companyNameError" class="error-message">Company name is required</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required">
+                                <i class="fas fa-map-marker-alt"></i> District
+                            </label>
+                            <select id="district" required>
+                                <option value="">Select district</option>
+                                <option value="Kampala">Kampala</option>
+                                <option value="Wakiso">Wakiso</option>
+                                <option value="Mukono">Mukono</option>
+                                <option value="Jinja">Jinja</option>
+                                <option value="Mbarara">Mbarara</option>
+                                <option value="Gulu">Gulu</option>
+                                <option value="Mbale">Mbale</option>
+                                <option value="Masaka">Masaka</option>
+                                <option value="Arua">Arua</option>
+                                <option value="Lira">Lira</option>
+                                <option value="Entebbe">Entebbe</option>
+                            </select>
+                            <div id="districtError" class="error-message">Please select a district</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-calendar"></i> Year Established
+                            </label>
+                            <select id="yearEstablished">
+                                <option value="">Select year</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-globe"></i> Website (Optional)
+                        </label>
+                        <input type="url" id="website" placeholder="https://www.example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">
+                            <i class="fas fa-id-card"></i> Business Registration Number
+                        </label>
+                        <input type="text" id="registrationNumber" placeholder="e.g., 80020001234567" required>
+                        <div id="registrationError" class="error-message">Registration number is required</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-file-alt"></i> Tax ID (TIN) (Optional)
+                        </label>
+                        <input type="text" id="taxId" placeholder="e.g., 1234567890">
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="goToStep1()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="step2Btn">
+                            Continue <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Services & Coverage -->
+            <div id="step3Form" class="form-step">
+                <form id="servicesForm" onsubmit="event.preventDefault(); registerProvider()">
+                    <div class="form-group">
+                        <label class="required">
+                            <i class="fas fa-cogs"></i> Services Offered
+                        </label>
+                        <div class="service-tags" id="servicesContainer">
+                            <span class="service-tag" data-service="sea_freight">🚢 Sea Freight</span>
+                            <span class="service-tag" data-service="air_freight">✈️ Air Freight</span>
+                            <span class="service-tag" data-service="road_transport">🚛 Road Transport</span>
+                            <span class="service-tag" data-service="clearing">📋 Clearing</span>
+                            <span class="service-tag" data-service="warehousing">📦 Warehousing</span>
+                            <span class="service-tag" data-service="project_cargo">🏗️ Project Cargo</span>
+                            <span class="service-tag" data-service="cold_chain">❄️ Cold Chain</span>
+                            <span class="service-tag" data-service="hazardous">⚠️ Hazardous Goods</span>
+                        </div>
+                        <input type="hidden" id="services" value="[]">
+                        <div id="servicesError" class="error-message">Please select at least one service</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">
+                            <i class="fas fa-map"></i> Coverage Areas
+                        </label>
+                        <div class="coverage-options">
+                            <label style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" value="Uganda Only" class="coverage-checkbox"> Uganda Only
+                            </label>
+                            <label style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" value="East Africa" class="coverage-checkbox"> East Africa (Kenya, Tanzania, Rwanda, etc.)
+                            </label>
+                            <label style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" value="International" class="coverage-checkbox"> International (Worldwide)
+                            </label>
+                        </div>
+                        <input type="hidden" id="coverage" value="[]">
+                        <div id="coverageError" class="error-message">Please select at least one coverage area</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-weight"></i> Min Weight (kg)
+                            </label>
+                            <input type="number" id="minWeight" placeholder="e.g., 1" min="0" step="0.1">
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-weight"></i> Max Weight (kg)
+                            </label>
+                            <input type="number" id="maxWeight" placeholder="e.g., 10000" min="0" step="0.1">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-shield-alt"></i> Insurance Available?
+                        </label>
+                        <div style="display: flex; gap: 20px; margin-top: 8px;">
+                            <label>
+                                <input type="radio" name="insurance" value="true"> Yes, offer cargo insurance
+                            </label>
+                            <label>
+                                <input type="radio" name="insurance" value="false" checked> No insurance
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-comment"></i> Additional Information
+                        </label>
+                        <textarea id="additionalInfo" rows="3" placeholder="Tell us more about your company and any special services..."></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="goToStep2()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="registerBtn">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Verification Pending Screen -->
+            <div id="verificationScreen" class="verification-box" style="display: none;">
+                <div class="verification-icon">
+                    <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <div class="verification-title">Verify Your Email</div>
+                <div class="verification-text" id="verificationEmail">
+                    We've sent a verification link to your email. Please check your inbox and click the link to activate your account.
+                </div>
+                <div class="verification-text" style="font-weight: 500; margin: 15px 0;">
+                    Provider Code: <span id="providerCodeDisplay" style="color: #0B4F6C; font-size: 18px;"></span>
+                </div>
+                <div class="verification-text" style="font-size: 12px;">
+                    Save this code - you'll need it to login!
+                </div>
+                <a class="resend-link" onclick="resendVerification()">
+                    <i class="fas fa-redo-alt"></i> Resend verification email
+                </a>
+                <div style="margin-top: 20px;">
+                    <a href="logistics-login.html" class="btn btn-primary" style="display: inline-block; padding: 12px 30px; text-decoration: none;">
+                        Go to Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // SUPABASE CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE MANAGEMENT
+        // ============================================
+        let currentStep = 1;
+        let currentUser = null;
+        let formData = {
+            email: '',
+            password: '',
+            phone: '',
+            companyName: '',
+            district: '',
+            yearEstablished: '',
+            website: '',
+            registrationNumber: '',
+            taxId: '',
+            services: [],
+            coverage: [],
+            minWeight: '',
+            maxWeight: '',
+            insurance: false,
+            additionalInfo: ''
+        };
+
+        // ============================================
+        // PAGE LOAD INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            populateYearOptions();
+            setupServiceTags();
+            setupPasswordStrength();
+            setupCoverageCheckboxes();
+            checkExistingSession();
+        });
+
+        // ============================================
+        // CHECK EXISTING SESSION - FIXED
+        // ============================================
+        async function checkExistingSession() {
+            try {
+                const { data: { session }, error } = await sb.auth.getSession();
+                
+                if (error) {
+                    console.error('Session check error:', error);
+                    return;
+                }
+                
+                if (session) {
+                    currentUser = session.user;
+                    
+                    // Check if this user is already a logistics provider
+                    const { data: provider, error: providerError } = await sb
+                        .from('logistics_providers')
+                        .select('company_name, provider_code')
+                        .eq('profile_id', session.user.id)
+                        .single();
+                    
+                    const sessionAlert = document.getElementById('sessionAlert');
+                    const sessionMessage = document.getElementById('sessionMessage');
+                    
+                    if (provider) {
+                        // User is already registered as a logistics provider
+                        sessionMessage.innerHTML = `You're already registered as <strong>${provider.company_name}</strong> (Code: ${provider.provider_code}).`;
+                    } else {
+                        // User is logged in but not a logistics provider yet
+                        sessionMessage.innerHTML = `You're logged in as <strong>${session.user.email}</strong>. You can register a new logistics provider account below.`;
+                    }
+                    
+                    sessionAlert.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Session check error:', error);
+            }
+        }
+
+        // ============================================
+        // SESSION ACTIONS
+        // ============================================
+        function continueToDashboard() {
+            window.location.href = 'logistics-dashboard.html';
+        }
+
+        function continueRegistration() {
+            // Hide the session alert and continue with registration
+            document.getElementById('sessionAlert').style.display = 'none';
+            
+            // Pre-fill email if user is logged in
+            if (currentUser && currentUser.email) {
+                document.getElementById('email').value = currentUser.email;
+                document.getElementById('email').readOnly = true;
+                document.getElementById('email').style.backgroundColor = '#f3f4f6';
+            }
+            
+            showAlert('You can now register a new logistics provider account', 'info');
+        }
+
+        // ============================================
+        // POPULATE YEAR OPTIONS
+        // ============================================
+        function populateYearOptions() {
+            const select = document.getElementById('yearEstablished');
+            const currentYear = new Date().getFullYear();
+            
+            for (let year = currentYear; year >= currentYear - 50; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                select.appendChild(option);
+            }
+        }
+
+        // ============================================
+        // STEP NAVIGATION
+        // ============================================
+        function goToStep1() {
+            document.getElementById('step1Form').classList.add('active');
+            document.getElementById('step2Form').classList.remove('active');
+            document.getElementById('step3Form').classList.remove('active');
+            
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('step2').classList.remove('active', 'completed');
+            document.getElementById('step3').classList.remove('active', 'completed');
+            
+            currentStep = 1;
+        }
+
+        function goToStep2() {
+            document.getElementById('step1Form').classList.remove('active');
+            document.getElementById('step2Form').classList.add('active');
+            document.getElementById('step3Form').classList.remove('active');
+            
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step2').classList.add('active');
+            document.getElementById('step3').classList.remove('active', 'completed');
+            
+            currentStep = 2;
+        }
+
+        function goToStep3() {
+            document.getElementById('step1Form').classList.remove('active');
+            document.getElementById('step2Form').classList.remove('active');
+            document.getElementById('step3Form').classList.add('active');
+            
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step2').classList.add('completed');
+            document.getElementById('step3').classList.add('active');
+            
+            currentStep = 3;
+        }
+
+        // ============================================
+        // STEP 1 VALIDATION
+        // ============================================
+        function validateStep1() {
+            let isValid = true;
+            
+            // Validate email
+            const email = document.getElementById('email').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(email)) {
+                document.getElementById('email').classList.add('error');
+                document.getElementById('emailError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('email').classList.remove('error');
+                document.getElementById('emailError').classList.remove('show');
+                formData.email = email;
+            }
+            
+            // Validate password
+            const password = document.getElementById('password').value;
+            if (password.length < 8) {
+                document.getElementById('password').classList.add('error');
+                document.getElementById('passwordError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('password').classList.remove('error');
+                document.getElementById('passwordError').classList.remove('show');
+                formData.password = password;
+            }
+            
+            // Confirm password
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPassword').classList.add('error');
+                document.getElementById('confirmError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('confirmPassword').classList.remove('error');
+                document.getElementById('confirmError').classList.remove('show');
+            }
+            
+            // Validate phone (Ugandan format)
+            const phone = document.getElementById('phone').value.trim();
+            const phoneRegex = /^(\+256|0)[0-9]{9}$/;
+            
+            if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
+                document.getElementById('phone').classList.add('error');
+                document.getElementById('phoneError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('phone').classList.remove('error');
+                document.getElementById('phoneError').classList.remove('show');
+                formData.phone = phone;
+            }
+            
+            // Validate terms
+            const terms = document.getElementById('terms').checked;
+            if (!terms) {
+                showAlert('Please accept the Terms of Service', 'warning');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                goToStep2();
+            }
+            
+            return isValid;
+        }
+
+        // ============================================
+        // STEP 2 VALIDATION
+        // ============================================
+        function validateStep2() {
+            let isValid = true;
+            
+            // Validate company name
+            const companyName = document.getElementById('companyName').value.trim();
+            if (!companyName) {
+                document.getElementById('companyName').classList.add('error');
+                document.getElementById('companyNameError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('companyName').classList.remove('error');
+                document.getElementById('companyNameError').classList.remove('show');
+                formData.companyName = companyName;
+            }
+            
+            // Validate district
+            const district = document.getElementById('district').value;
+            if (!district) {
+                document.getElementById('district').classList.add('error');
+                document.getElementById('districtError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('district').classList.remove('error');
+                document.getElementById('districtError').classList.remove('show');
+                formData.district = district;
+            }
+            
+            // Validate registration number
+            const regNumber = document.getElementById('registrationNumber').value.trim();
+            if (!regNumber) {
+                document.getElementById('registrationNumber').classList.add('error');
+                document.getElementById('registrationError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('registrationNumber').classList.remove('error');
+                document.getElementById('registrationError').classList.remove('show');
+                formData.registrationNumber = regNumber;
+            }
+            
+            // Optional fields
+            formData.yearEstablished = document.getElementById('yearEstablished').value;
+            formData.website = document.getElementById('website').value.trim();
+            formData.taxId = document.getElementById('taxId').value.trim();
+            
+            if (isValid) {
+                goToStep3();
+            }
+            
+            return isValid;
+        }
+
+        // ============================================
+        // SERVICE TAGS HANDLING
+        // ============================================
+        function setupServiceTags() {
+            const tags = document.querySelectorAll('.service-tag');
+            
+            tags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    updateServices();
+                });
+            });
+        }
+
+        function updateServices() {
+            const selected = [];
+            document.querySelectorAll('.service-tag.selected').forEach(tag => {
+                selected.push(tag.dataset.service);
+            });
+            
+            formData.services = selected;
+            document.getElementById('services').value = JSON.stringify(selected);
+            
+            // Validate at least one service
+            if (selected.length === 0) {
+                document.getElementById('servicesError').classList.add('show');
+            } else {
+                document.getElementById('servicesError').classList.remove('show');
+            }
+        }
+
+        // ============================================
+        // COVERAGE HANDLING
+        // ============================================
+        function setupCoverageCheckboxes() {
+            const checkboxes = document.querySelectorAll('.coverage-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateCoverage);
+            });
+        }
+
+        function updateCoverage() {
+            const selected = [];
+            document.querySelectorAll('.coverage-checkbox:checked').forEach(cb => {
+                selected.push(cb.value);
+            });
+            
+            formData.coverage = selected;
+            document.getElementById('coverage').value = JSON.stringify(selected);
+            
+            // Validate at least one coverage area
+            if (selected.length === 0) {
+                document.getElementById('coverageError').classList.add('show');
+            } else {
+                document.getElementById('coverageError').classList.remove('show');
+            }
+        }
+
+        // ============================================
+        // PASSWORD STRENGTH INDICATOR
+        // ============================================
+        function setupPasswordStrength() {
+            const passwordInput = document.getElementById('password');
+            
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                const strength = calculatePasswordStrength(password);
+                updateStrengthIndicator(strength);
+            });
+        }
+
+        function calculatePasswordStrength(password) {
+            if (!password) return 0;
+            
+            let score = 0;
+            
+            // Length check
+            if (password.length >= 8) score += 1;
+            if (password.length >= 12) score += 1;
+            
+            // Character variety
+            if (/[a-z]/.test(password)) score += 1;
+            if (/[A-Z]/.test(password)) score += 1;
+            if (/[0-9]/.test(password)) score += 1;
+            if (/[^a-zA-Z0-9]/.test(password)) score += 1;
+            
+            return Math.min(score, 5);
+        }
+
+        function updateStrengthIndicator(score) {
+            const fill = document.getElementById('strengthFill');
+            const text = document.getElementById('strengthText');
+            
+            fill.className = 'strength-fill';
+            
+            if (score <= 2) {
+                fill.classList.add('weak');
+                text.textContent = 'Weak password';
+            } else if (score <= 4) {
+                fill.classList.add('medium');
+                text.textContent = 'Medium password';
+            } else {
+                fill.classList.add('strong');
+                text.textContent = 'Strong password';
+            }
+        }
+
+        // ============================================
+        // MAIN REGISTRATION FUNCTION
+        // ============================================
+        async function registerProvider() {
+            // Get final form data
+            formData.minWeight = document.getElementById('minWeight').value;
+            formData.maxWeight = document.getElementById('maxWeight').value;
+            formData.insurance = document.querySelector('input[name="insurance"]:checked')?.value === 'true';
+            formData.additionalInfo = document.getElementById('additionalInfo').value;
+            
+            // Validate services and coverage
+            if (formData.services.length === 0) {
+                document.getElementById('servicesError').classList.add('show');
+                return;
+            }
+            
+            if (formData.coverage.length === 0) {
+                document.getElementById('coverageError').classList.add('show');
+                return;
+            }
+            
+            // Show loading state
+            const registerBtn = document.getElementById('registerBtn');
+            const originalText = registerBtn.innerHTML;
+            registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            registerBtn.disabled = true;
+            
+            try {
+                // Generate provider code from company name
+                const providerCode = generateProviderCode(formData.companyName);
+                
+                // Check if user is already logged in
+                let userId = currentUser?.id;
+                
+                if (!userId) {
+                    // 1. Create auth user (new registration)
+                    const { data: authData, error: authError } = await sb.auth.signUp({
+                        email: formData.email,
+                        password: formData.password,
+                        options: {
+                            data: {
+                                full_name: formData.companyName,
+                                phone: formData.phone,
+                                user_type: 'logistics_provider'
+                            }
+                        }
+                    });
+                    
+                    if (authError) throw authError;
+                    userId = authData.user.id;
+                } else {
+                    // User is already logged in - we'll use their existing ID
+                    console.log('Using existing user ID:', userId);
+                }
+                
+                // 2. Create logistics provider record
+                const { error: providerError } = await sb
+                    .from('logistics_providers')
+                    .insert({
+                        profile_id: userId,
+                        company_name: formData.companyName,
+                        provider_code: providerCode,
+                        services_offered: formData.services,
+                        coverage_areas: formData.coverage,
+                        phone: formData.phone,
+                        email: formData.email,
+                        website: formData.website || null,
+                        warehouse_district: formData.district,
+                        min_weight_kg: formData.minWeight ? parseFloat(formData.minWeight) : 0,
+                        max_weight_kg: formData.maxWeight ? parseFloat(formData.maxWeight) : null,
+                        insurance_available: formData.insurance,
+                        business_registration: formData.registrationNumber,
+                        tax_id: formData.taxId || null,
+                        year_established: formData.yearEstablished ? parseInt(formData.yearEstablished) : null,
+                        description: formData.additionalInfo,
+                        verification_status: 'pending',
+                        is_active: true,
+                        commission_rate: 3.0,
+                        created_at: new Date().toISOString()
+                    });
+                
+                if (providerError) {
+                    // Check for duplicate provider
+                    if (providerError.code === '23505') {
+                        throw new Error('A provider with this email or company name already exists');
+                    }
+                    throw providerError;
+                }
+                
+                // Show success
+                showVerificationScreen(formData.email, providerCode);
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                showAlert(error.message || 'Registration failed. Please try again.', 'error');
+                
+                // Reset button
+                registerBtn.innerHTML = originalText;
+                registerBtn.disabled = false;
+            }
+        }
+
+        // Generate provider code from company name
+        function generateProviderCode(companyName) {
+            // Take first 3-6 letters, uppercase, remove special chars
+            const clean = companyName
+                .replace(/[^a-zA-Z0-9]/g, '')
+                .substring(0, 6)
+                .toUpperCase();
+            
+            // Add random numbers for uniqueness
+            const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            
+            return clean + random;
+        }
+
+        // Show verification screen after successful registration
+        function showVerificationScreen(email, providerCode) {
+            // Hide forms
+            document.getElementById('step1Form').style.display = 'none';
+            document.getElementById('step2Form').style.display = 'none';
+            document.getElementById('step3Form').style.display = 'none';
+            document.getElementById('sessionAlert').style.display = 'none';
+            
+            // Hide progress bar
+            document.querySelector('.progress-bar').style.display = 'none';
+            
+            // Show verification
+            const verificationScreen = document.getElementById('verificationScreen');
+            verificationScreen.style.display = 'block';
+            
+            document.getElementById('verificationEmail').innerHTML = 
+                `We've sent a verification link to <strong>${email}</strong>. Please check your inbox and click the link to activate your account.`;
+            
+            document.getElementById('providerCodeDisplay').textContent = providerCode;
+        }
+
+        // Resend verification email
+        async function resendVerification() {
+            try {
+                const { error } = await sb.auth.resend({
+                    type: 'signup',
+                    email: formData.email
+                });
+                
+                if (error) throw error;
+                
+                showAlert('Verification email resent! Check your inbox.', 'success');
+            } catch (error) {
+                showAlert('Failed to resend verification email', 'error');
+            }
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function showAlert(message, type = 'info') {
+            const alert = document.getElementById('alertMessage');
+            alert.textContent = message;
+            alert.className = `alert alert-${type} show`;
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

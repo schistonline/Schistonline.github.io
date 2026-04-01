@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Discover Products - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/product-videos.css">
+</head>
+<body>
+    <!-- Video Feed -->
+    <div class="feed-container" id="feedContainer">
+        <!-- Videos will be inserted here -->
+        <div class="loading-state" id="loadingState">
+            <div class="spinner"></div>
+            <p>Loading videos...</p>
+        </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <span class="feed-title">Discover Products</span>
+        <button class="search-btn" onclick="openSearch()">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+
+    <!-- Comments Modal -->
+    <div class="modal" id="commentsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Comments (<span id="commentCount">0</span>)</h3>
+                <button class="modal-close" onclick="VideoFeed.closeComments()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="comments-list" id="commentsList"></div>
+            <div class="comment-input">
+                <input type="text" id="commentInput" placeholder="Add a comment...">
+                <button onclick="VideoFeed.addComment()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- FFmpeg for video compression -->
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+    <script src="js/product-videos.js"></script>
+</body>
+</html>

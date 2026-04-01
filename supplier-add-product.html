@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Add Product - Supplier Dashboard | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Select2 for better dropdowns -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
+    <!-- Tagify for tags input -->
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.17.9/dist/tagify.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-add-product.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="supplier-dashboard.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+                <span class="supplier-badge">SUPPLIER</span>
+            </a>
+            <div class="header-actions">
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+                <div class="header-icon" id="menuToggle">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>Add New Product</h1>
+            <p class="subtitle">List your products for B2B buyers</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="step active" id="step1Indicator">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Basic Info</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step2Indicator">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Pricing & Stock</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step3Indicator">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Images & Media</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step4Indicator">
+                    <span class="step-number">4</span>
+                    <span class="step-label">Review</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Step 1: Basic Information -->
+        <div class="step-content active" id="step1">
+            <div class="form-section">
+                <h2><i class="fas fa-info-circle"></i> Basic Information</h2>
+                
+                <div class="form-group">
+                    <label class="form-label required">Product Title</label>
+                    <input type="text" id="productTitle" class="form-input" placeholder="e.g., Samsung Galaxy A15 128GB" maxlength="200">
+                    <div class="char-counter"><span id="titleCount">0</span>/200</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Product Description</label>
+                    <textarea id="productDescription" class="form-textarea" rows="5" placeholder="Detailed description of your product..."></textarea>
+                    <div class="char-counter"><span id="descCount">0</span>/2000</div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Category</label>
+                        <select id="productCategory" class="form-select">
+                            <option value="">Select category</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Subcategory</label>
+                        <select id="productSubcategory" class="form-select" disabled>
+                            <option value="">First select a category</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Brand</label>
+                        <input type="text" id="productBrand" class="form-input" placeholder="e.g., Samsung">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Model/Part Number</label>
+                        <input type="text" id="productModel" class="form-input" placeholder="e.g., SM-A155F">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Condition</label>
+                        <select id="productCondition" class="form-select">
+                            <option value="new">New</option>
+                            <option value="used">Used</option>
+                            <option value="refurbished">Refurbished</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">SKU (Stock Keeping Unit)</label>
+                        <input type="text" id="productSku" class="form-input" placeholder="Your internal SKU">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tags/Keywords</label>
+                    <input type="text" id="productTags" class="form-input" placeholder="e.g., smartphone, android, samsung">
+                    <div class="hint">Separate tags with commas</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Product Video URL (Optional)</label>
+                    <input type="url" id="productVideo" class="form-input" placeholder="https://youtube.com/...">
+                </div>
+            </div>
+
+            <div class="form-navigation">
+                <button class="btn-secondary" onclick="window.location.href='supplier-products.html'">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn-primary" id="continueToStep2">
+                    Continue to Pricing <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Pricing & Stock -->
+        <div class="step-content" id="step2">
+            <div class="form-section">
+                <h2><i class="fas fa-tags"></i> Pricing & Stock</h2>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Regular Price (UGX)</label>
+                        <input type="number" id="regularPrice" class="form-input" min="0" step="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Sale Price (UGX)</label>
+                        <input type="number" id="salePrice" class="form-input" min="0" step="100">
+                        <div class="hint">Leave empty if not on sale</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="isNegotiable">
+                        <span>Price is negotiable</span>
+                    </label>
+                </div>
+
+                <!-- Bulk Pricing Section -->
+                <div class="subsection-header">
+                    <h3><i class="fas fa-layer-group"></i> Bulk Pricing Tiers</h3>
+                    <button type="button" class="btn-icon" onclick="addBulkTier()">
+                        <i class="fas fa-plus"></i> Add Tier
+                    </button>
+                </div>
+
+                <div id="bulkPricingContainer">
+                    <!-- Bulk pricing tiers will be added here -->
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Stock Quantity</label>
+                        <input type="number" id="stockQuantity" class="form-input" min="0" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Low Stock Alert</label>
+                        <input type="number" id="lowStockThreshold" class="form-input" min="1" value="10">
+                        <div class="hint">Alert when stock falls below this number</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Minimum Order Quantity (MOQ)</label>
+                        <input type="number" id="moq" class="form-input" min="1" value="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Maximum Order Quantity</label>
+                        <input type="number" id="maxOrderQuantity" class="form-input" min="0">
+                        <div class="hint">0 for unlimited</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Lead Time (days)</label>
+                    <input type="number" id="leadTime" class="form-input" min="1" value="3">
+                    <div class="hint">Days needed to prepare the order</div>
+                </div>
+            </div>
+
+            <div class="form-navigation">
+                <button class="btn-secondary" id="backToStep1">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="btn-primary" id="continueToStep3">
+                    Continue to Images <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Images & Media -->
+        <div class="step-content" id="step3">
+            <div class="form-section">
+                <h2><i class="fas fa-images"></i> Product Images</h2>
+                
+                <div class="image-upload-container">
+                    <!-- Main Image Upload -->
+                    <div class="main-image-section">
+                        <label class="form-label required">Main Product Image</label>
+                        <div class="main-image-upload" id="mainImageUpload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload main image</p>
+                            <small>Recommended: 800x800px, JPG or PNG, Max 5MB</small>
+                            <input type="file" id="mainImage" accept="image/*" style="display: none;">
+                        </div>
+                        <div id="mainImagePreview" class="main-image-preview"></div>
+                    </div>
+
+                    <!-- Gallery Images -->
+                    <div class="gallery-section">
+                        <label class="form-label">Additional Images (Up to 5)</label>
+                        <div class="gallery-upload" id="galleryUpload">
+                            <i class="fas fa-images"></i>
+                            <p>Click to upload gallery images</p>
+                            <small>JPG, PNG, WebP • Max 2MB each</small>
+                            <input type="file" id="galleryImages" accept="image/*" multiple style="display: none;">
+                        </div>
+                        <div id="galleryPreview" class="gallery-preview"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-navigation">
+                <button class="btn-secondary" id="backToStep2">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="btn-primary" id="continueToStep4">
+                    Review Product <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 4: Review & Submit -->
+        <div class="step-content" id="step4">
+            <div class="form-section">
+                <h2><i class="fas fa-check-circle"></i> Review Product</h2>
+                
+                <div class="review-container" id="reviewContainer">
+                    <!-- Populated by JavaScript -->
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="acceptTerms">
+                    <label for="acceptTerms">I confirm that all information provided is accurate and I have the right to sell this product</label>
+                </div>
+            </div>
+
+            <div class="form-navigation">
+                <button class="btn-secondary" id="backToStep3">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="btn-primary" id="submitProduct">
+                    <i class="fas fa-cloud-upload-alt"></i> Submit Product
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="supplier-dashboard.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="supplier-products.html" class="nav-item active">
+            <i class="fas fa-box"></i>
+            <span>Products</span>
+        </a>
+        <a href="supplier-sponsored.html" class="nav-item">
+            <i class="fas fa-bullhorn"></i>
+            <span>Sponsored</span>
+        </a>
+        <a href="supplier-orders.html" class="nav-item">
+            <i class="fas fa-truck"></i>
+            <span>Orders</span>
+        </a>
+        <a href="supplier-profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Product Added Successfully!</h3>
+            <p>Your product has been listed and is now visible to buyers.</p>
+            <div class="modal-actions">
+                <a href="supplier-products.html" class="btn-primary">View My Products</a>
+                <a href="supplier-add-product.html" class="btn-secondary">Add Another Product</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Compression Modal -->
+    <div class="modal" id="compressionModal">
+        <div class="modal-content">
+            <h4>Processing Images</h4>
+            <div class="progress-bar">
+                <div class="progress-fill" id="compressionProgress"></div>
+            </div>
+            <p id="compressionStatus">Optimizing images...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p id="loadingMessage">Processing...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.17.9/dist/tagify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.0/dist/browser-image-compression.js"></script>
+    <script src="js/supplier-add-product.js"></script>
+</body>
+</html>

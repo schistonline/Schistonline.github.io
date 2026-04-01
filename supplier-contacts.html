@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iBlue B2B - Manage Contacts</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-contacts.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-circle">i</div>
+                <span>iBlue B2B</span>
+            </div>
+            <div class="nav-menu">
+                <a href="supplier-dashboard.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="supplier-products.html" class="nav-link">
+                    <i class="fas fa-box"></i> Products
+                </a>
+                <a href="supplier-orders.html" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i> Orders
+                </a>
+                <a href="supplier-contacts.html" class="nav-link active">
+                    <i class="fab fa-whatsapp"></i> Contacts
+                </a>
+                <a href="supplier-profile.html" class="nav-link">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+            </div>
+            <div class="nav-user">
+                <button class="btn-icon" id="notificationsBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </button>
+                <div class="user-dropdown">
+                    <img src="https://via.placeholder.com/40" alt="User" class="user-avatar">
+                    <span id="businessName">Loading...</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <h1><i class="fab fa-whatsapp" style="color: #25D366;"></i> Contact Management</h1>
+                <p>Manage your WhatsApp numbers and communication settings</p>
+            </div>
+            <button class="btn btn-primary" id="addWhatsAppBtn">
+                <i class="fas fa-plus"></i> Add WhatsApp Number
+            </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e8f5e8; color: #25D366;">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div class="stat-details">
+                    <span class="stat-label">Active WhatsApp Numbers</span>
+                    <span class="stat-value" id="activeWhatsappCount">0</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e3f2fd; color: #0B4F6C;">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="stat-details">
+                    <span class="stat-label">Conversations This Month</span>
+                    <span class="stat-value" id="conversationsCount">0</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #fff3e0; color: #F59E0B;">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-details">
+                    <span class="stat-label">Avg. Response Time</span>
+                    <span class="stat-value" id="avgResponseTime">0 min</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e8eaf6; color: #5C6BC0;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-details">
+                    <span class="stat-label">Response Rate</span>
+                    <span class="stat-value" id="responseRate">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- WhatsApp Numbers Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fab fa-whatsapp"></i> Your WhatsApp Numbers</h2>
+                    <div class="card-actions">
+                        <button class="btn-icon" id="refreshWhatsapp">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body" id="whatsappList">
+                    <!-- WhatsApp numbers will be loaded here -->
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+
+            <!-- Quick Stats & Auto-Reply Templates -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-reply-all"></i> Auto-Reply Templates</h2>
+                    <button class="btn btn-secondary btn-sm" id="addTemplateBtn">
+                        <i class="fas fa-plus"></i> New Template
+                    </button>
+                </div>
+                <div class="card-body" id="templatesList">
+                    <!-- Templates will be loaded here -->
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Conversations -->
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-history"></i> Recent WhatsApp Conversations</h2>
+                <a href="supplier-conversations.html" class="btn btn-secondary btn-sm">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="conversations-list" id="recentConversations">
+                    <!-- Conversations will be loaded here -->
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit WhatsApp Modal -->
+    <div class="modal" id="whatsappModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add WhatsApp Number</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="whatsappForm">
+                    <input type="hidden" id="editId">
+                    
+                    <div class="form-group">
+                        <label class="form-label required">WhatsApp Number</label>
+                        <div class="phone-input-container">
+                            <select class="country-code-select" id="modalCountryCode">
+                                <option value="+256">UG (+256)</option>
+                                <option value="+254">KE (+254)</option>
+                                <option value="+255">TZ (+255)</option>
+                                <option value="+250">RW (+250)</option>
+                                <option value="+257">BI (+257)</option>
+                                <option value="+211">SS (+211)</option>
+                            </select>
+                            <input type="tel" class="form-input" id="modalWhatsappNumber" 
+                                   placeholder="701234567" required>
+                        </div>
+                        <div class="error-message" id="modalWhatsappError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Label</label>
+                        <input type="text" class="form-input" id="modalLabel" 
+                               placeholder="e.g., Sales, Support, Orders" required>
+                    </div>
+
+                    <div class="row-2">
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <select class="form-select" id="modalDepartment">
+                                <option value="sales">Sales</option>
+                                <option value="support">Customer Support</option>
+                                <option value="orders">Orders</option>
+                                <option value="accounts">Accounts</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Display Name</label>
+                            <input type="text" class="form-input" id="modalDisplayName" 
+                                   placeholder="How you want to appear">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="modalIsPrimary"> 
+                            Set as primary WhatsApp number
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="modalAutoReply"> 
+                            Enable auto-reply
+                        </label>
+                    </div>
+
+                    <div class="form-group" id="autoReplyField" style="display: none;">
+                        <label class="form-label">Auto-Reply Message</label>
+                        <textarea class="form-textarea" id="modalAutoReplyMessage" 
+                                  rows="3" placeholder="Thank you for contacting us. We'll respond shortly."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Availability Hours</label>
+                        <div class="hours-grid">
+                            <div class="hour-row">
+                                <span>Weekdays:</span>
+                                <input type="text" class="form-input" id="modalWeekdayHours" 
+                                       placeholder="9:00 AM - 6:00 PM">
+                            </div>
+                            <div class="hour-row">
+                                <span>Weekends:</span>
+                                <input type="text" class="form-input" id="modalWeekendHours" 
+                                       placeholder="10:00 AM - 2:00 PM">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" id="saveWhatsappBtn">Save Number</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Template Modal -->
+    <div class="modal" id="templateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Reply Template</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="templateForm">
+                    <div class="form-group">
+                        <label class="form-label required">Template Title</label>
+                        <input type="text" class="form-input" id="templateTitle" 
+                               placeholder="e.g., Price Inquiry Response" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Message</label>
+                        <textarea class="form-textarea" id="templateMessage" 
+                                  rows="4" placeholder="Type your template message here..." required></textarea>
+                        <div class="hint">
+                            Use [Customer Name], [Product Name], [Price] as placeholders
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" id="templateCategory">
+                            <option value="greeting">Greeting</option>
+                            <option value="price">Price Inquiry</option>
+                            <option value="availability">Product Availability</option>
+                            <option value="order">Order Related</option>
+                            <option value="closing">Closing</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTemplateModal()">Cancel</button>
+                <button class="btn btn-primary" id="saveTemplateBtn">Save Template</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Delete</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this WhatsApp number?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/supplier-contacts.js"></script>
+</body>
+</html>

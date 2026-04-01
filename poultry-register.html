@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Register as Poultry Supplier | iBlue B2B</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Left Side - Branding */
+        .brand-side {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-side::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .brand-header {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 40px;
+        }
+
+        .brand-logo {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo i {
+            font-size: 48px;
+            color: #fbbf24;
+        }
+
+        .brand-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .brand-description {
+            font-size: 15px;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .feature-list {
+            list-style: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            animation: fadeIn 0.5s ease;
+            animation-fill-mode: both;
+        }
+
+        .feature-item:nth-child(1) { animation-delay: 0.1s; }
+        .feature-item:nth-child(2) { animation-delay: 0.2s; }
+        .feature-item:nth-child(3) { animation-delay: 0.3s; }
+        .feature-item:nth-child(4) { animation-delay: 0.4s; }
+        .feature-item:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .feature-item i {
+            width: 24px;
+            height: 24px;
+            background: rgba(251, 191, 36, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fbbf24;
+            font-size: 14px;
+        }
+
+        .testimonial {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 30px;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .testimonial-text::before {
+            content: '"';
+            font-size: 40px;
+            position: absolute;
+            left: -10px;
+            top: -20px;
+            opacity: 0.3;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            background: #fbbf24;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0B4F6C;
+            font-weight: 700;
+        }
+
+        .testimonial-info {
+            font-size: 13px;
+        }
+
+        .testimonial-name {
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .testimonial-role {
+            opacity: 0.7;
+            font-size: 11px;
+        }
+
+        .stats-mini {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-mini-item {
+            text-align: center;
+        }
+
+        .stat-mini-value {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            color: #fbbf24;
+        }
+
+        .stat-mini-label {
+            font-size: 11px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Right Side - Registration Form */
+        .form-side {
+            padding: 40px;
+            background: white;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .login-link {
+            color: #0B4F6C;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Session Alert */
+        .session-alert {
+            background: #dbeafe;
+            border: 1px solid #bfdbfe;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .session-alert.show {
+            display: block;
+        }
+
+        .session-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .session-icon {
+            width: 48px;
+            height: 48px;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .session-message {
+            flex: 1;
+            color: #1e40af;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .session-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .btn-sm {
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 35px;
+            right: 35px;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            border: 2px solid #e2e8f0;
+            color: #94a3b8;
+            transition: all 0.3s;
+        }
+
+        .progress-step.active {
+            border-color: #0B4F6C;
+            background: #0B4F6C;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed {
+            border-color: #10b981;
+            background: #10b981;
+            color: white;
+        }
+
+        .step-label {
+            position: absolute;
+            top: 40px;
+            font-size: 11px;
+            color: #64748b;
+            white-space: nowrap;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 500;
+        }
+
+        /* Form Steps */
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #334155;
+        }
+
+        label i {
+            color: #0B4F6C;
+            width: 20px;
+            margin-right: 4px;
+        }
+
+        .required::after {
+            content: '*';
+            color: #ef4444;
+            margin-left: 4px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 15px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            background: white;
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: #94a3b8;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #0B4F6C;
+            box-shadow: 0 0 0 4px rgba(11,79,108,0.1);
+        }
+
+        input.error, select.error {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        .error-message i {
+            font-size: 14px;
+        }
+
+        /* Password Strength */
+        .password-strength {
+            margin-top: 8px;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .strength-fill.weak { 
+            width: 33%; 
+            background: #ef4444; 
+        }
+        
+        .strength-fill.medium { 
+            width: 66%; 
+            background: #f59e0b; 
+        }
+        
+        .strength-fill.strong { 
+            width: 100%; 
+            background: #10b981; 
+        }
+
+        .strength-text {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Business Type Cards */
+        .business-type-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .type-card {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .type-card:hover {
+            border-color: #0B4F6C;
+            background: #f0f9ff;
+        }
+
+        .type-card.selected {
+            border-color: #0B4F6C;
+            background: #f0f9ff;
+            box-shadow: 0 4px 12px rgba(11,79,108,0.1);
+        }
+
+        .type-card i {
+            font-size: 24px;
+            color: #0B4F6C;
+            margin-bottom: 8px;
+        }
+
+        .type-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .type-card p {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        /* Terms Checkbox */
+        .terms-group {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: #0B4F6C;
+        }
+
+        .checkbox-text {
+            font-size: 13px;
+            color: #334155;
+            line-height: 1.5;
+        }
+
+        .checkbox-text a {
+            color: #0B4F6C;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .checkbox-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+            box-shadow: 0 8px 16px rgba(11,79,108,0.3);
+        }
+
+        .btn-primary:hover {
+            background: #0a4057;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(11,79,108,0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #334155;
+            border: 1.5px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert.show {
+            display: flex;
+            animation: slideDown 0.3s ease;
+        }
+
+        .alert i {
+            font-size: 20px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* Verification Box */
+        .verification-box {
+            text-align: center;
+            padding: 40px 30px;
+            background: #f8fafc;
+            border-radius: 24px;
+            margin: 20px 0;
+        }
+
+        .verification-icon {
+            width: 80px;
+            height: 80px;
+            background: #d1fae5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .verification-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
+
+        .verification-text {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .provider-code-box {
+            background: white;
+            border: 2px dashed #0B4F6C;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .provider-code-label {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .provider-code {
+            font-size: 32px;
+            font-weight: 800;
+            color: #0B4F6C;
+            letter-spacing: 2px;
+        }
+
+        .resend-link {
+            color: #0B4F6C;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: all 0.2s;
+        }
+
+        .resend-link:hover {
+            background: #f0f9ff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .register-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .brand-side {
+                display: none;
+            }
+            
+            .form-side {
+                padding: 30px 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .business-type-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .session-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .progress-bar::before {
+                left: 25px;
+                right: 25px;
+            }
+            
+            .step-label {
+                font-size: 10px;
+            }
+            
+            .provider-code {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <!-- Left Side - Branding -->
+        <div class="brand-side">
+            <div>
+                <div class="brand-header">
+                    <div class="brand-logo">
+                        <i class="fas fa-drumstick-bite"></i>
+                        <span>iBlue Poultry</span>
+                    </div>
+                    <div class="brand-title">
+                        Join Uganda's<br>Premier Poultry Network
+                    </div>
+                    <div class="brand-description">
+                        Connect with thousands of buyers looking for quality poultry. Showcase your birds, manage bookings, and grow your business.
+                    </div>
+                </div>
+
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <i class="fas fa-check"></i>
+                        <span>Showcase your birds with professional listings</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-check"></i>
+                        <span>Receive bookings directly from verified buyers</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-check"></i>
+                        <span>Manage batches, track inventory in real-time</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-check"></i>
+                        <span>Accept payments via mobile money, bank, or cash</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-check"></i>
+                        <span>Communicate via WhatsApp with customers</span>
+                    </li>
+                </ul>
+
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        Since joining iBlue Poultry, we've increased our sales by 200%. The dashboard makes it so easy to manage bookings and track our batches.
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">JM</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">John Mukasa</div>
+                            <div class="testimonial-role">Silver Links Poultry</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-mini">
+                <div class="stat-mini-item">
+                    <div class="stat-mini-value">500+</div>
+                    <div class="stat-mini-label">Suppliers</div>
+                </div>
+                <div class="stat-mini-item">
+                    <div class="stat-mini-value">50K+</div>
+                    <div class="stat-mini-label">Birds Sold</div>
+                </div>
+                <div class="stat-mini-item">
+                    <div class="stat-mini-value">4.8</div>
+                    <div class="stat-mini-label">Rating</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Registration Form -->
+        <div class="form-side">
+            <div class="form-header">
+                <h2>Create Supplier Account</h2>
+                <p>
+                    Already registered? 
+                    <a href="poultry-login.html" class="login-link">Sign in here</a>
+                </p>
+            </div>
+
+            <!-- Session Alert - Shows if already logged in -->
+            <div id="sessionAlert" class="session-alert">
+                <div class="session-content">
+                    <div class="session-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="session-message" id="sessionMessage">
+                        You're already logged in.
+                    </div>
+                </div>
+                <div class="session-buttons">
+                    <button class="btn btn-secondary btn-sm" onclick="continueToDashboard()">
+                        <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="continueRegistration()">
+                        <i class="fas fa-user-plus"></i> Register New
+                    </button>
+                </div>
+            </div>
+
+            <!-- Alert Messages -->
+            <div id="alertMessage" class="alert"></div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-step active" id="step1">1</div>
+                <div class="progress-step" id="step2">2</div>
+                <div class="progress-step" id="step3">3</div>
+                <div class="progress-step" id="step4">4</div>
+                <div class="step-label" style="left: 12%;">Account</div>
+                <div class="step-label" style="left: 37%;">Business</div>
+                <div class="step-label" style="left: 62%;">Poultry</div>
+                <div class="step-label" style="left: 87%;">Verify</div>
+            </div>
+
+            <!-- Step 1: Account Information -->
+            <div id="step1Form" class="form-step active">
+                <form id="accountForm" onsubmit="event.preventDefault(); validateStep1()">
+                    <div class="form-group">
+                        <label class="required"><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="email" placeholder="you@company.com" required>
+                        <div class="error-message" id="emailError">
+                            <i class="fas fa-exclamation-circle"></i> Please enter a valid email
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required"><i class="fas fa-lock"></i> Password</label>
+                            <input type="password" id="password" placeholder="••••••••" required>
+                            <div class="error-message" id="passwordError">
+                                <i class="fas fa-exclamation-circle"></i> At least 8 characters
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required"><i class="fas fa-lock"></i> Confirm Password</label>
+                            <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                            <div class="error-message" id="confirmError">
+                                <i class="fas fa-exclamation-circle"></i> Passwords do not match
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <div class="strength-text" id="strengthText">Enter a password</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required"><i class="fas fa-phone"></i> Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+256 712 345678" required>
+                        <div class="error-message" id="phoneError">
+                            <i class="fas fa-exclamation-circle"></i> Valid Ugandan phone required
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="step1Btn">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Step 2: Business Information -->
+            <div id="step2Form" class="form-step">
+                <form id="businessForm" onsubmit="event.preventDefault(); validateStep2()">
+                    <div class="form-group">
+                        <label class="required"><i class="fas fa-building"></i> Farm/Business Name</label>
+                        <input type="text" id="businessName" placeholder="e.g., Silver Links Poultry Farm" required>
+                        <div class="error-message" id="businessNameError">
+                            <i class="fas fa-exclamation-circle"></i> Business name is required
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required"><i class="fas fa-tag"></i> Business Type</label>
+                        <div class="business-type-grid">
+                            <div class="type-card" onclick="selectBusinessType('farm')" id="typeFarm">
+                                <i class="fas fa-tractor"></i>
+                                <h4>Poultry Farm</h4>
+                                <p>Breed and raise birds</p>
+                            </div>
+                            <div class="type-card" onclick="selectBusinessType('distributor')" id="typeDistributor">
+                                <i class="fas fa-truck"></i>
+                                <h4>Distributor</h4>
+                                <p>Buy and resell birds</p>
+                            </div>
+                            <div class="type-card" onclick="selectBusinessType('hatchery')" id="typeHatchery">
+                                <i class="fas fa-egg"></i>
+                                <h4>Hatchery</h4>
+                                <p>Day-old chicks</p>
+                            </div>
+                            <div class="type-card" onclick="selectBusinessType('processor')" id="typeProcessor">
+                                <i class="fas fa-utensils"></i>
+                                <h4>Processor</h4>
+                                <p>Processed poultry</p>
+                            </div>
+                        </div>
+                        <input type="hidden" id="businessType" value="">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required"><i class="fas fa-map-marker-alt"></i> District</label>
+                            <select id="district" required>
+                                <option value="">Select district</option>
+                                <option value="Kampala">Kampala</option>
+                                <option value="Wakiso">Wakiso</option>
+                                <option value="Mukono">Mukono</option>
+                                <option value="Jinja">Jinja</option>
+                                <option value="Mbarara">Mbarara</option>
+                                <option value="Gulu">Gulu</option>
+                                <option value="Mbale">Mbale</option>
+                                <option value="Masaka">Masaka</option>
+                                <option value="Arua">Arua</option>
+                                <option value="Lira">Lira</option>
+                                <option value="Entebbe">Entebbe</option>
+                            </select>
+                            <div class="error-message" id="districtError">
+                                <i class="fas fa-exclamation-circle"></i> Please select district
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> Year Established</label>
+                            <select id="yearEstablished">
+                                <option value="">Select year</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-globe"></i> Website (Optional)</label>
+                        <input type="url" id="website" placeholder="https://www.example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required"><i class="fas fa-id-card"></i> Business Registration</label>
+                        <input type="text" id="registrationNumber" placeholder="e.g., 80020001234567" required>
+                        <div class="error-message" id="registrationError">
+                            <i class="fas fa-exclamation-circle"></i> Registration number required
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-file-invoice"></i> Tax ID (TIN) (Optional)</label>
+                        <input type="text" id="taxId" placeholder="e.g., 1234567890">
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="goToStep1()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="step2Btn">
+                            Continue <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Poultry Details -->
+            <div id="step3Form" class="form-step">
+                <form id="poultryForm" onsubmit="event.preventDefault(); validateStep3()">
+                    <div class="form-group">
+                        <label class="required"><i class="fas fa-drumstick-bite"></i> Primary Poultry Type</label>
+                        <select id="primaryType" required>
+                            <option value="">Select type</option>
+                            <option value="Broilers">Broilers (meat)</option>
+                            <option value="Layers">Layers (eggs)</option>
+                            <option value="Cobb 500">Cobb 500</option>
+                            <option value="Ross">Ross</option>
+                            <option value="Kuroiler">Kuroiler</option>
+                            <option value="Local">Local breeds</option>
+                            <option value="Mixed">Mixed</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required"><i class="fas fa-weight-scale"></i> Avg Weight (kg)</label>
+                            <input type="number" id="avgWeight" value="2.0" step="0.1" min="0.5" max="10" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required"><i class="fas fa-clock"></i> Growing Period (weeks)</label>
+                            <input type="number" id="growingPeriod" value="6" min="2" max="52" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required"><i class="fas fa-syringe"></i> Vaccination Program</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" value="Newcastle" checked> Newcastle
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" value="Gumboro" checked> Gumboro
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" value="Fowl Pox"> Fowl Pox
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" value="Marek's"> Marek's
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-certificate"></i> Health Certifications</label>
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" value="vet_certified"> Veterinary Certified
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" value="organic"> Organic
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" value="antibiotic_free"> Antibiotic-free
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-comment"></i> Farm Description</label>
+                        <textarea id="farmDescription" rows="3" placeholder="Tell buyers about your farm, your practices, and what makes your poultry special..."></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="goToStep2()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="step3Btn">
+                            Continue <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 4: Verification -->
+            <div id="step4Form" class="form-step">
+                <form id="verificationForm" onsubmit="event.preventDefault(); registerSupplier()">
+                    <div class="terms-group">
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="termsAccepted" required>
+                            <div class="checkbox-text">
+                                I confirm that all information provided is accurate and I agree to the 
+                                <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                                I understand that my account will be verified before going live.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="terms-group">
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="whatsappConsent" checked>
+                            <div class="checkbox-text">
+                                I agree to receive booking notifications via WhatsApp on the number provided.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-image"></i> Upload Farm Photo (Optional)</label>
+                        <div class="image-upload-area" onclick="document.getElementById('farmPhoto').click()" style="border: 2px dashed #e2e8f0; border-radius: 14px; padding: 20px; text-align: center; cursor: pointer;">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 32px; color: #94a3b8; margin-bottom: 8px;"></i>
+                            <p>Click to upload farm photo</p>
+                            <p style="font-size: 11px; color: #94a3b8;">PNG, JPG up to 5MB</p>
+                            <input type="file" id="farmPhoto" accept="image/*" style="display: none;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="registerBtn">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+
+                    <p style="text-align: center; margin-top: 16px; font-size: 12px; color: #94a3b8;">
+                        <i class="fas fa-shield-alt"></i> Your information is secure and encrypted
+                    </p>
+                </form>
+            </div>
+
+            <!-- Verification Success Screen -->
+            <div id="verificationScreen" style="display: none;">
+                <div class="verification-box">
+                    <div class="verification-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="verification-title">Registration Successful!</div>
+                    <div class="verification-text" id="verificationEmail">
+                        We've sent a verification link to your email. Please check your inbox and click the link to activate your account.
+                    </div>
+                    
+                    <div class="provider-code-box">
+                        <div class="provider-code-label">Your Provider Code</div>
+                        <div class="provider-code" id="providerCodeDisplay">SL-001</div>
+                    </div>
+
+                    <div style="background: #f1f5f9; border-radius: 14px; padding: 16px; margin: 20px 0; text-align: left;">
+                        <p style="margin-bottom: 8px; font-weight: 600;">📋 Next Steps:</p>
+                        <ul style="list-style: none; font-size: 13px; color: #475569;">
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check-circle" style="color: #10b981;"></i> Check your email and verify</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check-circle" style="color: #94a3b8;"></i> Login to your dashboard</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check-circle" style="color: #94a3b8;"></i> Create your first poultry batch</li>
+                            <li><i class="fas fa-check-circle" style="color: #94a3b8;"></i> Start receiving bookings!</li>
+                        </ul>
+                    </div>
+
+                    <a href="poultry-login.html" class="btn btn-primary" style="text-decoration: none;">
+                        <i class="fas fa-sign-in-alt"></i> Go to Login
+                    </a>
+
+                    <a class="resend-link" onclick="resendVerification()" style="margin-top: 16px; display: inline-block;">
+                        <i class="fas fa-redo-alt"></i> Resend verification email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast" style="position: fixed; bottom: 30px; left: 20px; right: 20px; background: #0f172a; color: white; padding: 16px; border-radius: 30px; text-align: center; transform: translateY(100px); opacity: 0; transition: all 0.3s; z-index: 2000; max-width: 400px; margin: 0 auto;"></div>
+
+    <script>
+        // ============================================
+        // SUPABASE CONFIG
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE
+        // ============================================
+        let currentStep = 1;
+        let currentUser = null;
+        let selectedBusinessType = '';
+        let formData = {
+            email: '',
+            password: '',
+            phone: '',
+            businessName: '',
+            businessType: '',
+            district: '',
+            yearEstablished: '',
+            website: '',
+            registrationNumber: '',
+            taxId: '',
+            primaryType: '',
+            avgWeight: 2.0,
+            growingPeriod: 6,
+            vaccinations: [],
+            certifications: [],
+            farmDescription: '',
+            termsAccepted: false,
+            whatsappConsent: true
+        };
+
+        // ============================================
+        // INIT
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            populateYearOptions();
+            setupPasswordStrength();
+            checkExistingSession();
+        });
+
+        function populateYearOptions() {
+            const select = document.getElementById('yearEstablished');
+            const currentYear = new Date().getFullYear();
+            
+            for (let year = currentYear; year >= currentYear - 50; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                select.appendChild(option);
+            }
+        }
+
+        // ============================================
+        // SESSION CHECK
+        // ============================================
+        async function checkExistingSession() {
+            try {
+                const { data: { session } } = await sb.auth.getSession();
+                
+                if (session) {
+                    currentUser = session.user;
+                    
+                    const { data: supplier } = await sb
+                        .from('poultry_suppliers')
+                        .select('company_name')
+                        .eq('profile_id', session.user.id)
+                        .single();
+                    
+                    const sessionAlert = document.getElementById('sessionAlert');
+                    const sessionMessage = document.getElementById('sessionMessage');
+                    
+                    if (supplier) {
+                        sessionMessage.innerHTML = `You're already registered as <strong>${supplier.company_name}</strong>. You can manage your account from the dashboard.`;
+                    } else {
+                        sessionMessage.innerHTML = `You're logged in as <strong>${session.user.email}</strong>. You can register a new poultry supplier account below.`;
+                        document.getElementById('email').value = session.user.email;
+                        document.getElementById('email').readOnly = true;
+                        document.getElementById('email').style.backgroundColor = '#f8fafc';
+                    }
+                    
+                    sessionAlert.classList.add('show');
+                }
+            } catch (error) {
+                console.error('Session check error:', error);
+            }
+        }
+
+        function continueToDashboard() {
+            window.location.href = 'poultry-dashboard.html';
+        }
+
+        function continueRegistration() {
+            document.getElementById('sessionAlert').classList.remove('show');
+        }
+
+        // ============================================
+        // STEP NAVIGATION
+        // ============================================
+        function goToStep1() {
+            updateStep(1);
+        }
+
+        function goToStep2() {
+            updateStep(2);
+        }
+
+        function goToStep3() {
+            updateStep(3);
+        }
+
+        function updateStep(step) {
+            currentStep = step;
+            
+            // Hide all forms
+            document.querySelectorAll('.form-step').forEach(form => form.classList.remove('active'));
+            
+            // Show current form
+            document.getElementById(`step${step}Form`).classList.add('active');
+            
+            // Update progress steps
+            for (let i = 1; i <= 4; i++) {
+                const stepEl = document.getElementById(`step${i}`);
+                if (i < step) {
+                    stepEl.classList.add('completed');
+                    stepEl.classList.remove('active');
+                } else if (i === step) {
+                    stepEl.classList.add('active');
+                    stepEl.classList.remove('completed');
+                } else {
+                    stepEl.classList.remove('active', 'completed');
+                }
+            }
+        }
+
+        // ============================================
+        // STEP 1 VALIDATION
+        // ============================================
+        function validateStep1() {
+            let isValid = true;
+            
+            // Email validation
+            const email = document.getElementById('email').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(email)) {
+                showError('email', 'emailError');
+                isValid = false;
+            } else {
+                hideError('email', 'emailError');
+                formData.email = email;
+            }
+            
+            // Password validation
+            const password = document.getElementById('password').value;
+            if (password.length < 8) {
+                showError('password', 'passwordError');
+                isValid = false;
+            } else {
+                hideError('password', 'passwordError');
+                formData.password = password;
+            }
+            
+            // Confirm password
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (password !== confirmPassword) {
+                showError('confirmPassword', 'confirmError');
+                isValid = false;
+            } else {
+                hideError('confirmPassword', 'confirmError');
+            }
+            
+            // Phone validation (Ugandan format)
+            const phone = document.getElementById('phone').value.trim();
+            const phoneRegex = /^(\+256|0)[0-9]{9}$/;
+            
+            if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
+                showError('phone', 'phoneError');
+                isValid = false;
+            } else {
+                hideError('phone', 'phoneError');
+                formData.phone = phone;
+            }
+            
+            if (isValid) {
+                updateStep(2);
+            }
+            
+            return isValid;
+        }
+
+        // ============================================
+        // STEP 2 VALIDATION
+        // ============================================
+        function validateStep2() {
+            let isValid = true;
+            
+            // Business name
+            const businessName = document.getElementById('businessName').value.trim();
+            if (!businessName) {
+                showError('businessName', 'businessNameError');
+                isValid = false;
+            } else {
+                hideError('businessName', 'businessNameError');
+                formData.businessName = businessName;
+            }
+            
+            // Business type
+            if (!selectedBusinessType) {
+                showToast('Please select a business type', 'error');
+                isValid = false;
+            } else {
+                formData.businessType = selectedBusinessType;
+            }
+            
+            // District
+            const district = document.getElementById('district').value;
+            if (!district) {
+                showError('district', 'districtError');
+                isValid = false;
+            } else {
+                hideError('district', 'districtError');
+                formData.district = district;
+            }
+            
+            // Registration number
+            const regNumber = document.getElementById('registrationNumber').value.trim();
+            if (!regNumber) {
+                showError('registrationNumber', 'registrationError');
+                isValid = false;
+            } else {
+                hideError('registrationNumber', 'registrationError');
+                formData.registrationNumber = regNumber;
+            }
+            
+            // Optional fields
+            formData.yearEstablished = document.getElementById('yearEstablished').value;
+            formData.website = document.getElementById('website').value.trim();
+            formData.taxId = document.getElementById('taxId').value.trim();
+            
+            if (isValid) {
+                updateStep(3);
+            }
+            
+            return isValid;
+        }
+
+        // ============================================
+        // STEP 3 VALIDATION
+        // ============================================
+        function validateStep3() {
+            let isValid = true;
+            
+            const primaryType = document.getElementById('primaryType').value;
+            if (!primaryType) {
+                showToast('Please select primary poultry type', 'error');
+                isValid = false;
+            } else {
+                formData.primaryType = primaryType;
+            }
+            
+            formData.avgWeight = document.getElementById('avgWeight').value;
+            formData.growingPeriod = document.getElementById('growingPeriod').value;
+            
+            // Get vaccinations
+            formData.vaccinations = [];
+            document.querySelectorAll('#step3Form input[type="checkbox"]:checked').forEach(cb => {
+                formData.vaccinations.push(cb.value);
+            });
+            
+            formData.farmDescription = document.getElementById('farmDescription').value;
+            
+            if (isValid) {
+                updateStep(4);
+            }
+            
+            return isValid;
+        }
+
+        // ============================================
+        // BUSINESS TYPE SELECTION
+        // ============================================
+        function selectBusinessType(type) {
+            selectedBusinessType = type;
+            formData.businessType = type;
+            
+            // Update UI
+            document.querySelectorAll('.type-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            document.getElementById(`type${type.charAt(0).toUpperCase() + type.slice(1)}`).classList.add('selected');
+        }
+
+        // ============================================
+        // PASSWORD STRENGTH
+        // ============================================
+        function setupPasswordStrength() {
+            const passwordInput = document.getElementById('password');
+            
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                const strength = calculatePasswordStrength(password);
+                updateStrengthIndicator(strength);
+            });
+        }
+
+        function calculatePasswordStrength(password) {
+            if (!password) return 0;
+            
+            let score = 0;
+            
+            if (password.length >= 8) score += 1;
+            if (password.length >= 12) score += 1;
+            if (/[a-z]/.test(password)) score += 1;
+            if (/[A-Z]/.test(password)) score += 1;
+            if (/[0-9]/.test(password)) score += 1;
+            if (/[^a-zA-Z0-9]/.test(password)) score += 1;
+            
+            return Math.min(score, 5);
+        }
+
+        function updateStrengthIndicator(score) {
+            const fill = document.getElementById('strengthFill');
+            const text = document.getElementById('strengthText');
+            
+            fill.className = 'strength-fill';
+            
+            if (score <= 2) {
+                fill.classList.add('weak');
+                text.textContent = 'Weak password';
+            } else if (score <= 4) {
+                fill.classList.add('medium');
+                text.textContent = 'Medium password';
+            } else {
+                fill.classList.add('strong');
+                text.textContent = 'Strong password';
+            }
+        }
+
+        // ============================================
+        // MAIN REGISTRATION
+        // ============================================
+        async function registerSupplier() {
+            if (!document.getElementById('termsAccepted').checked) {
+                showToast('Please accept the Terms of Service', 'error');
+                return;
+            }
+            
+            const registerBtn = document.getElementById('registerBtn');
+            const originalText = registerBtn.innerHTML;
+            registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            registerBtn.disabled = true;
+            
+            try {
+                // Generate provider code
+                const providerCode = generateProviderCode(formData.businessName);
+                
+                // Create auth user (if not already logged in)
+                let userId = currentUser?.id;
+                
+                if (!userId) {
+                    const { data: authData, error: authError } = await sb.auth.signUp({
+                        email: formData.email,
+                        password: formData.password,
+                        options: {
+                            data: {
+                                full_name: formData.businessName,
+                                phone: formData.phone,
+                                user_type: 'poultry_supplier'
+                            }
+                        }
+                    });
+                    
+                    if (authError) throw authError;
+                    userId = authData.user.id;
+                }
+                
+                // Create poultry supplier record
+                const { error: supplierError } = await sb
+                    .from('poultry_suppliers')
+                    .insert({
+                        profile_id: userId,
+                        company_name: formData.businessName,
+                        business_type: formData.businessType,
+                        phone: formData.phone,
+                        whatsapp_number: formData.whatsappConsent ? formData.phone : null,
+                        email: formData.email,
+                        website: formData.website || null,
+                        district: formData.district,
+                        year_established: formData.yearEstablished ? parseInt(formData.yearEstablished) : null,
+                        license_number: formData.registrationNumber,
+                        tax_id: formData.taxId || null,
+                        description: formData.farmDescription,
+                        primary_poultry: formData.primaryType,
+                        avg_weight: parseFloat(formData.avgWeight),
+                        growing_period: parseInt(formData.growingPeriod),
+                        vaccination_status: formData.vaccinations,
+                        health_certified: formData.certifications.includes('vet_certified'),
+                        is_active: true,
+                        verification_status: 'pending',
+                        created_at: new Date().toISOString()
+                    });
+                
+                if (supplierError) {
+                    if (supplierError.code === '23505') {
+                        throw new Error('A supplier with this email already exists');
+                    }
+                    throw supplierError;
+                }
+                
+                // Show success
+                showVerificationScreen(formData.email, providerCode);
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                showToast(error.message || 'Registration failed', 'error');
+                registerBtn.innerHTML = originalText;
+                registerBtn.disabled = false;
+            }
+        }
+
+        function generateProviderCode(companyName) {
+            const clean = companyName
+                .replace(/[^a-zA-Z0-9]/g, '')
+                .substring(0, 4)
+                .toUpperCase();
+            
+            const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            
+            return clean + random;
+        }
+
+        function showVerificationScreen(email, providerCode) {
+            document.querySelectorAll('.form-step').forEach(form => form.style.display = 'none');
+            document.querySelector('.progress-bar').style.display = 'none';
+            document.getElementById('verificationScreen').style.display = 'block';
+            
+            document.getElementById('verificationEmail').innerHTML = 
+                `We've sent a verification link to <strong>${email}</strong>. Please check your inbox and click the link to activate your account.`;
+            
+            document.getElementById('providerCodeDisplay').textContent = providerCode;
+        }
+
+        async function resendVerification() {
+            try {
+                await sb.auth.resend({
+                    type: 'signup',
+                    email: formData.email
+                });
+                showToast('Verification email resent!', 'success');
+            } catch (error) {
+                showToast('Failed to resend', 'error');
+            }
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function showError(inputId, errorId) {
+            document.getElementById(inputId).classList.add('error');
+            document.getElementById(errorId).classList.add('show');
+        }
+
+        function hideError(inputId, errorId) {
+            document.getElementById(inputId).classList.remove('error');
+            document.getElementById(errorId).classList.remove('show');
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+            toast.className = `toast show ${type}`;
+            toast.style.transform = 'translateY(0)';
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateY(100px)';
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

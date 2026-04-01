@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover" />
+  <title>SourceX B2B • Business Sign In</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #6B21E5;
+      --primary-dark: #4A0D9C;
+      --primary-light: #9B4DFF;
+      --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+      --secondary: #10B981;
+      --accent: #F59E0B;
+      --danger: #EF4444;
+      --dark: #1F2937;
+      --gray-700: #374151;
+      --gray-500: #6B7280;
+      --gray-300: #D1D5DB;
+      --gray-200: #E5E7EB;
+      --white: #FFFFFF;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      padding: 16px;
+      background-attachment: fixed;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 2rem 1.8rem;
+      border-radius: 32px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    /* Logo Section */
+    .logo-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo-cube {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      perspective: 800px;
+    }
+
+    .logo-cube .cube {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transform: rotateX(18deg) rotateY(28deg);
+      transition: transform 0.3s ease;
+    }
+
+    .logo-cube:hover .cube {
+      transform: rotateX(28deg) rotateY(38deg);
+    }
+
+    .logo-cube .face {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      background: var(--primary-gradient);
+      box-shadow: inset 0 0 15px rgba(107, 33, 229, 0.5), 0 0 10px rgba(155, 77, 255, 0.3);
+      border-radius: 8px;
+    }
+
+    .logo-cube .front {
+      transform: translateZ(24px);
+      background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+    }
+
+    .logo-cube .right {
+      transform: rotateY(90deg) translateZ(24px);
+      background: linear-gradient(135deg, #4A0D9C, #6B21E5);
+    }
+
+    .logo-cube .top {
+      transform: rotateX(90deg) translateZ(24px);
+      background: linear-gradient(135deg, #9B4DFF, #B47BFF);
+    }
+
+    .logo-text {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .logo-text span {
+      background: linear-gradient(135deg, #9B4DFF, #B47BFF);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .b2b-badge {
+      background: var(--primary-gradient);
+      color: white;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    .brand-tag {
+      font-size: 0.95rem;
+      color: var(--gray-500);
+      margin-bottom: 2rem;
+      border-bottom: 1.5px solid rgba(107, 33, 229, 0.12);
+      padding-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .brand-tag i {
+      color: var(--primary);
+    }
+
+    .redirect-message {
+      background: #EFF6FF;
+      color: var(--primary);
+      padding: 12px 16px;
+      border-radius: 40px;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      text-align: center;
+      border-left: 4px solid var(--primary);
+      display: none;
+    }
+
+    .redirect-message.show {
+      display: block;
+    }
+
+    .redirect-message i {
+      margin-right: 8px;
+    }
+
+    .success-message {
+      background: #E7F5E8;
+      color: var(--secondary);
+      padding: 12px 16px;
+      border-radius: 40px;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      text-align: center;
+      border-left: 4px solid var(--secondary);
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 18px;
+      margin-bottom: 1rem;
+      border-radius: 18px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white);
+      font-size: 1rem;
+      line-height: 1.4;
+      color: var(--dark);
+      transition: border 0.15s, box-shadow 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      outline: 0;
+      box-shadow: 0 0 0 4px rgba(107, 33, 229, 0.12);
+    }
+
+    input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 50px white inset;
+      -webkit-text-fill-color: var(--dark);
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 0 5px;
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      margin-bottom: 0;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .remember-me label {
+      font-size: 0.95rem;
+      color: var(--gray-700);
+      cursor: pointer;
+      font-weight: 500;
+      user-select: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px 18px;
+      border: none;
+      border-radius: 40px;
+      font-size: 1.06rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.3px;
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 10px 18px -8px rgba(107, 33, 229, 0.4);
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    button:active {
+      transform: scale(0.98);
+      box-shadow: 0 5px 12px -6px rgba(107, 33, 229, 0.5);
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .auth-links {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1.2rem 0 0;
+      font-size: 0.95rem;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .auth-links a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 0;
+      transition: color 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+
+    .auth-links a:hover {
+      color: var(--primary-dark);
+      border-bottom-color: var(--primary);
+    }
+
+    .auth-links .register-link {
+      background: rgba(107, 33, 229, 0.08);
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-weight: 600;
+    }
+
+    .auth-links .register-link:hover {
+      background: rgba(107, 33, 229, 0.15);
+      border-bottom: none;
+    }
+
+    .business-tip {
+      background: #F3F4F6;
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin: 1.5rem 0 0.5rem;
+      font-size: 0.85rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(107, 33, 229, 0.15);
+    }
+
+    .business-tip i {
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .msg {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: none;
+      transition: opacity 0.2s;
+      line-height: 1.4;
+    }
+
+    .msg.show {
+      display: block;
+    }
+
+    .msg.error {
+      background: #FEF2F2;
+      color: #991B1B;
+      border-left: 6px solid var(--danger);
+    }
+
+    .msg.info {
+      background: #EFF6FF;
+      color: var(--primary);
+      border-left: 6px solid var(--primary);
+    }
+
+    .msg.success {
+      background: #E7F5E8;
+      color: var(--secondary);
+      border-left: 6px solid var(--secondary);
+    }
+
+    .demo-credentials {
+      background: #FEF3C7;
+      border: 1px solid #FDE68A;
+      border-radius: 16px;
+      padding: 12px;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #92400E;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-credentials i {
+      color: var(--accent);
+    }
+
+    @media (max-width: 400px) {
+      .card { padding: 1.5rem; }
+      .logo-text { font-size: 24px; }
+      .logo-cube { width: 40px; height: 40px; }
+      .logo-cube .face { width: 40px; height: 40px; }
+      .logo-cube .front { transform: translateZ(20px); }
+      .logo-cube .right { transform: rotateY(90deg) translateZ(20px); }
+      .logo-cube .top { transform: rotateX(90deg) translateZ(20px); }
+    }
+
+    button, input {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible, input:focus-visible, a:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- 3D Cube Logo -->
+    <div class="logo-section">
+      <div class="logo-cube">
+        <div class="cube">
+          <div class="face front"></div>
+          <div class="face right"></div>
+          <div class="face top"></div>
+        </div>
+      </div>
+      <span class="logo-text">Source<span>X</span></span>
+    </div>
+    
+    <div class="b2b-badge">BUSINESS MARKETPLACE • UGANDA</div>
+    
+    <div class="brand-tag">
+      <i class="fas fa-handshake"></i>
+      <span>Connect. Source. Grow.</span>
+    </div>
+    
+    <!-- Redirect Message (shown when user came from a protected page) -->
+    <div id="redirectMessage" class="redirect-message">
+      <i class="fas fa-info-circle"></i>
+      <span id="redirectMessageText">Please sign in to continue</span>
+    </div>
+
+    <!-- Success Message (shown after registration) -->
+    <div id="successMessage" class="success-message">
+      <i class="fas fa-check-circle"></i>
+      <span id="successMessageText">Account created! Please check your email to verify.</span>
+    </div>
+    
+    <input id="email" type="email" placeholder="Business email address" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" />
+    <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+    
+    <div class="remember-me">
+      <input type="checkbox" id="rememberMe" checked>
+      <label for="rememberMe">Keep me signed in on this device</label>
+    </div>
+    
+    <button id="loginBtn">
+      <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+      Sign in to SourceX
+    </button>
+    
+    <!-- Auth Links -->
+    <div class="auth-links">
+      <a href="forgot-password.html" class="forgot-link">
+        <i class="fas fa-lock" style="margin-right: 4px;"></i>
+        Forgot password?
+      </a>
+      <a href="register.html" class="register-link">
+        Create Business Account <i class="fas fa-arrow-right" style="margin-left: 4px;"></i>
+      </a>
+    </div>
+
+    <!-- Business Tip -->
+    <div class="business-tip">
+      <i class="fas fa-briefcase"></i>
+      <div>
+        <strong>B2B Access:</strong> Source products in bulk, manage orders, connect with verified suppliers
+      </div>
+    </div>
+
+    <!-- Demo Credentials (for testing) -->
+    <div class="demo-credentials">
+      <i class="fas fa-flask"></i>
+      <div>
+        <strong>Demo Credentials:</strong> buyer@sourcex.com / any password | supplier@sourcex.com / any password
+      </div>
+    </div>
+    
+    <div id="msg" class="msg" role="status"></div>
+  </div>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (function() {
+      "use strict";
+
+      // ============================================
+      // SUPABASE CONFIGURATION
+      // ============================================
+      const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+      
+      // ============================================
+      // CONSTANTS & CONFIG
+      // ============================================
+      const STORAGE_KEYS = {
+        SAVED_EMAIL: 'sourcex_saved_email',
+        REMEMBER_ME: 'sourcex_remember_me',
+        SESSION_EXPIRY: 'sourcex_session_expiry',
+        INTENDED_PAGE: 'sourcex_intended_page'
+      };
+
+      // Dashboard URLs based on user role
+      const DASHBOARD_URLS = {
+        BUYER: 'buyer-dashboard.html',
+        SUPPLIER: 'supplier-dashboard.html',
+        ADMIN: 'admin-dashboard.html',
+        DEFAULT: 'index.html'
+      };
+
+      // Demo credentials (for testing only - remove in production)
+      const DEMO_USERS = [
+        { email: 'buyer@sourcex.com', role: 'buyer' },
+        { email: 'supplier@sourcex.com', role: 'supplier' }
+      ];
+
+      // ============================================
+      // DOM ELEMENTS
+      // ============================================
+      const msgEl = document.getElementById('msg');
+      const redirectMessageEl = document.getElementById('redirectMessage');
+      const redirectMessageText = document.getElementById('redirectMessageText');
+      const successMessageEl = document.getElementById('successMessage');
+      const successMessageText = document.getElementById('successMessageText');
+      const loginBtn = document.getElementById('loginBtn');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const rememberMeCheckbox = document.getElementById('rememberMe');
+
+      // ============================================
+      // INITIALIZE SUPABASE CLIENT
+      // ============================================
+      let sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true
+        }
+      });
+
+      // ============================================
+      // HELPER FUNCTIONS
+      // ============================================
+      function showMessage(text, type = 'error') {
+        if (!msgEl) return;
+        msgEl.textContent = text;
+        msgEl.className = 'msg show ' + type;
+        
+        setTimeout(() => {
+          msgEl.classList.remove('show');
+        }, 5000);
+      }
+
+      function showSuccessMessage(text) {
+        if (!successMessageEl || !successMessageText) return;
+        successMessageText.textContent = text;
+        successMessageEl.classList.add('show');
+        
+        setTimeout(() => {
+          successMessageEl.classList.remove('show');
+        }, 5000);
+      }
+
+      function validateEmail(email) {
+        return /^\S+@\S+\.\S+$/.test(email);
+      }
+
+      function getPageNameFromUrl(url) {
+        if (!url) return 'dashboard';
+        const fileName = url.split('/').pop().replace('.html', '');
+        return fileName
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      }
+
+      // ============================================
+      // REDIRECT HANDLING
+      // ============================================
+      function getIntendedRedirect() {
+        // Check URL parameters first
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectParam = urlParams.get('redirect');
+        
+        if (redirectParam) {
+          // Store it for later use
+          sessionStorage.setItem(STORAGE_KEYS.INTENDED_PAGE, redirectParam);
+          return redirectParam;
+        }
+        
+        // Check session storage
+        return sessionStorage.getItem(STORAGE_KEYS.INTENDED_PAGE);
+      }
+
+      function showRedirectMessage(redirectUrl) {
+        if (!redirectUrl || !redirectMessageEl || !redirectMessageText) return;
+        
+        const pageName = getPageNameFromUrl(redirectUrl);
+        redirectMessageText.innerHTML = `🔒 Please sign in to access <strong>${pageName}</strong>`;
+        redirectMessageEl.classList.add('show');
+      }
+
+      function clearIntendedRedirect() {
+        sessionStorage.removeItem(STORAGE_KEYS.INTENDED_PAGE);
+      }
+
+      // ============================================
+      // GET USER ROLE AND DASHBOARD URL
+      // ============================================
+      async function getUserDashboardUrl(userId) {
+        try {
+          // Get user profile to check role
+          const { data: profile, error } = await sb
+            .from('profiles')
+            .select('is_supplier, is_admin, admin_role')
+            .eq('id', userId)
+            .single();
+
+          if (error) {
+            console.error('Error fetching profile:', error);
+            return DASHBOARD_URLS.DEFAULT;
+          }
+
+          // Check admin first
+          if (profile?.is_admin) {
+            return DASHBOARD_URLS.ADMIN;
+          }
+
+          // Then supplier
+          if (profile?.is_supplier) {
+            return DASHBOARD_URLS.SUPPLIER;
+          }
+
+          // Default to buyer dashboard
+          return DASHBOARD_URLS.BUYER;
+
+        } catch (error) {
+          console.error('Error determining user role:', error);
+          return DASHBOARD_URLS.DEFAULT;
+        }
+      }
+
+      // ============================================
+      // HANDLE SUCCESSFUL LOGIN
+      // ============================================
+      async function handleSuccessfulLogin(user) {
+        try {
+          // Get the intended redirect URL
+          let redirectUrl = getIntendedRedirect();
+          
+          // If no specific redirect, go to role-based dashboard
+          if (!redirectUrl) {
+            redirectUrl = await getUserDashboardUrl(user.id);
+          }
+
+          // Clear the stored redirect
+          clearIntendedRedirect();
+
+          // Save session expiry if remember me is checked
+          if (rememberMeCheckbox.checked) {
+            const expiresAt = new Date();
+            expiresAt.setDate(expiresAt.getDate() + 30); // 30 days
+            localStorage.setItem(STORAGE_KEYS.SESSION_EXPIRY, expiresAt.toISOString());
+            localStorage.setItem(STORAGE_KEYS.SAVED_EMAIL, emailInput.value.trim());
+            localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'true');
+          } else {
+            localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'false');
+          }
+
+          // Show success message
+          const pageName = getPageNameFromUrl(redirectUrl);
+          showMessage(`✓ Login successful! Redirecting to ${pageName}...`, 'success');
+
+          // Redirect after brief delay
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 1500);
+
+        } catch (error) {
+          console.error('Error in post-login handling:', error);
+          window.location.href = DASHBOARD_URLS.DEFAULT;
+        }
+      }
+
+      // ============================================
+      // LOGIN HANDLER
+      // ============================================
+      async function loginHandler(e) {
+        e.preventDefault();
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+        const rememberMe = rememberMeCheckbox.checked;
+
+        // Validation
+        if (!email) {
+          showMessage('📧 Email is required', 'error');
+          emailInput.focus();
+          return;
+        }
+
+        if (!password) {
+          showMessage('🔒 Password is required', 'error');
+          passwordInput.focus();
+          return;
+        }
+
+        if (!validateEmail(email)) {
+          showMessage('Please enter a valid email address', 'error');
+          emailInput.focus();
+          return;
+        }
+
+        // Disable button
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i> Signing in...';
+
+        try {
+          // Attempt login
+          const { data, error } = await sb.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+          if (error) {
+            // Check for demo credentials (optional - remove in production)
+            if (email === 'buyer@sourcex.com' || email === 'supplier@sourcex.com') {
+              // For demo, redirect based on email
+              const redirectUrl = email === 'supplier@sourcex.com' 
+                ? DASHBOARD_URLS.SUPPLIER 
+                : DASHBOARD_URLS.BUYER;
+              
+              showMessage(`✓ Demo login successful! Redirecting...`, 'success');
+              setTimeout(() => window.location.href = redirectUrl, 1500);
+              return;
+            }
+
+            // Handle specific error messages
+            if (error.message.includes('Invalid login credentials')) {
+              showMessage('Invalid email or password', 'error');
+            } else if (error.message.includes('Email not confirmed')) {
+              showMessage('Please verify your email first. Check your inbox.', 'info');
+            } else {
+              showMessage(error.message, 'error');
+            }
+
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to SourceX';
+            return;
+          }
+
+          // Login successful
+          if (data?.user) {
+            await handleSuccessfulLogin(data.user);
+          }
+
+        } catch (err) {
+          console.error('Login error:', err);
+          showMessage('Network error. Please try again.', 'error');
+          loginBtn.disabled = false;
+          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to SourceX';
+        }
+      }
+
+      // ============================================
+      // CHECK EXISTING SESSION
+      // ============================================
+      async function checkExistingSession() {
+        try {
+          const { data: { session }, error } = await sb.auth.getSession();
+
+          if (error) {
+            console.error('Session check error:', error);
+            return;
+          }
+
+          if (session?.user) {
+            // Check if session is expired based on remember me setting
+            const rememberMe = localStorage.getItem(STORAGE_KEYS.REMEMBER_ME) === 'true';
+            
+            if (rememberMe) {
+              const expiryStr = localStorage.getItem(STORAGE_KEYS.SESSION_EXPIRY);
+              if (expiryStr) {
+                const expiryDate = new Date(expiryStr);
+                if (new Date() > expiryDate) {
+                  // Session expired
+                  await sb.auth.signOut();
+                  localStorage.removeItem(STORAGE_KEYS.SAVED_EMAIL);
+                  localStorage.removeItem(STORAGE_KEYS.SESSION_EXPIRY);
+                  return;
+                }
+              }
+            }
+
+            // User is already logged in, check for redirect
+            const redirectUrl = getIntendedRedirect();
+            
+            if (redirectUrl) {
+              clearIntendedRedirect();
+              showMessage('✓ You are already logged in. Redirecting...', 'success');
+              setTimeout(() => window.location.href = redirectUrl, 1500);
+            } else {
+              // Redirect to role-appropriate dashboard
+              const dashboardUrl = await getUserDashboardUrl(session.user.id);
+              window.location.href = dashboardUrl;
+            }
+          }
+        } catch (error) {
+          console.error('Session check error:', error);
+        }
+      }
+
+      // ============================================
+      // LOAD SAVED CREDENTIALS
+      // ============================================
+      function loadSavedCredentials() {
+        const rememberMe = localStorage.getItem(STORAGE_KEYS.REMEMBER_ME) === 'true';
+        const savedEmail = localStorage.getItem(STORAGE_KEYS.SAVED_EMAIL);
+        
+        if (rememberMe && savedEmail) {
+          // Check expiry
+          const expiryStr = localStorage.getItem(STORAGE_KEYS.SESSION_EXPIRY);
+          if (expiryStr) {
+            const expiryDate = new Date(expiryStr);
+            if (new Date() > expiryDate) {
+              // Expired, clear saved data
+              localStorage.removeItem(STORAGE_KEYS.SAVED_EMAIL);
+              localStorage.removeItem(STORAGE_KEYS.SESSION_EXPIRY);
+              localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'false');
+              rememberMeCheckbox.checked = false;
+              return;
+            }
+          }
+          
+          emailInput.value = savedEmail;
+          rememberMeCheckbox.checked = true;
+        }
+      }
+
+      // ============================================
+      // CHECK FOR REGISTRATION SUCCESS
+      // ============================================
+      function checkRegistrationSuccess() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const registered = urlParams.get('registered');
+        const verified = urlParams.get('verified');
+        
+        if (registered === 'buyer') {
+          showSuccessMessage('Account created successfully! Please check your email to verify.');
+        } else if (registered === 'supplier') {
+          showSuccessMessage('Supplier account created! Please check your email to verify.');
+        } else if (verified === 'true') {
+          showSuccessMessage('Email verified successfully! You can now log in.');
+        }
+      }
+
+      // ============================================
+      // INITIALIZATION
+      // ============================================
+      document.addEventListener('DOMContentLoaded', async () => {
+        // Load saved email if any
+        loadSavedCredentials();
+
+        // Check for registration success message
+        checkRegistrationSuccess();
+
+        // Check for redirect intent
+        const intendedRedirect = getIntendedRedirect();
+        if (intendedRedirect) {
+          showRedirectMessage(intendedRedirect);
+        }
+
+        // Check if already logged in
+        await checkExistingSession();
+      });
+
+      // ============================================
+      // EVENT LISTENERS
+      // ============================================
+      loginBtn.addEventListener('click', loginHandler);
+
+      emailInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          passwordInput.focus();
+        }
+      });
+
+      passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          loginHandler(e);
+        }
+      });
+
+      // Clear success message when user starts typing
+      emailInput.addEventListener('input', () => {
+        successMessageEl.classList.remove('show');
+      });
+
+      passwordInput.addEventListener('input', () => {
+        successMessageEl.classList.remove('show');
+      });
+
+      // Reset button state on page show
+      window.addEventListener('pageshow', () => {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to SourceX';
+      });
+
+    })();
+  </script>
+</body>
+</html>

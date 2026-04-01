@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/product.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <!-- Your existing navbar -->
+    </nav>
+
+    <!-- Product Container -->
+    <div class="product-container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> > 
+            <a href="categories.html">Categories</a> > 
+            <a href="category.html" id="categoryLink">Category</a> > 
+            <span id="productTitle">Product</span>
+        </div>
+
+        <div class="product-grid">
+            <!-- Left Column - Images -->
+            <div class="product-gallery">
+                <!-- Main Image -->
+                <div class="main-image-container">
+                    <img id="mainProductImage" src="https://via.placeholder.com/600" alt="Product Image">
+                    <button class="zoom-btn" id="zoomBtn">
+                        <i class="fas fa-search-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Thumbnail Images -->
+                <div class="thumbnail-container" id="thumbnailContainer">
+                    <!-- Thumbnails will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Right Column - Product Info -->
+            <div class="product-info">
+                <!-- Supplier Badge -->
+                <div class="supplier-badge">
+                    <i class="fas fa-store"></i>
+                    <span id="supplierName">Verified Supplier</span>
+                    <span class="verified-badge">
+                        <i class="fas fa-check-circle"></i> Verified
+                    </span>
+                </div>
+
+                <!-- Product Title -->
+                <h1 class="product-title" id="productTitle">Product Title</h1>
+
+                <!-- Rating -->
+                <div class="product-rating">
+                    <div class="stars" id="productRating">
+                        ★★★★☆
+                    </div>
+                    <span class="rating-count" id="reviewCount">(12 reviews)</span>
+                    <span class="sold-count" id="soldCount">1.2k sold</span>
+                </div>
+
+                <!-- Price Section -->
+                <div class="price-section">
+                    <div class="current-price" id="currentPrice">UGX 0</div>
+                    <div class="original-price" id="originalPrice">UGX 0</div>
+                    <div class="discount-badge" id="discountBadge">-20%</div>
+                </div>
+
+                <!-- Bulk Price Info -->
+                <div class="bulk-price-info">
+                    <i class="fas fa-boxes"></i>
+                    <span>Bulk pricing available</span>
+                    <button class="info-btn" onclick="showBulkPricing()">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </div>
+
+                <!-- Color Selection -->
+                <div class="variant-section" id="colorSection">
+                    <div class="variant-label">
+                        <span>Color:</span>
+                        <span class="selected-variant" id="selectedColor">Red</span>
+                    </div>
+                    <div class="color-options" id="colorOptions">
+                        <!-- Color options will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Size/Other Variants (if needed) -->
+                <div class="variant-section" id="sizeSection" style="display: none;">
+                    <div class="variant-label">
+                        <span>Size:</span>
+                        <span class="selected-variant" id="selectedSize">Standard</span>
+                    </div>
+                    <div class="size-options" id="sizeOptions">
+                        <!-- Size options will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Stock Status -->
+                <div class="stock-status" id="stockStatus">
+                    <i class="fas fa-check-circle"></i>
+                    <span>In Stock</span>
+                    <span class="stock-quantity" id="stockQuantity">(50+ units)</span>
+                </div>
+
+                <!-- Quantity Selector -->
+                <div class="quantity-selector">
+                    <label>Quantity:</label>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="decrementQuantity()">−</button>
+                        <input type="number" id="quantity" value="1" min="1" max="999">
+                        <button class="quantity-btn" onclick="incrementQuantity()">+</button>
+                    </div>
+                    <span class="moq-info" id="moqInfo">(MOQ: 10 units)</span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-large" id="addToCartBtn">
+                        <i class="fas fa-shopping-cart"></i>
+                        Add to Cart
+                    </button>
+                    <button class="btn btn-whatsapp btn-large" id="whatsappBtn">
+                        <i class="fab fa-whatsapp"></i>
+                        Inquire on WhatsApp
+                    </button>
+                    <button class="btn-icon btn-large" id="saveBtn">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="btn-link" onclick="shareProduct()">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                    <button class="btn-link" onclick="compareProduct()">
+                        <i class="fas fa-balance-scale"></i> Compare
+                    </button>
+                    <button class="btn-link" onclick="reportProduct()">
+                        <i class="fas fa-flag"></i> Report
+                    </button>
+                </div>
+
+                <!-- Delivery Info -->
+                <div class="delivery-info">
+                    <div class="info-item">
+                        <i class="fas fa-truck"></i>
+                        <div>
+                            <strong>Delivery</strong>
+                            <span>3-5 business days</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <strong>Warranty</strong>
+                            <span>12 months</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-undo"></i>
+                        <div>
+                            <strong>Returns</strong>
+                            <span>7 days</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details Tabs -->
+        <div class="product-tabs">
+            <div class="tab-headers">
+                <button class="tab-header active" data-tab="description">Description</button>
+                <button class="tab-header" data-tab="specifications">Specifications</button>
+                <button class="tab-header" data-tab="reviews">Reviews</button>
+                <button class="tab-header" data-tab="shipping">Shipping</button>
+            </div>
+            
+            <div class="tab-content active" id="descriptionTab">
+                <!-- Product description will be loaded here -->
+            </div>
+            
+            <div class="tab-content" id="specificationsTab">
+                <!-- Specifications will be loaded here -->
+            </div>
+            
+            <div class="tab-content" id="reviewsTab">
+                <!-- Reviews will be loaded here -->
+            </div>
+            
+            <div class="tab-content" id="shippingTab">
+                <!-- Shipping info will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        <div class="related-products">
+            <h2>Related Products</h2>
+            <div class="product-grid" id="relatedProducts">
+                <!-- Related products will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Zoom Modal -->
+    <div class="modal" id="zoomModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="zoomedImage" src="" alt="Zoomed Product">
+        </div>
+    </div>
+
+    <!-- WhatsApp Inquiry Modal -->
+    <div class="modal" id="whatsappModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Inquire via WhatsApp</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="whatsappForm">
+                    <div class="form-group">
+                        <label>Product:</label>
+                        <p id="modalProductName"></p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Selected Color:</label>
+                        <p id="modalSelectedColor"></p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Quantity:</label>
+                        <p id="modalQuantity"></p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Your Message:</label>
+                        <textarea id="inquiryMessage" rows="4" 
+                            placeholder="I'm interested in this product. Please provide more information..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeWhatsAppModal()">Cancel</button>
+                <button class="btn btn-whatsapp" id="sendWhatsAppBtn">
+                    <i class="fab fa-whatsapp"></i> Send Inquiry
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/product.js"></script>
+</body>
+</html>

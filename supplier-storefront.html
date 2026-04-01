@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Manage Storefront - Supplier Dashboard | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Image Compression Library -->
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-storefront.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-store"></i> iBlue B2B</h2>
+                <p>Supplier Dashboard</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="supplier-dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i> Overview
+                </a>
+                <a href="supplier-products.html" class="nav-item">
+                    <i class="fas fa-box"></i> Products
+                </a>
+                <a href="supplier-orders.html" class="nav-item">
+                    <i class="fas fa-truck"></i> Orders
+                </a>
+                <a href="supplier-quotations.html" class="nav-item">
+                    <i class="fas fa-file-invoice"></i> Quotations
+                </a>
+                <a href="supplier-storefront.html" class="nav-item active">
+                    <i class="fas fa-palette"></i> Storefront
+                </a>
+                <a href="supplier-tips.html" class="nav-item">
+                    <i class="fas fa-lightbulb"></i> Tips & Articles
+                </a>
+                <a href="supplier-company-profile.html" class="nav-item">
+                    <i class="fas fa-building"></i> Company Profile
+                </a>
+                <a href="supplier-settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <hr>
+                <a href="supplier-detail.html?id=YOUR_SUPPLIER_ID" class="nav-item" target="_blank" id="previewLink">
+                    <i class="fas fa-eye"></i> Preview Store
+                </a>
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i> Exit Dashboard
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="content-header">
+                <div class="header-title">
+                    <h1>Manage Your Storefront</h1>
+                    <p>Customize how your store appears to buyers</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="previewBtn">
+                        <i class="fas fa-eye"></i> Preview
+                    </button>
+                    <button class="btn btn-primary" onclick="StorefrontManager.saveAll()">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" data-tab="banner">Banner & Header</button>
+                <button class="tab-btn" data-tab="stats">Statistics</button>
+                <button class="tab-btn" data-tab="categories">Categories</button>
+                <button class="tab-btn" data-tab="featured">Featured Products</button>
+                <button class="tab-btn" data-tab="tagline">Tagline</button>
+            </div>
+
+            <!-- Tab: Banner & Header -->
+            <div class="tab-pane active" id="tab-banner">
+                <div class="section-card">
+                    <h3><i class="fas fa-images"></i> Store Banner</h3>
+                    
+                    <div class="form-group">
+                        <label>Banner Image</label>
+                        <div class="image-upload-area" id="bannerUploadArea">
+                            <input type="file" id="bannerImage" accept="image/*" style="display: none;">
+                            <div class="upload-preview" id="bannerPreview">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Click to upload banner image</p>
+                                <small>Recommended: 1200x400px (will be compressed)</small>
+                            </div>
+                        </div>
+                        <small class="compression-note">Images are automatically compressed to optimize loading speed</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Banner Title</label>
+                            <input type="text" id="bannerTitle" placeholder="e.g., Verified Custom Manufacturer">
+                        </div>
+                        <div class="form-group">
+                            <label>Banner Subtitle</label>
+                            <input type="text" id="bannerSubtitle" placeholder="e.g., Peerless Automotive Co., Ltd.">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Button Text</label>
+                            <input type="text" id="bannerButtonText" value="Learn More">
+                        </div>
+                        <div class="form-group">
+                            <label>Button Link</label>
+                            <input type="text" id="bannerButtonLink" placeholder="/products">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Statistics -->
+            <div class="tab-pane" id="tab-stats">
+                <div class="section-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar"></i> Custom Statistics</h3>
+                        <button class="btn btn-sm btn-primary" onclick="StorefrontManager.addStat()">
+                            <i class="fas fa-plus"></i> Add Stat
+                        </button>
+                    </div>
+                    
+                    <div class="stats-list" id="statsList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Categories -->
+            <div class="tab-pane" id="tab-categories">
+                <div class="section-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-tags"></i> Product Categories Display</h3>
+                        <button class="btn btn-sm btn-primary" onclick="StorefrontManager.addCategory()">
+                            <i class="fas fa-plus"></i> Add Category
+                        </button>
+                    </div>
+                    
+                    <div class="categories-list" id="categoriesList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Featured Products -->
+            <div class="tab-pane" id="tab-featured">
+                <div class="section-card">
+                    <h3><i class="fas fa-star"></i> Hot Selling Products</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Section Title</label>
+                            <input type="text" id="hotSellingTitle" value="HOT SELLING PRODUCT">
+                        </div>
+                        <div class="form-group">
+                            <label>Section Subtitle</label>
+                            <input type="text" id="hotSellingSubtitle" value="WELCOME TO OUR COUNTRY">
+                        </div>
+                    </div>
+                    
+                    <div class="card-header">
+                        <h4>Select Products for Hot Selling Section</h4>
+                        <button class="btn btn-sm btn-outline" onclick="StorefrontManager.addHotProduct()">
+                            <i class="fas fa-plus"></i> Add Product
+                        </button>
+                    </div>
+                    
+                    <div class="product-selection-list" id="hotProductsList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h3><i class="fas fa-clock"></i> New Arrivals</h3>
+                    <div class="card-header">
+                        <h4>Select Products for New Arrivals Section</h4>
+                        <button class="btn btn-sm btn-outline" onclick="StorefrontManager.addNewArrival()">
+                            <i class="fas fa-plus"></i> Add Product
+                        </button>
+                    </div>
+                    <div class="product-selection-list" id="newArrivalsList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Tagline -->
+            <div class="tab-pane" id="tab-tagline">
+                <div class="section-card">
+                    <h3><i class="fas fa-quote-right"></i> Store Tagline</h3>
+                    
+                    <div class="form-group">
+                        <label>Tagline Text</label>
+                        <textarea id="tagline" rows="3" placeholder="e.g., FOCUS ON SAMPLE CUSTOMIZATION TO CREATE EXCLUSIVE STYLE."></textarea>
+                        <small>This appears prominently on your store page</small>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Selection Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Select Products</h3>
+                <button class="modal-close" onclick="StorefrontManager.closeProductModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="productSearch" placeholder="Search your products...">
+                </div>
+                
+                <div class="product-grid" id="productGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="StorefrontManager.confirmProductSelection()">Confirm Selection</button>
+                <button class="btn btn-outline" onclick="StorefrontManager.closeProductModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supplier-storefront.js"></script>
+</body>
+</html>
