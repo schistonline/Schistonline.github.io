@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products - iBlue B2B Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style/admin-products.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-store"></i> iBlue B2B Admin</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin-dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="admin-products.html" class="nav-item active">
+                    <i class="fas fa-box"></i> Products
+                </a>
+                <a href="admin-orders.html" class="nav-item">
+                    <i class="fas fa-shopping-cart"></i> Orders
+                </a>
+                <a href="admin-suppliers.html" class="nav-item">
+                    <i class="fas fa-truck"></i> Suppliers
+                </a>
+                <a href="admin-categories.html" class="nav-item">
+                    <i class="fas fa-tags"></i> Categories
+                </a>
+                <a href="admin-spotlights.html" class="nav-item">
+                    <i class="fas fa-star"></i> Spotlights
+                </a>
+                <a href="admin-banners.html" class="nav-item">
+                    <i class="fas fa-images"></i> Banners
+                </a>
+                <a href="admin-reports.html" class="nav-item">
+                    <i class="fas fa-flag"></i> Reports
+                </a>
+                <a href="admin-users.html" class="nav-item">
+                    <i class="fas fa-users"></i> Users
+                </a>
+                <a href="admin-settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <hr style="margin: 16px 0; border: none; border-top: 1px solid #e5e7eb;">
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-arrow-left"></i> Back to Site
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="content-header">
+                <div class="header-title">
+                    <h1>Manage Products</h1>
+                    <p>View and manage all supplier products across the marketplace</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" onclick="adminProducts.exportProducts()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-primary" onclick="adminProducts.showAddProductModal()">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Total Products</h3>
+                        <div class="stat-number" id="totalProducts">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Active Products</h3>
+                        <div class="stat-number" id="activeProducts">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Bulk Deals</h3>
+                        <div class="stat-number" id="bulkProducts">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Low Stock</h3>
+                        <div class="stat-number" id="lowStockProducts">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Search</label>
+                        <input type="text" id="searchInput" placeholder="Product title or ID...">
+                    </div>
+                    <div class="filter-group">
+                        <label>Supplier</label>
+                        <select id="supplierFilter">
+                            <option value="">All Suppliers</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Category</label>
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <select id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="draft">Draft</option>
+                            <option value="sold">Sold</option>
+                            <option value="expired">Expired</option>
+                            <option value="banned">Banned</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Product Type</label>
+                        <select id="typeFilter">
+                            <option value="">All Types</option>
+                            <option value="bulk">Bulk Only</option>
+                            <option value="wholesale">Wholesale Price</option>
+                            <option value="regular">Regular</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Stock Status</label>
+                        <select id="stockFilter">
+                            <option value="">All</option>
+                            <option value="low">Low Stock</option>
+                            <option value="out">Out of Stock</option>
+                            <option value="in">In Stock</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn btn-outline" onclick="adminProducts.resetFilters()">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                    <button class="btn btn-primary" onclick="adminProducts.applyFilters()">
+                        <i class="fas fa-search"></i> Apply Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Products Table -->
+            <div class="products-table-container">
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Supplier</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                            <th>Type</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <tr>
+                            <td colspan="9" class="loading">
+                                <i class="fas fa-spinner"></i>
+                                <div>Loading products...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="pagination-info" id="paginationInfo"></div>
+                <div class="pagination-controls" id="paginationControls"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Product Details</h3>
+                <button class="modal-close" onclick="adminProducts.closeModal('productModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="productModalBody">
+                <!-- Populated dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="adminProducts.closeModal('productModal')">Close</button>
+                <button class="btn btn-primary" onclick="adminProducts.editProduct(adminProducts.currentProductId)">Edit Product</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div class="modal" id="editProductModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Product</h3>
+                <button class="modal-close" onclick="adminProducts.closeModal('editProductModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editProductForm">
+                    <input type="hidden" id="editProductId">
+                    
+                    <div class="filter-group" style="margin-bottom: 16px;">
+                        <label>Title</label>
+                        <input type="text" id="editTitle" required>
+                    </div>
+
+                    <div class="filter-group" style="margin-bottom: 16px;">
+                        <label>Description</label>
+                        <textarea id="editDescription" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="filter-group">
+                            <label>Regular Price (UGX)</label>
+                            <input type="number" id="editPrice">
+                        </div>
+                        <div class="filter-group">
+                            <label>Wholesale Price (UGX)</label>
+                            <input type="number" id="editWholesalePrice">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="filter-group">
+                            <label>Stock Quantity</label>
+                            <input type="number" id="editStockQuantity">
+                        </div>
+                        <div class="filter-group">
+                            <label>Low Stock Threshold</label>
+                            <input type="number" id="editLowStockThreshold">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="filter-group">
+                            <label>MOQ</label>
+                            <input type="number" id="editMoq">
+                        </div>
+                        <div class="filter-group">
+                            <label>Lead Time (days)</label>
+                            <input type="number" id="editLeadTime">
+                        </div>
+                    </div>
+
+                    <div class="form-check-group">
+                        <label class="form-check">
+                            <input type="checkbox" id="editIsBulkOnly"> Bulk Only
+                        </label>
+                        <label class="form-check">
+                            <input type="checkbox" id="editIsNegotiable"> Negotiable
+                        </label>
+                        <label class="form-check">
+                            <input type="checkbox" id="editIsFeatured"> Featured
+                        </label>
+                    </div>
+
+                    <div class="filter-group" style="margin-bottom: 16px;">
+                        <label>Status</label>
+                        <select id="editStatus">
+                            <option value="active">Active</option>
+                            <option value="draft">Draft</option>
+                            <option value="sold">Sold</option>
+                            <option value="expired">Expired</option>
+                            <option value="banned">Banned</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="adminProducts.closeModal('editProductModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="adminProducts.saveProduct()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script/admin-products.js"></script>
+</body>
+</html>

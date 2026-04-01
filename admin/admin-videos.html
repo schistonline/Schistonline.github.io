@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Admin - Video Management | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style/admin-videos.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-cube"></i>
+                    <span>iBlue Admin</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="admin-dashboard.html" class="nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="admin-users.html" class="nav-item">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                    <a href="admin-suppliers.html" class="nav-item">
+                        <i class="fas fa-store"></i>
+                        <span>Suppliers</span>
+                    </a>
+                    <a href="admin-products.html" class="nav-item">
+                        <i class="fas fa-box"></i>
+                        <span>Products</span>
+                    </a>
+                    <a href="admin-videos.html" class="nav-item active">
+                        <i class="fas fa-video"></i>
+                        <span>Videos</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Moderation</div>
+                    <a href="admin-reports.html" class="nav-item">
+                        <i class="fas fa-flag"></i>
+                        <span>Reports</span>
+                    </a>
+                    <a href="admin-spotlights.html" class="nav-item">
+                        <i class="fas fa-star"></i>
+                        <span>Spotlights</span>
+                    </a>
+                    <a href="admin-announcements.html" class="nav-item">
+                        <i class="fas fa-bullhorn"></i>
+                        <span>Announcements</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Analytics</div>
+                    <a href="admin-analytics.html" class="nav-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </a>
+                    <a href="admin-logs.html" class="nav-item">
+                        <i class="fas fa-history"></i>
+                        <span>Activity Logs</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Settings</div>
+                    <a href="admin-settings.html" class="nav-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                    <a href="index.html" class="nav-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Exit Admin</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="admin-info">
+                    <div class="admin-avatar" id="adminAvatar">A</div>
+                    <div class="admin-details">
+                        <h4 id="adminName">Admin User</h4>
+                        <p id="adminRole">Super Admin</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="page-title">
+                    <h1>Video Management</h1>
+                    <p>Monitor and manage all product videos</p>
+                </div>
+                
+                <div class="top-actions">
+                    <button class="action-btn" onclick="AdminVideos.exportData()">
+                        <i class="fas fa-download"></i>
+                        <span>Export</span>
+                    </button>
+                    <button class="action-btn" onclick="AdminVideos.refreshData()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Refresh</span>
+                    </button>
+                    <div class="date-range" id="dateRange">
+                        <i class="fas fa-calendar"></i>
+                        <span>Last 30 Days</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Total Videos</div>
+                        <div class="stat-value" id="totalVideos">0</div>
+                        <div class="stat-trend" id="videosTrend">+12% from last month</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Total Views</div>
+                        <div class="stat-value" id="totalViews">0</div>
+                        <div class="stat-trend" id="viewsTrend">+23% from last month</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Total Likes</div>
+                        <div class="stat-value" id="totalLikes">0</div>
+                        <div class="stat-trend" id="likesTrend">+18% from last month</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-comment"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Comments</div>
+                        <div class="stat-value" id="totalComments">0</div>
+                        <div class="stat-trend" id="commentsTrend">+8% from last month</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Reported</div>
+                        <div class="stat-value" id="reportedVideos">0</div>
+                        <div class="stat-trend" id="reportedTrend">3 pending review</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon teal">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Active Suppliers</div>
+                        <div class="stat-value" id="activeSuppliers">0</div>
+                        <div class="stat-trend" id="suppliersTrend">with videos</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Video Uploads (Last 30 Days)</h3>
+                        <select id="uploadChartPeriod">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="uploadsChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Video Performance</h3>
+                        <select id="performanceChartPeriod">
+                            <option value="views">Views</option>
+                            <option value="likes">Likes</option>
+                            <option value="comments">Comments</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Bar -->
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by video, supplier, or product...">
+                </div>
+                
+                <div class="filter-group">
+                    <select id="supplierFilter">
+                        <option value="all">All Suppliers</option>
+                    </select>
+                    
+                    <select id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="reported">Reported</option>
+                    </select>
+                    
+                    <select id="dateFilter">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                    </select>
+                    
+                    <select id="sortFilter">
+                        <option value="latest">Latest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="most_viewed">Most Viewed</option>
+                        <option value="most_liked">Most Liked</option>
+                        <option value="most_commented">Most Commented</option>
+                    </select>
+                    
+                    <button class="filter-btn" onclick="AdminVideos.applyFilters()">
+                        <i class="fas fa-sliders-h"></i>
+                        Apply Filters
+                    </button>
+                    
+                    <button class="reset-btn" onclick="AdminVideos.resetFilters()">
+                        <i class="fas fa-undo"></i>
+                        Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bulk Actions Bar -->
+            <div class="bulk-actions-bar" id="bulkActionsBar" style="display: none;">
+                <div class="bulk-info">
+                    <span id="selectedCount">0</span> videos selected
+                </div>
+                <div class="bulk-buttons">
+                    <button class="bulk-btn" onclick="AdminVideos.bulkActivate()">
+                        <i class="fas fa-eye"></i>
+                        Activate
+                    </button>
+                    <button class="bulk-btn" onclick="AdminVideos.bulkDeactivate()">
+                        <i class="fas fa-eye-slash"></i>
+                        Deactivate
+                    </button>
+                    <button class="bulk-btn danger" onclick="AdminVideos.bulkDelete()">
+                        <i class="fas fa-trash"></i>
+                        Delete
+                    </button>
+                    <button class="bulk-btn" onclick="AdminVideos.clearSelection()">
+                        <i class="fas fa-times"></i>
+                        Clear
+                    </button>
+                </div>
+            </div>
+
+            <!-- Videos Table -->
+            <div class="table-container">
+                <table class="videos-table">
+                    <thead>
+                        <tr>
+                            <th class="checkbox-col">
+                                <input type="checkbox" id="selectAll" onclick="AdminVideos.toggleSelectAll()">
+                            </th>
+                            <th>Video</th>
+                            <th>Supplier</th>
+                            <th>Product</th>
+                            <th>Stats</th>
+                            <th>Status</th>
+                            <th>Uploaded</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="videosTableBody">
+                        <!-- Loading State -->
+                        <tr class="loading-row">
+                            <td colspan="8">
+                                <div class="table-loading">
+                                    <div class="spinner"></div>
+                                    <p>Loading videos...</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <button class="page-btn" onclick="AdminVideos.goToPage(1)" id="firstPage">
+                    <i class="fas fa-angle-double-left"></i>
+                </button>
+                <button class="page-btn" onclick="AdminVideos.goToPage('prev')" id="prevPage">
+                    <i class="fas fa-angle-left"></i>
+                </button>
+                
+                <div class="page-numbers" id="pageNumbers"></div>
+                
+                <button class="page-btn" onclick="AdminVideos.goToPage('next')" id="nextPage">
+                    <i class="fas fa-angle-right"></i>
+                </button>
+                <button class="page-btn" onclick="AdminVideos.goToPage('last')" id="lastPage">
+                    <i class="fas fa-angle-double-right"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- View Video Modal -->
+    <div class="modal" id="viewVideoModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Video Details</h3>
+                <button class="modal-close" onclick="AdminVideos.closeViewModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="viewVideoBody">
+                <!-- Populated by JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="AdminVideos.warnSupplier()">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Warn Supplier
+                </button>
+                <button class="btn btn-danger" onclick="AdminVideos.deleteVideo(currentVideoId)">
+                    <i class="fas fa-trash"></i>
+                    Delete Video
+                </button>
+                <button class="btn btn-secondary" onclick="AdminVideos.closeViewModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Video Modal -->
+    <div class="modal" id="editVideoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Video</h3>
+                <button class="modal-close" onclick="AdminVideos.closeEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editVideoForm">
+                    <input type="hidden" id="editVideoId">
+                    
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="editVideoStatus" class="form-control">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Featured</label>
+                        <select id="editVideoFeatured" class="form-control">
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" id="editVideoCategory" class="form-control" placeholder="Video category">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Admin Notes</label>
+                        <textarea id="editAdminNotes" class="form-control" rows="3" placeholder="Add admin notes about this video..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="AdminVideos.saveVideoChanges()">Save Changes</button>
+                <button class="btn btn-secondary" onclick="AdminVideos.closeEditModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warn Supplier Modal -->
+    <div class="modal" id="warnModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Warn Supplier</h3>
+                <button class="modal-close" onclick="AdminVideos.closeWarnModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warn-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="warn-message">Send a warning to <span id="warnSupplierName">supplier</span> about this video?</p>
+                
+                <div class="form-group">
+                    <label>Reason for warning</label>
+                    <select id="warnReason" class="form-control">
+                        <option value="inappropriate">Inappropriate content</option>
+                        <option value="copyright">Copyright violation</option>
+                        <option value="misleading">Misleading information</option>
+                        <option value="quality">Poor quality video</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Additional notes</label>
+                    <textarea id="warnNotes" class="form-control" rows="3" placeholder="Enter details about the violation..."></textarea>
+                </div>
+                
+                <div class="form-check">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="autoDeactivate">
+                        <span>Automatically deactivate this video</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="AdminVideos.sendWarning()">Send Warning</button>
+                <button class="btn btn-secondary" onclick="AdminVideos.closeWarnModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Video</h3>
+                <button class="modal-close" onclick="AdminVideos.closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="delete-message">Are you sure you want to delete this video?</p>
+                <p class="delete-warning">This action cannot be undone.</p>
+                
+                <div class="form-check">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="banSupplier">
+                        <span>Also ban this supplier</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                <button class="btn btn-secondary" onclick="AdminVideos.closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Action Confirmation Modal -->
+    <div class="modal" id="bulkModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Bulk Action</h3>
+                <button class="modal-close" onclick="AdminVideos.closeBulkModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="bulkMessage">Are you sure you want to perform this action on <span id="bulkCount">0</span> videos?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="confirmBulkBtn">Confirm</button>
+                <button class="btn btn-secondary" onclick="AdminVideos.closeBulkModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Action completed successfully</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="AdminVideos.closeSuccessModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script/admin-videos.js"></script>
+</body>
+</html>

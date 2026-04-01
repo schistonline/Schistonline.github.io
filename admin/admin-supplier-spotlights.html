@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Supplier Spotlights - iBlue B2B Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style/admin-supplier-spotlights.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-fire"></i> iBlue Admin
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="admin-banners.html"><i class="fas fa-images"></i> Banners</a></li>
+                <li><a href="admin-categories.html"><i class="fas fa-sitemap"></i> Categories</a></li>
+                <li><a href="admin-supplier-spotlights.html" class="active"><i class="fas fa-fire"></i> Supplier Spotlights <span class="badge" id="pendingSpotlightsBadge">0</span></a></li>
+                <li><a href="admin-spotlights.html"><i class="fas fa-star"></i> Product Spotlights</a></li>
+                <li><a href="admin-ads.html"><i class="fas fa-ad"></i> Ads</a></li>
+                <li><a href="admin-users.html"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="admin-suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
+                <li><a href="admin-orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+                <li><a href="admin-reports.html"><i class="fas fa-flag"></i> Reports</a></li>
+                <li><a href="admin-payments.html"><i class="fas fa-credit-card"></i> Payments</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1>
+                    <i class="fas fa-fire"></i>
+                    Supplier Spotlight Management
+                </h1>
+                <div class="header-actions">
+                    <button class="btn btn-outline" onclick="spotlightManager.exportSpotlights()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-primary" onclick="spotlightManager.openCreateSpotlightModal()">
+                        <i class="fas fa-plus"></i> Create Spotlight
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid" id="statsContainer">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Active Spotlights</h3>
+                        <div class="stat-number" id="activeSpotlightsCount">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Pending Approval</h3>
+                        <div class="stat-number" id="pendingSpotlightsCount">0</div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Total Revenue</h3>
+                        <div class="stat-number" id="totalRevenue">UGX 0</div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--secondary);">
+                        <i class="fas fa-money-bill"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Total Clicks</h3>
+                        <div class="stat-number" id="totalClicks">0</div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: #3B82F6;">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" onclick="spotlightManager.switchTab('active')" id="tabActive">Active Spotlights</div>
+                <div class="tab" onclick="spotlightManager.switchTab('pending')" id="tabPending">Pending Approval</div>
+                <div class="tab" onclick="spotlightManager.switchTab('expired')" id="tabExpired">Expired</div>
+                <div class="tab" onclick="spotlightManager.switchTab('all')" id="tabAll">All</div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-bar">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search by supplier or business name...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="filter-group">
+                    <select class="filter-select" id="packageFilter">
+                        <option value="">All Packages</option>
+                    </select>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">Payment Status</option>
+                        <option value="paid">Paid</option>
+                        <option value="pending">Pending</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                    <button class="btn btn-primary btn-sm" onclick="spotlightManager.loadSpotlights()">
+                        <i class="fas fa-filter"></i> Apply
+                    </button>
+                    <button class="btn btn-outline btn-sm" onclick="spotlightManager.resetFilters()">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Spotlights Table -->
+            <div class="table-container">
+                <div id="loadingSpinner" class="loading">
+                    <i class="fas fa-spinner spinner"></i>
+                    <p>Loading spotlights...</p>
+                </div>
+                <div id="spotlightsTable" style="display: none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Supplier</th>
+                                <th>Package</th>
+                                <th>Duration</th>
+                                <th>Badge</th>
+                                <th>Position</th>
+                                <th>Payment</th>
+                                <th>Performance</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="spotlightsTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-fire"></i>
+                    <h3>No spotlights found</h3>
+                    <p>Create your first supplier spotlight to get started</p>
+                    <button class="btn btn-primary" style="margin-top: 15px;" onclick="spotlightManager.openCreateSpotlightModal()">
+                        <i class="fas fa-plus"></i> Create Spotlight
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create/Edit Spotlight Modal -->
+    <div class="modal" id="spotlightModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 id="modalTitle"><i class="fas fa-fire"></i> Create Supplier Spotlight</h2>
+                <button class="close-btn" onclick="spotlightManager.closeSpotlightModal()">&times;</button>
+            </div>
+            
+            <form id="spotlightForm" onsubmit="spotlightManager.saveSpotlight(event)">
+                <input type="hidden" id="spotlightId">
+                
+                <!-- Supplier Selection -->
+                <div class="form-group">
+                    <label>Select Supplier *</label>
+                    <div class="supplier-selector" id="supplierSelector">
+                        <div class="loading" style="padding: 20px;">
+                            <i class="fas fa-spinner spinner"></i> Loading suppliers...
+                        </div>
+                    </div>
+                    <input type="hidden" id="supplierId" required>
+                </div>
+
+                <!-- Package Selection -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Spotlight Package *</label>
+                        <select class="form-control" id="packageId" required onchange="spotlightManager.updatePackageDetails()">
+                            <option value="">Select Package</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Display Position</label>
+                        <input type="number" class="form-control" id="displayPosition" min="0" value="0">
+                        <small>Lower number = higher priority</small>
+                    </div>
+                </div>
+
+                <!-- Customization -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Spotlight Title (Optional)</label>
+                        <input type="text" class="form-control" id="spotlightTitle" placeholder="e.g., Top Verified Supplier">
+                    </div>
+                    <div class="form-group">
+                        <label>Badge Text</label>
+                        <input type="text" class="form-control" id="spotlightBadge" value="HOT" placeholder="HOT">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Badge Color</label>
+                        <input type="color" class="form-control" id="badgeColor" value="#EF4444">
+                    </div>
+                    <div class="form-group">
+                        <label>Custom Image URL (Optional)</label>
+                        <input type="url" class="form-control" id="customImageUrl" placeholder="https://...">
+                    </div>
+                </div>
+
+                <!-- Date Range -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Start Date *</label>
+                        <input type="datetime-local" class="form-control" id="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date *</label>
+                        <input type="datetime-local" class="form-control" id="endDate" required>
+                    </div>
+                </div>
+
+                <!-- Payment Info -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Amount Paid</label>
+                        <input type="number" class="form-control" id="amountPaid" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Status</label>
+                        <select class="form-control" id="paymentStatus">
+                            <option value="pending">Pending</option>
+                            <option value="paid">Paid</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <input type="text" class="form-control" id="paymentMethod" placeholder="Mobile Money, Card, etc.">
+                    </div>
+                    <div class="form-group">
+                        <label>Transaction ID</label>
+                        <input type="text" class="form-control" id="transactionId">
+                    </div>
+                </div>
+
+                <!-- Active Status -->
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="isActive" checked> 
+                        Active (visible on homepage)
+                    </label>
+                </div>
+
+                <!-- Preview -->
+                <div class="spotlight-preview">
+                    <h4 style="margin-bottom: 15px;">Preview</h4>
+                    <div class="preview-card">
+                        <div class="preview-badge" id="previewBadge">HOT</div>
+                        <div class="preview-image" id="previewImage"></div>
+                        <div class="preview-avatar" id="previewAvatar">
+                            <img src="https://via.placeholder.com/70" alt="Preview">
+                        </div>
+                        <div class="preview-info">
+                            <h4 id="previewName">Supplier Name</h4>
+                            <p id="previewLocation"><i class="fas fa-map-marker-alt"></i> Kampala</p>
+                            <div style="display: flex; justify-content: center; gap: 10px; font-size: 12px;">
+                                <span><i class="fas fa-box"></i> 0</span>
+                                <span><i class="fas fa-star"></i> 100%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn" onclick="spotlightManager.closeSpotlightModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Spotlight</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Details Modal -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-info-circle"></i> Spotlight Details</h2>
+                <button class="close-btn" onclick="spotlightManager.closeDetailsModal()">&times;</button>
+            </div>
+            <div id="detailsContent">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-trash" style="color: var(--danger);"></i> Confirm Delete</h2>
+                <button class="close-btn" onclick="spotlightManager.closeDeleteModal()">&times;</button>
+            </div>
+            <p id="deleteMessage">Are you sure you want to delete this spotlight?</p>
+            <p style="color: var(--danger); font-size: 13px; margin-top: 10px;">
+                <i class="fas fa-exclamation-triangle"></i> This action cannot be undone.
+            </p>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button class="btn" onclick="spotlightManager.closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="spotlightManager.confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script/admin-supplier-spotlights.js"></script>
+</body>
+</html>

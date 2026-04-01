@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Categories - iBlue B2B Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style/admin-categories.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-sitemap"></i> iBlue Admin
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="admin-dashboard.html" class="active"><i class="fas fa-dashboard"></i> Dashboard</a></li>
+                <li><a href="admin-banners.html"><i class="fas fa-images"></i> Banners</a></li>
+                <li><a href="admin-categories.html"><i class="fas fa-sitemap"></i> Categories</a></li>
+                <li><a href="admin-spotlights.html"><i class="fas fa-star"></i> Spotlights</a></li>
+                <li><a href="admin-ads.html"><i class="fas fa-ad"></i> Ads</a></li>
+                <li><a href="admin-users.html"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="admin-reports.html"><i class="fas fa-flag"></i> Reports</a></li>
+                <li><a href="admin-message-reports.html"><i class="fas fa-star"></i> message-reports</a></li>
+                <li><a href="admin-messages.html"><i class="fas fa-star"></i> Messages</a></li>
+                <li><a href="admin-products.html"><i class="fas fa-star"></i> Products</a></li>
+                <li><a href="admin-rankings.html"><i class="fas fa-star"></i> Rankings</a></li>
+                <li><a href="admin-spotlight-pricing.html"><i class="fas fa-star"></i> Spotlight-pricing</a></li>
+                <li><a href="admin-supplier-approvals.html"><i class="fas fa-star"></i> Supplier-Approvals</a></li>
+                <li><a href="admin-templates.html"><i class="fas fa-star"></i> templates</a></li>
+                <li><a href="admin-users.html"><i class="fas fa-star"></i> Users</a></li>
+           
+                           </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1>Category Management</h1>
+                <div>
+                    <button class="btn btn-success" onclick="openBulkUploadModal()">
+                        <i class="fas fa-upload"></i> Bulk Upload
+                    </button>
+                    <button class="btn btn-primary" onclick="openCategoryModal()">
+                        <i class="fas fa-plus"></i> Add Category
+                    </button>
+                </div>
+            </div>
+
+            <!-- Category Tree View -->
+            <div class="category-tree">
+                <div class="tree-header">
+                    <div class="search-box">
+                        <input type="text" id="searchCategories" placeholder="Search categories...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="tree-actions">
+                        <button class="btn btn-sm" onclick="expandAll()">
+                            <i class="fas fa-expand"></i> Expand All
+                        </button>
+                        <button class="btn btn-sm" onclick="collapseAll()">
+                            <i class="fas fa-compress"></i> Collapse All
+                        </button>
+                    </div>
+                </div>
+
+                <div id="categoryTreeContainer">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Category Modal -->
+    <div class="modal" id="categoryModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Category</h2>
+                <button class="close-btn" onclick="closeCategoryModal()">&times;</button>
+            </div>
+            
+            <form id="categoryForm" onsubmit="saveCategory(event)">
+                <input type="hidden" id="categoryId">
+                <input type="hidden" id="parentId" value="">
+                
+                <!-- Basic Information -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category Name *</label>
+                        <input type="text" id="name" class="form-control" required onkeyup="generateSlug()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Slug *</label>
+                        <input type="text" id="slug" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="description" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Parent Category</label>
+                        <select id="parentCategory" class="form-control" onchange="updateParentId()">
+                            <option value="">None (Root Category)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Display Order</label>
+                        <input type="number" id="displayOrder" class="form-control" value="0" min="0">
+                    </div>
+                </div>
+
+                <!-- Icon Selection -->
+                <div class="form-group">
+                    <label>Category Icon</label>
+                    <input type="text" id="icon" class="form-control" placeholder="e.g., building, car, mobile-alt">
+                    <small>Font Awesome icon name (without 'fa-')</small>
+                    
+                    <div class="icon-selector" id="iconSelector">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Display Options -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Display Name (Optional)</label>
+                        <input type="text" id="displayName" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Color</label>
+                        <input type="color" id="colorHex" class="form-control" value="#0B4F6C">
+                    </div>
+                </div>
+
+                <div class="form-row-3">
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="isActive" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                            Active
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="displayInMenu" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                            Show in Menu
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="featured">
+                                <span class="toggle-slider"></span>
+                            </div>
+                            Featured
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Images -->
+                <div class="form-group">
+                    <label>Category Image</label>
+                    <div class="image-upload-area" onclick="triggerFileUpload('image')">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 24px; color: var(--primary);"></i>
+                        <p>Click to upload image</p>
+                        <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(this, 'image')">
+                    </div>
+                    <input type="hidden" id="imageUrl">
+                    <div id="imagePreview"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Banner Image (Optional)</label>
+                    <div class="image-upload-area" onclick="triggerFileUpload('banner')">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 24px; color: var(--primary);"></i>
+                        <p>Click to upload banner</p>
+                        <input type="file" id="bannerUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(this, 'banner')">
+                    </div>
+                    <input type="hidden" id="bannerUrl">
+                    <div id="bannerPreview"></div>
+                </div>
+
+                <!-- SEO Information -->
+                <div class="attributes-section">
+                    <h3 style="margin-bottom: 15px;">SEO Information</h3>
+                    
+                    <div class="form-group">
+                        <label>Meta Title</label>
+                        <input type="text" id="metaTitle" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Meta Description</label>
+                        <textarea id="metaDescription" class="form-control" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>SEO Keywords (comma separated)</label>
+                        <input type="text" id="seoKeywords" class="form-control" placeholder="keyword1, keyword2, keyword3">
+                    </div>
+                </div>
+
+                <!-- Category Attributes -->
+                <div class="attributes-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3>Category Attributes</h3>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addAttribute()">
+                            <i class="fas fa-plus"></i> Add Attribute
+                        </button>
+                    </div>
+                    
+                    <div id="attributesContainer">
+                        <!-- Dynamic attributes will be added here -->
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn" onclick="closeCategoryModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2>Confirm Delete</h2>
+                <button class="close-btn" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <p id="deleteMessage">Are you sure you want to delete this category?</p>
+            <p style="color: var(--danger); font-size: 13px; margin-top: 10px;">
+                <i class="fas fa-exclamation-triangle"></i> 
+                This will affect all subcategories and products in this category.
+            </p>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button class="btn" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Upload Modal -->
+    <div class="modal" id="bulkUploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Bulk Upload Categories</h2>
+                <button class="close-btn" onclick="closeBulkUploadModal()">&times;</button>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <p>Upload a CSV file with the following columns:</p>
+                <pre style="background: var(--gray-100); padding: 10px; border-radius: 4px; font-size: 12px;">
+name,slug,parent_id,description,icon,display_order,is_active
+Electronics,electronics,,Electronics category,mobile-alt,1,true
+Phones,phones,1,Smartphones,phone,1,true
+                </pre>
+                
+                <div style="margin-top: 20px;">
+                    <a href="#" onclick="downloadTemplate()" style="color: var(--primary);">
+                        <i class="fas fa-download"></i> Download Template
+                    </a>
+                </div>
+            </div>
+            
+            <div class="image-upload-area" onclick="document.getElementById('csvUpload').click()">
+                <i class="fas fa-file-csv" style="font-size: 32px; color: var(--primary);"></i>
+                <p>Click to upload CSV file</p>
+                <input type="file" id="csvUpload" accept=".csv" style="display: none;" onchange="uploadCSV(this)">
+            </div>
+            
+            <div id="uploadPreview" style="margin-top: 20px;"></div>
+            
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button class="btn" onclick="closeBulkUploadModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="processBulkUpload()">Process Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <!-- Add this after your other script tags in index.html -->
+<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.0/dist/browser-image-compression.js"></script>
+    <script src="script/admin-categories.js"></script>
+</body>
+</html>

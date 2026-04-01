@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Approve Campaigns - Admin</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #F8FAFC;
+            color: #1E293B;
+        }
+
+        .header {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F1F5F9;
+            border-radius: 50%;
+            color: #1E293B;
+            text-decoration: none;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-cube {
+            width: 28px;
+            height: 28px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate 3s infinite linear;
+        }
+
+        .face {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            background: #6B21E5;
+            opacity: 0.9;
+        }
+
+        .front { transform: translateZ(14px); background: #8B5CF6; }
+        .right { transform: rotateY(90deg) translateZ(14px); background: #C084FC; }
+        .top { transform: rotateX(90deg) translateZ(14px); background: #A855F7; }
+
+        @keyframes rotate {
+            0% { transform: rotateX(0) rotateY(0); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #6B21E5, #C084FC);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, #6B21E5, #C084FC);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .stats-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #E2E8F0;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #6B21E5;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #64748B;
+        }
+
+        .refresh-btn {
+            padding: 10px 20px;
+            background: #6B21E5;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .refresh-btn:hover {
+            background: #5B1FD1;
+        }
+
+        .campaigns-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .campaign-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #E2E8F0;
+            transition: all 0.2s;
+        }
+
+        .campaign-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .campaign-header {
+            background: #FEF3C7;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 1px solid #FDE68A;
+        }
+
+        .campaign-status {
+            padding: 4px 12px;
+            background: #F59E0B;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .campaign-body {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .campaign-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #F1F5F9;
+            flex-shrink: 0;
+        }
+
+        .campaign-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .campaign-details {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .campaign-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1E293B;
+        }
+
+        .campaign-supplier {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .supplier-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748B;
+            font-size: 14px;
+        }
+
+        .supplier-info i {
+            color: #6B21E5;
+            width: 16px;
+        }
+
+        .campaign-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #F8FAFC;
+            border-radius: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #6B21E5;
+        }
+
+        .stat-item .label {
+            font-size: 11px;
+            color: #64748B;
+        }
+
+        .campaign-description {
+            background: #F8FAFC;
+            padding: 12px;
+            border-radius: 12px;
+            margin: 12px 0;
+            font-size: 14px;
+            color: #475569;
+            border-left: 3px solid #6B21E5;
+        }
+
+        .promo-message {
+            background: #EDE9FE;
+            padding: 10px 12px;
+            border-radius: 12px;
+            margin: 12px 0;
+            font-size: 13px;
+            color: #6B21E5;
+        }
+
+        .campaign-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn-approve {
+            flex: 1;
+            padding: 12px;
+            background: #10B981;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-approve:hover {
+            background: #0D9668;
+            transform: translateY(-1px);
+        }
+
+        .btn-reject {
+            flex: 1;
+            padding: 12px;
+            background: #EF4444;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-reject:hover {
+            background: #DC2626;
+            transform: translateY(-1px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #E2E8F0;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #94A3B8;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #1E293B;
+        }
+
+        .empty-state p {
+            color: #64748B;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #E2E8F0;
+            border-top-color: #6B21E5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            padding: 24px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #94A3B8;
+        }
+
+        .modal-body textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 14px;
+            resize: vertical;
+            margin-bottom: 20px;
+            font-family: inherit;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1E293B;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="admin-campaigns.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">Approve Campaigns</span>
+            </div>
+            <div class="admin-badge" id="adminBadge">Administrator</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value" id="pendingCount">0</div>
+                <div class="stat-label">Pending Approval</div>
+            </div>
+            <button class="refresh-btn" onclick="loadPendingCampaigns()">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+
+        <div id="campaignsContainer" class="campaigns-list">
+            <div style="text-align: center; padding: 48px;">
+                <div class="loading-spinner"></div>
+                <p>Loading campaigns...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Modal -->
+    <div id="rejectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reject Campaign</h3>
+                <button class="close-modal" onclick="closeModal('rejectModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Reason for rejection (optional)</label>
+                <textarea id="rejectReason" rows="3" placeholder="Enter reason for rejection..."></textarea>
+                <div class="modal-actions">
+                    <button onclick="confirmReject()" class="btn-reject" style="flex: 1;">Confirm Reject</button>
+                    <button onclick="closeModal('rejectModal')" style="flex: 1; padding: 12px; background: #E2E8F0; border: none; border-radius: 40px; cursor: pointer;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p id="loadingMessage" style="color: white; margin-top: 16px;">Processing...</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        let currentUser = null;
+        let currentCampaignToReject = null;
+
+        // Utility Functions
+        function formatCurrency(amount) {
+            return `UGX ${(amount || 0).toLocaleString('en-UG')}`;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            if (days === 0) return 'Today';
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return `${days} days ago`;
+            return date.toLocaleDateString('en-UG');
+        }
+
+        function formatDateTime(dateString) {
+            if (!dateString) return '';
+            return new Date(dateString).toLocaleString();
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const colors = {
+                success: '#10B981',
+                error: '#EF4444',
+                info: '#6B21E5',
+                warning: '#F59E0B'
+            };
+            toast.style.backgroundColor = colors[type] || colors.info;
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function showLoading(show, message = 'Processing...') {
+            const overlay = document.getElementById('loadingOverlay');
+            const msgEl = document.getElementById('loadingMessage');
+            if (show) {
+                if (msgEl) msgEl.textContent = message;
+                overlay.classList.add('show');
+            } else {
+                overlay.classList.remove('show');
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            currentCampaignToReject = null;
+            document.getElementById('rejectReason').value = '';
+        }
+
+        // Auth Check
+        async function checkAdminAuth() {
+            try {
+                const { data: { user }, error } = await sb.auth.getUser();
+                if (error || !user) {
+                    window.location.href = 'login.html?redirect=admin-approve-campaigns.html';
+                    return false;
+                }
+                currentUser = user;
+                
+                const { data: profile, error: profileError } = await sb
+                    .from('profiles')
+                    .select('is_admin, admin_role')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                if (profileError || !profile || !profile.is_admin) {
+                    window.location.href = 'index.html';
+                    return false;
+                }
+                
+                const adminBadge = document.getElementById('adminBadge');
+                if (adminBadge) {
+                    adminBadge.textContent = profile.admin_role === 'super_admin' ? 'Super Admin' : 'Administrator';
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Auth error:', error);
+                return false;
+            }
+        }
+
+        // Load Pending Campaigns
+        async function loadPendingCampaigns() {
+            console.log('Loading pending campaigns...');
+            
+            const container = document.getElementById('campaignsContainer');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 48px;">
+                    <div class="loading-spinner"></div>
+                    <p>Loading campaigns...</p>
+                </div>
+            `;
+            
+            try {
+                // Get all pending campaigns
+                const { data: campaigns, error } = await sb
+                    .from('campaigns')
+                    .select('*')
+                    .eq('status', 'pending')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                console.log('Found campaigns:', campaigns);
+                
+                // Update pending count
+                document.getElementById('pendingCount').textContent = campaigns?.length || 0;
+                
+                if (!campaigns || campaigns.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-check-circle"></i>
+                            <h3>No Pending Campaigns</h3>
+                            <p>All campaigns have been reviewed.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Get supplier info for all campaigns
+                const supplierIds = [...new Set(campaigns.map(c => c.supplier_id).filter(id => id))];
+                let suppliersMap = {};
+                
+                if (supplierIds.length > 0) {
+                    const { data: suppliers } = await sb
+                        .from('suppliers')
+                        .select('id, business_name, profile_id')
+                        .in('id', supplierIds);
+                    if (suppliers) {
+                        suppliersMap = Object.fromEntries(suppliers.map(s => [s.id, s]));
+                    }
+                }
+                
+                // Get profile info for all suppliers
+                const profileIds = [...new Set(Object.values(suppliersMap).map(s => s.profile_id).filter(id => id))];
+                let profilesMap = {};
+                
+                if (profileIds.length > 0) {
+                    const { data: profiles } = await sb
+                        .from('profiles')
+                        .select('id, full_name, email, phone')
+                        .in('id', profileIds);
+                    if (profiles) {
+                        profilesMap = Object.fromEntries(profiles.map(p => [p.id, p]));
+                    }
+                }
+                
+                // Get ad info
+                const adIds = [...new Set(campaigns.map(c => c.ad_id).filter(id => id))];
+                let adsMap = {};
+                
+                if (adIds.length > 0) {
+                    const { data: ads } = await sb
+                        .from('ads')
+                        .select('id, title, image_urls')
+                        .in('id', adIds);
+                    if (ads) {
+                        adsMap = Object.fromEntries(ads.map(a => [a.id, a]));
+                    }
+                }
+                
+                // Render campaigns
+                let html = '';
+                
+                for (const campaign of campaigns) {
+                    const supplier = suppliersMap[campaign.supplier_id];
+                    const profile = profilesMap[supplier?.profile_id];
+                    const ad = adsMap[campaign.ad_id];
+                    
+                    const supplierName = supplier?.business_name || 'Unknown Supplier';
+                    const supplierEmail = profile?.email || 'No email';
+                    const supplierPhone = profile?.phone || 'No phone';
+                    const productName = ad?.title || 'N/A';
+                    const productImage = ad?.image_urls?.[0] || 'https://via.placeholder.com/120x120/6B21E5/FFFFFF?text=Product';
+                    
+                    html += `
+                        <div class="campaign-card">
+                            <div class="campaign-header">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <i class="fas fa-clock" style="color: #F59E0B;"></i>
+                                    <span>Created: ${formatDate(campaign.created_at)}</span>
+                                </div>
+                                <div class="campaign-status">PENDING APPROVAL</div>
+                            </div>
+                            <div class="campaign-body">
+                                <div class="campaign-image">
+                                    <img src="${productImage}" alt="${escapeHtml(productName)}">
+                                </div>
+                                <div class="campaign-details">
+                                    <h2 class="campaign-name">${escapeHtml(campaign.name)}</h2>
+                                    <div class="campaign-supplier">
+                                        <div class="supplier-info">
+                                            <i class="fas fa-store"></i>
+                                            <span>${escapeHtml(supplierName)}</span>
+                                        </div>
+                                        <div class="supplier-info">
+                                            <i class="fas fa-envelope"></i>
+                                            <span>${escapeHtml(supplierEmail)}</span>
+                                        </div>
+                                        <div class="supplier-info">
+                                            <i class="fas fa-phone"></i>
+                                            <span>${escapeHtml(supplierPhone)}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="campaign-stats">
+                                        <div class="stat-item">
+                                            <div class="value">${formatCurrency(campaign.budget)}</div>
+                                            <div class="label">Budget</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="value">${formatCurrency(campaign.cost_per_lead)}</div>
+                                            <div class="label">Cost Per Lead</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="value">${campaign.target_leads || '∞'}</div>
+                                            <div class="label">Target Leads</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="value">${escapeHtml(productName)}</div>
+                                            <div class="label">Product</div>
+                                        </div>
+                                    </div>
+                                    
+                                    ${campaign.description ? `
+                                        <div class="campaign-description">
+                                            <i class="fas fa-align-left" style="color: #6B21E5; margin-right: 8px;"></i>
+                                            ${escapeHtml(campaign.description)}
+                                        </div>
+                                    ` : ''}
+                                    
+                                    ${campaign.promo_message ? `
+                                        <div class="promo-message">
+                                            <i class="fas fa-comment-dots"></i> <strong>Promo Message:</strong><br>
+                                            ${escapeHtml(campaign.promo_message)}
+                                        </div>
+                                    ` : ''}
+                                    
+                                    <div class="campaign-actions">
+                                        <button class="btn-approve" onclick="approveCampaign('${campaign.id}')">
+                                            <i class="fas fa-check-circle"></i> Approve Campaign
+                                        </button>
+                                        <button class="btn-reject" onclick="showRejectModal('${campaign.id}')">
+                                            <i class="fas fa-times-circle"></i> Reject
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                container.innerHTML = html;
+                console.log(`Rendered ${campaigns.length} campaigns`);
+                
+            } catch (error) {
+                console.error('Error loading campaigns:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Loading Campaigns</h3>
+                        <p>${error.message}</p>
+                        <button onclick="loadPendingCampaigns()" style="margin-top: 16px; padding: 10px 20px; background: #6B21E5; color: white; border: none; border-radius: 30px; cursor: pointer;">
+                            <i class="fas fa-sync-alt"></i> Retry
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Approve Campaign
+        async function approveCampaign(campaignId) {
+            if (!confirm('Are you sure you want to approve this campaign? It will become active immediately.')) return;
+            
+            showLoading(true, 'Approving campaign...');
+            
+            try {
+                const { error } = await sb
+                    .from('campaigns')
+                    .update({
+                        status: 'active',
+                        start_date: new Date().toISOString()
+                    })
+                    .eq('id', campaignId);
+                
+                if (error) throw error;
+                
+                // Log admin action
+                await sb
+                    .from('admin_actions')
+                    .insert({
+                        admin_id: currentUser.id,
+                        action_type: 'campaign_approved',
+                        target_campaign_id: campaignId,
+                        details: { approved_at: new Date().toISOString() }
+                    });
+                
+                showToast('Campaign approved and launched successfully!', 'success');
+                loadPendingCampaigns(); // Refresh the list
+                
+            } catch (error) {
+                console.error('Error approving campaign:', error);
+                showToast('Error approving campaign: ' + error.message, 'error');
+            }
+            
+            showLoading(false);
+        }
+
+        // Show Reject Modal
+        function showRejectModal(campaignId) {
+            currentCampaignToReject = campaignId;
+            document.getElementById('rejectModal').classList.add('active');
+        }
+
+        // Confirm Reject
+        async function confirmReject() {
+            if (!currentCampaignToReject) return;
+            
+            const reason = document.getElementById('rejectReason').value;
+            
+            showLoading(true, 'Rejecting campaign...');
+            
+            try {
+                const { error } = await sb
+                    .from('campaigns')
+                    .update({
+                        status: 'cancelled'
+                    })
+                    .eq('id', currentCampaignToReject);
+                
+                if (error) throw error;
+                
+                // Log admin action
+                await sb
+                    .from('admin_actions')
+                    .insert({
+                        admin_id: currentUser.id,
+                        action_type: 'campaign_rejected',
+                        target_campaign_id: currentCampaignToReject,
+                        details: { reason, rejected_at: new Date().toISOString() }
+                    });
+                
+                showToast('Campaign rejected successfully', 'success');
+                closeModal('rejectModal');
+                loadPendingCampaigns(); // Refresh the list
+                
+            } catch (error) {
+                console.error('Error rejecting campaign:', error);
+                showToast('Error rejecting campaign: ' + error.message, 'error');
+            }
+            
+            showLoading(false);
+        }
+
+        // Initialize
+        async function init() {
+            const isAdmin = await checkAdminAuth();
+            if (isAdmin) {
+                await loadPendingCampaigns();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

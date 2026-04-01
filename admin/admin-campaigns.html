@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Dashboard - Campaign Management</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css">
+    <link rel="stylesheet" href="style/index.css">
+    <link rel="stylesheet" href="style/admin-campaigns.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">Admin Dashboard</span>
+            </div>
+            <div class="header-right">
+                <span class="admin-badge" id="adminBadge">Administrator</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Navigation -->
+    <div class="admin-nav">
+        <button class="admin-nav-btn active" data-section="overview">
+            <i class="fas fa-chart-line"></i> Overview
+        </button>
+        <button class="admin-nav-btn" data-section="pending-campaigns">
+            <i class="fas fa-clock"></i> Pending Campaigns
+            <span class="badge" id="pendingCount">0</span>
+        </button>
+        <button class="admin-nav-btn" data-section="active-campaigns">
+            <i class="fas fa-rocket"></i> Active Campaigns
+        </button>
+        <button class="admin-nav-btn" data-section="fraud-alerts">
+            <i class="fas fa-shield-alt"></i> Fraud Alerts
+            <span class="badge danger" id="fraudCount">0</span>
+        </button>
+        <button class="admin-nav-btn" data-section="payout-requests">
+            <i class="fas fa-money-bill-wave"></i> Payout Requests
+            <span class="badge" id="payoutCount">0</span>
+        </button>
+        <button class="admin-nav-btn" data-section="suppliers">
+            <i class="fas fa-store"></i> Suppliers
+        </button>
+        <button class="admin-nav-btn" data-section="marketers">
+            <i class="fas fa-users"></i> Marketers
+        </button>
+        <button class="admin-nav-btn" data-section="settings">
+            <i class="fas fa-cog"></i> Settings
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-content">
+        
+        <!-- Overview Section -->
+        <div class="admin-section active" id="overviewSection">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalCampaigns">0</span>
+                        <span class="stat-label">Total Campaigns</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="pendingCampaigns">0</span>
+                        <span class="stat-label">Pending Approval</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="activeCampaignsCount">0</span>
+                        <span class="stat-label">Active Campaigns</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalLeads">0</span>
+                        <span class="stat-label">Total Leads</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalPayouts">UGX 0</span>
+                        <span class="stat-label">Total Payouts</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="fraudAlertsCount">0</span>
+                        <span class="stat-label">Fraud Alerts</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-row">
+                <div class="chart-card">
+                    <h3>Campaigns by Status</h3>
+                    <canvas id="campaignStatusChart" width="400" height="300"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Leads Over Time</h3>
+                    <canvas id="leadsTimelineChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+
+            <div class="recent-activity">
+                <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                <div class="activity-list" id="recentActivity">
+                    <div class="loading-skeleton">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Campaigns Section -->
+        <div class="admin-section" id="pendingCampaignsSection">
+            <div class="section-header">
+                <h3><i class="fas fa-clock"></i> Campaigns Awaiting Approval</h3>
+                <div class="filter-controls">
+                    <select id="pendingFilter">
+                        <option value="all">All</option>
+                        <option value="supplier">Filter by Supplier</option>
+                    </select>
+                </div>
+            </div>
+            <div class="campaigns-table" id="pendingCampaignsList">
+                <div class="loading-skeleton">Loading pending campaigns...</div>
+            </div>
+        </div>
+
+        <!-- Active Campaigns Section -->
+        <div class="admin-section" id="activeCampaignsSection">
+            <div class="section-header">
+                <h3><i class="fas fa-rocket"></i> Active Campaigns</h3>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchActiveCampaigns" placeholder="Search campaigns...">
+                </div>
+            </div>
+            <div class="campaigns-table" id="activeCampaignsList">
+                <div class="loading-skeleton">Loading active campaigns...</div>
+            </div>
+        </div>
+
+        <!-- Fraud Alerts Section -->
+        <div class="admin-section" id="fraudAlertsSection">
+            <div class="section-header">
+                <h3><i class="fas fa-shield-alt"></i> Fraud Alerts</h3>
+                <div class="filter-controls">
+                    <select id="fraudFilter">
+                        <option value="all">All Alerts</option>
+                        <option value="pending">Pending Review</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fraud-alerts-list" id="fraudAlertsList">
+                <div class="loading-skeleton">Loading fraud alerts...</div>
+            </div>
+        </div>
+
+        <!-- Payout Requests Section -->
+        <div class="admin-section" id="payoutRequestsSection">
+            <div class="section-header">
+                <h3><i class="fas fa-money-bill-wave"></i> Payout Requests</h3>
+                <div class="filter-controls">
+                    <select id="payoutFilter">
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="all">All</option>
+                    </select>
+                </div>
+            </div>
+            <div class="payouts-table" id="payoutRequestsList">
+                <div class="loading-skeleton">Loading payout requests...</div>
+            </div>
+        </div>
+
+        <!-- Suppliers Section -->
+        <div class="admin-section" id="suppliersSection">
+            <div class="section-header">
+                <h3><i class="fas fa-store"></i> Verified Suppliers</h3>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchSuppliers" placeholder="Search suppliers...">
+                </div>
+            </div>
+            <div class="suppliers-table" id="suppliersList">
+                <div class="loading-skeleton">Loading suppliers...</div>
+            </div>
+        </div>
+
+        <!-- Marketers Section -->
+        <div class="admin-section" id="marketersSection">
+            <div class="section-header">
+                <h3><i class="fas fa-users"></i> Top Marketers</h3>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchMarketers" placeholder="Search marketers...">
+                </div>
+            </div>
+            <div class="marketers-table" id="marketersList">
+                <div class="loading-skeleton">Loading marketers...</div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div class="admin-section" id="settingsSection">
+            <div class="settings-card">
+                <h3><i class="fas fa-sliders-h"></i> Campaign Settings</h3>
+                <form id="campaignSettingsForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Minimum Budget (UGX)</label>
+                            <input type="number" id="minBudget" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Maximum Budget (UGX)</label>
+                            <input type="number" id="maxBudget" class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Min Cost Per Lead (UGX)</label>
+                            <input type="number" id="minCostPerLead" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Max Cost Per Lead (UGX)</label>
+                            <input type="number" id="maxCostPerLead" class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Default Campaign Duration (Days)</label>
+                        <input type="number" id="defaultDuration" class="form-input">
+                    </div>
+                    <button type="submit" class="save-settings-btn">Save Settings</button>
+                </form>
+            </div>
+
+            <div class="settings-card">
+                <h3><i class="fas fa-shield-alt"></i> Fraud Detection Rules</h3>
+                <form id="fraudRulesForm">
+                    <div class="form-group">
+                        <label>Max Leads per IP per Day</label>
+                        <input type="number" id="maxLeadsPerIp" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Max Leads per Device per Day</label>
+                        <input type="number" id="maxLeadsPerDevice" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Min Seconds Between Conversions</label>
+                        <input type="number" id="minSecondsBetween" class="form-input">
+                    </div>
+                    <button type="submit" class="save-settings-btn">Save Rules</button>
+                </form>
+            </div>
+
+            <div class="settings-card">
+                <h3><i class="fas fa-percent"></i> Commission Structure</h3>
+                <form id="commissionForm">
+                    <div class="form-group">
+                        <label>Platform Commission (%)</label>
+                        <input type="number" id="platformCommission" class="form-input" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Marketer Commission (%)</label>
+                        <input type="number" id="marketerCommission" class="form-input" step="0.1">
+                    </div>
+                    <button type="submit" class="save-settings-btn">Save Commission</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campaign Approval Modal -->
+    <div class="modal" id="approvalModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Review Campaign</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="campaign-details" id="campaignDetails"></div>
+                <div class="form-group">
+                    <label>Admin Notes (Optional)</label>
+                    <textarea id="approvalNotes" rows="3" placeholder="Add any notes about this campaign..."></textarea>
+                </div>
+                <div class="approval-actions">
+                    <button class="btn-reject" id="rejectCampaignBtn">
+                        <i class="fas fa-times"></i> Reject Campaign
+                    </button>
+                    <button class="btn-approve" id="approveCampaignBtn">
+                        <i class="fas fa-check"></i> Approve & Launch
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lead Details Modal -->
+    <div class="modal" id="leadDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Lead Details</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="leadDetailsContent"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p id="loadingMessage">Loading...</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="js/referral-utils.js"></script>
+    <script src="script/admin-campaigns.js"></script>
+</body>
+</html>

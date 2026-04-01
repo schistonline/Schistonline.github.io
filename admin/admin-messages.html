@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin - Message Monitoring | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style/admin-messages.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="admin-dashboard.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>Admin</span></span>
+            </a>
+            <div class="header-actions">
+                <button class="header-icon" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+                <div class="admin-profile" id="adminProfile">
+                    <img src="https://via.placeholder.com/32" alt="Admin">
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <div>
+                <h1>Message Monitoring</h1>
+                <p class="subtitle">Monitor and moderate all messages across the platform</p>
+            </div>
+            <div class="title-actions">
+                <button class="btn-outline" id="exportBtn">
+                    <i class="fas fa-download"></i> Export
+                </button>
+                <button class="btn-primary" id="scanBtn">
+                    <i class="fas fa-shield-alt"></i> Scan for Issues
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalMessages">0</span>
+                    <span class="stat-label">Total Messages</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="activeConversations">0</span>
+                    <span class="stat-label">Active Conversations</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon yellow">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="reportedMessages">0</span>
+                    <span class="stat-label">Reported</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="activeUsers">0</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchMessages" placeholder="Search messages, users, or content...">
+            </div>
+            
+            <div class="filter-group">
+                <select id="dateFilter">
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="week">Last 7 Days</option>
+                    <option value="month">Last 30 Days</option>
+                    <option value="all" selected>All Time</option>
+                    <option value="custom">Custom Range</option>
+                </select>
+                
+                <select id="typeFilter">
+                    <option value="all">All Types</option>
+                    <option value="text">Text Only</option>
+                    <option value="image">With Images</option>
+                    <option value="file">With Files</option>
+                    <option value="quote">With Quotes</option>
+                </select>
+                
+                <select id="statusFilter">
+                    <option value="all">All Status</option>
+                    <option value="reported">Reported</option>
+                    <option value="flagged">Flagged</option>
+                    <option value="blocked">Blocked</option>
+                    <option value="normal">Normal</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Quick Filters -->
+        <div class="quick-filters">
+            <button class="quick-filter active" data-filter="all">All Messages</button>
+            <button class="quick-filter" data-filter="reported">Reported <span class="badge" id="reportedBadge">0</span></button>
+            <button class="quick-filter" data-filter="flagged">Flagged <span class="badge" id="flaggedBadge">0</span></button>
+            <button class="quick-filter" data-filter="images">With Images</button>
+            <button class="quick-filter" data-filter="files">With Files</button>
+            <button class="quick-filter" data-filter="quotes">With Quotes</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading messages...</p>
+        </div>
+
+        <!-- Messages Grid -->
+        <div class="messages-grid" id="messagesGrid" style="display: none;">
+            <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-comments"></i>
+            <h3>No Messages Found</h3>
+            <p>There are no messages matching your filters</p>
+            <button class="btn-primary" onclick="resetFilters()">
+                <i class="fas fa-redo"></i> Reset Filters
+            </button>
+        </div>
+
+        <!-- Load More -->
+        <div class="load-more" id="loadMore" style="display: none;">
+            <button class="btn-outline" onclick="loadMoreMessages()">
+                <i class="fas fa-chevron-down"></i> Load More
+            </button>
+        </div>
+    </main>
+
+    <!-- Message Detail Modal -->
+    <div class="modal" id="messageModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Message Details</h3>
+                <button class="modal-close" onclick="closeMessageModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="message-detail" id="messageDetail">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversation View Modal -->
+    <div class="modal" id="conversationModal">
+        <div class="modal-content modal-xl">
+            <div class="modal-header">
+                <h3>Conversation Thread</h3>
+                <button class="modal-close" onclick="closeConversationModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="conversation-thread" id="conversationThread">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Details Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>User Details</h3>
+                <button class="modal-close" onclick="closeUserModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="user-detail" id="userDetail">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Details Modal -->
+    <div class="modal" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Report Details</h3>
+                <button class="modal-close" onclick="closeReportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="report-detail" id="reportDetail">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-success" onclick="resolveReport()">
+                        <i class="fas fa-check"></i> Resolve
+                    </button>
+                    <button class="btn-warning" onclick="dismissReport()">
+                        <i class="fas fa-times"></i> Dismiss
+                    </button>
+                    <button class="btn-danger" onclick="blockUser()">
+                        <i class="fas fa-ban"></i> Block User
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flag Message Modal -->
+    <div class="modal" id="flagModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Flag Message</h3>
+                <button class="modal-close" onclick="closeFlagModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Select reason for flagging this message:</p>
+                
+                <div class="flag-reasons">
+                    <label class="radio-label">
+                        <input type="radio" name="flagReason" value="inappropriate" checked>
+                        <span>Inappropriate Content</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="flagReason" value="spam">
+                        <span>Spam</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="flagReason" value="harassment">
+                        <span>Harassment</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="flagReason" value="scam">
+                        <span>Potential Scam</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="flagReason" value="other">
+                        <span>Other</span>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="flagNotes">Additional Notes</label>
+                    <textarea id="flagNotes" rows="3" placeholder="Provide more details..."></textarea>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="submitFlag()">Flag Message</button>
+                    <button class="btn-secondary" onclick="closeFlagModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Block User Modal -->
+    <div class="modal" id="blockUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Block User</h3>
+                <button class="modal-close" onclick="closeBlockUserModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="warning-message">Are you sure you want to block <span id="blockUserName"></span>?</p>
+                <p class="warning-detail">This will prevent them from sending messages and they will be logged out.</p>
+                
+                <div class="form-group">
+                    <label for="blockReason">Reason for blocking</label>
+                    <select id="blockReason">
+                        <option value="spam">Spam</option>
+                        <option value="harassment">Harassment</option>
+                        <option value="scam">Scam/Fraud</option>
+                        <option value="multiple_reports">Multiple Reports</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Duration</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="blockDuration" value="temporary" checked>
+                            <span>Temporary (7 days)</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="blockDuration" value="permanent">
+                            <span>Permanent</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-danger" onclick="confirmBlockUser()">Block User</button>
+                    <button class="btn-secondary" onclick="closeBlockUserModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Message Modal -->
+    <div class="modal" id="deleteMessageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Message</h3>
+                <button class="modal-close" onclick="closeDeleteMessageModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-icon">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+                <p class="delete-message">Are you sure you want to delete this message?</p>
+                <p class="delete-warning">This action cannot be undone. The message will be permanently removed.</p>
+                
+                <div class="modal-actions">
+                    <button class="btn-danger" onclick="confirmDeleteMessage()">Delete Permanently</button>
+                    <button class="btn-secondary" onclick="closeDeleteMessageModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Messages</h3>
+                <button class="modal-close" onclick="closeExportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="export-options">
+                    <div class="export-option">
+                        <i class="fas fa-file-csv"></i>
+                        <h4>CSV Export</h4>
+                        <p>Export messages as CSV file for Excel</p>
+                        <button class="btn-secondary" onclick="exportMessages('csv')">Export CSV</button>
+                    </div>
+                    
+                    <div class="export-option">
+                        <i class="fas fa-file-excel"></i>
+                        <h4>Excel Export</h4>
+                        <p>Export with formatting and multiple sheets</p>
+                        <button class="btn-secondary" onclick="exportMessages('excel')">Export Excel</button>
+                    </div>
+                    
+                    <div class="export-option">
+                        <i class="fas fa-file-pdf"></i>
+                        <h4>PDF Report</h4>
+                        <p>Generate a formatted PDF report</p>
+                        <button class="btn-secondary" onclick="exportMessages('pdf')">Export PDF</button>
+                    </div>
+                    
+                    <div class="export-option">
+                        <i class="fas fa-file-archive"></i>
+                        <h4>JSON Backup</h4>
+                        <p>Full data export for backup purposes</p>
+                        <button class="btn-secondary" onclick="exportMessages('json')">Export JSON</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Date Range Modal -->
+    <div class="modal" id="dateRangeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Select Date Range</h3>
+                <button class="modal-close" onclick="closeDateRangeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="date-range-picker">
+                    <div class="form-group">
+                        <label>From Date</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label>To Date</label>
+                        <input type="date" id="endDate">
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="applyDateRange()">Apply</button>
+                    <button class="btn-secondary" onclick="closeDateRangeModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scan Results Modal -->
+    <div class="modal" id="scanModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Security Scan Results</h3>
+                <button class="modal-close" onclick="closeScanModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="scan-results" id="scanResults">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Operation completed successfully</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="script/admin-messages.js"></script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin - Location Management | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style/admin-locations.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="admin-dashboard.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>Admin</span></span>
+            </a>
+            <div class="header-actions">
+                <button class="header-icon" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+                <div class="admin-profile" id="adminProfile">
+                    <img src="https://via.placeholder.com/32" alt="Admin">
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <div>
+                <h1>Location Management</h1>
+                <p class="subtitle">Manage regions, districts, counties and sub-counties</p>
+            </div>
+            <div class="title-actions">
+                <button class="btn-outline" id="importBtn">
+                    <i class="fas fa-file-import"></i> Import
+                </button>
+                <button class="btn-primary" id="addLocationBtn">
+                    <i class="fas fa-plus"></i> Add Location
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-globe-africa"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalRegions">0</span>
+                    <span class="stat-label">Regions</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalDistricts">0</span>
+                    <span class="stat-label">Districts</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-city"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalCounties">0</span>
+                    <span class="stat-label">Counties</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-map-pin"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalSubCounties">0</span>
+                    <span class="stat-label">Sub-Counties</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Hierarchy Navigation -->
+        <div class="hierarchy-nav">
+            <button class="hierarchy-btn active" data-level="regions">
+                <i class="fas fa-globe-africa"></i> Regions
+            </button>
+            <button class="hierarchy-btn" data-level="districts">
+                <i class="fas fa-map-marker-alt"></i> Districts
+            </button>
+            <button class="hierarchy-btn" data-level="counties">
+                <i class="fas fa-city"></i> Counties
+            </button>
+            <button class="hierarchy-btn" data-level="subcounties">
+                <i class="fas fa-map-pin"></i> Sub-Counties
+            </button>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="filters-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchLocations" placeholder="Search locations...">
+            </div>
+            
+            <div class="filter-group">
+                <select id="regionFilter" style="display: none;">
+                    <option value="">All Regions</option>
+                </select>
+                
+                <select id="districtFilter" style="display: none;">
+                    <option value="">All Districts</option>
+                </select>
+                
+                <select id="countyFilter" style="display: none;">
+                    <option value="">All Counties</option>
+                </select>
+                
+                <select id="statusFilter">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading locations...</p>
+        </div>
+
+        <!-- Locations Table -->
+        <div class="table-container" id="tableContainer" style="display: none;">
+            <table class="locations-table">
+                <thead id="tableHeader">
+                    <!-- Dynamic header based on level -->
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-map-marked-alt"></i>
+            <h3>No Locations Found</h3>
+            <p>Get started by adding your first location</p>
+            <button class="btn-primary" onclick="showAddModal()">
+                <i class="fas fa-plus"></i> Add Location
+            </button>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination" style="display: none;">
+            <!-- Populated by JS -->
+        </div>
+    </main>
+
+    <!-- Add/Edit Location Modal -->
+    <div class="modal" id="locationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Region</h3>
+                <button class="modal-close" onclick="closeLocationModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="locationForm" onsubmit="event.preventDefault(); saveLocation();">
+                    <!-- Dynamic fields based on level -->
+                    <div id="modalFields"></div>
+                    
+                    <div class="modal-actions">
+                        <button type="submit" class="btn-primary" id="saveLocationBtn">Save</button>
+                        <button type="button" class="btn-secondary" onclick="closeLocationModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Import Locations</h3>
+                <button class="modal-close" onclick="closeImportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-options">
+                    <div class="import-option">
+                        <i class="fas fa-file-csv"></i>
+                        <h4>CSV Import</h4>
+                        <p>Upload a CSV file with location data</p>
+                        <div class="file-upload-area" id="csvUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to browse or drag and drop</p>
+                            <small>Supports .csv files (Max 5MB)</small>
+                            <input type="file" id="csvFile" accept=".csv" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="import-option">
+                        <i class="fas fa-copy"></i>
+                        <h4>Bulk Add</h4>
+                        <p>Add multiple locations at once</p>
+                        <textarea id="bulkData" rows="5" placeholder="Enter one location per line&#10;e.g.: Kampala, Central, KLA"></textarea>
+                        <select id="bulkLevel">
+                            <option value="regions">Regions</option>
+                            <option value="districts">Districts</option>
+                            <option value="counties">Counties</option>
+                            <option value="subcounties">Sub-Counties</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="processImport()">Import</button>
+                    <button class="btn-secondary" onclick="closeImportModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Location</h3>
+                <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="delete-message">Are you sure you want to delete <span id="deleteItemName"></span>?</p>
+                <p class="delete-warning">This will also delete all child locations. This action cannot be undone.</p>
+                
+                <div class="modal-actions">
+                    <button class="btn-danger" id="confirmDeleteBtn">Delete</button>
+                    <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Operation completed successfully</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="script/admin-locations.js"></script>
+</body>
+</html>

@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Verify Poultry Suppliers | Admin Dashboard</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        /* Admin Container */
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .admin-header {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .header-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .admin-badge {
+            background: #fbbf24;
+            color: #0B4F6C;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .date-badge {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px 8px 12px;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 36px;
+            height: 36px;
+            background: #fbbf24;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0B4F6C;
+            font-weight: 700;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .stat-header i {
+            font-size: 28px;
+            color: #0B4F6C;
+            opacity: 0.3;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Tabs */
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            margin: 0 24px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .admin-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn i {
+            font-size: 16px;
+        }
+
+        .tab-btn:hover {
+            border-color: #0B4F6C;
+            color: #0B4F6C;
+            background: #f0f9ff;
+        }
+
+        .tab-btn.active {
+            background: #0B4F6C;
+            color: white;
+            border-color: #0B4F6C;
+        }
+
+        .tab-btn .count-badge {
+            background: #ef4444;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 30px;
+            font-size: 11px;
+            margin-left: 4px;
+        }
+
+        /* Content Area */
+        .content-area {
+            margin: 24px;
+        }
+
+        .filters-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 48px;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            font-size: 14px;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 12px 24px;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0a4057;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(11,79,108,0.3);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-outline:hover {
+            border-color: #0B4F6C;
+            color: #0B4F6C;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        /* Suppliers Grid */
+        .suppliers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 20px;
+        }
+
+        .supplier-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .supplier-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+
+        .supplier-card.pending {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .supplier-card.verified {
+            border-left: 4px solid #10b981;
+        }
+
+        .supplier-card.rejected {
+            border-left: 4px solid #ef4444;
+        }
+
+        .card-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .company-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .status-verified {
+            background: #10b981;
+            color: white;
+        }
+
+        .status-rejected {
+            background: #ef4444;
+            color: white;
+        }
+
+        .company-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .company-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .company-meta i {
+            margin-right: 6px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .info-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .vaccine-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .vaccine-tag {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .doc-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 16px 0;
+        }
+
+        .doc-title {
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #0B4F6C;
+        }
+
+        .doc-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 4px;
+        }
+
+        .doc-name {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .doc-name i {
+            color: #ef4444;
+        }
+
+        .doc-view {
+            color: #0B4F6C;
+            cursor: pointer;
+        }
+
+        .notes-section {
+            margin: 16px 0;
+        }
+
+        .notes-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 13px;
+            resize: vertical;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn.approve {
+            background: #10b981;
+            color: white;
+        }
+
+        .action-btn.approve:hover {
+            background: #059669;
+        }
+
+        .action-btn.reject {
+            background: #ef4444;
+            color: white;
+        }
+
+        .action-btn.reject:hover {
+            background: #dc2626;
+        }
+
+        .action-btn.pending {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .action-btn.view {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: #94a3b8;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        .rejection-reasons {
+            margin: 20px 0;
+        }
+
+        .rejection-option {
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .rejection-option:hover {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .rejection-option.selected {
+            border-color: #ef4444;
+            background: #fee2e2;
+        }
+
+        /* Loading */
+        .loading {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px;
+        }
+
+        .spinner {
+            border: 3px solid #f1f5f9;
+            border-top: 3px solid #0B4F6C;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            background: #0f172a;
+            color: white;
+            padding: 16px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: #10b981;
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .filters-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                max-width: none;
+            }
+            
+            .filter-group {
+                flex-wrap: wrap;
+            }
+            
+            .filter-select {
+                flex: 1;
+            }
+            
+            .suppliers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header -->
+        <div class="admin-header">
+            <div class="header-left">
+                <div class="menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="header-title">
+                    <h1>Verify Poultry Suppliers</h1>
+                    <p>Review and approve supplier applications</p>
+                </div>
+            </div>
+            
+            <div class="admin-badge">
+                <i class="fas fa-shield-alt"></i> Admin
+            </div>
+
+            <div class="header-right">
+                <div class="date-badge">
+                    <i class="far fa-calendar"></i> <span id="currentDate"></span>
+                </div>
+                <div class="profile-btn" onclick="toggleProfileMenu()">
+                    <div class="profile-avatar" id="profileAvatar">A</div>
+                    <span>Admin</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Pending</span>
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-value" id="statPending">0</div>
+                <div class="stat-label">awaiting review</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Verified</span>
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-value" id="statVerified">0</div>
+                <div class="stat-label">approved suppliers</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Rejected</span>
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="stat-value" id="statRejected">0</div>
+                <div class="stat-label">applications</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Total</span>
+                    <i class="fas fa-store"></i>
+                </div>
+                <div class="stat-value" id="statTotal">0</div>
+                <div class="stat-label">all suppliers</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="switchTab('pending')">
+                <i class="fas fa-clock"></i> Pending
+                <span class="count-badge" id="pendingCount">0</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('verified')">
+                <i class="fas fa-check-circle"></i> Verified
+            </button>
+            <button class="tab-btn" onclick="switchTab('rejected')">
+                <i class="fas fa-times-circle"></i> Rejected
+            </button>
+            <button class="tab-btn" onclick="switchTab('all')">
+                <i class="fas fa-store"></i> All Suppliers
+            </button>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Filters -->
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by company name, email, phone...">
+                </div>
+                
+                <div class="filter-group">
+                    <select class="filter-select" id="districtFilter">
+                        <option value="all">All Districts</option>
+                        <option value="Kampala">Kampala</option>
+                        <option value="Wakiso">Wakiso</option>
+                        <option value="Mukono">Mukono</option>
+                        <option value="Jinja">Jinja</option>
+                        <option value="Mbarara">Mbarara</option>
+                    </select>
+                    
+                    <select class="filter-select" id="dateFilter">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                    </select>
+                    
+                    <button class="btn btn-outline" onclick="applyFilters()">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Suppliers Grid -->
+            <div class="suppliers-grid" id="suppliersGrid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading suppliers...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rejection Modal -->
+    <div class="modal" id="rejectionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reject Supplier Application</h3>
+                <span class="close-btn" onclick="closeModal('rejectionModal')">&times;</span>
+            </div>
+            
+            <p style="color: #64748b; margin-bottom: 20px;">Please select a reason for rejection:</p>
+            
+            <div class="rejection-reasons">
+                <div class="rejection-option" onclick="selectRejectionReason('incomplete')">
+                    <strong>📋 Incomplete Information</strong>
+                    <p style="font-size: 12px; margin-top: 4px;">Missing required business documents or information</p>
+                </div>
+                
+                <div class="rejection-option" onclick="selectRejectionReason('invalid')">
+                    <strong>❌ Invalid Documents</strong>
+                    <p style="font-size: 12px; margin-top: 4px;">Documents are not valid or cannot be verified</p>
+                </div>
+                
+                <div class="rejection-option" onclick="selectRejectionReason('duplicate')">
+                    <strong>⚠️ Duplicate Account</strong>
+                    <p style="font-size: 12px; margin-top: 4px;">Supplier already has an existing account</p>
+                </div>
+                
+                <div class="rejection-option" onclick="selectRejectionReason('fraud')">
+                    <strong>🚫 Suspicious Activity</strong>
+                    <p style="font-size: 12px; margin-top: 4px;">Potential fraud or misrepresentation</p>
+                </div>
+                
+                <div class="rejection-option" onclick="selectRejectionReason('other')">
+                    <strong>📌 Other</strong>
+                    <p style="font-size: 12px; margin-top: 4px;">Specify another reason</p>
+                </div>
+            </div>
+            
+            <div id="otherReasonContainer" style="display: none; margin: 20px 0;">
+                <textarea id="otherReason" rows="3" placeholder="Please specify the reason for rejection..." style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px;"></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-outline" onclick="closeModal('rejectionModal')" style="flex:1">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmRejection()" style="flex:1">Confirm Rejection</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Documents Modal -->
+    <div class="modal" id="viewDocsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Supplier Documents</h3>
+                <span class="close-btn" onclick="closeModal('viewDocsModal')">&times;</span>
+            </div>
+            <div id="documentViewer" style="margin: 20px 0; text-align: center;">
+                <!-- Documents will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ============================================
+        // SUPABASE CONFIG
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE
+        // ============================================
+        let allSuppliers = [];
+        let filteredSuppliers = [];
+        let currentTab = 'pending';
+        let currentSupplierId = null;
+        let selectedRejectionReason = '';
+
+        // ============================================
+        // INIT
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async function() {
+            await checkAdminAuth();
+            await loadSuppliers();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        });
+
+        async function checkAdminAuth() {
+            const { data: { user } } = await sb.auth.getUser();
+            
+            if (!user) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            // Check if user is admin
+            const { data: profile } = await sb
+                .from('profiles')
+                .select('is_admin')
+                .eq('id', user.id)
+                .single();
+            
+            if (!profile?.is_admin) {
+                window.location.href = 'index.html';
+                return;
+            }
+        }
+
+        // ============================================
+        // LOAD SUPPLIERS
+        // ============================================
+        async function loadSuppliers() {
+            const { data, error } = await sb
+                .from('poultry_suppliers')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                console.error('Error loading suppliers:', error);
+                return;
+            }
+            
+            allSuppliers = data || [];
+            applyFilters();
+            updateStats();
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const district = document.getElementById('districtFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            
+            filteredSuppliers = allSuppliers.filter(supplier => {
+                // Status filter (tab)
+                if (currentTab !== 'all' && supplier.verification_status !== currentTab) {
+                    return false;
+                }
+                
+                // Search filter
+                if (searchTerm) {
+                    const matchesSearch = 
+                        (supplier.company_name?.toLowerCase() || '').includes(searchTerm) ||
+                        (supplier.email?.toLowerCase() || '').includes(searchTerm) ||
+                        (supplier.phone || '').includes(searchTerm) ||
+                        (supplier.business_type || '').toLowerCase().includes(searchTerm);
+                    
+                    if (!matchesSearch) return false;
+                }
+                
+                // District filter
+                if (district !== 'all' && supplier.district !== district) {
+                    return false;
+                }
+                
+                // Date filter
+                if (dateFilter !== 'all') {
+                    const created = new Date(supplier.created_at);
+                    const now = new Date();
+                    
+                    if (dateFilter === 'today') {
+                        if (created.toDateString() !== now.toDateString()) return false;
+                    } else if (dateFilter === 'week') {
+                        const weekAgo = new Date(now.setDate(now.getDate() - 7));
+                        if (created < weekAgo) return false;
+                    } else if (dateFilter === 'month') {
+                        const monthAgo = new Date(now.setMonth(now.getMonth() - 1));
+                        if (created < monthAgo) return false;
+                    }
+                }
+                
+                return true;
+            });
+            
+            renderSuppliers();
+        }
+
+        function renderSuppliers() {
+            const grid = document.getElementById('suppliersGrid');
+            
+            if (filteredSuppliers.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-store"></i>
+                        <h3>No Suppliers Found</h3>
+                        <p>No suppliers match your current filters</p>
+                        <button class="btn btn-outline" onclick="resetFilters()">
+                            <i class="fas fa-redo"></i> Reset Filters
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filteredSuppliers.map(supplier => `
+                <div class="supplier-card ${supplier.verification_status || 'pending'}">
+                    <div class="card-header">
+                        <div class="header-top">
+                            <span class="company-badge">
+                                <i class="fas ${getBusinessIcon(supplier.business_type)}"></i> 
+                                ${supplier.business_type || 'Farm'}
+                            </span>
+                            <span class="status-badge status-${supplier.verification_status || 'pending'}">
+                                ${supplier.verification_status || 'pending'}
+                            </span>
+                        </div>
+                        <div class="company-name">${escapeHtml(supplier.company_name)}</div>
+                        <div class="company-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> ${supplier.district || 'Kampala'}</span>
+                            <span><i class="fas fa-phone"></i> ${supplier.phone || 'N/A'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Email</div>
+                                <div class="info-value">${escapeHtml(supplier.email) || 'N/A'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">WhatsApp</div>
+                                <div class="info-value">${supplier.whatsapp_number || 'N/A'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Registered</div>
+                                <div class="info-value">${formatDate(supplier.created_at)}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Business Reg</div>
+                                <div class="info-value">${supplier.license_number || 'N/A'}</div>
+                            </div>
+                        </div>
+                        
+                        ${supplier.description ? `
+                            <div style="background: #f8fafc; padding: 12px; border-radius: 12px; margin: 12px 0;">
+                                <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">Description</div>
+                                <div style="font-size: 13px;">${escapeHtml(supplier.description)}</div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Primary Poultry</div>
+                                <div class="info-value">${supplier.primary_poultry || 'Broilers'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Avg Weight</div>
+                                <div class="info-value">${supplier.avg_weight || 2} kg</div>
+                            </div>
+                        </div>
+                        
+                        ${supplier.vaccination_status ? `
+                            <div class="vaccine-tags">
+                                ${supplier.vaccination_status.map(v => 
+                                    `<span class="vaccine-tag">${v}</span>`
+                                ).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="doc-section">
+                            <div class="doc-title">
+                                <i class="fas fa-file-alt"></i> Verification Documents
+                            </div>
+                            <div class="doc-item">
+                                <span class="doc-name">
+                                    <i class="fas fa-file-pdf"></i> Business Registration
+                                </span>
+                                <span class="doc-view" onclick="viewDocument('registration', '${supplier.id}')">
+                                    <i class="fas fa-eye"></i> View
+                                </span>
+                            </div>
+                            <div class="doc-item">
+                                <span class="doc-name">
+                                    <i class="fas fa-file-image"></i> Tax ID (TIN)
+                                </span>
+                                <span class="doc-view" onclick="viewDocument('tax', '${supplier.id}')">
+                                    <i class="fas fa-eye"></i> View
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="notes-section">
+                            <textarea id="note-${supplier.id}" placeholder="Add verification notes... (optional)" rows="2">${supplier.admin_notes || ''}</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        ${supplier.verification_status === 'pending' ? `
+                            <button class="action-btn approve" onclick="verifySupplier('${supplier.id}', true)">
+                                <i class="fas fa-check"></i> Approve
+                            </button>
+                            <button class="action-btn reject" onclick="openRejectionModal('${supplier.id}')">
+                                <i class="fas fa-times"></i> Reject
+                            </button>
+                        ` : supplier.verification_status === 'verified' ? `
+                            <button class="action-btn view" onclick="viewSupplierProfile('${supplier.id}')">
+                                <i class="fas fa-eye"></i> View Profile
+                            </button>
+                            <button class="action-btn reject" onclick="openRejectionModal('${supplier.id}')">
+                                <i class="fas fa-ban"></i> Suspend
+                            </button>
+                        ` : `
+                            <button class="action-btn approve" onclick="verifySupplier('${supplier.id}', true)">
+                                <i class="fas fa-undo"></i> Reinstate
+                            </button>
+                            <button class="action-btn view" onclick="viewSupplierProfile('${supplier.id}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const pending = allSuppliers.filter(s => s.verification_status === 'pending').length;
+            const verified = allSuppliers.filter(s => s.verification_status === 'verified').length;
+            const rejected = allSuppliers.filter(s => s.verification_status === 'rejected').length;
+            
+            document.getElementById('statPending').textContent = pending;
+            document.getElementById('statVerified').textContent = verified;
+            document.getElementById('statRejected').textContent = rejected;
+            document.getElementById('statTotal').textContent = allSuppliers.length;
+            
+            document.getElementById('pendingCount').textContent = pending;
+        }
+
+        // ============================================
+        // VERIFICATION ACTIONS
+        // ============================================
+        async function verifySupplier(supplierId, approve) {
+            const note = document.getElementById(`note-${supplierId}`)?.value || '';
+            
+            const updates = {
+                verification_status: approve ? 'verified' : 'rejected',
+                verified_at: new Date().toISOString(),
+                admin_notes: note,
+                updated_at: new Date().toISOString()
+            };
+            
+            const { error } = await sb
+                .from('poultry_suppliers')
+                .update(updates)
+                .eq('id', supplierId);
+            
+            if (!error) {
+                showToast(`Supplier ${approve ? 'verified' : 'rejected'} successfully!`, 'success');
+                
+                // Send notification to supplier
+                await sendVerificationNotification(supplierId, approve);
+                
+                await loadSuppliers();
+            } else {
+                showToast('Error updating supplier status', 'error');
+            }
+        }
+
+        function openRejectionModal(supplierId) {
+            currentSupplierId = supplierId;
+            document.getElementById('rejectionModal').classList.add('show');
+        }
+
+        function selectRejectionReason(reason) {
+            document.querySelectorAll('.rejection-option').forEach(opt => opt.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            
+            selectedRejectionReason = reason;
+            
+            document.getElementById('otherReasonContainer').style.display = 
+                reason === 'other' ? 'block' : 'none';
+        }
+
+        async function confirmRejection() {
+            if (!selectedRejectionReason) {
+                showToast('Please select a rejection reason', 'error');
+                return;
+            }
+            
+            const otherReason = document.getElementById('otherReason').value;
+            const finalReason = selectedRejectionReason === 'other' ? otherReason : selectedRejectionReason;
+            
+            const note = document.getElementById(`note-${currentSupplierId}`)?.value || '';
+            const fullNote = `Rejected: ${finalReason}. ${note}`;
+            
+            const { error } = await sb
+                .from('poultry_suppliers')
+                .update({
+                    verification_status: 'rejected',
+                    verified_at: new Date().toISOString(),
+                    admin_notes: fullNote,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('id', currentSupplierId);
+            
+            if (!error) {
+                showToast('Supplier rejected', 'success');
+                closeModal('rejectionModal');
+                await loadSuppliers();
+            }
+        }
+
+        async function sendVerificationNotification(supplierId, approved) {
+            // Get supplier's profile_id
+            const { data: supplier } = await sb
+                .from('poultry_suppliers')
+                .select('profile_id, email, phone')
+                .eq('id', supplierId)
+                .single();
+            
+            if (supplier?.profile_id) {
+                await sb
+                    .from('notifications')
+                    .insert({
+                        user_id: supplier.profile_id,
+                        title: approved ? '✅ Application Approved!' : '❌ Application Update',
+                        message: approved ? 
+                            'Your poultry supplier account has been approved. You can now login and start selling!' : 
+                            'Your application was not approved. Please check your email for details.',
+                        type: approved ? 'success' : 'error',
+                        link: approved ? 'poultry-dashboard.html' : null,
+                        created_at: new Date().toISOString()
+                    });
+            }
+        }
+
+        // ============================================
+        // DOCUMENT VIEWING
+        // ============================================
+        function viewDocument(docType, supplierId) {
+            const supplier = allSuppliers.find(s => s.id === supplierId);
+            if (!supplier) return;
+            
+            const docViewer = document.getElementById('documentViewer');
+            
+            // For demo, show placeholder
+            docViewer.innerHTML = `
+                <div style="background: #f8fafc; padding: 40px; border-radius: 12px;">
+                    <i class="fas fa-file-pdf" style="font-size: 48px; color: #ef4444; margin-bottom: 16px;"></i>
+                    <h4 style="margin-bottom: 8px;">${docType === 'registration' ? 'Business Registration' : 'Tax ID (TIN)'}</h4>
+                    <p style="color: #64748b; margin-bottom: 20px;">Document uploaded on ${formatDate(supplier.created_at)}</p>
+                    <button class="btn btn-primary" onclick="window.open('#', '_blank')">
+                        <i class="fas fa-download"></i> Download Document
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('viewDocsModal').classList.add('show');
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            applyFilters();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('districtFilter').value = 'all';
+            document.getElementById('dateFilter').value = 'all';
+            applyFilters();
+        }
+
+        function getBusinessIcon(type) {
+            const icons = {
+                'farm': 'fa-tractor',
+                'distributor': 'fa-truck',
+                'hatchery': 'fa-egg',
+                'processor': 'fa-utensils'
+            };
+            return icons[type] || 'fa-store';
+        }
+
+        function formatDate(date) {
+            if (!date) return 'N/A';
+            return new Date(date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function updateDateTime() {
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+            selectedRejectionReason = '';
+            document.getElementById('otherReason').value = '';
+            document.getElementById('otherReasonContainer').style.display = 'none';
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function viewSupplierProfile(supplierId) {
+            window.open(`poultry-index.html?preview=${supplierId}`, '_blank');
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('districtFilter').addEventListener('change', applyFilters);
+        document.getElementById('dateFilter').addEventListener('change', applyFilters);
+
+        // Placeholder functions
+        function toggleSidebar() {}
+        function toggleProfileMenu() {}
+    </script>
+</body>
+</html>

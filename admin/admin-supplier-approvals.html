@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • Admin • Supplier Approvals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style/admin-supplier-approvals.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="menu-btn" id="menuBtn">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="header-title">Supplier Approvals</div>
+        <div class="admin-badge">Admin</div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-value" id="statPending">0</div>
+            <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="statVerified">0</div>
+            <div class="stat-label">Verified</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="statRejected">0</div>
+            <div class="stat-label">Rejected</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="statTotal">0</div>
+            <div class="stat-label">Total</div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="tab active" data-status="pending">
+            <i class="fas fa-clock"></i>
+            Pending Review
+        </div>
+        <div class="tab" data-status="verified">
+            <i class="fas fa-check-circle"></i>
+            Verified
+        </div>
+        <div class="tab" data-status="rejected">
+            <i class="fas fa-times-circle"></i>
+            Rejected
+        </div>
+        <div class="tab" data-status="suspended">
+            <i class="fas fa-ban"></i>
+            Suspended
+        </div>
+        <div class="tab" data-status="all">
+            <i class="fas fa-store"></i>
+            All Suppliers
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search by business name, email, or phone...">
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="filter-chip active" data-filter="all">All Documents</div>
+        <div class="filter-chip" data-filter="withDocs">With Documents</div>
+        <div class="filter-chip" data-filter="urgent">Urgent (7+ days)</div>
+        <div class="filter-chip" data-filter="today">Registered Today</div>
+    </div>
+
+    <!-- Suppliers Grid -->
+    <div class="suppliers-grid" id="suppliersGrid">
+        <!-- Loading Skeletons -->
+        <div class="skeleton-card">
+            <div class="skeleton-header"></div>
+            <div class="skeleton-line" style="width: 80%;"></div>
+            <div class="skeleton-line" style="width: 60%;"></div>
+            <div class="skeleton-line" style="width: 40%;"></div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-header"></div>
+            <div class="skeleton-line" style="width: 80%;"></div>
+            <div class="skeleton-line" style="width: 60%;"></div>
+            <div class="skeleton-line" style="width: 40%;"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script/admin-supplier-approvals.js"></script>
+</body>
+</html>

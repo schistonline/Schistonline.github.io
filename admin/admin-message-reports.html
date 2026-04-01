@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin - Message Reports | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style/admin-message-reports.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="admin-dashboard.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>Admin</span></span>
+            </a>
+            <div class="header-actions">
+                <button class="header-icon" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+                <div class="admin-profile" id="adminProfile">
+                    <img src="https://via.placeholder.com/32" alt="Admin">
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <div>
+                <h1>Message Reports</h1>
+                <p class="subtitle">Manage and resolve user-reported messages</p>
+            </div>
+            <div class="title-actions">
+                <button class="btn-outline" id="exportBtn">
+                    <i class="fas fa-download"></i> Export Report
+                </button>
+                <button class="btn-primary" id="resolveAllBtn">
+                    <i class="fas fa-check-double"></i> Resolve All
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon yellow">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="pendingReports">0</span>
+                    <span class="stat-label">Pending</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="resolvedReports">0</span>
+                    <span class="stat-label">Resolved</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-ban"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="dismissedReports">0</span>
+                    <span class="stat-label">Dismissed</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon red">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="criticalReports">0</span>
+                    <span class="stat-label">Critical</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchReports" placeholder="Search by user, reason, or message...">
+            </div>
+            
+            <div class="filter-group">
+                <select id="statusFilter">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="resolved">Resolved</option>
+                    <option value="dismissed">Dismissed</option>
+                </select>
+                
+                <select id="reasonFilter">
+                    <option value="all">All Reasons</option>
+                    <option value="spam">Spam</option>
+                    <option value="harassment">Harassment</option>
+                    <option value="scam">Scam</option>
+                    <option value="inappropriate">Inappropriate</option>
+                    <option value="other">Other</option>
+                </select>
+                
+                <select id="dateFilter">
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="week">Last 7 Days</option>
+                    <option value="month">Last 30 Days</option>
+                    <option value="all" selected>All Time</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Priority Tabs -->
+        <div class="priority-tabs">
+            <button class="priority-tab active" data-priority="all">
+                All Reports <span class="count" id="allCount">0</span>
+            </button>
+            <button class="priority-tab" data-priority="high">
+                <i class="fas fa-exclamation-circle"></i> High Priority <span class="count" id="highCount">0</span>
+            </button>
+            <button class="priority-tab" data-priority="medium">
+                <i class="fas fa-flag"></i> Medium <span class="count" id="mediumCount">0</span>
+            </button>
+            <button class="priority-tab" data-priority="low">
+                <i class="fas fa-info-circle"></i> Low <span class="count" id="lowCount">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading reports...</p>
+        </div>
+
+        <!-- Reports List -->
+        <div class="reports-list" id="reportsList" style="display: none;">
+            <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-flag"></i>
+            <h3>No Reports Found</h3>
+            <p>There are no message reports matching your filters</p>
+            <button class="btn-primary" onclick="resetFilters()">
+                <i class="fas fa-redo"></i> Reset Filters
+            </button>
+        </div>
+
+        <!-- Load More -->
+        <div class="load-more" id="loadMore" style="display: none;">
+            <button class="btn-outline" onclick="loadMoreReports()">
+                <i class="fas fa-chevron-down"></i> Load More
+            </button>
+        </div>
+    </main>
+
+    <!-- Report Detail Modal -->
+    <div class="modal" id="reportModal">
+        <div class="modal-content modal-xl">
+            <div class="modal-header">
+                <h3>Report Details</h3>
+                <button class="modal-close" onclick="closeReportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="report-detail-container" id="reportDetail">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Context Modal -->
+    <div class="modal" id="messageModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Reported Message</h3>
+                <button class="modal-close" onclick="closeMessageModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="message-context" id="messageContext">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="conversation-thread" id="conversationThread">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Details Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>User Details</h3>
+                <button class="modal-close" onclick="closeUserModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="user-detail" id="userDetail">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resolve Report Modal -->
+    <div class="modal" id="resolveModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Resolve Report</h3>
+                <button class="modal-close" onclick="closeResolveModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="resolve-options">
+                    <label class="radio-label">
+                        <input type="radio" name="resolveAction" value="warning" checked>
+                        <span>Send warning to user</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="resolveAction" value="mute">
+                        <span>Mute user (24 hours)</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="resolveAction" value="block">
+                        <span>Block user temporarily</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="resolveAction" value="delete">
+                        <span>Delete message</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="resolveAction" value="nothing">
+                        <span>No action needed</span>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="resolutionNotes">Resolution Notes</label>
+                    <textarea id="resolutionNotes" rows="3" placeholder="Add notes about this resolution..."></textarea>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-success" onclick="confirmResolve()">Resolve Report</button>
+                    <button class="btn-secondary" onclick="closeResolveModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Block User Modal -->
+    <div class="modal" id="blockModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Block User</h3>
+                <button class="modal-close" onclick="closeBlockModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="warning-message">Are you sure you want to block <span id="blockUserName"></span>?</p>
+                
+                <div class="form-group">
+                    <label for="blockDuration">Duration</label>
+                    <select id="blockDuration">
+                        <option value="24h">24 Hours</option>
+                        <option value="7d">7 Days</option>
+                        <option value="30d">30 Days</option>
+                        <option value="permanent">Permanent</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="blockReason">Reason</label>
+                    <textarea id="blockReason" rows="2" placeholder="Why are you blocking this user?"></textarea>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-danger" onclick="confirmBlock()">Block User</button>
+                    <button class="btn-secondary" onclick="closeBlockModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Modal -->
+    <div class="modal" id="bulkModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Bulk Actions</h3>
+                <button class="modal-close" onclick="closeBulkModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Selected <span id="bulkSelectedCount">0</span> report(s)</p>
+                
+                <div class="bulk-options">
+                    <button class="bulk-option" onclick="bulkAction('resolve')">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Mark as Resolved</span>
+                    </button>
+                    <button class="bulk-option" onclick="bulkAction('dismiss')">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Dismiss Reports</span>
+                    </button>
+                    <button class="bulk-option" onclick="bulkAction('warning')">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Send Warnings</span>
+                    </button>
+                    <button class="bulk-option danger" onclick="bulkAction('delete')">
+                        <i class="fas fa-trash"></i>
+                        <span>Delete Messages</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Operation completed successfully</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="js/admin-message-reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iBlue B2B - User Management Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style/admin-users.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="admin-dashboard.html" class="logo">
+                    <div class="logo-circle">i</div>
+                    <span class="logo-text">iBlue Admin</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="admin-dashboard.html" class="nav-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="admin-categories.html" class="nav-item">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Categories</span>
+                    </a>
+                    <a href="admin-ads.html" class="nav-item">
+                        <i class="fas fa-list"></i>
+                        <span>Ads</span>
+                    </a>
+                    <a href="admin-users.html" class="nav-item active">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div>
+                    <a href="admin-suppliers.html" class="nav-item">
+                        <i class="fas fa-warehouse"></i>
+                        <span>Suppliers</span>
+                    </a>
+                    <a href="admin-orders.html" class="nav-item">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders</span>
+                    </a>
+                    <a href="admin-reports.html" class="nav-item">
+                        <i class="fas fa-flag"></i>
+                        <span>Reports</span>
+                    </a>
+                    <a href="admin-spotlights.html" class="nav-item">
+                        <i class="fas fa-star"></i>
+                        <span>Spotlights</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">System</div>
+                    <a href="admin-logs.html" class="nav-item">
+                        <i class="fas fa-history"></i>
+                        <span>Admin Logs</span>
+                    </a>
+                    <a href="admin-settings.html" class="nav-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h1 class="page-title">User Management</h1>
+                <div class="admin-profile">
+                    <div class="admin-avatar" id="adminInitials">A</div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card" data-filter="all" onclick="userManager.filterUsers('all')">
+                    <div class="stat-info">
+                        <h3>Total Users</h3>
+                        <div class="stat-number" id="totalUsers">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="stat-card" data-filter="active" onclick="userManager.filterUsers('active')">
+                    <div class="stat-info">
+                        <h3>Active Users</h3>
+                        <div class="stat-number" id="activeUsers">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                </div>
+                <div class="stat-card" data-filter="banned" onclick="userManager.filterUsers('banned')">
+                    <div class="stat-info">
+                        <h3>Banned Users</h3>
+                        <div class="stat-number" id="bannedUsers">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-user-slash"></i>
+                    </div>
+                </div>
+                <div class="stat-card" data-filter="suppliers" onclick="userManager.filterUsers('suppliers')">
+                    <div class="stat-info">
+                        <h3>Suppliers</h3>
+                        <div class="stat-number" id="supplierCount">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-warehouse"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Bar -->
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search users by name, email, phone...">
+                </div>
+                
+                <div class="filter-group">
+                    <select class="filter-select" id="userTypeFilter">
+                        <option value="all">All User Types</option>
+                        <option value="buyer">Buyers Only</option>
+                        <option value="supplier">Suppliers Only</option>
+                        <option value="admin">Admins Only</option>
+                    </select>
+                    
+                    <select class="filter-select" id="verificationFilter">
+                        <option value="all">All Verification</option>
+                        <option value="verified">Verified Only</option>
+                        <option value="unverified">Unverified Only</option>
+                        <option value="pending">Pending Verification</option>
+                    </select>
+                    
+                    <select class="filter-select" id="dateFilter">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-outline" onclick="userManager.exportUsers()">
+                    <i class="fas fa-download"></i> Export
+                </button>
+            </div>
+
+            <!-- Custom Date Range (hidden by default) -->
+            <div class="filters-bar" id="customDateRange" style="display: none;">
+                <div class="date-range">
+                    <span>From:</span>
+                    <input type="date" class="date-input" id="startDate">
+                    <span>To:</span>
+                    <input type="date" class="date-input" id="endDate">
+                    <button class="btn btn-primary" onclick="userManager.applyCustomDate()">Apply</button>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="users-table-container">
+                <div class="table-header">
+                    <span>User</span>
+                    <span>Contact</span>
+                    <span>Location</span>
+                    <span>Type</span>
+                    <span>Stats</span>
+                    <span>Supplier Status</span>
+                    <span>Actions</span>
+                </div>
+                
+                <div id="usersList">
+                    <!-- Populated by JavaScript -->
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading users...</p>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <div class="pagination-info" id="paginationInfo"></div>
+                    <div class="pagination-controls" id="paginationControls"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- User Detail Modal -->
+    <div class="modal modal-lg" id="userDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">User Details</h2>
+                <button class="modal-close" onclick="userManager.closeModal('userDetailModal')">&times;</button>
+            </div>
+            
+            <div id="userDetailContent">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Ban User Modal -->
+    <div class="modal" id="banUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="banModalTitle">Ban User</h2>
+                <button class="modal-close" onclick="userManager.closeModal('banUserModal')">&times;</button>
+            </div>
+            
+            <form id="banUserForm">
+                <input type="hidden" id="banUserId">
+                
+                <div class="form-group">
+                    <label class="form-label">Ban Reason</label>
+                    <select class="form-select" id="banReason" required>
+                        <option value="">Select reason...</option>
+                        <option value="spam">Spam / Fake Listings</option>
+                        <option value="scam">Suspected Scam</option>
+                        <option value="harassment">Harassment</option>
+                        <option value="prohibited">Prohibited Items</option>
+                        <option value="multiple">Multiple Violations</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Additional Notes</label>
+                    <textarea class="form-control" id="banNotes" rows="3" placeholder="Enter additional details..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Ban Duration</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="banDuration" value="temporary" checked> Temporary (7 days)
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="banDuration" value="permanent"> Permanent
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                    <button type="button" class="btn btn-outline" onclick="userManager.closeModal('banUserModal')">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Ban User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Verify Supplier Modal -->
+    <div class="modal" id="verifySupplierModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Verify Supplier</h2>
+                <button class="modal-close" onclick="userManager.closeModal('verifySupplierModal')">&times;</button>
+            </div>
+            
+            <form id="verifySupplierForm">
+                <input type="hidden" id="verifySupplierId">
+                <input type="hidden" id="verifyUserId">
+                
+                <div class="form-group">
+                    <label class="form-label">Business Name</label>
+                    <input type="text" class="form-control" id="verifyBusinessName" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Business Registration</label>
+                    <input type="text" class="form-control" id="verifyBusinessReg" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tax ID</label>
+                    <input type="text" class="form-control" id="verifyTaxId" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Verification Decision</label>
+                    <select class="form-select" id="verificationDecision" required>
+                        <option value="verified">Approve & Verify</option>
+                        <option value="rejected">Reject</option>
+                        <option value="pending">Keep Pending</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Admin Notes</label>
+                    <textarea class="form-control" id="verifyNotes" rows="3" placeholder="Enter notes about this verification..."></textarea>
+                </div>
+                
+                <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                    <button type="button" class="btn btn-outline" onclick="userManager.closeModal('verifySupplierModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit Verification</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Role Modal -->
+    <div class="modal" id="adminRoleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Manage Admin Role</h2>
+                <button class="modal-close" onclick="userManager.closeModal('adminRoleModal')">&times;</button>
+            </div>
+            
+            <form id="adminRoleForm">
+                <input type="hidden" id="adminUserId">
+                
+                <div class="form-group">
+                    <label class="form-label">Admin Role</label>
+                    <select class="form-select" id="adminRole" required>
+                        <option value="">Select role...</option>
+                        <option value="super_admin">Super Admin (Full Access)</option>
+                        <option value="content_manager">Content Manager (Manage ads, categories)</option>
+                        <option value="support_staff">Support Staff (Handle reports, users)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="removeAdmin"> Remove admin privileges
+                    </label>
+                </div>
+                
+                <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                    <button type="button" class="btn btn-outline" onclick="userManager.closeModal('adminRoleModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Role</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script/admin-users.js"></script>
+</body>
+</html>

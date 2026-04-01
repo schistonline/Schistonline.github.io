@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iBlue B2B • Admin • Spotlight Pricing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style/admin-spotlight-pricing.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-circle">i</div>
+                    <span class="logo-text">iBlue Admin</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="admin-dashboard.html" class="nav-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="admin-spotlight-pricing.html" class="nav-item active">
+                        <i class="fas fa-tag"></i>
+                        <span>Spotlight Pricing</span>
+                    </a>
+                    <a href="admin-supplier-spotlights.html" class="nav-item">
+                        <i class="fas fa-fire"></i>
+                        <span>Supplier Spotlights</span>
+                    </a>
+                    <a href="admin-spotlights.html" class="nav-item">
+                        <i class="fas fa-star"></i>
+                        <span>Product Spotlights</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div>
+                    <a href="admin-suppliers.html" class="nav-item">
+                        <i class="fas fa-truck"></i>
+                        <span>Suppliers</span>
+                    </a>
+                    <a href="admin-ads.html" class="nav-item">
+                        <i class="fas fa-ad"></i>
+                        <span>Ads</span>
+                    </a>
+                    <a href="admin-orders.html" class="nav-item">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders</span>
+                    </a>
+                    <a href="admin-users.html" class="nav-item">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">System</div>
+                    <a href="admin-settings.html" class="nav-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="content-header">
+                <div class="header-title">
+                    <h1>Spotlight Pricing Management</h1>
+                    <p>Configure pricing for supplier spotlight packages</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" onclick="spotlightPricingManager.exportPricing()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-primary" onclick="spotlightPricingManager.openCreateModal()">
+                        <i class="fas fa-plus"></i> New Package
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Total Packages</h3>
+                        <div class="stat-number" id="totalPackages">0</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Active Packages</h3>
+                        <div class="stat-number" id="activePackages">0</div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Min Price</h3>
+                        <div class="stat-number" id="minPrice">UGX 0</div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Max Price</h3>
+                        <div class="stat-number" id="maxPrice">UGX 0</div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #EF4444;">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search packages...">
+                </div>
+                
+                <div class="filter-group">
+                    <select class="filter-select" id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="active">Active Only</option>
+                        <option value="inactive">Inactive Only</option>
+                    </select>
+                    
+                    <select class="filter-select" id="typeFilter">
+                        <option value="all">All Types</option>
+                        <option value="featured_deals">Featured Deals</option>
+                        <option value="trending_now">Trending Now</option>
+                        <option value="editor_picks">Editor Picks</option>
+                        <option value="new_arrivals">New Arrivals</option>
+                        <option value="budget_finds">Budget Finds</option>
+                        <option value="premium_listings">Premium Listings</option>
+                        <option value="local_favorites">Local Favorites</option>
+                        <option value="verified_sellers">Verified Sellers</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Packages Table -->
+            <div class="table-container">
+                <div id="loadingSpinner" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading packages...</p>
+                </div>
+                
+                <div id="packagesTable" style="display: none;">
+                    <table class="packages-table">
+                        <thead>
+                            <tr>
+                                <th>Package Name</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                                <th>Duration</th>
+                                <th>Priority</th>
+                                <th>Benefits</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="packagesTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-tags"></i>
+                    <h3>No packages found</h3>
+                    <p>Create your first spotlight package to get started</p>
+                    <button class="btn btn-primary" onclick="spotlightPricingManager.openCreateModal()">
+                        <i class="fas fa-plus"></i> Create Package
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create/Edit Package Modal -->
+    <div class="modal" id="packageModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 id="modalTitle"><i class="fas fa-tag"></i> Create Spotlight Package</h2>
+                <button class="modal-close" onclick="spotlightPricingManager.closeModal()">&times;</button>
+            </div>
+            
+            <form id="packageForm" onsubmit="spotlightPricingManager.savePackage(event)">
+                <input type="hidden" id="packageId">
+                
+                <!-- Basic Information -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Package Name *</label>
+                        <input type="text" class="form-control" id="packageName" required 
+                               placeholder="e.g., Basic Spotlight, Premium Package">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Spotlight Type</label>
+                        <select class="form-control" id="spotlightType">
+                            <option value="">Standard Package</option>
+                            <option value="featured_deals">Featured Deals</option>
+                            <option value="trending_now">Trending Now</option>
+                            <option value="editor_picks">Editor Picks</option>
+                            <option value="new_arrivals">New Arrivals</option>
+                            <option value="budget_finds">Budget Finds</option>
+                            <option value="premium_listings">Premium Listings</option>
+                            <option value="local_favorites">Local Favorites</option>
+                            <option value="verified_sellers">Verified Sellers</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Pricing -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Base Price (UGX) *</label>
+                        <input type="number" class="form-control" id="price" required min="0" step="1000">
+                        <small>Required - main price for the package</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Currency</label>
+                        <select class="form-control" id="currency">
+                            <option value="UGX">UGX</option>
+                            <option value="USD">USD</option>
+                            <option value="KES">KES</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Additional Rates -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Daily Rate (UGX)</label>
+                        <input type="number" class="form-control" id="dailyRate" min="0" step="1000">
+                        <small>Optional - for daily pricing</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Weekly Rate (UGX)</label>
+                        <input type="number" class="form-control" id="weeklyRate" min="0" step="1000">
+                        <small>Optional - for weekly pricing</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Monthly Rate (UGX)</label>
+                        <input type="number" class="form-control" id="monthlyRate" min="0" step="1000">
+                        <small>Optional - for monthly pricing</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Duration (Days) *</label>
+                        <input type="number" class="form-control" id="durationDays" required min="1" value="7">
+                        <small>Base duration in days</small>
+                    </div>
+                </div>
+
+                <!-- Duration Options -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Weekly Duration (Days)</label>
+                        <input type="number" class="form-control" id="weeklyDays" value="7" min="1">
+                        <small>Duration for weekly rate</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Monthly Duration (Days)</label>
+                        <input type="number" class="form-control" id="monthlyDays" value="30" min="1">
+                        <small>Duration for monthly rate</small>
+                    </div>
+                </div>
+
+                <!-- Display Settings -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Display Priority *</label>
+                        <input type="number" class="form-control" id="displayPriority" value="3" min="1" max="999">
+                        <small>Lower number = higher priority (1 = highest)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Max Suppliers Per Day</label>
+                        <input type="number" class="form-control" id="maxSuppliersPerDay" value="10" min="1">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Max Ads Per Day</label>
+                        <input type="number" class="form-control" id="maxAdsPerDay" value="10" min="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Badge Text</label>
+                        <input type="text" class="form-control" id="badgeText" value="HOT" placeholder="e.g., HOT, PREMIUM">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Badge Color</label>
+                        <input type="color" class="form-control" id="badgeColor" value="#EF4444">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Benefits (one per line)</label>
+                        <textarea class="form-control" id="benefits" rows="3" 
+                                  placeholder="Homepage placement&#10;Hot supplier badge&#10;Priority visibility&#10;More inquiries"></textarea>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" id="description" rows="3" 
+                              placeholder="Describe what this package includes..."></textarea>
+                </div>
+
+                <!-- Feature Toggles -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="includesVerificationBadge"> 
+                            Includes Verification Badge
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="includesFeaturedLabel" checked> 
+                            Includes Featured Label
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="includesVerification"> 
+                            Includes Verification
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="isActive" checked> 
+                            Active (available for purchase)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="spotlightPricingManager.closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Package</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-trash" style="color: #EF4444;"></i> Confirm Delete</h2>
+                <button class="modal-close" onclick="spotlightPricingManager.closeDeleteModal()">&times;</button>
+            </div>
+            <p id="deleteMessage">Are you sure you want to delete this package?</p>
+            <p style="color: #EF4444; font-size: 13px; margin-top: 10px;">
+                <i class="fas fa-exclamation-triangle"></i> This action cannot be undone.
+            </p>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="spotlightPricingManager.closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="spotlightPricingManager.confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script/admin-spotlight-pricing.js"></script>
+</body>
+</html>

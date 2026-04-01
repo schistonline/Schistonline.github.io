@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin - Message Templates | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style/admin-templates.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="admin-dashboard.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>Admin</span></span>
+            </a>
+            <div class="header-actions">
+                <button class="header-icon" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+                <div class="admin-profile" id="adminProfile">
+                    <img src="https://via.placeholder.com/32" alt="Admin">
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <div>
+                <h1>Message Templates</h1>
+                <p class="subtitle">Manage global message templates for all users</p>
+            </div>
+            <button class="btn-primary" id="createTemplateBtn">
+                <i class="fas fa-plus"></i> New Template
+            </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalTemplates">0</span>
+                    <span class="stat-label">Total Templates</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="globalTemplates">0</span>
+                    <span class="stat-label">Global Templates</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="personalTemplates">0</span>
+                    <span class="stat-label">User Created</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalUsage">0</span>
+                    <span class="stat-label">Total Uses</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchTemplates" placeholder="Search templates...">
+            </div>
+            
+            <div class="filter-group">
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="greeting">Greeting</option>
+                    <option value="price">Price Quote</option>
+                    <option value="shipping">Shipping</option>
+                    <option value="payment">Payment</option>
+                    <option value="quality">Quality</option>
+                    <option value="negotiation">Negotiation</option>
+                    <option value="closing">Closing</option>
+                    <option value="followup">Follow-up</option>
+                    <option value="support">Support</option>
+                    <option value="other">Other</option>
+                </select>
+                
+                <select id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="global">Global Only</option>
+                    <option value="personal">User Created</option>
+                </select>
+                
+                <select id="sortBy">
+                    <option value="usage">Most Used</option>
+                    <option value="recent">Recently Updated</option>
+                    <option value="alphabetical">Alphabetical</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading templates...</p>
+        </div>
+
+        <!-- Templates Table -->
+        <div class="templates-table-container" id="templatesContainer" style="display: none;">
+            <table class="templates-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Content Preview</th>
+                        <th>Type</th>
+                        <th>Created By</th>
+                        <th>Usage</th>
+                        <th>Last Used</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="templatesTableBody">
+                    <!-- Populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-file-alt"></i>
+            <h3>No Templates Found</h3>
+            <p>Get started by creating your first global template</p>
+            <button class="btn-primary" onclick="showCreateTemplateModal()">
+                <i class="fas fa-plus"></i> Create Template
+            </button>
+        </div>
+    </main>
+
+    <!-- Create/Edit Template Modal -->
+    <div class="modal" id="templateModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 id="modalTitle">Create New Template</h3>
+                <button class="modal-close" onclick="closeTemplateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="templateForm" onsubmit="event.preventDefault(); saveTemplate();">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="templateTitle">Template Title <span class="required">*</span></label>
+                            <input type="text" id="templateTitle" maxlength="100" placeholder="e.g., Standard Price Quote Response">
+                            <small class="char-counter"><span id="titleCharCount">0</span>/100</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="templateCategory">Category <span class="required">*</span></label>
+                            <select id="templateCategory">
+                                <option value="">Select Category</option>
+                                <option value="greeting">Greeting & Introduction</option>
+                                <option value="price">Price Quote</option>
+                                <option value="shipping">Shipping & Delivery</option>
+                                <option value="payment">Payment Terms</option>
+                                <option value="quality">Quality & Specifications</option>
+                                <option value="negotiation">Negotiation</option>
+                                <option value="closing">Closing & Confirmation</option>
+                                <option value="followup">Follow-up</option>
+                                <option value="support">Customer Support</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="templateContent">Template Content <span class="required">*</span></label>
+                        <textarea id="templateContent" rows="6" maxlength="2000" placeholder="Write your template message here..."></textarea>
+                        <small class="char-counter"><span id="contentCharCount">0</span>/2000</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="templateLanguage">Language</label>
+                            <select id="templateLanguage">
+                                <option value="en">English</option>
+                                <option value="sw">Swahili</option>
+                                <option value="lg">Luganda</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="templateStatus">Status</label>
+                            <select id="templateStatus">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="draft">Draft</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="templateIsGlobal" checked>
+                            <span>Make this a global template (available to all users)</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Available Variables</label>
+                        <div class="variables-grid">
+                            <button type="button" class="variable-btn" onclick="insertVariable('{buyer_name}')">
+                                <i class="fas fa-user"></i> {buyer_name}
+                            </button>
+                            <button type="button" class="variable-btn" onclick="insertVariable('{supplier_name}')">
+                                <i class="fas fa-building"></i> {supplier_name}
+                            </button>
+                            <button type="button" class="variable-btn" onclick="insertVariable('{company_name}')">
+                                <i class="fas fa-briefcase"></i> {company_name}
+                            </button>
+                            <button type="button" class="variable-btn" onclick="insertVariable('{product_name}')">
+                                <i class="fas fa-box"></i> {product_name}
+                            </button>
+                            <button type="button" class="variable-btn" onclick="insertVariable('{inquiry_number}')">
+                                <i class="fas fa-hashtag"></i> {inquiry_number}
+                            </button>
+                            <button type="button" class="variable-btn" onclick="insertVariable('{quote_number}')">
+                                <i class="fas fa-file-invoice"></i> {quote_number}
+                            </button>
+                            <button type="button" class="variable-btn" onclick="insertVariable('{order_number}')">
+                                <i class="fas fa-clipboard-list"></i> {order_number}
+                            </button>
+                            <button type="button" class="variable-btn" onclick="insertVariable('{amount}')">
+                                <i class="fas fa-tag"></i> {amount}
+                            </button>
+                            <button type="button" class="variable-btn" onclick="insertVariable('{date}')">
+                                <i class="fas fa-calendar"></i> {date}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="preview-section">
+                        <label>Preview:</label>
+                        <div class="preview-box" id="templatePreview"></div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="submit" class="btn-primary" id="saveTemplateBtn">Save Template</button>
+                        <button type="button" class="btn-secondary" onclick="closeTemplateModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Template Modal -->
+    <div class="modal" id="viewTemplateModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Template Details</h3>
+                <button class="modal-close" onclick="closeViewTemplateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="template-details" id="templateDetails">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Template</h3>
+                <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="delete-message">Are you sure you want to delete "<span id="deleteTemplateName"></span>"?</p>
+                <p class="delete-warning">This action cannot be undone. Users will no longer have access to this template.</p>
+                
+                <div class="modal-actions">
+                    <button class="btn-danger" id="confirmDeleteBtn">Delete Permanently</button>
+                    <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Modal -->
+    <div class="modal" id="bulkModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Bulk Actions</h3>
+                <button class="modal-close" onclick="closeBulkModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Selected <span id="selectedCount">0</span> template(s)</p>
+                
+                <div class="bulk-options">
+                    <button class="bulk-option" onclick="bulkAction('activate')">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Activate Selected</span>
+                    </button>
+                    <button class="bulk-option" onclick="bulkAction('deactivate')">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Deactivate Selected</span>
+                    </button>
+                    <button class="bulk-option" onclick="bulkAction('global')">
+                        <i class="fas fa-globe"></i>
+                        <span>Make Global</span>
+                    </button>
+                    <button class="bulk-option" onclick="bulkAction('personal')">
+                        <i class="fas fa-user"></i>
+                        <span>Make Personal</span>
+                    </button>
+                    <button class="bulk-option danger" onclick="bulkAction('delete')">
+                        <i class="fas fa-trash"></i>
+                        <span>Delete Selected</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Templates Modal -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Import Templates</h3>
+                <button class="modal-close" onclick="closeImportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-options">
+                    <div class="import-option">
+                        <i class="fas fa-file-import"></i>
+                        <h4>Import from File</h4>
+                        <p>Upload a CSV or JSON file with templates</p>
+                        <div class="file-upload-area" id="importFileArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to browse or drag and drop</p>
+                            <small>Supports .csv, .json (Max 5MB)</small>
+                            <input type="file" id="importFile" accept=".csv,.json" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="import-option">
+                        <i class="fas fa-copy"></i>
+                        <h4>Duplicate from Existing</h4>
+                        <p>Copy templates from another category</p>
+                        <select id="duplicateCategory" class="duplicate-select">
+                            <option value="">Select Category</option>
+                            <option value="greeting">Greeting</option>
+                            <option value="price">Price Quote</option>
+                            <option value="shipping">Shipping</option>
+                        </select>
+                        <button class="btn-secondary" onclick="duplicateCategory()">Duplicate</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Templates Modal -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Templates</h3>
+                <button class="modal-close" onclick="closeExportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="export-filters">
+                    <h4>Filter Templates to Export</h4>
+                    
+                    <div class="filter-group">
+                        <label>Category:</label>
+                        <select id="exportCategory">
+                            <option value="all">All Categories</option>
+                            <option value="greeting">Greeting</option>
+                            <option value="price">Price Quote</option>
+                            <option value="shipping">Shipping</option>
+                            <option value="payment">Payment</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Type:</label>
+                        <select id="exportType">
+                            <option value="all">All Templates</option>
+                            <option value="global">Global Only</option>
+                            <option value="personal">Personal Only</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Date Range:</label>
+                        <div class="date-range">
+                            <input type="date" id="exportStartDate">
+                            <span>to</span>
+                            <input type="date" id="exportEndDate">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="export-format">
+                    <h4>Export Format</h4>
+                    <div class="format-options">
+                        <label class="radio-label">
+                            <input type="radio" name="exportFormat" value="csv" checked>
+                            <span>CSV (Excel)</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="exportFormat" value="json">
+                            <span>JSON (Backup)</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="exportFormat" value="pdf">
+                            <span>PDF (Printable)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="exportTemplates()">Export</button>
+                    <button class="btn-secondary" onclick="closeExportModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template Usage Stats Modal -->
+    <div class="modal" id="statsModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Template Usage Statistics</h3>
+                <button class="modal-close" onclick="closeStatsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="stats-dashboard" id="statsDashboard">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Operation completed successfully</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script/admin-templates.js"></script>
+</body>
+</html>

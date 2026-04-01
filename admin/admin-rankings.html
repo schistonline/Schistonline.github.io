@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin - Product Rankings | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style/admin-rankings.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="admin-dashboard.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>Admin</span></span>
+            </a>
+            <div class="header-actions">
+                <button class="header-icon" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+                <div class="admin-profile" id="adminProfile">
+                    <img src="https://via.placeholder.com/32" alt="Admin">
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <div>
+                <h1>Product Rankings</h1>
+                <p class="subtitle">Manage and optimize how products are ranked across the platform</p>
+            </div>
+            <div class="title-actions">
+                <button class="btn-outline" id="recalculateBtn">
+                    <i class="fas fa-sync-alt"></i> Recalculate Scores
+                </button>
+                <button class="btn-primary" id="saveWeightsBtn">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="avgScore">0</span>
+                    <span class="stat-label">Avg Ranking Score</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="topProducts">0</span>
+                    <span class="stat-label">Top 100 Products</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-ad"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="sponsoredCount">0</span>
+                    <span class="stat-label">Sponsored</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="lastUpdate">-</span>
+                    <span class="stat-label">Last Update</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-btn" data-tab="weights">Ranking Weights</button>
+            <button class="tab-btn" data-tab="products">Product Rankings</button>
+            <button class="tab-btn" data-tab="sponsored">Sponsored Products</button>
+            <button class="tab-btn" data-tab="analytics">Analytics</button>
+            <button class="tab-btn" data-tab="tests">A/B Tests</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="dashboard">
+            <!-- Ranking Distribution Chart -->
+            <div class="chart-container">
+                <h3>Ranking Score Distribution</h3>
+                <canvas id="distributionChart"></canvas>
+            </div>
+
+            <!-- Category Performance -->
+            <div class="category-performance">
+                <h3>Top Categories by Performance</h3>
+                <div class="category-grid" id="categoryGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Recent Changes -->
+            <div class="recent-changes">
+                <h3>Recent Ranking Changes</h3>
+                <div class="changes-list" id="changesList">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Ranking Weights Tab -->
+        <div class="tab-content" id="weights">
+            <div class="weights-container">
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Adjust how much each factor contributes to the final ranking score. Higher weight = more importance.</p>
+                </div>
+
+                <div class="weights-grid">
+                    <!-- Sales Performance -->
+                    <div class="weight-card">
+                        <div class="weight-header">
+                            <h4><i class="fas fa-chart-bar"></i> Sales Performance</h4>
+                            <span class="weight-value" id="salesWeight">40%</span>
+                        </div>
+                        <div class="weight-slider">
+                            <input type="range" id="salesWeightSlider" min="0" max="100" value="40" step="5">
+                        </div>
+                        <div class="weight-details">
+                            <div class="detail-item">
+                                <label>Total Sales</label>
+                                <input type="number" id="salesTotalWeight" value="40" min="0" max="100" step="5">
+                            </div>
+                            <div class="detail-item">
+                                <label>30-Day Sales</label>
+                                <input type="number" id="sales30Weight" value="30" min="0" max="100" step="5">
+                            </div>
+                            <div class="detail-item">
+                                <label>7-Day Sales</label>
+                                <input type="number" id="sales7Weight" value="30" min="0" max="100" step="5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Engagement Metrics -->
+                    <div class="weight-card">
+                        <div class="weight-header">
+                            <h4><i class="fas fa-users"></i> Engagement</h4>
+                            <span class="weight-value" id="engagementWeight">30%</span>
+                        </div>
+                        <div class="weight-slider">
+                            <input type="range" id="engagementWeightSlider" min="0" max="100" value="30" step="5">
+                        </div>
+                        <div class="weight-details">
+                            <div class="detail-item">
+                                <label>Views</label>
+                                <input type="number" id="viewsWeight" value="40" min="0" max="100" step="5">
+                            </div>
+                            <div class="detail-item">
+                                <label>Clicks</label>
+                                <input type="number" id="clicksWeight" value="30" min="0" max="100" step="5">
+                            </div>
+                            <div class="detail-item">
+                                <label>Inquiries</label>
+                                <input type="number" id="inquiriesWeight" value="30" min="0" max="100" step="5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quality Metrics -->
+                    <div class="weight-card">
+                        <div class="weight-header">
+                            <h4><i class="fas fa-star"></i> Quality</h4>
+                            <span class="weight-value" id="qualityWeight">20%</span>
+                        </div>
+                        <div class="weight-slider">
+                            <input type="range" id="qualityWeightSlider" min="0" max="100" value="20" step="5">
+                        </div>
+                        <div class="weight-details">
+                            <div class="detail-item">
+                                <label>Rating</label>
+                                <input type="number" id="ratingWeight" value="40" min="0" max="100" step="5">
+                            </div>
+                            <div class="detail-item">
+                                <label>Conversion Rate</label>
+                                <input type="number" id="conversionWeight" value="60" min="0" max="100" step="5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Supplier Reliability -->
+                    <div class="weight-card">
+                        <div class="weight-header">
+                            <h4><i class="fas fa-building"></i> Supplier Reliability</h4>
+                            <span class="weight-value" id="reliabilityWeight">10%</span>
+                        </div>
+                        <div class="weight-slider">
+                            <input type="range" id="reliabilityWeightSlider" min="0" max="100" value="10" step="5">
+                        </div>
+                        <div class="weight-details">
+                            <div class="detail-item">
+                                <label>Response Rate</label>
+                                <input type="number" id="responseRateWeight" value="40" min="0" max="100" step="5">
+                            </div>
+                            <div class="detail-item">
+                                <label>Completion Rate</label>
+                                <input type="number" id="completionRateWeight" value="60" min="0" max="100" step="5">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recency Boost -->
+                <div class="recency-boost">
+                    <h4>New Product Boost</h4>
+                    <div class="boost-controls">
+                        <div class="boost-item">
+                            <label>First 7 days</label>
+                            <input type="number" id="boost7Days" value="10" min="0" max="50" step="1">
+                            <span>points</span>
+                        </div>
+                        <div class="boost-item">
+                            <label>Days 8-30</label>
+                            <input type="number" id="boost30Days" value="5" min="0" max="50" step="1">
+                            <span>points</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Rankings Tab -->
+        <div class="tab-content" id="products">
+            <!-- Filters -->
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchProducts" placeholder="Search products...">
+                </div>
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                </select>
+                <select id="supplierFilter">
+                    <option value="">All Suppliers</option>
+                </select>
+                <select id="sortBy">
+                    <option value="ranking">Ranking Score</option>
+                    <option value="sales">Total Sales</option>
+                    <option value="views">Views</option>
+                    <option value="inquiries">Inquiries</option>
+                </select>
+            </div>
+
+            <!-- Products Table -->
+            <div class="products-table-container">
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Supplier</th>
+                            <th>Sales</th>
+                            <th>Views</th>
+                            <th>Inquiries</th>
+                            <th>Rating</th>
+                            <th>Ranking Score</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Sponsored Products Tab -->
+        <div class="tab-content" id="sponsored">
+            <div class="sponsored-header">
+                <h3>Sponsored Placements</h3>
+                <button class="btn-primary" id="addSponsoredBtn">
+                    <i class="fas fa-plus"></i> Add Sponsored Product
+                </button>
+            </div>
+
+            <div class="sponsored-grid" id="sponsoredGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div class="tab-content" id="analytics">
+            <div class="analytics-controls">
+                <select id="analyticsPeriod">
+                    <option value="7">Last 7 Days</option>
+                    <option value="30" selected>Last 30 Days</option>
+                    <option value="90">Last 90 Days</option>
+                </select>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h4>Click-through Rate by Position</h4>
+                    <canvas id="ctrChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>Conversion Rate by Rank</h4>
+                    <canvas id="conversionChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>Revenue by Category</h4>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>Search Performance</h4>
+                    <canvas id="searchChart"></canvas>
+                </div>
+            </div>
+
+            <div class="metrics-table">
+                <h4>Top Performing Products</h4>
+                <div id="topPerformersTable">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- A/B Tests Tab -->
+        <div class="tab-content" id="tests">
+            <div class="tests-header">
+                <h3>Ranking Algorithm Tests</h3>
+                <button class="btn-primary" id="createTestBtn">
+                    <i class="fas fa-flask"></i> Create New Test
+                </button>
+            </div>
+
+            <div class="tests-grid" id="testsGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Sponsored Product Modal -->
+    <div class="modal" id="sponsoredModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Add Sponsored Product</h3>
+                <button class="modal-close" onclick="closeSponsoredModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Select Product</label>
+                    <input type="text" id="productSearch" placeholder="Search products...">
+                    <div id="productResults" class="product-results"></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Campaign Name</label>
+                        <input type="text" id="campaignName" placeholder="e.g., Holiday Sale 2026">
+                    </div>
+                    <div class="form-group">
+                        <label>Budget (UGX)</label>
+                        <input type="number" id="budget" min="0" step="1000">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="endDate">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Bid Type</label>
+                        <select id="bidType">
+                            <option value="cpc">Cost Per Click (CPC)</option>
+                            <option value="cpm">Cost Per 1000 Impressions (CPM)</option>
+                            <option value="fixed">Fixed Placement</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Bid Amount</label>
+                        <input type="number" id="bidAmount" min="0" step="100">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Priority (1-10, higher = better position)</label>
+                    <input type="number" id="priority" min="1" max="10" value="5">
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="saveSponsored()">Add Sponsored</button>
+                    <button class="btn-secondary" onclick="closeSponsoredModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create A/B Test Modal -->
+    <div class="modal" id="testModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create A/B Test</h3>
+                <button class="modal-close" onclick="closeTestModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Test Name</label>
+                    <input type="text" id="testName" placeholder="e.g., New Ranking Algorithm v2">
+                </div>
+
+                <div class="form-group">
+                    <label>Traffic Percentage</label>
+                    <input type="number" id="trafficPercent" min="1" max="50" value="10">
+                    <small>% of users who will see this test</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Test Configuration (JSON)</label>
+                    <textarea id="testConfig" rows="6" placeholder='{"weights": {"sales": 0.4, "engagement": 0.3, "quality": 0.2, "reliability": 0.1}}'></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="saveTest()">Start Test</button>
+                    <button class="btn-secondary" onclick="closeTestModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adjust Score Modal -->
+    <div class="modal" id="adjustScoreModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Manually Adjust Ranking</h3>
+                <button class="modal-close" onclick="closeAdjustScoreModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Product: <span id="adjustProductName"></span></p>
+                
+                <div class="form-group">
+                    <label>Current Score</label>
+                    <input type="text" id="currentScore" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Manual Boost (+/-)</label>
+                    <input type="number" id="manualBoost" value="0" step="5">
+                </div>
+
+                <div class="form-group">
+                    <label>Reason for adjustment</label>
+                    <textarea id="adjustReason" rows="3" placeholder="e.g., Featured product, Seasonal promotion..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="saveAdjustment()">Apply Adjustment</button>
+                    <button class="btn-secondary" onclick="closeAdjustScoreModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Changes saved successfully</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="script/admin-rankings.js"></script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Admin Dashboard – iBlue Uganda</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style/admin-reports.css">
+</head>
+<body>
+  <div class="admin-app">
+    <!-- Desktop Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <a href="admin-dashboard.html" class="admin-logo">
+          <div class="logo-icon">iB</div>
+          <span class="logo-text">iBlue Admin</span>
+        </a>
+        <div class="admin-badge">Administrator</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="admin-dashboard.html" class="nav-item active">
+          <i class="fas fa-flag"></i>
+          <span>Reports</span>
+          <span class="notification-dot" id="pendingReportsBadge" style="display: none;"></span>
+        </a>
+        <a href="admin-ads.html" class="nav-item">
+          <i class="fas fa-bullhorn"></i>
+          <span>Ads</span>
+        </a>
+        <a href="admin-users.html" class="nav-item">
+          <i class="fas fa-users"></i>
+          <span>Users</span>
+        </a>
+        <a href="admin-categories.html" class="nav-item">
+          <i class="fas fa-tags"></i>
+          <span>Categories</span>
+        </a>
+        <a href="admin-payments.html" class="nav-item">
+          <i class="fas fa-credit-card"></i>
+          <span>Payments</span>
+        </a>
+        <a href="admin-settings.html" class="nav-item">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+        <hr style="border: none; border-top: 1px solid var(--border); margin: var(--spacing-lg) 0;">
+        <a href="index.html" class="nav-item">
+          <i class="fas fa-home"></i>
+          <span>Back to Site</span>
+        </a>
+        <a href="#" class="nav-item" onclick="reportsManager.logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Mobile Header -->
+    <header class="admin-header">
+      <a href="admin-dashboard.html" class="admin-logo">
+        <div class="logo-icon">iB</div>
+        <span class="logo-text">Admin</span>
+      </a>
+      
+      <div class="admin-header-title">Reports Dashboard</div>
+      
+      <div class="admin-header-actions">
+        <button class="admin-icon-btn" onclick="reportsManager.refreshData()">
+          <i class="fas fa-sync-alt"></i>
+        </button>
+        <button class="admin-icon-btn" onclick="reportsManager.logout()">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <!-- Stats Cards -->
+      <div class="stats-grid" id="statsContainer">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon pending">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-label">Pending</div>
+              <div class="stat-value" id="pendingCount">0</div>
+            </div>
+          </div>
+          <div class="stat-trend">Awaiting review</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon reviewed">
+              <i class="fas fa-eye"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-label">Reviewed</div>
+              <div class="stat-value" id="reviewedCount">0</div>
+            </div>
+          </div>
+          <div class="stat-trend">Under investigation</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon resolved">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-label">Resolved</div>
+              <div class="stat-value" id="resolvedCount">0</div>
+            </div>
+          </div>
+          <div class="stat-trend">Completed</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon total">
+              <i class="fas fa-flag"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-label">Total</div>
+              <div class="stat-value" id="totalCount">0</div>
+            </div>
+          </div>
+          <div class="stat-trend">All time reports</div>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <i class="fas fa-search search-icon"></i>
+          <input 
+            type="text" 
+            class="search-input" 
+            id="searchInput" 
+            placeholder="Search by ID, reporter, or reason..."
+            autocomplete="off"
+          >
+        </div>
+
+        <div class="filter-group">
+          <select class="filter-select" id="statusFilter">
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="reviewed">Reviewed</option>
+            <option value="resolved">Resolved</option>
+            <option value="dismissed">Dismissed</option>
+          </select>
+
+          <select class="filter-select" id="typeFilter">
+            <option value="all">All Types</option>
+            <option value="ad">Ad Reports</option>
+            <option value="user">User Reports</option>
+          </select>
+
+          <select class="filter-select" id="reasonFilter">
+            <option value="all">All Reasons</option>
+          </select>
+        </div>
+
+        <div class="date-range">
+          <input type="date" class="date-input" id="dateFrom" placeholder="From">
+          <span style="color: var(--text-light);">to</span>
+          <input type="date" class="date-input" id="dateTo" placeholder="To">
+        </div>
+      </div>
+
+      <!-- Reports Container -->
+      <div class="reports-container">
+        <!-- Table Header (Desktop) -->
+        <div class="reports-header">
+          <div>Report ID</div>
+          <div>Status</div>
+          <div>Details</div>
+          <div>Reporter</div>
+          <div>Submitted</div>
+          <div>Actions</div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading">
+          <div class="spinner"></div>
+          <div class="loading-text">Loading reports...</div>
+        </div>
+
+        <!-- Reports List -->
+        <div id="reportsList" class="reports-list" style="display: none;"></div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <div class="empty-icon">
+            <i class="fas fa-flag"></i>
+          </div>
+          <h3 class="empty-title">No reports found</h3>
+          <p class="empty-message" id="emptyMessage">
+            There are no reports matching your criteria.
+          </p>
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="pagination" style="display: none;"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Report Detail Modal -->
+  <div class="modal-overlay" id="reportModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalReportId">Report #IB-2024-0000</h2>
+        <button class="modal-close" onclick="reportsManager.closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="modal-body" id="modalBody">
+        <!-- Dynamic content will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script/admin-reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>iBlue Uganda - Spotlight Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary: #3B82F6;
+            --primary-dark: #2563EB;
+            --secondary: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --light: #F9FAFB;
+            --dark: #1F2937;
+            --gray: #6B7280;
+            --gray-light: #E5E7EB;
+            --border-radius: 8px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 6px rgba(0,0,0,0.1);
+            --primary-light: #EFF6FF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--dark);
+            background: var(--light);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Login Page Styles */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-light);
+        }
+        
+        .login-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 24px;
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+        
+        .error-message {
+            background: #FEE2E2;
+            color: #991B1B;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            margin-bottom: 16px;
+            display: none;
+            border-left: 4px solid #EF4444;
+        }
+        
+        .error-message.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .success-message {
+            background: #D1FAE5;
+            color: #065F46;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            margin-bottom: 16px;
+            display: none;
+            border-left: 4px solid #10B981;
+        }
+        
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .form-control::placeholder {
+            color: var(--gray);
+        }
+        
+        .password-wrapper {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 5px;
+            font-size: 16px;
+        }
+        
+        .toggle-password:hover {
+            color: var(--dark);
+        }
+        
+        .btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-primary:disabled {
+            background: var(--gray-light);
+            color: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-light);
+            color: var(--gray);
+            font-size: 12px;
+        }
+        
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 40px 20px;
+                padding: 20px;
+            }
+            
+            .login-title {
+                font-size: 20px;
+            }
+            
+            .logo-icon {
+                font-size: 36px;
+            }
+            
+            .logo-text {
+                font-size: 20px;
+            }
+        }
+        
+        .admin-interface {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage">
+        <div class="login-container">
+            <div class="login-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="logo-text">iBlue Spotlight</div>
+                <div style="color: var(--gray); margin-top: 5px;">Admin Portal</div>
+            </div>
+            
+            <h2 class="login-title">
+                <i class="fas fa-lock"></i>
+                Admin Login
+            </h2>
+            
+            <div id="loginError" class="error-message"></div>
+            <div id="loginSuccess" class="success-message"></div>
+            
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="loginEmail" 
+                       placeholder="admin@iblue.com"
+                       autocomplete="username">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <div class="password-wrapper">
+                    <input type="password" class="form-control" id="loginPassword" 
+                           placeholder="••••••••"
+                           autocomplete="current-password">
+                    <button type="button" class="toggle-password" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i>
+                Login to Admin Dashboard
+            </button>
+            
+            <div class="login-footer">
+                <p>Restricted access • Administrative use only</p>
+                <div class="security-note">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secured by Supabase Auth</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Interface (hidden by default) -->
+    <div id="adminInterface" class="admin-interface">
+        <!-- Admin interface content will be shown after login -->
+    </div>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        // Initialize Supabase
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // DOM Elements
+        const loginPage = document.getElementById('loginPage');
+        const adminInterface = document.getElementById('adminInterface');
+        const loginEmail = document.getElementById('loginEmail');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+        const loginSuccess = document.getElementById('loginSuccess');
+        const togglePassword = document.getElementById('togglePassword');
+        
+        // ============ REDIRECT SYSTEM ============
+        // Enhanced return URL function similar to the reference code
+        function getReturnUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Check for returnUrl parameter first
+            let returnUrl = urlParams.get('returnUrl');
+            
+            if (returnUrl) {
+                console.log("Found returnUrl in query params:", returnUrl);
+                return returnUrl;
+            }
+            
+            // Check for redirect parameter
+            returnUrl = urlParams.get('redirect');
+            if (returnUrl) {
+                console.log("Found redirect in query params:", returnUrl);
+                return returnUrl;
+            }
+            
+            // Check session storage
+            const storedReturnUrl = sessionStorage.getItem('returnUrl');
+            if (storedReturnUrl) {
+                console.log("Found returnUrl in sessionStorage:", storedReturnUrl);
+                sessionStorage.removeItem('returnUrl');
+                return storedReturnUrl;
+            }
+            
+            // Check localStorage as fallback
+            const localStorageUrl = localStorage.getItem('returnUrl');
+            if (localStorageUrl) {
+                console.log("Found returnUrl in localStorage:", localStorageUrl);
+                localStorage.removeItem('returnUrl');
+                return localStorageUrl;
+            }
+            
+            // Check for admin dashboard default
+            const adminDashboard = urlParams.get('admin') ? 'admin-dashboard.html' : null;
+            if (adminDashboard) {
+                console.log("Admin dashboard requested");
+                return adminDashboard;
+            }
+            
+            // Default to admin interface or index
+            console.log("No return URL found, defaulting to admin interface");
+            return window.location.origin + '/admin-dashboard.html';
+        }
+        
+        // Store return URL before navigation
+        function storeReturnUrl(url) {
+            if (url) {
+                sessionStorage.setItem('returnUrl', url);
+                localStorage.setItem('returnUrl', url);
+                console.log("Stored return URL:", url);
+            }
+        }
+        
+        // Clear stored return URLs
+        function clearReturnUrls() {
+            sessionStorage.removeItem('returnUrl');
+            localStorage.removeItem('returnUrl');
+            console.log("Cleared return URLs");
+        }
+        
+        // ============ AUTH FUNCTIONS ============
+        
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log("Admin login page loaded");
+            
+            // Store any provided return URL from query params
+            const urlParams = new URLSearchParams(window.location.search);
+            const returnUrl = urlParams.get('returnUrl') || urlParams.get('redirect');
+            
+            if (returnUrl) {
+                storeReturnUrl(returnUrl);
+            }
+            
+            // If no return URL in query params, check referrer
+            else if (document.referrer && 
+                     document.referrer !== window.location.href &&
+                     !document.referrer.includes('login.html') &&
+                     !document.referrer.includes('admin-login.html')) {
+                storeReturnUrl(document.referrer);
+            }
+            
+            await checkAuth();
+            
+            // Enter key to login
+            loginPassword.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleLogin();
+                }
+            });
+            
+            // Toggle password visibility
+            togglePassword.addEventListener('click', function() {
+                const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                loginPassword.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+            
+            // Auto-focus email field
+            loginEmail.focus();
+        });
+        
+        // Check if user is already logged in
+        async function checkAuth() {
+            try {
+                const { data: { session } } = await sb.auth.getSession();
+                
+                if (!session) {
+                    showLoginPage();
+                    return;
+                }
+                
+                // Check if user is admin
+                const { data: profile, error } = await sb
+                    .from('profiles')
+                    .select('id, full_name, email, is_admin')
+                    .eq('id', session.user.id)
+                    .single();
+                
+                if (error) {
+                    console.error('Error fetching profile:', error);
+                    showLoginPage();
+                    return;
+                }
+                
+                if (!profile.is_admin) {
+                    showErrorMessage('Access denied. Admin privileges required.');
+                    await sb.auth.signOut();
+                    return;
+                }
+                
+                // User is admin, get return URL and redirect
+                const returnUrl = getReturnUrl();
+                console.log("User already authenticated, redirecting to:", returnUrl);
+                
+                // Clear stored URLs
+                clearReturnUrls();
+                
+                // Redirect to admin interface
+                window.location.href = returnUrl;
+                
+            } catch (error) {
+                console.error('Auth check error:', error);
+                showLoginPage();
+            }
+        }
+        
+        function showLoginPage() {
+            loginPage.style.display = 'block';
+            adminInterface.style.display = 'none';
+            document.body.style.background = 'var(--light)';
+        }
+        
+        function showAdminInterface() {
+            // This function is kept for backward compatibility
+            // but we now redirect instead of showing inline interface
+            loginPage.style.display = 'none';
+            adminInterface.style.display = 'block';
+        }
+        
+        async function handleLogin() {
+            const email = loginEmail.value.trim();
+            const password = loginPassword.value;
+            
+            clearMessages();
+            
+            if (!email || !password) {
+                showErrorMessage('Please enter both email and password');
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showErrorMessage('Please enter a valid email address');
+                return;
+            }
+            
+            const originalText = loginBtn.innerHTML;
+            loginBtn.innerHTML = '<div class="loading"></div>';
+            loginBtn.disabled = true;
+            
+            try {
+                const { data, error } = await sb.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                if (error) {
+                    if (error.message.includes('Invalid login credentials')) {
+                        throw new Error('Invalid email or password');
+                    } else if (error.message.includes('Email not confirmed')) {
+                        throw new Error('Please confirm your email address first');
+                    } else {
+                        throw error;
+                    }
+                }
+                
+                const { data: profile, error: profileError } = await sb
+                    .from('profiles')
+                    .select('is_admin')
+                    .eq('id', data.user.id)
+                    .single();
+                
+                if (profileError) {
+                    throw new Error('Error fetching user profile');
+                }
+                
+                if (!profile?.is_admin) {
+                    await sb.auth.signOut();
+                    throw new Error('Admin access required');
+                }
+                
+                // Login successful
+                showSuccessMessage('Login successful! Redirecting...');
+                
+                // Get the return URL
+                const returnUrl = getReturnUrl();
+                console.log("Login successful, redirecting to:", returnUrl);
+                
+                // Clear stored URLs
+                clearReturnUrls();
+                
+                // Redirect to return URL
+                setTimeout(() => {
+                    window.location.href = returnUrl;
+                }, 1500);
+                
+            } catch (error) {
+                showErrorMessage(error.message || 'Login failed. Please try again.');
+                loginPassword.value = '';
+                loginPassword.focus();
+                
+            } finally {
+                loginBtn.innerHTML = originalText;
+                loginBtn.disabled = false;
+            }
+        }
+        
+        function showErrorMessage(message) {
+            loginError.textContent = message;
+            loginError.classList.add('show');
+            
+            setTimeout(() => {
+                loginError.classList.remove('show');
+            }, 5000);
+        }
+        
+        function showSuccessMessage(message) {
+            loginSuccess.textContent = message;
+            loginSuccess.classList.add('show');
+            
+            setTimeout(() => {
+                loginSuccess.classList.remove('show');
+            }, 3000);
+        }
+        
+        function clearMessages() {
+            loginError.classList.remove('show');
+            loginSuccess.classList.remove('show');
+            loginError.textContent = '';
+            loginSuccess.textContent = '';
+        }
+        
+        window.handleLogin = handleLogin;
+        loginBtn.addEventListener('click', handleLogin);
+        
+        loginEmail.addEventListener('input', function() {
+            if (this.value.length === 1) {
+                this.value = this.value.charAt(0).toLowerCase() + this.value.slice(1);
+            }
+        });
+        
+        loginEmail.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                loginPassword.focus();
+            }
+        });
+        
+        // Global Enter key handler
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter' && loginPage.style.display !== 'none') {
+                handleLogin();
+            }
+        });
+    </script>
+</body>
+</html>
