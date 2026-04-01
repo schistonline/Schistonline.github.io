@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - iBlue B2B</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin/style/admin-dashboard.css">
+    <style>
+        /* Additional styles for better sidebar scrolling */
+        .sidebar {
+            max-height: 100vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+        
+        .sidebar-menu {
+            padding-bottom: 20px;
+        }
+        
+        .sidebar-menu li a {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Category headers in sidebar */
+        .sidebar-category {
+            padding: 12px 20px 4px 20px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-chart-line"></i> iBlue Admin
+            </div>
+            <ul class="sidebar-menu">
+                <!-- Main Section -->
+                <li class="sidebar-category">MAIN</li>
+                <li><a href="admin-dashboard.html" class="active"><i class="fas fa-dashboard"></i> Dashboard</a></li>
+                
+                <!-- Content Management -->
+                <li class="sidebar-category">CONTENT</li>
+                <li><a href="admin/admin-banners.html"><i class="fas fa-images"></i> Banners</a></li>
+                <li><a href="admin/admin-categories.html"><i class="fas fa-sitemap"></i> Categories</a></li>
+                <li><a href="admin/admin-filters.html"><i class="fas fa-filter"></i> Filters</a></li>
+                <li><a href="admin/admin-locations.html"><i class="fas fa-map-marker-alt"></i> Locations</a></li>
+                <li><a href="admin/admin-templates.html"><i class="fas fa-file-alt"></i> Templates</a></li>
+                <li><a href="admin/admin-videos.html"><i class="fas fa-video"></i> Videos</a></li>
+                
+                <!-- Spotlights & Campaigns -->
+                <li class="sidebar-category">SPOTLIGHTS & CAMPAIGNS</li>
+                <li><a href="admin/admin-spotlights.html"><i class="fas fa-star"></i> Spotlights</a></li>
+                <li><a href="admin/admin-supplier-spotlights.html"><i class="fas fa-truck"></i> Supplier Spotlights</a></li>
+                <li><a href="admin/admin-spotlight-pricing.html"><i class="fas fa-dollar-sign"></i> Spotlight Pricing</a></li>
+                <li><a href="admin/admin-campaigns.html"><i class="fas fa-bullhorn"></i> Campaigns</a></li>
+                <li><a href="admin/admin-approve-campaigns.html"><i class="fas fa-check-circle"></i> Approve Campaigns</a></li>
+                <li><a href="admin/admin-ads.html"><i class="fas fa-ad"></i> Ads</a></li>
+                
+                <!-- Users & Suppliers -->
+                <li class="sidebar-category">USERS & SUPPLIERS</li>
+                <li><a href="admin/admin-users.html"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="admin/admin-supplier-approvals.html"><i class="fas fa-user-check"></i> Supplier Approvals</a></li>
+                <li><a href="admin/admin-edit-suppliers.html"><i class="fas fa-edit"></i> Edit Suppliers</a></li>
+                <li><a href="admin/admin-verify-poultry.html"><i class="fas fa-drumstick-bite"></i> Verify Poultry</a></li>
+                
+                <!-- Products & Rankings -->
+                <li class="sidebar-category">PRODUCTS & RANKINGS</li>
+                <li><a href="admin/admin-products.html"><i class="fas fa-box"></i> Products</a></li>
+                <li><a href="admin/admin-rankings.html"><i class="fas fa-trophy"></i> Rankings</a></li>
+                <li><a href="admin/admin-discover.html"><i class="fas fa-compass"></i> Discover</a></li>
+                
+                <!-- Messages & Reports -->
+                <li class="sidebar-category">MESSAGES & REPORTS</li>
+                <li><a href="admin/admin-messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
+                <li><a href="admin/admin-message-reports.html"><i class="fas fa-flag"></i> Message Reports</a></li>
+                <li><a href="admin/admin-reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                
+                <!-- Announcements -->
+                <li class="sidebar-category">ANNOUNCEMENTS</li>
+                <li><a href="admin/admin-announcements.html"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                
+                <!-- Authentication -->
+                <li class="sidebar-category">AUTHENTICATION</li>
+                <li><a href="admin/admin-login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="page-title">
+                    <h1>Dashboard Overview</h1>
+                </div>
+                <div class="user-menu">
+                    <span class="admin-badge">Admin</span>
+                    <span id="adminName">Loading...</span>
+                    <button class="btn btn-sm btn-danger" onclick="dashboardManager.logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid" id="statsGrid">
+                <!-- Stats cards will be populated by JavaScript -->
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3>Ad Performance</h3>
+                    <canvas id="adsChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>User Growth</h3>
+                    <canvas id="usersChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <div class="section-header">
+                    <h2>Recent Activity</h2>
+                    <a href="admin-reports.html" class="btn btn-sm">View All</a>
+                </div>
+                <div class="activity-table-container">
+                    <table class="activity-table" id="activityTable">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Action</th>
+                                <th>Admin</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityBody">
+                            <!-- Activity rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="admin/script/admin-dashboard.js"></script>
+</body>
+</html>
