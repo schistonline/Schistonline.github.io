@@ -40,10 +40,10 @@ const REASON_LABELS = {
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', async function() {
-    console.log('🚀 Initializing Schist.online homepage...');
+    console.log('🚀 BuyUganda.online...');
     
     // Show loading overlay
-    showLoading(true, 'Loading Schist.online...');
+    showLoading(true, 'Loading BuyUganda.online...');
     
     // Check authentication
     await checkAuth();
@@ -181,7 +181,7 @@ function showAuthPrompt() {
     var authHTML = `
         <div class="auth-prompt-section" id="authPrompt">
             <div class="auth-prompt-content">
-                <h3>👋 Welcome to Schist.online!</h3>
+                <h3>👋 Welcome to BuyUganda.online!</h3>
                 <p>Sign in for personalized recommendations and faster checkout</p>
                 <div class="auth-prompt-actions">
                     <a href="login.html" class="login-btn">
