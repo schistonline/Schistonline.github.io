@@ -1,0 +1,795 @@
+/* Marketer Dashboard Styles */
+
+/* Earnings Overview Cards */
+.earnings-overview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 16px;
+    background: var(--white);
+    margin-bottom: 12px;
+}
+
+.overview-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+}
+
+.overview-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.balance-card {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border: none;
+    color: white;
+}
+
+.balance-card .card-icon,
+.balance-card .card-label,
+.balance-card .card-value {
+    color: white;
+}
+
+.earned-card {
+    background: linear-gradient(135deg, #10B981, #059669);
+    border: none;
+    color: white;
+}
+
+.earned-card .card-icon,
+.earned-card .card-label,
+.earned-card .card-value {
+    color: white;
+}
+
+.leads-card {
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    border: none;
+    color: white;
+}
+
+.leads-card .card-icon,
+.leads-card .card-label,
+.leads-card .card-value {
+    color: white;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-label {
+    display: block;
+    font-size: 12px;
+    opacity: 0.9;
+    margin-bottom: 4px;
+}
+
+.card-value {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.card-sub {
+    font-size: 10px;
+    opacity: 0.8;
+}
+
+.quick-withdraw {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 11px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+}
+
+.quick-withdraw:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+}
+
+/* Performance Stats */
+.performance-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 16px;
+    background: var(--white);
+    margin-bottom: 12px;
+    border-top: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.performance-stats .stat-item {
+    text-align: center;
+}
+
+.performance-stats .stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.performance-stats .stat-label {
+    font-size: 11px;
+    color: var(--gray-500);
+    margin-top: 4px;
+}
+
+/* Chart Section */
+.chart-section {
+    background: var(--white);
+    margin: 12px 16px;
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--gray-200);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.section-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.section-header h3 i {
+    color: var(--primary);
+    margin-right: 8px;
+}
+
+.chart-filters {
+    display: flex;
+    gap: 8px;
+}
+
+.chart-filter {
+    padding: 4px 12px;
+    background: var(--gray-100);
+    border: none;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.chart-filter.active {
+    background: var(--primary);
+    color: white;
+}
+
+.earnings-canvas {
+    max-height: 250px;
+    width: 100%;
+}
+
+/* Active Campaigns */
+.active-campaigns-section {
+    background: var(--white);
+    margin: 12px 16px;
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--gray-200);
+}
+
+.active-campaigns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.campaign-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--gray-100);
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+
+.campaign-card:hover {
+    background: var(--gray-200);
+}
+
+.campaign-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-gradient);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.campaign-info {
+    flex: 1;
+}
+
+.campaign-name {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.campaign-stats {
+    font-size: 11px;
+    color: var(--gray-500);
+    display: flex;
+    gap: 12px;
+}
+
+.campaign-reward {
+    text-align: right;
+}
+
+.reward-amount {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.reward-label {
+    font-size: 10px;
+    color: var(--gray-500);
+}
+
+.share-btn-small {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    cursor: pointer;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Recent Earnings List */
+.recent-earnings-section {
+    background: var(--white);
+    margin: 12px 16px;
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--gray-200);
+}
+
+.earnings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.earning-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.earning-item:last-child {
+    border-bottom: none;
+}
+
+.earning-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.earning-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--gray-100);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+}
+
+.earning-details h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.earning-details p {
+    font-size: 11px;
+    color: var(--gray-500);
+}
+
+.earning-amount {
+    text-align: right;
+}
+
+.earning-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.earning-date {
+    font-size: 10px;
+    color: var(--gray-400);
+    margin-top: 2px;
+}
+
+/* Leaderboard Section */
+.leaderboard-section {
+    background: var(--white);
+    margin: 12px 16px;
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--gray-200);
+}
+
+.leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--gray-100);
+    border-radius: var(--radius-sm);
+}
+
+.leaderboard-rank {
+    width: 32px;
+    height: 32px;
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.leaderboard-rank.gold {
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+}
+
+.leaderboard-rank.silver {
+    background: linear-gradient(135deg, #94A3B8, #64748B);
+}
+
+.leaderboard-rank.bronze {
+    background: linear-gradient(135deg, #CD7F32, #B87333);
+}
+
+.leaderboard-info {
+    flex: 1;
+}
+
+.leaderboard-name {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.leaderboard-stats {
+    font-size: 11px;
+    color: var(--gray-500);
+}
+
+.leaderboard-earnings {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Tips Section */
+.tips-section {
+    background: var(--white);
+    margin: 12px 16px;
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--gray-200);
+}
+
+.tips-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.tips-header i {
+    font-size: 20px;
+    color: var(--accent);
+}
+
+.tips-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.tips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tip-item {
+    display: flex;
+    gap: 12px;
+}
+
+.tip-icon {
+    font-size: 20px;
+}
+
+.tip-content strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.tip-content p {
+    font-size: 12px;
+    color: var(--gray-500);
+    line-height: 1.4;
+}
+
+/* Withdrawal Modal */
+.withdraw-info {
+    background: var(--gray-100);
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 20px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
+.info-row strong {
+    color: var(--primary);
+    font-size: 18px;
+}
+
+/* Network Buttons */
+.network-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.network-btn {
+    flex: 1;
+    padding: 10px;
+    background: var(--gray-100);
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.network-btn.active {
+    border-color: var(--primary);
+    background: white;
+    color: var(--primary);
+}
+
+/* Submit Button */
+.submit-withdraw {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.submit-withdraw:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(107, 33, 229, 0.3);
+}
+
+/* History Modal */
+.history-filters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.history-filter {
+    padding: 8px 16px;
+    background: var(--gray-100);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.history-filter.active {
+    background: var(--primary);
+    color: white;
+}
+
+.history-list {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.history-item.positive {
+    border-left: 3px solid var(--secondary);
+}
+
+.history-item.negative {
+    border-left: 3px solid var(--danger);
+}
+
+.history-info h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.history-info p {
+    font-size: 11px;
+    color: var(--gray-500);
+}
+
+.history-amount {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.history-amount.positive {
+    color: var(--secondary);
+}
+
+.history-amount.negative {
+    color: var(--danger);
+}
+
+.history-date {
+    font-size: 10px;
+    color: var(--gray-400);
+    margin-top: 2px;
+}
+
+/* Leaderboard Modal */
+.leaderboard-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.leaderboard-tab {
+    padding: 8px 16px;
+    background: var(--gray-100);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.leaderboard-tab.active {
+    background: var(--primary);
+    color: white;
+}
+
+.full-leaderboard {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.full-leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.full-leaderboard-rank {
+    width: 40px;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.full-leaderboard-rank.gold {
+    color: #F59E0B;
+}
+
+.full-leaderboard-rank.silver {
+    color: #94A3B8;
+}
+
+.full-leaderboard-rank.bronze {
+    color: #CD7F32;
+}
+
+.full-leaderboard-info {
+    flex: 1;
+}
+
+.full-leaderboard-name {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.full-leaderboard-stats {
+    font-size: 11px;
+    color: var(--gray-500);
+}
+
+.full-leaderboard-earnings {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Header Withdraw Button */
+.withdraw-btn-header {
+    background: var(--primary-gradient);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Skeleton Loading */
+.loading-skeleton {
+    padding: 12px 0;
+}
+
+.campaign-card-skeleton {
+    height: 80px;
+    background: var(--gray-200);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.earning-item-skeleton {
+    height: 60px;
+    background: var(--gray-200);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.leaderboard-item-skeleton {
+    height: 70px;
+    background: var(--gray-200);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray-500);
+}
+
+.empty-state i {
+    font-size: 48px;
+    color: var(--gray-300);
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+    .earnings-overview {
+        gap: 16px;
+        padding: 20px;
+    }
+    
+    .active-campaigns-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .campaign-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .campaign-reward {
+        text-align: center;
+        margin-top: 8px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .earnings-overview {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .performance-stats,
+    .chart-section,
+    .active-campaigns-section,
+    .recent-earnings-section,
+    .leaderboard-section,
+    .tips-section {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

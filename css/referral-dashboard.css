@@ -1,0 +1,422 @@
+/* Referral Dashboard Styles */
+
+/* Back Button */
+.back-btn {
+    color: var(--gray-600);
+    font-size: 20px;
+    text-decoration: none;
+    padding: 8px;
+}
+
+/* Earnings Summary Cards */
+.earnings-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px;
+    background: var(--white);
+    margin-bottom: 12px;
+}
+
+.summary-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+}
+
+.cash-card::before {
+    background: var(--primary);
+}
+
+.credit-card::before {
+    background: var(--accent);
+}
+
+.total-card {
+    grid-column: span 2;
+    background: var(--primary-gradient);
+    color: white;
+}
+
+.total-card .card-label,
+.total-card .card-value {
+    color: white;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--gray-100);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.cash-card .card-icon {
+    color: var(--primary);
+}
+
+.credit-card .card-icon {
+    color: var(--accent);
+}
+
+.total-card .card-icon {
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-label {
+    display: block;
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-bottom: 4px;
+}
+
+.card-value {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.credit-value {
+    display: block;
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-top: 4px;
+}
+
+.withdraw-btn {
+    margin-top: 8px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.withdraw-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(107, 33, 229, 0.3);
+}
+
+/* Referral Code Section */
+.referral-code-section {
+    background: var(--white);
+    margin: 12px 16px;
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--gray-200);
+}
+
+.code-container {
+    background: var(--gray-100);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    margin: 12px 0;
+    text-align: center;
+}
+
+.referral-code {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--primary);
+    font-family: monospace;
+    margin-bottom: 8px;
+}
+
+.referral-link {
+    font-size: 12px;
+    color: var(--gray-500);
+    word-break: break-all;
+}
+
+.copy-code-btn {
+    background: var(--gray-100);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.copy-code-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* Share Options */
+.share-options h4 {
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: var(--gray-600);
+}
+
+.share-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.share-whatsapp,
+.share-sms,
+.share-copy {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.share-whatsapp {
+    background: #25D366;
+    color: white;
+}
+
+.share-sms {
+    background: var(--gray-600);
+    color: white;
+}
+
+.share-copy {
+    background: var(--gray-200);
+    color: var(--gray-700);
+}
+
+/* Referral Stats */
+.referral-stats {
+    background: var(--white);
+    margin: 12px 16px;
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    border: 1px solid var(--gray-200);
+}
+
+.stat-item {
+    flex: 1;
+}
+
+.stat-value {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat-label {
+    display: block;
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-top: 4px;
+}
+
+.stat-sub {
+    display: block;
+    font-size: 10px;
+    color: var(--gray-400);
+    margin-top: 2px;
+}
+
+.stat-divider {
+    width: 1px;
+    background: var(--gray-200);
+}
+
+/* How It Works */
+.how-it-works {
+    background: var(--white);
+    margin: 12px 16px;
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--gray-200);
+}
+
+.how-it-works h3 {
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: var(--dark);
+}
+
+.how-it-works h3 i {
+    color: var(--primary);
+    margin-right: 8px;
+}
+
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.step {
+    display: flex;
+    gap: 12px;
+}
+
+.step-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.step-content strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.step-content p {
+    font-size: 12px;
+    color: var(--gray-500);
+    line-height: 1.4;
+}
+
+/* Recent Referrals */
+.recent-referrals {
+    background: var(--white);
+    margin: 12px 16px;
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--gray-200);
+}
+
+.referrals-list {
+    margin-top: 12px;
+}
+
+.referral-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.referral-item:last-child {
+    border-bottom: none;
+}
+
+.referral-info {
+    flex: 1;
+}
+
+.referral-name {
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.referral-type {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.referral-type.supplier {
+    background: #FEF3C7;
+    color: #F59E0B;
+}
+
+.referral-type.buyer {
+    background: #D1FAE5;
+    color: #10B981;
+}
+
+.referral-status {
+    font-size: 11px;
+    color: var(--gray-500);
+    margin-left: 8px;
+}
+
+.referral-status.verified {
+    color: var(--secondary);
+}
+
+.referral-status.pending {
+    color: var(--accent);
+}
+
+.referral-date {
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-top: 2px;
+}
+
+.referral-reward {
+    text-align: right;
+}
+
+.reward-amount {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--primary);
+}
+
+.reward-credits {
+    font-size: 12px;
+    color: var(--accent);
+}
+
+/* Loading States */
+.loading-skeleton {
+    padding: 12px 0;
+}
+
+.loading-skeleton .skeleton-text {
+    height: 40px;
+    margin-bottom: 12px;
+    background: var(--gray-200);
+    border-radius: 8px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
