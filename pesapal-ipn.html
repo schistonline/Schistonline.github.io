@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pesapal IPN Handler</title>
+</head>
+<body>
+    <h1>Payment Processing...</h1>
+    <script>
+        // Get parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const trackingId = urlParams.get('OrderTrackingId');
+        const merchantRef = urlParams.get('OrderMerchantReference');
+        
+        if (trackingId) {
+            // Forward to Supabase Edge Function
+            fetch('https://uufhvmmgwzkxvvdbqemz.supabase.co/functions/v1/pesapal-payment/ipn?' + new URLSearchParams({
+                OrderTrackingId: trackingId,
+                OrderMerchantReference: merchantRef
+            }))
+            .then(response => {
+                console.log('IPN forwarded successfully');
+            })
+            .catch(error => {
+                console.error('Error forwarding IPN:', error);
+            });
+        }
+        
+        // Show success message
+        document.body.innerHTML = `
+            <div style="font-family: system-ui; text-align: center; padding: 50px; max-width: 500px; margin: 0 auto;">
+                <div style="font-size: 48px; margin-bottom: 20px;">✅</div>
+                <h2>Payment Received!</h2>
+                <p>Your payment is being processed. You will be redirected shortly.</p>
+                <div class="spinner" style="width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: #0B4F6C; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 20px auto;"></div>
+                <p style="color: #666; font-size: 14px;">Redirecting to dashboard...</p>
+            </div>
+            <style>
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+            </style>
+            <script>
+                setTimeout(() => {
+                    window.location.href = 'https://akatunanuraevra-svg.github.io/Iblue/supplier-dashboard.html';
+                }, 3000);
+            </script>
+        `;
+    </script>
+</body>
+</html>
