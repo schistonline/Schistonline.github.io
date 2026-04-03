@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Payment - BuyUganda</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #0B4F6C 0%, #0a3e55 100%);
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 24px;
+            max-width: 400px;
+            margin: 20px;
+        }
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #0B4F6C;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #0B4F6C;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <h2>Processing Payment...</h2>
+        <p>Please wait while we confirm your payment.</p>
+    </div>
+
+    <script>
+        // Get payment info from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const trackingId = urlParams.get('OrderTrackingId');
+        const merchantRef = urlParams.get('OrderMerchantReference');
+        const status = urlParams.get('Status');
+        
+        console.log('Callback received:', { trackingId, merchantRef, status });
+        
+        if (trackingId) {
+            // Send to Edge Function for verification
+            fetch('https://uufhvmmgwzkxvvdbqemz.supabase.co/functions/v1/pesapal-payment/confirm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    tracking_id: trackingId,
+                    merchant_reference: merchantRef,
+                    status: status
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('Confirmation response:', data);
+                if (data.success) {
+                    document.body.innerHTML = `
+                        <div class="container">
+                            <div class="success" style="font-size: 64px;">✅</div>
+                            <h2>Payment Successful!</h2>
+                            <p>${data.message || 'Your wallet has been funded.'}</p>
+                            <a href="https://buyuganda.online/supplier-wallet-funding.html" class="btn">Go to Wallet</a>
+                        </div>
+                    `;
+                } else {
+                    document.body.innerHTML = `
+                        <div class="container">
+                            <div class="error" style="font-size: 64px;">❌</div>
+                            <h2>Payment Failed</h2>
+                            <p>${data.error || 'Please try again.'}</p>
+                            <a href="https://buyuganda.online/supplier-wallet-funding.html" class="btn">Try Again</a>
+                        </div>
+                    `;
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                document.body.innerHTML = `
+                    <div class="container">
+                        <div class="error" style="font-size: 64px;">❌</div>
+                        <h2>Verification Failed</h2>
+                        <p>Please contact support.</p>
+                        <a href="https://buyuganda.online/supplier-wallet-funding.html" class="btn">Go Back</a>
+                    </div>
+                `;
+            });
+        } else {
+            document.body.innerHTML = `
+                <div class="container">
+                    <div class="error" style="font-size: 64px;">❌</div>
+                    <h2>No Payment Data</h2>
+                    <a href="https://buyuganda.online/supplier-wallet-funding.html" class="btn">Go Back</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
