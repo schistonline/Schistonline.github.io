@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover" />
-  <title>SourceX B2B • Business Sign In</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  <title>Buy Uganda - Sign In</title>
   <style>
     * {
       margin: 0;
@@ -12,521 +12,364 @@
     }
 
     :root {
-      --primary: #6B21E5;
-      --primary-dark: #4A0D9C;
-      --primary-light: #9B4DFF;
-      --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
-      --secondary: #10B981;
-      --accent: #F59E0B;
+      --primary: #2563EB;
+      --primary-dark: #1D4ED8;
+      --primary-light: #60A5FA;
+      --success: #10B981;
       --danger: #EF4444;
-      --dark: #1F2937;
-      --gray-700: #374151;
-      --gray-500: #6B7280;
-      --gray-300: #D1D5DB;
+      --warning: #F59E0B;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
       --gray-200: #E5E7EB;
-      --white: #FFFFFF;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --gray-900: #111827;
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
       min-height: 100dvh;
-      margin: 0;
       padding: 16px;
-      background-attachment: fixed;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 440px;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 2rem 1.8rem;
-      border-radius: 32px;
-      width: 100%;
-      max-width: 440px;
-      box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255,255,255,0.3);
+      background: white;
+      border-radius: 24px;
+      padding: 32px 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }
 
-    /* Logo Section */
-    .logo-section {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 1.5rem;
+    .logo {
+      text-align: center;
+      margin-bottom: 32px;
     }
 
-    .logo-cube {
-      position: relative;
-      width: 48px;
-      height: 48px;
-      perspective: 800px;
-    }
-
-    .logo-cube .cube {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      transform-style: preserve-3d;
-      transform: rotateX(18deg) rotateY(28deg);
-      transition: transform 0.3s ease;
-    }
-
-    .logo-cube:hover .cube {
-      transform: rotateX(28deg) rotateY(38deg);
-    }
-
-    .logo-cube .face {
-      position: absolute;
-      width: 48px;
-      height: 48px;
-      border: 2px solid rgba(255, 255, 255, 0.8);
-      background: var(--primary-gradient);
-      box-shadow: inset 0 0 15px rgba(107, 33, 229, 0.5), 0 0 10px rgba(155, 77, 255, 0.3);
-      border-radius: 8px;
-    }
-
-    .logo-cube .front {
-      transform: translateZ(24px);
-      background: linear-gradient(135deg, #6B21E5, #9B4DFF);
-    }
-
-    .logo-cube .right {
-      transform: rotateY(90deg) translateZ(24px);
-      background: linear-gradient(135deg, #4A0D9C, #6B21E5);
-    }
-
-    .logo-cube .top {
-      transform: rotateX(90deg) translateZ(24px);
-      background: linear-gradient(135deg, #9B4DFF, #B47BFF);
-    }
-
-    .logo-text {
+    .logo h1 {
       font-size: 28px;
       font-weight: 700;
-      letter-spacing: -0.02em;
-      background: var(--primary-gradient);
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      letter-spacing: -0.5px;
     }
 
-    .logo-text span {
-      background: linear-gradient(135deg, #9B4DFF, #B47BFF);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+    .logo p {
+      color: var(--gray-500);
+      font-size: 14px;
+      margin-top: 8px;
     }
 
-    .b2b-badge {
-      background: var(--primary-gradient);
-      color: white;
+    .brand-badge {
       display: inline-block;
+      background: var(--gray-100);
+      color: var(--gray-600);
+      font-size: 12px;
       padding: 4px 12px;
-      border-radius: 40px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 1.2rem;
+      border-radius: 20px;
+      margin-bottom: 24px;
       text-align: center;
       width: 100%;
     }
 
-    .brand-tag {
-      font-size: 0.95rem;
-      color: var(--gray-500);
-      margin-bottom: 2rem;
-      border-bottom: 1.5px solid rgba(107, 33, 229, 0.12);
-      padding-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+    .form-group {
+      margin-bottom: 20px;
     }
 
-    .brand-tag i {
-      color: var(--primary);
-    }
-
-    .redirect-message {
-      background: #EFF6FF;
-      color: var(--primary);
-      padding: 12px 16px;
-      border-radius: 40px;
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
-      text-align: center;
-      border-left: 4px solid var(--primary);
-      display: none;
-    }
-
-    .redirect-message.show {
+    label {
       display: block;
-    }
-
-    .redirect-message i {
-      margin-right: 8px;
-    }
-
-    .success-message {
-      background: #E7F5E8;
-      color: var(--secondary);
-      padding: 12px 16px;
-      border-radius: 40px;
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
-      text-align: center;
-      border-left: 4px solid var(--secondary);
-      display: none;
-    }
-
-    .success-message.show {
-      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-700);
+      margin-bottom: 6px;
     }
 
     input {
       width: 100%;
-      padding: 15px 18px;
-      margin-bottom: 1rem;
-      border-radius: 18px;
-      border: 1.5px solid var(--gray-200);
-      background: var(--white);
-      font-size: 1rem;
-      line-height: 1.4;
-      color: var(--dark);
-      transition: border 0.15s, box-shadow 0.2s;
-      appearance: none;
-      -webkit-appearance: none;
+      padding: 12px 16px;
+      border: 1px solid var(--gray-300);
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.2s;
+      background: white;
     }
 
     input:focus {
+      outline: none;
       border-color: var(--primary);
-      outline: 0;
-      box-shadow: 0 0 0 4px rgba(107, 33, 229, 0.12);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
-    input:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0 50px white inset;
-      -webkit-text-fill-color: var(--dark);
+    input.error {
+      border-color: var(--danger);
     }
 
-    .remember-me {
+    .error-message {
+      color: var(--danger);
+      font-size: 12px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .checkbox-group {
       display: flex;
       align-items: center;
-      margin-bottom: 1.5rem;
-      padding: 0 5px;
+      justify-content: space-between;
+      margin-bottom: 24px;
     }
 
-    .remember-me input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-      margin-bottom: 0;
-      accent-color: var(--primary);
-      cursor: pointer;
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .remember-me label {
-      font-size: 0.95rem;
-      color: var(--gray-700);
-      cursor: pointer;
-      font-weight: 500;
-      user-select: none;
+    .checkbox input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+    }
+
+    .checkbox label {
+      margin: 0;
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+    .forgot-link {
+      font-size: 14px;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
     }
 
     button {
       width: 100%;
-      padding: 16px 18px;
+      padding: 14px;
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      color: white;
       border: none;
-      border-radius: 40px;
-      font-size: 1.06rem;
+      border-radius: 12px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.18s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      letter-spacing: 0.3px;
-      background: var(--primary-gradient);
-      color: white;
-      box-shadow: 0 10px 18px -8px rgba(107, 33, 229, 0.4);
-      margin-bottom: 1rem;
-      border: 1px solid rgba(255,255,255,0.2);
+      transition: opacity 0.2s, transform 0.1s;
     }
 
     button:active {
       transform: scale(0.98);
-      box-shadow: 0 5px 12px -6px rgba(107, 33, 229, 0.5);
     }
 
     button:disabled {
-      opacity: 0.7;
+      opacity: 0.6;
       cursor: not-allowed;
       transform: none;
     }
 
-    .auth-links {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 1.2rem 0 0;
-      font-size: 0.95rem;
-      flex-wrap: wrap;
-      gap: 10px;
+    .register-link {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--gray-200);
     }
 
-    .auth-links a {
+    .register-link p {
+      color: var(--gray-600);
+      font-size: 14px;
+    }
+
+    .register-link a {
       color: var(--primary);
       text-decoration: none;
       font-weight: 600;
-      padding: 8px 0;
-      transition: color 0.2s;
-      border-bottom: 2px solid transparent;
     }
 
-    .auth-links a:hover {
-      color: var(--primary-dark);
-      border-bottom-color: var(--primary);
+    .register-link a:hover {
+      text-decoration: underline;
     }
 
-    .auth-links .register-link {
-      background: rgba(107, 33, 229, 0.08);
-      padding: 8px 16px;
-      border-radius: 40px;
-      font-weight: 600;
-    }
-
-    .auth-links .register-link:hover {
-      background: rgba(107, 33, 229, 0.15);
-      border-bottom: none;
-    }
-
-    .business-tip {
-      background: #F3F4F6;
-      border-radius: 16px;
+    .alert {
       padding: 12px 16px;
-      margin: 1.5rem 0 0.5rem;
-      font-size: 0.85rem;
-      color: var(--dark);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid rgba(107, 33, 229, 0.15);
-    }
-
-    .business-tip i {
-      color: var(--primary);
-      font-size: 1.2rem;
-    }
-
-    .msg {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      text-align: center;
-      border-radius: 40px;
-      font-size: 0.95rem;
-      font-weight: 500;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      font-size: 14px;
       display: none;
-      transition: opacity 0.2s;
-      line-height: 1.4;
     }
 
-    .msg.show {
+    .alert.show {
       display: block;
     }
 
-    .msg.error {
+    .alert-error {
       background: #FEF2F2;
       color: #991B1B;
-      border-left: 6px solid var(--danger);
+      border-left: 4px solid var(--danger);
     }
 
-    .msg.info {
+    .alert-success {
+      background: #ECFDF5;
+      color: #065F46;
+      border-left: 4px solid var(--success);
+    }
+
+    .alert-info {
       background: #EFF6FF;
-      color: var(--primary);
-      border-left: 6px solid var(--primary);
+      color: #1E40AF;
+      border-left: 4px solid var(--primary);
     }
 
-    .msg.success {
-      background: #E7F5E8;
-      color: var(--secondary);
-      border-left: 6px solid var(--secondary);
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
     }
 
-    .demo-credentials {
-      background: #FEF3C7;
-      border: 1px solid #FDE68A;
-      border-radius: 16px;
-      padding: 12px;
-      margin-top: 1rem;
-      font-size: 0.8rem;
-      color: #92400E;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
-    .demo-credentials i {
-      color: var(--accent);
+    .legal-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
     }
 
-    @media (max-width: 400px) {
-      .card { padding: 1.5rem; }
-      .logo-text { font-size: 24px; }
-      .logo-cube { width: 40px; height: 40px; }
-      .logo-cube .face { width: 40px; height: 40px; }
-      .logo-cube .front { transform: translateZ(20px); }
-      .logo-cube .right { transform: rotateY(90deg) translateZ(20px); }
-      .logo-cube .top { transform: rotateX(90deg) translateZ(20px); }
+    .legal-footer a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
     }
 
-    button, input {
-      -webkit-tap-highlight-color: transparent;
+    .legal-footer a:hover {
+      text-decoration: underline;
     }
 
-    button:focus-visible, input:focus-visible, a:focus-visible {
-      outline: 3px solid var(--primary);
-      outline-offset: 2px;
+    @media (max-width: 480px) {
+      .card {
+        padding: 24px 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <!-- 3D Cube Logo -->
-    <div class="logo-section">
-      <div class="logo-cube">
-        <div class="cube">
-          <div class="face front"></div>
-          <div class="face right"></div>
-          <div class="face top"></div>
+  <div class="container">
+    <div class="card">
+      <div class="logo">
+        <h1>Buy Uganda</h1>
+        <p>Uganda's Premier B2B Marketplace</p>
+      </div>
+
+      <div class="brand-badge">
+        🇺🇬 Connecting Ugandan Businesses 🇺🇬
+      </div>
+
+      <div id="alert" class="alert"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="you@company.com"
+            autocomplete="email"
+            required
+          />
+          <div id="emailError" class="error-message"></div>
         </div>
-      </div>
-      <span class="logo-text">Source<span>X</span></span>
-    </div>
-    
-    <div class="b2b-badge">BUSINESS MARKETPLACE • UGANDA</div>
-    
-    <div class="brand-tag">
-      <i class="fas fa-handshake"></i>
-      <span>Connect. Source. Grow.</span>
-    </div>
-    
-    <!-- Redirect Message (shown when user came from a protected page) -->
-    <div id="redirectMessage" class="redirect-message">
-      <i class="fas fa-info-circle"></i>
-      <span id="redirectMessageText">Please sign in to continue</span>
-    </div>
 
-    <!-- Success Message (shown after registration) -->
-    <div id="successMessage" class="success-message">
-      <i class="fas fa-check-circle"></i>
-      <span id="successMessageText">Account created! Please check your email to verify.</span>
-    </div>
-    
-    <input id="email" type="email" placeholder="Business email address" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" />
-    <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
-    
-    <div class="remember-me">
-      <input type="checkbox" id="rememberMe" checked>
-      <label for="rememberMe">Keep me signed in on this device</label>
-    </div>
-    
-    <button id="loginBtn">
-      <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
-      Sign in to SourceX
-    </button>
-    
-    <!-- Auth Links -->
-    <div class="auth-links">
-      <a href="forgot-password.html" class="forgot-link">
-        <i class="fas fa-lock" style="margin-right: 4px;"></i>
-        Forgot password?
-      </a>
-      <a href="register.html" class="register-link">
-        Create Business Account <i class="fas fa-arrow-right" style="margin-left: 4px;"></i>
-      </a>
-    </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          />
+          <div id="passwordError" class="error-message"></div>
+        </div>
 
-    <!-- Business Tip -->
-    <div class="business-tip">
-      <i class="fas fa-briefcase"></i>
-      <div>
-        <strong>B2B Access:</strong> Source products in bulk, manage orders, connect with verified suppliers
+        <div class="checkbox-group">
+          <label class="checkbox">
+            <input type="checkbox" id="rememberMe" />
+            <span>Remember me</span>
+          </label>
+          <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" id="loginBtn">
+          Sign In
+        </button>
+      </form>
+
+      <div class="register-link">
+        <p>Don't have an account? <a href="register.html">Create Business Account</a></p>
       </div>
     </div>
 
-    <!-- Demo Credentials (for testing) -->
-    <div class="demo-credentials">
-      <i class="fas fa-flask"></i>
-      <div>
-        <strong>Demo Credentials:</strong> buyer@sourcex.com / any password | supplier@sourcex.com / any password
-      </div>
+    <div class="legal-footer">
+      <p>© 2026 Buy Uganda. All rights reserved.</p>
+      <p>
+        <a href="terms.html">Terms of Service</a> | 
+        <a href="privacy.html">Privacy Policy</a> | 
+        <a href="contact.html">Contact Us</a>
+      </p>
     </div>
-    
-    <div id="msg" class="msg" role="status"></div>
   </div>
 
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     (function() {
-      "use strict";
-
       // ============================================
       // SUPABASE CONFIGURATION
       // ============================================
       const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
-      
-      // ============================================
-      // CONSTANTS & CONFIG
-      // ============================================
-      const STORAGE_KEYS = {
-        SAVED_EMAIL: 'sourcex_saved_email',
-        REMEMBER_ME: 'sourcex_remember_me',
-        SESSION_EXPIRY: 'sourcex_session_expiry',
-        INTENDED_PAGE: 'sourcex_intended_page'
-      };
-
-      // Dashboard URLs based on user role
-      const DASHBOARD_URLS = {
-        BUYER: 'buyer-dashboard.html',
-        SUPPLIER: 'supplier-dashboard.html',
-        ADMIN: 'admin-dashboard.html',
-        DEFAULT: 'index.html'
-      };
-
-      // Demo credentials (for testing only - remove in production)
-      const DEMO_USERS = [
-        { email: 'buyer@sourcex.com', role: 'buyer' },
-        { email: 'supplier@sourcex.com', role: 'supplier' }
-      ];
 
       // ============================================
       // DOM ELEMENTS
       // ============================================
-      const msgEl = document.getElementById('msg');
-      const redirectMessageEl = document.getElementById('redirectMessage');
-      const redirectMessageText = document.getElementById('redirectMessageText');
-      const successMessageEl = document.getElementById('successMessage');
-      const successMessageText = document.getElementById('successMessageText');
-      const loginBtn = document.getElementById('loginBtn');
+      const form = document.getElementById('loginForm');
       const emailInput = document.getElementById('email');
       const passwordInput = document.getElementById('password');
       const rememberMeCheckbox = document.getElementById('rememberMe');
+      const loginBtn = document.getElementById('loginBtn');
+      const alertDiv = document.getElementById('alert');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
 
-      // ============================================
-      // INITIALIZE SUPABASE CLIENT
-      // ============================================
-      let sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      // Initialize Supabase
+      const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
           autoRefreshToken: true,
           persistSession: true,
@@ -537,224 +380,139 @@
       // ============================================
       // HELPER FUNCTIONS
       // ============================================
-      function showMessage(text, type = 'error') {
-        if (!msgEl) return;
-        msgEl.textContent = text;
-        msgEl.className = 'msg show ' + type;
+      function showAlert(message, type = 'error') {
+        alertDiv.textContent = message;
+        alertDiv.className = `alert alert-${type} show`;
         
-        setTimeout(() => {
-          msgEl.classList.remove('show');
-        }, 5000);
+        // Auto-hide after 5 seconds for success/info messages
+        if (type !== 'error') {
+          setTimeout(() => {
+            alertDiv.classList.remove('show');
+          }, 5000);
+        }
       }
 
-      function showSuccessMessage(text) {
-        if (!successMessageEl || !successMessageText) return;
-        successMessageText.textContent = text;
-        successMessageEl.classList.add('show');
-        
-        setTimeout(() => {
-          successMessageEl.classList.remove('show');
-        }, 5000);
+      function clearErrors() {
+        emailError.textContent = '';
+        emailError.classList.remove('show');
+        passwordError.textContent = '';
+        passwordError.classList.remove('show');
+        emailInput.classList.remove('error');
+        passwordInput.classList.remove('error');
+      }
+
+      function showFieldError(field, message) {
+        if (field === 'email') {
+          emailError.textContent = message;
+          emailError.classList.add('show');
+          emailInput.classList.add('error');
+        } else if (field === 'password') {
+          passwordError.textContent = message;
+          passwordError.classList.add('show');
+          passwordInput.classList.add('error');
+        }
       }
 
       function validateEmail(email) {
-        return /^\S+@\S+\.\S+$/.test(email);
+        const re = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+        return re.test(email);
       }
 
-      function getPageNameFromUrl(url) {
-        if (!url) return 'dashboard';
-        const fileName = url.split('/').pop().replace('.html', '');
-        return fileName
-          .split('-')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ');
-      }
-
-      // ============================================
-      // REDIRECT HANDLING
-      // ============================================
-      function getIntendedRedirect() {
-        // Check URL parameters first
-        const urlParams = new URLSearchParams(window.location.search);
-        const redirectParam = urlParams.get('redirect');
-        
-        if (redirectParam) {
-          // Store it for later use
-          sessionStorage.setItem(STORAGE_KEYS.INTENDED_PAGE, redirectParam);
-          return redirectParam;
+      function setLoading(isLoading) {
+        if (isLoading) {
+          loginBtn.disabled = true;
+          loginBtn.innerHTML = '<span class="spinner"></span> Signing in...';
+        } else {
+          loginBtn.disabled = false;
+          loginBtn.innerHTML = 'Sign In';
         }
-        
-        // Check session storage
-        return sessionStorage.getItem(STORAGE_KEYS.INTENDED_PAGE);
-      }
-
-      function showRedirectMessage(redirectUrl) {
-        if (!redirectUrl || !redirectMessageEl || !redirectMessageText) return;
-        
-        const pageName = getPageNameFromUrl(redirectUrl);
-        redirectMessageText.innerHTML = `🔒 Please sign in to access <strong>${pageName}</strong>`;
-        redirectMessageEl.classList.add('show');
-      }
-
-      function clearIntendedRedirect() {
-        sessionStorage.removeItem(STORAGE_KEYS.INTENDED_PAGE);
       }
 
       // ============================================
-      // GET USER ROLE AND DASHBOARD URL
+      // GET USER PROFILE DATA (for dashboard redirect)
       // ============================================
-      async function getUserDashboardUrl(userId) {
+      async function getUserRole(userId) {
         try {
-          // Get user profile to check role
-          const { data: profile, error } = await sb
+          // First try to get from profiles table
+          const { data: profile, error } = await supabase
             .from('profiles')
-            .select('is_supplier, is_admin, admin_role')
+            .select('is_supplier, is_admin')
             .eq('id', userId)
             .single();
 
-          if (error) {
-            console.error('Error fetching profile:', error);
-            return DASHBOARD_URLS.DEFAULT;
+          if (error && error.code !== 'PGRST116') {
+            console.error('Profile fetch error:', error);
           }
 
-          // Check admin first
-          if (profile?.is_admin) {
-            return DASHBOARD_URLS.ADMIN;
+          if (profile) {
+            if (profile.is_admin) return 'admin';
+            if (profile.is_supplier) return 'supplier';
+            return 'buyer';
           }
 
-          // Then supplier
-          if (profile?.is_supplier) {
-            return DASHBOARD_URLS.SUPPLIER;
+          // Check if user has any supplier-related data
+          const { data: negotiations } = await supabase
+            .from('negotiations')
+            .select('id')
+            .eq('supplier_id', userId)
+            .limit(1);
+
+          if (negotiations && negotiations.length > 0) {
+            return 'supplier';
           }
 
-          // Default to buyer dashboard
-          return DASHBOARD_URLS.BUYER;
-
-        } catch (error) {
-          console.error('Error determining user role:', error);
-          return DASHBOARD_URLS.DEFAULT;
-        }
-      }
-
-      // ============================================
-      // HANDLE SUCCESSFUL LOGIN
-      // ============================================
-      async function handleSuccessfulLogin(user) {
-        try {
-          // Get the intended redirect URL
-          let redirectUrl = getIntendedRedirect();
-          
-          // If no specific redirect, go to role-based dashboard
-          if (!redirectUrl) {
-            redirectUrl = await getUserDashboardUrl(user.id);
-          }
-
-          // Clear the stored redirect
-          clearIntendedRedirect();
-
-          // Save session expiry if remember me is checked
-          if (rememberMeCheckbox.checked) {
-            const expiresAt = new Date();
-            expiresAt.setDate(expiresAt.getDate() + 30); // 30 days
-            localStorage.setItem(STORAGE_KEYS.SESSION_EXPIRY, expiresAt.toISOString());
-            localStorage.setItem(STORAGE_KEYS.SAVED_EMAIL, emailInput.value.trim());
-            localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'true');
-          } else {
-            localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'false');
-          }
-
-          // Show success message
-          const pageName = getPageNameFromUrl(redirectUrl);
-          showMessage(`✓ Login successful! Redirecting to ${pageName}...`, 'success');
-
-          // Redirect after brief delay
-          setTimeout(() => {
-            window.location.href = redirectUrl;
-          }, 1500);
-
-        } catch (error) {
-          console.error('Error in post-login handling:', error);
-          window.location.href = DASHBOARD_URLS.DEFAULT;
-        }
-      }
-
-      // ============================================
-      // LOGIN HANDLER
-      // ============================================
-      async function loginHandler(e) {
-        e.preventDefault();
-
-        const email = emailInput.value.trim();
-        const password = passwordInput.value.trim();
-        const rememberMe = rememberMeCheckbox.checked;
-
-        // Validation
-        if (!email) {
-          showMessage('📧 Email is required', 'error');
-          emailInput.focus();
-          return;
-        }
-
-        if (!password) {
-          showMessage('🔒 Password is required', 'error');
-          passwordInput.focus();
-          return;
-        }
-
-        if (!validateEmail(email)) {
-          showMessage('Please enter a valid email address', 'error');
-          emailInput.focus();
-          return;
-        }
-
-        // Disable button
-        loginBtn.disabled = true;
-        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i> Signing in...';
-
-        try {
-          // Attempt login
-          const { data, error } = await sb.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
-
-          if (error) {
-            // Check for demo credentials (optional - remove in production)
-            if (email === 'buyer@sourcex.com' || email === 'supplier@sourcex.com') {
-              // For demo, redirect based on email
-              const redirectUrl = email === 'supplier@sourcex.com' 
-                ? DASHBOARD_URLS.SUPPLIER 
-                : DASHBOARD_URLS.BUYER;
-              
-              showMessage(`✓ Demo login successful! Redirecting...`, 'success');
-              setTimeout(() => window.location.href = redirectUrl, 1500);
-              return;
-            }
-
-            // Handle specific error messages
-            if (error.message.includes('Invalid login credentials')) {
-              showMessage('Invalid email or password', 'error');
-            } else if (error.message.includes('Email not confirmed')) {
-              showMessage('Please verify your email first. Check your inbox.', 'info');
-            } else {
-              showMessage(error.message, 'error');
-            }
-
-            loginBtn.disabled = false;
-            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to SourceX';
-            return;
-          }
-
-          // Login successful
-          if (data?.user) {
-            await handleSuccessfulLogin(data.user);
-          }
-
+          return 'buyer';
         } catch (err) {
-          console.error('Login error:', err);
-          showMessage('Network error. Please try again.', 'error');
-          loginBtn.disabled = false;
-          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to SourceX';
+          console.error('Error getting user role:', err);
+          return 'buyer';
+        }
+      }
+
+      // ============================================
+      // REDIRECT BASED ON USER ROLE
+      // ============================================
+      async function redirectToDashboard(userId) {
+        const role = await getUserRole(userId);
+        
+        const dashboards = {
+          admin: '/admin/dashboard.html',
+          supplier: '/supplier/dashboard.html',
+          buyer: '/buyer/dashboard.html'
+        };
+        
+        const redirectUrl = dashboards[role] || '/dashboard.html';
+        
+        // Check if there's a return URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const returnTo = urlParams.get('return_to');
+        
+        if (returnTo && returnTo.startsWith('/')) {
+          window.location.href = returnTo;
+        } else {
+          window.location.href = redirectUrl;
+        }
+      }
+
+      // ============================================
+      // HANDLE SESSION PERSISTENCE
+      // ============================================
+      function saveSessionPreference(email) {
+        if (rememberMeCheckbox.checked) {
+          localStorage.setItem('saved_email', email);
+          localStorage.setItem('remember_me', 'true');
+        } else {
+          localStorage.removeItem('saved_email');
+          localStorage.setItem('remember_me', 'false');
+        }
+      }
+
+      function loadSavedEmail() {
+        const savedEmail = localStorage.getItem('saved_email');
+        const rememberMe = localStorage.getItem('remember_me') === 'true';
+        
+        if (savedEmail && rememberMe) {
+          emailInput.value = savedEmail;
+          rememberMeCheckbox.checked = true;
         }
       }
 
@@ -763,147 +521,168 @@
       // ============================================
       async function checkExistingSession() {
         try {
-          const { data: { session }, error } = await sb.auth.getSession();
-
+          const { data: { session }, error } = await supabase.auth.getSession();
+          
           if (error) {
             console.error('Session check error:', error);
             return;
           }
-
+          
           if (session?.user) {
-            // Check if session is expired based on remember me setting
-            const rememberMe = localStorage.getItem(STORAGE_KEYS.REMEMBER_ME) === 'true';
-            
-            if (rememberMe) {
-              const expiryStr = localStorage.getItem(STORAGE_KEYS.SESSION_EXPIRY);
-              if (expiryStr) {
-                const expiryDate = new Date(expiryStr);
-                if (new Date() > expiryDate) {
-                  // Session expired
-                  await sb.auth.signOut();
-                  localStorage.removeItem(STORAGE_KEYS.SAVED_EMAIL);
-                  localStorage.removeItem(STORAGE_KEYS.SESSION_EXPIRY);
-                  return;
-                }
-              }
-            }
-
-            // User is already logged in, check for redirect
-            const redirectUrl = getIntendedRedirect();
-            
-            if (redirectUrl) {
-              clearIntendedRedirect();
-              showMessage('✓ You are already logged in. Redirecting...', 'success');
-              setTimeout(() => window.location.href = redirectUrl, 1500);
-            } else {
-              // Redirect to role-appropriate dashboard
-              const dashboardUrl = await getUserDashboardUrl(session.user.id);
-              window.location.href = dashboardUrl;
-            }
+            // User is already logged in, redirect to dashboard
+            showAlert('You are already logged in. Redirecting...', 'success');
+            setTimeout(() => {
+              redirectToDashboard(session.user.id);
+            }, 1500);
           }
-        } catch (error) {
-          console.error('Session check error:', error);
+        } catch (err) {
+          console.error('Session check error:', err);
         }
       }
 
       // ============================================
-      // LOAD SAVED CREDENTIALS
+      // LOGIN HANDLER
       // ============================================
-      function loadSavedCredentials() {
-        const rememberMe = localStorage.getItem(STORAGE_KEYS.REMEMBER_ME) === 'true';
-        const savedEmail = localStorage.getItem(STORAGE_KEYS.SAVED_EMAIL);
+      async function handleLogin(event) {
+        event.preventDefault();
         
-        if (rememberMe && savedEmail) {
-          // Check expiry
-          const expiryStr = localStorage.getItem(STORAGE_KEYS.SESSION_EXPIRY);
-          if (expiryStr) {
-            const expiryDate = new Date(expiryStr);
-            if (new Date() > expiryDate) {
-              // Expired, clear saved data
-              localStorage.removeItem(STORAGE_KEYS.SAVED_EMAIL);
-              localStorage.removeItem(STORAGE_KEYS.SESSION_EXPIRY);
-              localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'false');
-              rememberMeCheckbox.checked = false;
-              return;
+        // Clear previous errors
+        clearErrors();
+        
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        
+        // Validation
+        let hasError = false;
+        
+        if (!email) {
+          showFieldError('email', 'Email address is required');
+          hasError = true;
+        } else if (!validateEmail(email)) {
+          showFieldError('email', 'Please enter a valid email address');
+          hasError = true;
+        }
+        
+        if (!password) {
+          showFieldError('password', 'Password is required');
+          hasError = true;
+        }
+        
+        if (hasError) {
+          return;
+        }
+        
+        setLoading(true);
+        
+        try {
+          // Attempt sign in
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+          
+          if (error) {
+            // Handle specific error cases
+            if (error.message.includes('Invalid login credentials')) {
+              showAlert('Invalid email or password. Please try again.', 'error');
+              showFieldError('password', 'Incorrect password');
+            } else if (error.message.includes('Email not confirmed')) {
+              showAlert('Please verify your email address before logging in. Check your inbox for the confirmation link.', 'info');
+            } else {
+              showAlert(error.message, 'error');
             }
+            setLoading(false);
+            return;
           }
           
-          emailInput.value = savedEmail;
-          rememberMeCheckbox.checked = true;
+          // Login successful
+          if (data?.user) {
+            // Save session preference
+            saveSessionPreference(email);
+            
+            // Show success message
+            showAlert('Login successful! Redirecting to your dashboard...', 'success');
+            
+            // Redirect to appropriate dashboard
+            setTimeout(() => {
+              redirectToDashboard(data.user.id);
+            }, 1000);
+          }
+          
+        } catch (err) {
+          console.error('Login error:', err);
+          showAlert('Network error. Please check your connection and try again.', 'error');
+          setLoading(false);
         }
       }
 
       // ============================================
-      // CHECK FOR REGISTRATION SUCCESS
+      // PASSWORD VISIBILITY TOGGLE (optional)
       // ============================================
-      function checkRegistrationSuccess() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const registered = urlParams.get('registered');
-        const verified = urlParams.get('verified');
+      function addPasswordToggle() {
+        const container = passwordInput.parentElement;
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.textContent = '👁️';
+        toggleBtn.style.cssText = `
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 4px;
+          font-size: 16px;
+          opacity: 0.6;
+          width: auto;
+        `;
         
-        if (registered === 'buyer') {
-          showSuccessMessage('Account created successfully! Please check your email to verify.');
-        } else if (registered === 'supplier') {
-          showSuccessMessage('Supplier account created! Please check your email to verify.');
-        } else if (verified === 'true') {
-          showSuccessMessage('Email verified successfully! You can now log in.');
-        }
+        // Make container relative
+        container.style.position = 'relative';
+        container.appendChild(toggleBtn);
+        
+        toggleBtn.addEventListener('click', () => {
+          const type = passwordInput.type === 'password' ? 'text' : 'password';
+          passwordInput.type = type;
+          toggleBtn.textContent = type === 'password' ? '👁️' : '🙈';
+        });
       }
 
       // ============================================
       // INITIALIZATION
       // ============================================
-      document.addEventListener('DOMContentLoaded', async () => {
-        // Load saved email if any
-        loadSavedCredentials();
-
+      document.addEventListener('DOMContentLoaded', () => {
+        loadSavedEmail();
+        checkExistingSession();
+        // addPasswordToggle(); // Uncomment to add password visibility toggle
+        
         // Check for registration success message
-        checkRegistrationSuccess();
-
-        // Check for redirect intent
-        const intendedRedirect = getIntendedRedirect();
-        if (intendedRedirect) {
-          showRedirectMessage(intendedRedirect);
-        }
-
-        // Check if already logged in
-        await checkExistingSession();
-      });
-
-      // ============================================
-      // EVENT LISTENERS
-      // ============================================
-      loginBtn.addEventListener('click', loginHandler);
-
-      emailInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          passwordInput.focus();
+        const urlParams = new URLSearchParams(window.location.search);
+        const registered = urlParams.get('registered');
+        const verified = urlParams.get('verified');
+        
+        if (registered === 'success') {
+          showAlert('Account created successfully! Please check your email to verify your account.', 'success');
+        } else if (verified === 'true') {
+          showAlert('Email verified successfully! You can now log in.', 'success');
         }
       });
-
-      passwordInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          loginHandler(e);
-        }
-      });
-
-      // Clear success message when user starts typing
+      
+      // Event listeners
+      form.addEventListener('submit', handleLogin);
+      
+      // Clear error on input
       emailInput.addEventListener('input', () => {
-        successMessageEl.classList.remove('show');
+        emailInput.classList.remove('error');
+        emailError.classList.remove('show');
       });
-
+      
       passwordInput.addEventListener('input', () => {
-        successMessageEl.classList.remove('show');
+        passwordInput.classList.remove('error');
+        passwordError.classList.remove('show');
       });
-
-      // Reset button state on page show
-      window.addEventListener('pageshow', () => {
-        loginBtn.disabled = false;
-        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to SourceX';
-      });
-
+      
     })();
   </script>
 </body>
