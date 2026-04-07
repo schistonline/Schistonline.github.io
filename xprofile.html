@@ -470,8 +470,8 @@
             
             <div class="auth-buttons" id="authButtons">
                 <!-- Will be populated by JavaScript based on login status -->
-                <a href="login.html" class="btn btn-outline">Sign In</a>
-                <a href="register.html" class="btn btn-primary">Get Started</a>
+                <a href="login.html" class="btn btn-outline">login</a>
+                <a href="register.html" class="btn btn-primary">register</a>
             </div>
         </div>
     </header>
@@ -620,61 +620,12 @@
             }, 300);
         }
 
-        async function getUserRole(userId) {
-            try {
-                const { data: profile, error } = await sb
-                    .from('profiles')
-                    .select('is_supplier, is_admin')
-                    .eq('id', userId)
-                    .single();
-
-                if (error) return 'buyer';
-                if (profile?.is_admin === true) return 'admin';
-                if (profile?.is_supplier === true) return 'supplier';
-                return 'buyer';
-            } catch (err) {
-                return 'buyer';
-            }
-        }
-
-        async function redirectToProfile() {
-            if (!currentUser) return;
-            
-            const role = await getUserRole(currentUser.id);
-            
-            const profileUrls = {
-                admin: 'admin-dashboard.html',
-                supplier: 'supplier-dashboard.html',
-                buyer: 'profile.html'
-            };
-            
-            window.location.href = profileUrls[role] || 'profile.html';
-        }
-
-        function updateAuthButtons(isLoggedIn, userRole = null) {
+        function updateAuthButtons(isLoggedIn) {
             const authContainer = document.getElementById('authButtons');
             
             if (isLoggedIn) {
-                let profileLink = 'profile.html';
-                let buttonText = 'My Account';
-                let buttonIcon = '<i class="fas fa-user"></i> ';
-                
-                if (userRole === 'admin') {
-                    profileLink = 'profile.html';
-                    buttonText = 'My Account';
-                    buttonIcon = '<i class="fas fa-crown"></i> ';
-                } else if (userRole === 'supplier') {
-                    profileLink = 'profile.html';
-                    buttonText = 'My Account.html;
-                    buttonIcon = '<i class="fas fa-store"></i> ';
-                } else if (userRole === 'buyer') {
-                    profileLink = 'profile.html';
-                    buttonText = 'My Profile';
-                    buttonIcon = '<i class="fas fa-user"></i> ';
-                }
-                
                 authContainer.innerHTML = `
-                    <a href="${profileLink}" class="btn btn-primary">${buttonIcon}${buttonText}</a>
+                    <a href="profile.html" class="btn btn-primary"><i class="fas fa-user"></i> My Profile</a>
                     <button onclick="logout()" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 `;
             } else {
@@ -706,7 +657,7 @@
                 if (session?.user) {
                     currentUser = session.user;
                     
-                    // Check if user has a profile
+                    // Check if user has a profile, if not create one
                     const { data: profile, error: profileError } = await sb
                         .from('profiles')
                         .select('id')
@@ -725,13 +676,14 @@
                             });
                     }
                     
-                    const role = await getUserRole(currentUser.id);
-                    updateAuthButtons(true, role);
+                    updateAuthButtons(true);
                     
-                    // Redirect to profile page after a short delay
-                    showToast('Welcome back! Redirecting to your dashboard...', 'success');
+                    // Show welcome message
+                    showToast(`Welcome back! Redirecting to your profile...`, 'success');
+                    
+                    // Redirect to profile page
                     setTimeout(() => {
-                        redirectToProfile();
+                        window.location.href = 'profile.html';
                     }, 1500);
                 } else {
                     updateAuthButtons(false);
