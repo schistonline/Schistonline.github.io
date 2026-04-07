@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>Buy Uganda - Sign In</title>
+  <title>Sign In - Buy Uganda B2B Marketplace</title>
   <style>
     * {
       margin: 0;
@@ -12,9 +12,10 @@
     }
 
     :root {
-      --primary: #2563EB;
-      --primary-dark: #1D4ED8;
-      --primary-light: #60A5FA;
+      --primary: #0B4F6C;
+      --primary-dark: #083b4f;
+      --primary-light: #1a6b8a;
+      --primary-gradient: linear-gradient(135deg, #0B4F6C 0%, #1a6b8a 100%);
       --success: #10B981;
       --danger: #EF4444;
       --warning: #F59E0B;
@@ -32,7 +33,7 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      background: var(--primary-gradient);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -48,20 +49,20 @@
 
     .card {
       background: white;
-      border-radius: 24px;
-      padding: 32px 24px;
+      border-radius: 28px;
+      padding: 32px 28px;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }
 
     .logo {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
     .logo h1 {
       font-size: 28px;
       font-weight: 700;
-      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      background: var(--primary-gradient);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -70,8 +71,8 @@
 
     .logo p {
       color: var(--gray-500);
-      font-size: 14px;
-      margin-top: 8px;
+      font-size: 13px;
+      margin-top: 6px;
     }
 
     .brand-badge {
@@ -79,8 +80,8 @@
       background: var(--gray-100);
       color: var(--gray-600);
       font-size: 12px;
-      padding: 4px 12px;
-      border-radius: 20px;
+      padding: 6px 14px;
+      border-radius: 30px;
       margin-bottom: 24px;
       text-align: center;
       width: 100%;
@@ -98,20 +99,25 @@
       margin-bottom: 6px;
     }
 
+    .input-wrapper {
+      position: relative;
+    }
+
     input {
       width: 100%;
       padding: 12px 16px;
-      border: 1px solid var(--gray-300);
-      border-radius: 12px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: 14px;
       font-size: 16px;
       transition: all 0.2s;
       background: white;
+      font-family: inherit;
     }
 
     input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      box-shadow: 0 0 0 3px rgba(11, 79, 108, 0.1);
     }
 
     input.error {
@@ -134,30 +140,35 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .checkbox {
       display: flex;
       align-items: center;
       gap: 8px;
+      cursor: pointer;
     }
 
     .checkbox input {
       width: 18px;
       height: 18px;
       margin: 0;
+      cursor: pointer;
+      accent-color: var(--primary);
     }
 
-    .checkbox label {
-      margin: 0;
+    .checkbox span {
       font-size: 14px;
-      font-weight: normal;
+      color: var(--gray-600);
     }
 
     .forgot-link {
       font-size: 14px;
       color: var(--primary);
       text-decoration: none;
+      font-weight: 500;
     }
 
     .forgot-link:hover {
@@ -167,14 +178,19 @@
     button {
       width: 100%;
       padding: 14px;
-      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      background: var(--primary-gradient);
       color: white;
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.1s;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
     }
 
     button:active {
@@ -211,10 +227,11 @@
 
     .alert {
       padding: 12px 16px;
-      border-radius: 12px;
+      border-radius: 14px;
       margin-bottom: 24px;
       font-size: 14px;
       display: none;
+      animation: fadeIn 0.3s ease;
     }
 
     .alert.show {
@@ -239,6 +256,11 @@
       border-left: 4px solid var(--primary);
     }
 
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .spinner {
       display: inline-block;
       width: 18px;
@@ -259,7 +281,11 @@
       text-align: center;
       margin-top: 24px;
       font-size: 12px;
-      color: rgba(255,255,255,0.7);
+      color: rgba(255,255,255,0.8);
+    }
+
+    .legal-footer p {
+      margin-bottom: 8px;
     }
 
     .legal-footer a {
@@ -269,6 +295,20 @@
 
     .legal-footer a:hover {
       text-decoration: underline;
+    }
+
+    .security-note {
+      background: var(--gray-50);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-top: 16px;
+      font-size: 11px;
+      color: var(--gray-500);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     @media (max-width: 480px) {
@@ -287,7 +327,7 @@
       </div>
 
       <div class="brand-badge">
-        🇺🇬 Connecting Ugandan Businesses 🇺🇬
+        🇺🇬 Trusted by 5,000+ Ugandan Businesses 🇺🇬
       </div>
 
       <div id="alert" class="alert"></div>
@@ -295,27 +335,31 @@
       <form id="loginForm" novalidate>
         <div class="form-group">
           <label for="email">Email Address</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            placeholder="you@company.com"
-            autocomplete="email"
-            required
-          />
+          <div class="input-wrapper">
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              placeholder="you@company.com"
+              autocomplete="email"
+              required
+            />
+          </div>
           <div id="emailError" class="error-message"></div>
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input 
-            type="password" 
-            id="password" 
-            name="password" 
-            placeholder="Enter your password"
-            autocomplete="current-password"
-            required
-          />
+          <div class="input-wrapper">
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+          </div>
           <div id="passwordError" class="error-message"></div>
         </div>
 
@@ -335,6 +379,11 @@
       <div class="register-link">
         <p>Don't have an account? <a href="register.html">Create Business Account</a></p>
       </div>
+
+      <div class="security-note">
+        <span>🔒</span>
+        <span>Your data is encrypted and secure. We never share your information.</span>
+      </div>
     </div>
 
     <div class="legal-footer">
@@ -349,16 +398,24 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    (function() {
-      // ============================================
-      // SUPABASE CONFIGURATION
-      // ============================================
+    // Wait for DOM and Supabase to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+      
+      // Supabase Configuration
       const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
 
-      // ============================================
-      // DOM ELEMENTS
-      // ============================================
+      // Initialize Supabase client
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true,
+          storage: localStorage
+        }
+      });
+
+      // DOM Elements
       const form = document.getElementById('loginForm');
       const emailInput = document.getElementById('email');
       const passwordInput = document.getElementById('password');
@@ -368,34 +425,16 @@
       const emailError = document.getElementById('emailError');
       const passwordError = document.getElementById('passwordError');
 
-      // Initialize Supabase
-      const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: {
-          autoRefreshToken: true,
-          persistSession: true,
-          detectSessionInUrl: true
-        }
-      });
-
-      // ============================================
-      // HELPER FUNCTIONS
-      // ============================================
       function showAlert(message, type = 'error') {
         alertDiv.textContent = message;
         alertDiv.className = `alert alert-${type} show`;
-        
-        // Auto-hide after 5 seconds for success/info messages
         if (type !== 'error') {
-          setTimeout(() => {
-            alertDiv.classList.remove('show');
-          }, 5000);
+          setTimeout(() => alertDiv.classList.remove('show'), 5000);
         }
       }
 
       function clearErrors() {
-        emailError.textContent = '';
         emailError.classList.remove('show');
-        passwordError.textContent = '';
         passwordError.classList.remove('show');
         emailInput.classList.remove('error');
         passwordInput.classList.remove('error');
@@ -406,7 +445,7 @@
           emailError.textContent = message;
           emailError.classList.add('show');
           emailInput.classList.add('error');
-        } else if (field === 'password') {
+        } else {
           passwordError.textContent = message;
           passwordError.classList.add('show');
           passwordInput.classList.add('error');
@@ -414,276 +453,147 @@
       }
 
       function validateEmail(email) {
-        const re = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
-        return re.test(email);
+        return /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
       }
 
       function setLoading(isLoading) {
-        if (isLoading) {
-          loginBtn.disabled = true;
-          loginBtn.innerHTML = '<span class="spinner"></span> Signing in...';
-        } else {
-          loginBtn.disabled = false;
-          loginBtn.innerHTML = 'Sign In';
-        }
+        loginBtn.disabled = isLoading;
+        loginBtn.innerHTML = isLoading ? '<span class="spinner"></span> Signing in...' : 'Sign In';
       }
 
-      // ============================================
-      // GET USER PROFILE DATA (for dashboard redirect)
-      // ============================================
       async function getUserRole(userId) {
         try {
-          // First try to get from profiles table
           const { data: profile, error } = await supabase
             .from('profiles')
             .select('is_supplier, is_admin')
             .eq('id', userId)
             .single();
 
-          if (error && error.code !== 'PGRST116') {
-            console.error('Profile fetch error:', error);
-          }
-
-          if (profile) {
-            if (profile.is_admin) return 'admin';
-            if (profile.is_supplier) return 'supplier';
-            return 'buyer';
-          }
-
-          // Check if user has any supplier-related data
-          const { data: negotiations } = await supabase
-            .from('negotiations')
-            .select('id')
-            .eq('supplier_id', userId)
-            .limit(1);
-
-          if (negotiations && negotiations.length > 0) {
-            return 'supplier';
-          }
-
+          if (error) return 'buyer';
+          if (profile?.is_admin === true) return 'admin';
+          if (profile?.is_supplier === true) return 'supplier';
           return 'buyer';
         } catch (err) {
-          console.error('Error getting user role:', err);
           return 'buyer';
         }
       }
 
-      // ============================================
-      // REDIRECT BASED ON USER ROLE
-      // ============================================
       async function redirectToDashboard(userId) {
         const role = await getUserRole(userId);
-        
         const dashboards = {
-          admin: '/admin/dashboard.html',
-          supplier: '/supplier/dashboard.html',
-          buyer: '/buyer/dashboard.html'
+          admin: 'admin-dashboard.html',
+          supplier: 'supplier-dashboard.html',
+          buyer: 'index.html'
         };
-        
-        const redirectUrl = dashboards[role] || '/dashboard.html';
-        
-        // Check if there's a return URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const returnTo = urlParams.get('return_to');
-        
-        if (returnTo && returnTo.startsWith('/')) {
-          window.location.href = returnTo;
-        } else {
-          window.location.href = redirectUrl;
-        }
+        window.location.href = dashboards[role] || 'index.html';
       }
 
-      // ============================================
-      // HANDLE SESSION PERSISTENCE
-      // ============================================
       function saveSessionPreference(email) {
         if (rememberMeCheckbox.checked) {
-          localStorage.setItem('saved_email', email);
-          localStorage.setItem('remember_me', 'true');
+          localStorage.setItem('buyuganda_saved_email', email);
+          localStorage.setItem('buyuganda_remember_me', 'true');
         } else {
-          localStorage.removeItem('saved_email');
-          localStorage.setItem('remember_me', 'false');
+          localStorage.removeItem('buyuganda_saved_email');
+          localStorage.setItem('buyuganda_remember_me', 'false');
         }
       }
 
       function loadSavedEmail() {
-        const savedEmail = localStorage.getItem('saved_email');
-        const rememberMe = localStorage.getItem('remember_me') === 'true';
-        
+        const savedEmail = localStorage.getItem('buyuganda_saved_email');
+        const rememberMe = localStorage.getItem('buyuganda_remember_me') === 'true';
         if (savedEmail && rememberMe) {
           emailInput.value = savedEmail;
           rememberMeCheckbox.checked = true;
         }
       }
 
-      // ============================================
-      // CHECK EXISTING SESSION
-      // ============================================
       async function checkExistingSession() {
         try {
-          const { data: { session }, error } = await supabase.auth.getSession();
-          
-          if (error) {
-            console.error('Session check error:', error);
-            return;
-          }
-          
+          const { data: { session } } = await supabase.auth.getSession();
           if (session?.user) {
-            // User is already logged in, redirect to dashboard
-            showAlert('You are already logged in. Redirecting...', 'success');
-            setTimeout(() => {
-              redirectToDashboard(session.user.id);
-            }, 1500);
+            showAlert('Already logged in. Redirecting...', 'success');
+            setTimeout(() => redirectToDashboard(session.user.id), 1500);
           }
         } catch (err) {
           console.error('Session check error:', err);
         }
       }
 
-      // ============================================
-      // LOGIN HANDLER
-      // ============================================
       async function handleLogin(event) {
         event.preventDefault();
-        
-        // Clear previous errors
         clearErrors();
-        
+
         const email = emailInput.value.trim();
         const password = passwordInput.value;
-        
-        // Validation
-        let hasError = false;
-        
+
         if (!email) {
-          showFieldError('email', 'Email address is required');
-          hasError = true;
-        } else if (!validateEmail(email)) {
-          showFieldError('email', 'Please enter a valid email address');
-          hasError = true;
-        }
-        
-        if (!password) {
-          showFieldError('password', 'Password is required');
-          hasError = true;
-        }
-        
-        if (hasError) {
+          showFieldError('email', 'Email is required');
           return;
         }
-        
+        if (!validateEmail(email)) {
+          showFieldError('email', 'Enter a valid email address');
+          return;
+        }
+        if (!password) {
+          showFieldError('password', 'Password is required');
+          return;
+        }
+
         setLoading(true);
-        
+
         try {
-          // Attempt sign in
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
-          
+          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
           if (error) {
-            // Handle specific error cases
-            if (error.message.includes('Invalid login credentials')) {
-              showAlert('Invalid email or password. Please try again.', 'error');
+            if (error.message === 'Invalid login credentials') {
+              showAlert('Invalid email or password', 'error');
               showFieldError('password', 'Incorrect password');
             } else if (error.message.includes('Email not confirmed')) {
-              showAlert('Please verify your email address before logging in. Check your inbox for the confirmation link.', 'info');
+              showAlert('Please verify your email before logging in', 'info');
             } else {
               showAlert(error.message, 'error');
             }
             setLoading(false);
             return;
           }
-          
-          // Login successful
+
           if (data?.user) {
-            // Save session preference
             saveSessionPreference(email);
-            
-            // Show success message
-            showAlert('Login successful! Redirecting to your dashboard...', 'success');
-            
-            // Redirect to appropriate dashboard
-            setTimeout(() => {
-              redirectToDashboard(data.user.id);
-            }, 1000);
+            showAlert('Login successful! Redirecting...', 'success');
+            setTimeout(() => redirectToDashboard(data.user.id), 1000);
           }
-          
         } catch (err) {
-          console.error('Login error:', err);
-          showAlert('Network error. Please check your connection and try again.', 'error');
+          showAlert('Network error. Please try again.', 'error');
           setLoading(false);
         }
       }
 
-      // ============================================
-      // PASSWORD VISIBILITY TOGGLE (optional)
-      // ============================================
-      function addPasswordToggle() {
-        const container = passwordInput.parentElement;
-        const toggleBtn = document.createElement('button');
-        toggleBtn.type = 'button';
-        toggleBtn.textContent = '👁️';
-        toggleBtn.style.cssText = `
-          position: absolute;
-          right: 12px;
-          top: 50%;
-          transform: translateY(-50%);
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 4px;
-          font-size: 16px;
-          opacity: 0.6;
-          width: auto;
-        `;
-        
-        // Make container relative
-        container.style.position = 'relative';
-        container.appendChild(toggleBtn);
-        
-        toggleBtn.addEventListener('click', () => {
-          const type = passwordInput.type === 'password' ? 'text' : 'password';
-          passwordInput.type = type;
-          toggleBtn.textContent = type === 'password' ? '👁️' : '🙈';
-        });
-      }
-
-      // ============================================
-      // INITIALIZATION
-      // ============================================
-      document.addEventListener('DOMContentLoaded', () => {
-        loadSavedEmail();
-        checkExistingSession();
-        // addPasswordToggle(); // Uncomment to add password visibility toggle
-        
-        // Check for registration success message
-        const urlParams = new URLSearchParams(window.location.search);
-        const registered = urlParams.get('registered');
-        const verified = urlParams.get('verified');
-        
-        if (registered === 'success') {
-          showAlert('Account created successfully! Please check your email to verify your account.', 'success');
-        } else if (verified === 'true') {
-          showAlert('Email verified successfully! You can now log in.', 'success');
-        }
-      });
-      
-      // Event listeners
-      form.addEventListener('submit', handleLogin);
-      
-      // Clear error on input
+      // Setup event listeners
       emailInput.addEventListener('input', () => {
         emailInput.classList.remove('error');
         emailError.classList.remove('show');
       });
-      
+
       passwordInput.addEventListener('input', () => {
         passwordInput.classList.remove('error');
         passwordError.classList.remove('show');
       });
+
+      form.addEventListener('submit', handleLogin);
+
+      // Check URL params for registration success
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('registered') === 'success') {
+        showAlert('Account created! Please check your email to verify.', 'success');
+      } else if (urlParams.get('verified') === 'true') {
+        showAlert('Email verified! You can now log in.', 'success');
+      }
+
+      // Load saved email and check session
+      loadSavedEmail();
+      checkExistingSession();
       
-    })();
+    });
   </script>
 </body>
 </html>
