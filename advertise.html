@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Advertise on BuyUganda.online | Reach Thousands of Buyers</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B21E5;
+            --primary-dark: #4A0D9C;
+            --primary-light: #9B4DFF;
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1F2937;
+            --gray-800: #1F2937;
+            --gray-700: #374151;
+            --gray-600: #4B5563;
+            --gray-500: #6B7280;
+            --gray-400: #9CA3AF;
+            --gray-300: #D1D5DB;
+            --gray-200: #E5E7EB;
+            --gray-100: #F3F4F6;
+            --white: #FFFFFF;
+            --shadow: 0 2px 8px rgba(107, 33, 229, 0.08);
+            --shadow-lg: 0 4px 16px rgba(107, 33, 229, 0.12);
+            --radius: 16px;
+            --radius-sm: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-100);
+            color: var(--dark);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-cube {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            perspective: 800px;
+        }
+
+        .logo-cube .cube {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(18deg) rotateY(28deg);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-cube .face {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        .logo-cube .front {
+            transform: translateZ(18px);
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+        }
+
+        .logo-cube .right {
+            transform: rotateY(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #4A0D9C, #6B21E5);
+        }
+
+        .logo-cube .top {
+            transform: rotateX(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #9B4DFF, #B47BFF);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        .back-btn {
+            background: var(--gray-100);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--gray-600);
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--gray-200);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--white);
+            padding: 40px 20px;
+        }
+
+        .stats-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-card {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        /* Advertising Options */
+        .ad-options {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--dark);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: var(--gray-600);
+            margin-bottom: 48px;
+        }
+
+        .section-title span {
+            color: var(--primary);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .option-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .option-popular {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .option-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .option-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .option-header h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .option-price {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .option-price span {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .option-body {
+            padding: 24px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 14px;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li i {
+            width: 20px;
+            color: var(--secondary);
+            font-size: 14px;
+        }
+
+        .option-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 33, 229, 0.3);
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: var(--white);
+            padding: 60px 20px;
+        }
+
+        .steps-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .step h4 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .testimonial-text {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .testimonial-title {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: var(--gray-100);
+            padding: 60px 20px;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .faq-question:hover {
+            background: var(--gray-100);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            color: var(--gray-600);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 300px;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background: var(--primary-gradient);
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .final-cta h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .final-cta p {
+            font-size: 16px;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 32px;
+            background: var(--white);
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: var(--gray-400);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <a href="index.html" class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">BuyUganda<span>.online</span></span>
+            </a>
+            
+            <div style="width: 40px;"></div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Advertise on BuyUganda.online</h1>
+        <p>Reach thousands of active buyers and grow your sales with our targeted advertising solutions</p>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number">100,000+</div>
+                <div class="stat-label">Monthly Visitors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3x</div>
+                <div class="stat-label">Higher Visibility</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">200%</div>
+                <div class="stat-label">Average ROI</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Campaign Management</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advertising Options -->
+    <section class="ad-options">
+        <h2 class="section-title">Choose Your <span>Advertising Package</span></h2>
+        <p class="section-subtitle">Select the plan that best fits your business goals and budget</p>
+        
+        <div class="options-grid">
+            <!-- Basic Package -->
+            <div class="option-card">
+                <div class="option-header">
+                    <div class="option-icon"><i class="fas fa-flag"></i></div>
+                    <h3>Basic Spotlight</h3>
+                    <div class="option-price"><span>UGX 50,000</span> / week</div>
+                </div>
+                <div class="option-body">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Featured in category page</li>
+                        <li><i class="fas fa-check-circle"></i> Priority placement in search</li>
+                        <li><i class="fas fa-check-circle"></i> Up to 5,000 impressions</li>
+                        <li><i class="fas fa-check-circle"></i> Basic analytics report</li>
+                        <li><i class="fas fa-times-circle" style="color: var(--danger);"></i> Homepage placement</li>
+                        <li><i class="fas fa-times-circle" style="color: var(--danger);"></i> Email marketing</li>
+                    </ul>
+                    <a href="#" class="option-btn" onclick="startAdCampaign('basic')">Get Started</a>
+                </div>
+            </div>
+
+            <!-- Premium Package (Popular) -->
+            <div class="option-card">
+                <div class="option-popular">Most Popular</div>
+                <div class="option-header">
+                    <div class="option-icon"><i class="fas fa-star"></i></div>
+                    <h3>Premium Spotlight</h3>
+                    <div class="option-price"><span>UGX 150,000</span> / week</div>
+                </div>
+                <div class="option-body">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Homepage featured placement</li>
+                        <li><i class="fas fa-check-circle"></i> Top of category page</li>
+                        <li><i class="fas fa-check-circle"></i> Priority search placement</li>
+                        <li><i class="fas fa-check-circle"></i> Up to 20,000 impressions</li>
+                        <li><i class="fas fa-check-circle"></i> Email blast to buyers</li>
+                        <li><i class="fas fa-check-circle"></i> Detailed analytics dashboard</li>
+                        <li><i class="fas fa-check-circle"></i> Social media promotion</li>
+                    </ul>
+                    <a href="#" class="option-btn" onclick="startAdCampaign('premium')">Get Started</a>
+                </div>
+            </div>
+
+            <!-- Enterprise Package -->
+            <div class="option-card">
+                <div class="option-header">
+                    <div class="option-icon"><i class="fas fa-crown"></i></div>
+                    <h3>Enterprise</h3>
+                    <div class="option-price">Custom Pricing</div>
+                </div>
+                <div class="option-body">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Everything in Premium</li>
+                        <li><i class="fas fa-check-circle"></i> Dedicated account manager</li>
+                        <li><i class="fas fa-check-circle"></i> Custom ad placements</li>
+                        <li><i class="fas fa-check-circle"></i> Unlimited impressions</li>
+                        <li><i class="fas fa-check-circle"></i> Priority support 24/7</li>
+                        <li><i class="fas fa-check-circle"></i> Custom strategy consultation</li>
+                        <li><i class="fas fa-check-circle"></i> Multi-channel campaigns</li>
+                    </ul>
+                    <a href="#" class="option-btn" onclick="contactSales()">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="steps-container">
+            <h2 class="section-title">How It <span>Works</span></h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Choose Package</h4>
+                    <p>Select the advertising package that fits your needs</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Set Up Campaign</h4>
+                    <p>Choose your products and target audience</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Launch & Monitor</h4>
+                    <p>Your ads go live and you track performance</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Optimize & Grow</h4>
+                    <p>Use analytics to improve and scale your campaigns</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2 class="section-title">What Our <span>Advertisers Say</span></h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "The Premium Spotlight package transformed our sales. We saw a 300% increase in inquiries within the first week!"
+                </div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">J</div>
+                    <div class="testimonial-info">
+                        <div class="testimonial-name">John Muwanga</div>
+                        <div class="testimonial-title">Muwanga Electronics</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "Best investment we made for our business. The ROI has been incredible and the support team is very responsive."
+                </div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">G</div>
+                    <div class="testimonial-info">
+                        <div class="testimonial-name">Grace Nakato</div>
+                        <div class="testimonial-title">Nakato Foods</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "The analytics dashboard helped us understand our customers better. Highly recommended for serious sellers!"
+                </div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">R</div>
+                    <div class="testimonial-info">
+                        <div class="testimonial-name">Robert Kato</div>
+                        <div class="testimonial-title">Kato Electronics</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="faq-container">
+            <h2 class="section-title">Frequently Asked <span>Questions</span></h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How long does it take for my ads to go live?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Once you complete payment and submit your campaign details, your ads typically go live within 24 hours. Our team reviews all campaigns to ensure quality and relevance.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I target specific buyer segments?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes! Our premium and enterprise packages allow you to target specific buyer segments based on location, industry, purchase history, and more.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What metrics will I be able to track?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Our analytics dashboard shows impressions, clicks, conversion rates, inquiries generated, and ROI calculations. You'll get real-time data on your campaign performance.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I pause or modify my campaign?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes, you can pause, modify, or extend your campaign at any time through your supplier dashboard. Changes take effect within 24 hours.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What payment methods do you accept?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    We accept Pesapal (credit/debit cards and mobile money), bank transfers, and mobile money (MTN/Airtel). All payments are secure and encrypted.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Ready to Boost Your Sales?</h2>
+        <p>Start your advertising campaign today and reach thousands of active buyers.</p>
+        <a href="promotion-campaigns.html" class="cta-btn">
+            <i class="fas fa-rocket"></i> Start Advertising Now
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 BuyUganda.online. All rights reserved.</p>
+        <p style="margin-top: 8px;">
+            <a href="terms.html">Terms</a> | 
+            <a href="privacy.html">Privacy</a> | 
+            <a href="contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+        let isSupplier = false;
+
+        async function checkAuthAndRole() {
+            try {
+                const { data: { user }, error } = await sb.auth.getUser();
+                
+                if (error) throw error;
+                
+                currentUser = user;
+                
+                if (currentUser) {
+                    const { data: supplier, error: supplierError } = await sb
+                        .from('suppliers')
+                        .select('id, verification_status')
+                        .eq('profile_id', currentUser.id)
+                        .maybeSingle();
+                    
+                    if (!supplierError) {
+                        isSupplier = !!supplier;
+                    }
+                }
+                
+                // Update CTA button based on role
+                const ctaButton = document.querySelector('.final-cta .cta-btn');
+                if (ctaButton) {
+                    if (isSupplier) {
+                        ctaButton.href = 'promotion-campaigns.html';
+                        ctaButton.innerHTML = '<i class="fas fa-rocket"></i> Start Advertising Now';
+                    } else if (currentUser && !isSupplier) {
+                        ctaButton.href = 'supplier-register.html';
+                        ctaButton.innerHTML = '<i class="fas fa-store"></i> Register as Supplier First';
+                    } else {
+                        ctaButton.href = 'login.html?redirect=advertise.html';
+                        ctaButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Start';
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Auth error:', error);
+                currentUser = null;
+                isSupplier = false;
+            }
+        }
+
+        function toggleFAQ(element) {
+            const faqItem = element.closest('.faq-item');
+            faqItem.classList.toggle('active');
+        }
+
+        function startAdCampaign(packageType) {
+            if (!currentUser) {
+                window.location.href = 'login.html?redirect=advertise.html';
+                return;
+            }
+            
+            if (!isSupplier) {
+                window.location.href = 'supplier-register.html';
+                return;
+            }
+            
+            // Redirect to promotion campaigns page with package preselected
+            window.location.href = `promotion-campaigns.html?package=${packageType}`;
+        }
+
+        function contactSales() {
+            window.location.href = 'contact.html?subject=Enterprise%20Advertising';
+        }
+
+        // Make functions global
+        window.toggleFAQ = toggleFAQ;
+        window.startAdCampaign = startAdCampaign;
+        window.contactSales = contactSales;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuthAndRole();
+        });
+    </script>
+</body>
+</html>

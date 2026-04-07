@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Privacy Policy - BuyUganda.online | Uganda's B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B21E5;
+            --primary-dark: #4A0D9C;
+            --primary-light: #9B4DFF;
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1F2937;
+            --gray-800: #1F2937;
+            --gray-700: #374151;
+            --gray-600: #4B5563;
+            --gray-500: #6B7280;
+            --gray-400: #9CA3AF;
+            --gray-300: #D1D5DB;
+            --gray-200: #E5E7EB;
+            --gray-100: #F3F4F6;
+            --white: #FFFFFF;
+            --shadow: 0 2px 8px rgba(107, 33, 229, 0.08);
+            --shadow-lg: 0 4px 16px rgba(107, 33, 229, 0.12);
+            --radius: 16px;
+            --radius-sm: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-100);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-cube {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            perspective: 800px;
+        }
+
+        .logo-cube .cube {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(18deg) rotateY(28deg);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-cube .face {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        .logo-cube .front {
+            transform: translateZ(18px);
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+        }
+
+        .logo-cube .right {
+            transform: rotateY(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #4A0D9C, #6B21E5);
+        }
+
+        .logo-cube .top {
+            transform: rotateX(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #9B4DFF, #B47BFF);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        .back-btn {
+            background: var(--gray-100);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--gray-600);
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--gray-200);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Last Updated */
+        .last-updated {
+            text-align: center;
+            padding: 16px;
+            background: var(--gray-100);
+            font-size: 13px;
+            color: var(--gray-500);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        /* Content Container */
+        .content-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .toc h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .toc-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--gray-100);
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--gray-700);
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .toc-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .toc-link i {
+            font-size: 12px;
+        }
+
+        /* Policy Sections */
+        .policy-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .policy-section h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .policy-section h3 {
+            font-size: 18px;
+            margin: 20px 0 12px;
+            color: var(--dark);
+        }
+
+        .policy-section p {
+            margin-bottom: 16px;
+            color: var(--gray-700);
+            line-height: 1.7;
+        }
+
+        .policy-section ul, .policy-section ol {
+            margin: 12px 0 16px 24px;
+            color: var(--gray-700);
+        }
+
+        .policy-section li {
+            margin-bottom: 8px;
+        }
+
+        .info-box {
+            background: var(--gray-100);
+            border-left: 4px solid var(--primary);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: var(--radius-sm);
+        }
+
+        .info-box i {
+            color: var(--primary);
+            margin-right: 8px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid var(--gray-200);
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .data-table th {
+            background: var(--gray-100);
+            font-weight: 600;
+        }
+
+        .contact-card {
+            background: linear-gradient(135deg, var(--gray-100), var(--white));
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .contact-card i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .contact-card a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        .footer a {
+            color: var(--gray-400);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 24px;
+            }
+            
+            .policy-section {
+                padding: 20px;
+            }
+            
+            .policy-section h2 {
+                font-size: 18px;
+            }
+            
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .toc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <a href="index.html" class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">BuyUganda<span>.online</span></span>
+            </a>
+            
+            <div style="width: 40px;"></div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Privacy Policy</h1>
+        <p>Your privacy matters. Learn how we collect, use, and protect your information.</p>
+    </section>
+
+    <div class="last-updated">
+        <i class="fas fa-calendar-alt"></i> Last Updated: April 7, 2026 | Effective: April 7, 2026
+    </div>
+
+    <div class="content-container">
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2><i class="fas fa-list"></i> Table of Contents</h2>
+            <div class="toc-grid">
+                <a href="#introduction" class="toc-link"><i class="fas fa-chevron-right"></i> Introduction</a>
+                <a href="#information-collect" class="toc-link"><i class="fas fa-database"></i> Information We Collect</a>
+                <a href="#how-we-use" class="toc-link"><i class="fas fa-chart-line"></i> How We Use Your Information</a>
+                <a href="#sharing" class="toc-link"><i class="fas fa-share-alt"></i> Sharing Your Information</a>
+                <a href="#cookies" class="toc-link"><i class="fas fa-cookie-bite"></i> Cookies & Tracking</a>
+                <a href="#data-security" class="toc-link"><i class="fas fa-shield-alt"></i> Data Security</a>
+                <a href="#your-rights" class="toc-link"><i class="fas fa-user-check"></i> Your Rights</a>
+                <a href="#children" class="toc-link"><i class="fas fa-child"></i> Children's Privacy</a>
+                <a href="#international" class="toc-link"><i class="fas fa-globe"></i> International Users</a>
+                <a href="#changes" class="toc-link"><i class="fas fa-edit"></i> Changes to Policy</a>
+                <a href="#contact" class="toc-link"><i class="fas fa-envelope"></i> Contact Us</a>
+            </div>
+        </div>
+
+        <!-- Section 1: Introduction -->
+        <div id="introduction" class="policy-section">
+            <h2><i class="fas fa-info-circle"></i> Introduction</h2>
+            <p>Welcome to BuyUganda.online ("we," "our," "us"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our mobile application, or engage with our B2B marketplace services.</p>
+            <p>We are committed to protecting your privacy and ensuring transparency about how we handle your personal information. By using our platform, you consent to the practices described in this policy.</p>
+            <div class="info-box">
+                <i class="fas fa-balance-scale"></i> <strong>Legal Compliance:</strong> This policy complies with the Uganda Data Protection and Privacy Act, 2019 and other applicable data protection regulations.
+            </div>
+        </div>
+
+        <!-- Section 2: Information We Collect -->
+        <div id="information-collect" class="policy-section">
+            <h2><i class="fas fa-database"></i> Information We Collect</h2>
+            
+            <h3>1. Personal Information You Provide</h3>
+            <ul>
+                <li><strong>Account Information:</strong> Name, email address, phone number, business name, tax identification number (TIN), and business registration documents.</li>
+                <li><strong>Profile Information:</strong> Profile photo, business description, product catalog, pricing information, and location details.</li>
+                <li><strong>Transaction Information:</strong> Purchase history, order details, payment information, shipping addresses, and delivery preferences.</li>
+                <li><strong>Communication Data:</strong> Messages sent through our platform, inquiry requests, quote negotiations, and customer support communications.</li>
+            </ul>
+
+            <h3>2. Automatically Collected Information</h3>
+            <ul>
+                <li><strong>Device Information:</strong> IP address, browser type, operating system, device identifiers, and mobile network information.</li>
+                <li><strong>Usage Data:</strong> Pages visited, time spent on pages, search queries, click patterns, and interaction with products and suppliers.</li>
+                <li><strong>Location Data:</strong> Approximate location based on IP address or precise location if you grant permission.</li>
+                <li><strong>Cookies & Similar Technologies:</strong> Information collected through cookies, web beacons, and pixel tags.</li>
+            </ul>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data Category</th>
+                        <th>Examples</th>
+                        <th>Legal Basis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Identity Data</td><td>Name, business name, registration number</td><td>Contract performance, legal obligation</td></tr>
+                    <tr><td>Contact Data</td><td>Email, phone, address</td><td>Contract performance, legitimate interest</td></tr>
+                    <tr><td>Financial Data</td><td>Payment details, transaction history</td><td>Contract performance, legal obligation</td></tr>
+                    <tr><td>Technical Data</td><td>IP address, browser type, device info</td><td>Legitimate interest, consent</td></tr>
+                    <tr><td>Usage Data</td><td>Pages visited, search queries</td><td>Legitimate interest</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 3: How We Use Your Information -->
+        <div id="how-we-use" class="policy-section">
+            <h2><i class="fas fa-chart-line"></i> How We Use Your Information</h2>
+            <p>We use your information for the following purposes:</p>
+            <ul>
+                <li><strong>Provide and Maintain Services:</strong> Process transactions, manage accounts, facilitate communication between buyers and suppliers, and deliver products.</li>
+                <li><strong>Improve Our Platform:</strong> Analyze usage patterns, personalize content, optimize search results, and enhance user experience.</li>
+                <li><strong>Marketing and Promotions:</strong> Send newsletters, promotional offers, product recommendations, and updates about new features (with your consent).</li>
+                <li><strong>Fraud Prevention and Security:</strong> Detect and prevent fraudulent activities, unauthorized access, and ensure platform security.</li>
+                <li><strong>Legal Compliance:</strong> Comply with applicable laws, regulations, and legal processes.</li>
+                <li><strong>Business Operations:</strong> Conduct research, develop new features, and manage customer support.</li>
+            </ul>
+        </div>
+
+        <!-- Section 4: Sharing Your Information -->
+        <div id="sharing" class="policy-section">
+            <h2><i class="fas fa-share-alt"></i> Sharing Your Information</h2>
+            <p>We may share your information with:</p>
+            <ul>
+                <li><strong>Other Users:</strong> Your business name, products, and profile information are visible to other users on the platform.</li>
+                <li><strong>Service Providers:</strong> Third-party vendors who help us operate our platform (payment processors, logistics partners, cloud hosting).</li>
+                <li><strong>Business Partners:</strong> Trusted partners who offer services that may benefit you (with your consent).</li>
+                <li><strong>Legal Authorities:</strong> When required by law, court order, or to protect our rights and safety.</li>
+                <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or sale of assets.</li>
+            </ul>
+            <div class="info-box">
+                <i class="fas fa-lock"></i> <strong>We do not sell your personal information</strong> to third parties for their marketing purposes without your explicit consent.
+            </div>
+        </div>
+
+        <!-- Section 5: Cookies & Tracking -->
+        <div id="cookies" class="policy-section">
+            <h2><i class="fas fa-cookie-bite"></i> Cookies & Tracking Technologies</h2>
+            <p>We use cookies and similar technologies to enhance your experience. Types of cookies we use include:</p>
+            <ul>
+                <li><strong>Essential Cookies:</strong> Required for basic platform functionality (login, shopping cart).</li>
+                <li><strong>Performance Cookies:</strong> Help us analyze how users interact with our platform.</li>
+                <li><strong>Functionality Cookies:</strong> Remember your preferences and settings.</li>
+                <li><strong>Targeting Cookies:</strong> Deliver relevant advertisements and track campaign performance.</li>
+            </ul>
+            <p>You can manage cookie preferences through your browser settings. However, disabling essential cookies may affect platform functionality.</p>
+        </div>
+
+        <!-- Section 6: Data Security -->
+        <div id="data-security" class="policy-section">
+            <h2><i class="fas fa-shield-alt"></i> Data Security</h2>
+            <p>We implement robust security measures to protect your information:</p>
+            <ul>
+                <li><strong>Encryption:</strong> All data transmitted is encrypted using SSL/TLS technology.</li>
+                <li><strong>Access Controls:</strong> Strict access controls limit who can view personal information.</li>
+                <li><strong>Regular Audits:</strong> We conduct regular security audits and vulnerability assessments.</li>
+                <li><strong>Data Minimization:</strong> We only collect information necessary for platform functionality.</li>
+                <li><strong>Employee Training:</strong> Staff receive regular training on data protection practices.</li>
+            </ul>
+            <p>While we strive to protect your information, no method of transmission over the internet is 100% secure. We cannot guarantee absolute security.</p>
+        </div>
+
+        <!-- Section 7: Your Rights -->
+        <div id="your-rights" class="policy-section">
+            <h2><i class="fas fa-user-check"></i> Your Rights</h2>
+            <p>Depending on your location, you may have the following rights regarding your personal information:</p>
+            <ul>
+                <li><strong>Access:</strong> Request a copy of the personal information we hold about you.</li>
+                <li><strong>Correction:</strong> Request correction of inaccurate or incomplete information.</li>
+                <li><strong>Deletion:</strong> Request deletion of your personal information (subject to legal obligations).</li>
+                <li><strong>Restriction:</strong> Request restriction of processing under certain circumstances.</li>
+                <li><strong>Portability:</strong> Request transfer of your data to another service provider.</li>
+                <li><strong>Objection:</strong> Object to processing based on legitimate interests.</li>
+                <li><strong>Withdraw Consent:</strong> Withdraw consent at any time where processing is based on consent.</li>
+            </ul>
+            <p>To exercise any of these rights, please contact us using the information in the "Contact Us" section below.</p>
+        </div>
+
+        <!-- Section 8: Children's Privacy -->
+        <div id="children" class="policy-section">
+            <h2><i class="fas fa-child"></i> Children's Privacy</h2>
+            <p>Our platform is a B2B marketplace intended for business users aged 18 and older. We do not knowingly collect personal information from children under 13. If you believe a child has provided us with personal information, please contact us, and we will take steps to delete such information.</p>
+        </div>
+
+        <!-- Section 9: International Users -->
+        <div id="international" class="policy-section">
+            <h2><i class="fas fa-globe"></i> International Users</h2>
+            <p>Our servers are located in Uganda. If you access our platform from outside Uganda, please be aware that your information may be transferred to, stored, and processed in Uganda. By using our services, you consent to this transfer.</p>
+        </div>
+
+        <!-- Section 10: Changes to Policy -->
+        <div id="changes" class="policy-section">
+            <h2><i class="fas fa-edit"></i> Changes to This Privacy Policy</h2>
+            <p>We may update this Privacy Policy from time to time. We will notify you of any material changes by:</p>
+            <ul>
+                <li>Posting the updated policy on this page</li>
+                <li>Sending an email notification to registered users</li>
+                <li>Displaying a notice on our website</li>
+            </ul>
+            <p>The "Last Updated" date at the top of this page indicates when changes were made. Your continued use of our platform after changes indicates your acceptance of the updated policy.</p>
+        </div>
+
+        <!-- Section 11: Contact Us -->
+        <div id="contact" class="policy-section">
+            <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+            <p>If you have questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:</p>
+            <div class="contact-card">
+                <i class="fas fa-building"></i>
+                <p><strong>BuyUganda.online</strong><br>
+                Kampala, Uganda</p>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:privacy@buyuganda.online">privacy@buyuganda.online</a></p>
+                <p><i class="fas fa-phone"></i> <a href="tel:+256700123456">+256 700 123456</a></p>
+                <p><i class="fas fa-clock"></i> Mon-Fri: 9:00 AM - 5:00 PM (EAT)</p>
+            </div>
+            <div class="info-box">
+                <i class="fas fa-gavel"></i> <strong>Data Protection Officer:</strong> For data protection inquiries, you may also contact our Data Protection Officer at dpo@buyuganda.online.
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 BuyUganda.online. All rights reserved.</p>
+        <p style="margin-top: 8px;">
+            <a href="terms.html">Terms of Service</a> | 
+            <a href="privacy.html">Privacy Policy</a> | 
+            <a href="contact.html">Contact Us</a>
+        </p>
+    </footer>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('.toc-link, a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId && targetId !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(targetId);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

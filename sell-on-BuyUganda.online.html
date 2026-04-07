@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Sell on BuyUganda.online - Become a Supplier | Uganda's B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B21E5;
+            --primary-dark: #4A0D9C;
+            --primary-light: #9B4DFF;
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1F2937;
+            --gray-800: #1F2937;
+            --gray-700: #374151;
+            --gray-600: #4B5563;
+            --gray-500: #6B7280;
+            --gray-400: #9CA3AF;
+            --gray-300: #D1D5DB;
+            --gray-200: #E5E7EB;
+            --gray-100: #F3F4F6;
+            --white: #FFFFFF;
+            --shadow: 0 2px 8px rgba(107, 33, 229, 0.08);
+            --shadow-lg: 0 4px 16px rgba(107, 33, 229, 0.12);
+            --radius: 16px;
+            --radius-sm: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-100);
+            color: var(--dark);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-cube {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            perspective: 800px;
+        }
+
+        .logo-cube .cube {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(18deg) rotateY(28deg);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-cube .face {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        .logo-cube .front {
+            transform: translateZ(18px);
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+        }
+
+        .logo-cube .right {
+            transform: rotateY(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #4A0D9C, #6B21E5);
+        }
+
+        .logo-cube .top {
+            transform: rotateX(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #9B4DFF, #B47BFF);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        .back-btn {
+            background: var(--gray-100);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--gray-600);
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--gray-200);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.5);
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 60px 20px;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 32px;
+            opacity: 0.95;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        /* CTA Button */
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 32px;
+            background: var(--white);
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .cta-btn i {
+            font-size: 20px;
+        }
+
+        .cta-btn.secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .cta-btn.secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--white);
+            padding: 40px 20px;
+        }
+
+        .stats-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-card {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 48px;
+            color: var(--dark);
+        }
+
+        .section-title span {
+            color: var(--primary);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .benefit-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            color: white;
+        }
+
+        .benefit-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .benefit-card p {
+            color: var(--gray-600);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: var(--gray-100);
+            padding: 60px 20px;
+        }
+
+        .steps-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .step h4 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .testimonial-text {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .testimonial-title {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background: var(--primary-gradient);
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .final-cta h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .final-cta p {
+            font-size: 16px;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: var(--gray-400);
+            text-decoration: none;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+            background: var(--gray-800);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-align: center;
+            z-index: 1100;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: var(--secondary);
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .cta-btn {
+                padding: 14px 24px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <a href="index.html" class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">BuyUganda<span>.online</span></span>
+            </a>
+            
+            <div style="width: 40px;"></div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-store"></i> Join 5,000+ Successful Suppliers
+            </div>
+            <h1>Sell to Uganda's Largest<br>B2B Marketplace</h1>
+            <p>Connect with thousands of serious buyers looking for quality products. Grow your business exponentially.</p>
+            <div id="ctaButtonContainer"></div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number">5,000+</div>
+                <div class="stat-label">Active Suppliers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">50,000+</div>
+                <div class="stat-label">Products Listed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100,000+</div>
+                <div class="stat-label">Monthly Buyers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">UGX 100B+</div>
+                <div class="stat-label">Annual GMV</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <h2 class="section-title">Why Sell on <span>BuyUganda.online</span>?</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-users"></i></div>
+                <h3>Massive Audience</h3>
+                <p>Reach thousands of verified buyers actively looking for products in your category.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Secure Payments</h3>
+                <p>Get paid securely with our escrow protection and multiple payment options.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Business Growth</h3>
+                <p>Access analytics and insights to grow your sales and optimize your listings.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-headset"></i></div>
+                <h3>24/7 Support</h3>
+                <p>Dedicated account managers to help you succeed on our platform.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-truck"></i></div>
+                <h3>Logistics Network</h3>
+                <p>Access our trusted logistics partners for reliable delivery across Uganda.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fas fa-chart-simple"></i></div>
+                <h3>Marketing Tools</h3>
+                <p>Promote your products with featured listings and targeted campaigns.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="steps-container">
+            <h2 class="section-title">How to Get Started</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Sign Up</h4>
+                    <p>Create your free supplier account</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Get Verified</h4>
+                    <p>Submit your business documents</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>List Products</h4>
+                    <p>Upload your products with images</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Start Selling</h4>
+                    <p>Connect with buyers and grow</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2 class="section-title">What Our Suppliers Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "Since joining BuyUganda.online, our sales have increased by 200%. The platform is easy to use and the support team is amazing!"
+                </div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">J</div>
+                    <div class="testimonial-info">
+                        <div class="testimonial-name">John Muwanga</div>
+                        <div class="testimonial-title">Muwanga Enterprises</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "The best decision we made was to list our products here. We've connected with buyers from across East Africa."
+                </div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">G</div>
+                    <div class="testimonial-info">
+                        <div class="testimonial-name">Grace Nakato</div>
+                        <div class="testimonial-title">Nakato Foods</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "Fast verification process and great support. Our products are now visible to thousands of potential buyers daily."
+                </div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">R</div>
+                    <div class="testimonial-info">
+                        <div class="testimonial-name">Robert Kato</div>
+                        <div class="testimonial-title">Kato Electronics</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Ready to Start Selling?</h2>
+        <p>Join thousands of successful suppliers on Uganda's fastest-growing B2B marketplace.</p>
+        <div id="finalCtaButtonContainer"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 BuyUganda.online. All rights reserved.</p>
+        <p style="margin-top: 8px;">
+            <a href="terms.html">Terms</a> | 
+            <a href="privacy.html">Privacy</a> | 
+            <a href="contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+        let isSupplier = false;
+
+        async function checkAuthAndRole() {
+            showLoading(true);
+            
+            try {
+                const { data: { user }, error } = await sb.auth.getUser();
+                
+                if (error) throw error;
+                
+                currentUser = user;
+                
+                if (currentUser) {
+                    // Check if user is a supplier
+                    const { data: supplier, error: supplierError } = await sb
+                        .from('suppliers')
+                        .select('id, verification_status')
+                        .eq('profile_id', currentUser.id)
+                        .maybeSingle();
+                    
+                    if (supplierError) {
+                        console.error('Error checking supplier status:', supplierError);
+                    }
+                    
+                    isSupplier = !!supplier;
+                }
+                
+                renderButtons();
+                
+            } catch (error) {
+                console.error('Auth error:', error);
+                currentUser = null;
+                isSupplier = false;
+                renderButtons();
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function renderButtons() {
+            const ctaContainer = document.getElementById('ctaButtonContainer');
+            const finalCtaContainer = document.getElementById('finalCtaButtonContainer');
+            
+            if (currentUser && isSupplier) {
+                // User is logged in and is a supplier - Show Go to Dashboard
+                const dashboardHtml = `
+                    <a href="supplier-dashboard.html" class="cta-btn">
+                        <i class="fas fa-tachometer-alt"></i> Go to Supplier Dashboard
+                    </a>
+                `;
+                if (ctaContainer) ctaContainer.innerHTML = dashboardHtml;
+                if (finalCtaContainer) finalCtaContainer.innerHTML = dashboardHtml;
+            } else if (currentUser && !isSupplier) {
+                // User is logged in but not a supplier - Show Upgrade/Register as Supplier
+                const registerHtml = `
+                    <a href="supplier-register.html" class="cta-btn">
+                        <i class="fas fa-user-plus"></i> Register as Supplier
+                    </a>
+                    <a href="supplier-dashboard.html" class="cta-btn secondary" style="margin-left: 16px;">
+                        <i class="fas fa-store"></i> Learn More
+                    </a>
+                `;
+                if (ctaContainer) ctaContainer.innerHTML = registerHtml;
+                if (finalCtaContainer) finalCtaContainer.innerHTML = `
+                    <a href="supplier-register.html" class="cta-btn">
+                        <i class="fas fa-user-plus"></i> Become a Supplier Today
+                    </a>
+                `;
+            } else {
+                // User not logged in - Show Login/Register options
+                const guestHtml = `
+                    <a href="login.html?redirect=sell-on-BuyUganda.online.html" class="cta-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login to Start Selling
+                    </a>
+                    <a href="register.html?type=supplier" class="cta-btn secondary" style="margin-left: 16px;">
+                        <i class="fas fa-user-plus"></i> Create Supplier Account
+                    </a>
+                `;
+                if (ctaContainer) ctaContainer.innerHTML = guestHtml;
+                if (finalCtaContainer) finalCtaContainer.innerHTML = `
+                    <a href="register.html?type=supplier" class="cta-btn">
+                        <i class="fas fa-user-plus"></i> Get Started Now
+                    </a>
+                `;
+            }
+        }
+
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                if (show) {
+                    overlay.classList.add('show');
+                } else {
+                    overlay.classList.remove('show');
+                }
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuthAndRole();
+        });
+    </script>
+</body>
+</html>

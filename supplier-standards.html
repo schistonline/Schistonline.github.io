@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Supplier Standards - BuyUganda.online | Quality & Ethics Guidelines</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B21E5;
+            --primary-dark: #4A0D9C;
+            --primary-light: #9B4DFF;
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1F2937;
+            --gray-800: #1F2937;
+            --gray-700: #374151;
+            --gray-600: #4B5563;
+            --gray-500: #6B7280;
+            --gray-400: #9CA3AF;
+            --gray-300: #D1D5DB;
+            --gray-200: #E5E7EB;
+            --gray-100: #F3F4F6;
+            --white: #FFFFFF;
+            --shadow: 0 2px 8px rgba(107, 33, 229, 0.08);
+            --shadow-lg: 0 4px 16px rgba(107, 33, 229, 0.12);
+            --radius: 16px;
+            --radius-sm: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-100);
+            color: var(--dark);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-cube {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            perspective: 800px;
+        }
+
+        .logo-cube .cube {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(18deg) rotateY(28deg);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-cube .face {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        .logo-cube .front {
+            transform: translateZ(18px);
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+        }
+
+        .logo-cube .right {
+            transform: rotateY(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #4A0D9C, #6B21E5);
+        }
+
+        .logo-cube .top {
+            transform: rotateX(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #9B4DFF, #B47BFF);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        .back-btn {
+            background: var(--gray-100);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--gray-600);
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--gray-200);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Main Content */
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .section-title span {
+            color: var(--primary);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: var(--gray-600);
+            margin-bottom: 48px;
+        }
+
+        /* Standards Grid */
+        .standards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .standard-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .standard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .standard-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: white;
+        }
+
+        .standard-card h3 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            color: var(--dark);
+        }
+
+        .standard-card p {
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .standard-list {
+            list-style: none;
+            margin-top: 16px;
+        }
+
+        .standard-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--gray-600);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .standard-list li:last-child {
+            border-bottom: none;
+        }
+
+        .standard-list li i {
+            color: var(--secondary);
+            margin-top: 2px;
+            font-size: 14px;
+        }
+
+        /* Compliance Levels */
+        .compliance-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-bottom: 60px;
+            box-shadow: var(--shadow);
+        }
+
+        .compliance-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .compliance-header h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .compliance-header p {
+            color: var(--gray-600);
+        }
+
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .compliance-level {
+            text-align: center;
+            padding: 24px;
+            border-radius: var(--radius-sm);
+            background: var(--gray-100);
+        }
+
+        .compliance-level.bronze {
+            border-top: 4px solid #CD7F32;
+        }
+
+        .compliance-level.silver {
+            border-top: 4px solid #C0C0C0;
+        }
+
+        .compliance-level.gold {
+            border-top: 4px solid #FFD700;
+        }
+
+        .compliance-level h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .compliance-level .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .compliance-level.bronze .badge {
+            background: #CD7F32;
+            color: white;
+        }
+
+        .compliance-level.silver .badge {
+            background: #C0C0C0;
+            color: #1a2c3e;
+        }
+
+        .compliance-level.gold .badge {
+            background: #FFD700;
+            color: #1a2c3e;
+        }
+
+        .compliance-level p {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        /* Consequences Section */
+        .consequences-section {
+            background: linear-gradient(135deg, #FEF2F2, #FEE2E2);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .consequences-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .consequences-header h2 {
+            color: var(--danger);
+            font-size: 24px;
+        }
+
+        .consequences-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .consequence-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .consequence-card i {
+            font-size: 32px;
+            color: var(--danger);
+            margin-bottom: 12px;
+        }
+
+        .consequence-card h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .consequence-card p {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        /* Certification Section */
+        .certification-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .certification-section h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .certification-section p {
+            color: var(--gray-600);
+            margin-bottom: 30px;
+        }
+
+        .cert-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cert-btn {
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .cert-btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .cert-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .cert-btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .cert-btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Report Section */
+        .report-section {
+            background: var(--gray-800);
+            border-radius: var(--radius);
+            padding: 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .report-section h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .report-section p {
+            margin-bottom: 24px;
+            opacity: 0.9;
+        }
+
+        .report-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .report-btn:hover {
+            transform: translateY(-2px);
+            background: #DC2626;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 0;
+        }
+
+        .footer a {
+            color: var(--gray-400);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .compliance-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .standards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cert-buttons {
+                flex-direction: column;
+            }
+            
+            .consequences-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .compliance-section,
+            .consequences-section,
+            .certification-section,
+            .report-section {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <a href="index.html" class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">BuyUganda<span>.online</span></span>
+            </a>
+            
+            <div style="width: 40px;"></div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Supplier Standards & Code of Conduct</h1>
+        <p>Our commitment to quality, integrity, and ethical business practices on BuyUganda.online</p>
+    </section>
+
+    <div class="content-container">
+        <!-- Standards Grid -->
+        <h2 class="section-title">Our <span>Core Standards</span></h2>
+        <p class="section-subtitle">Every supplier on our platform must adhere to these fundamental principles</p>
+        
+        <div class="standards-grid">
+            <div class="standard-card">
+                <div class="standard-icon"><i class="fas fa-check-circle"></i></div>
+                <h3>Product Quality</h3>
+                <p>All products listed must meet quality standards and match their descriptions exactly.</p>
+                <ul class="standard-list">
+                    <li><i class="fas fa-check"></i> Accurate product descriptions</li>
+                    <li><i class="fas fa-check"></i> High-quality images (minimum 3 per product)</li>
+                    <li><i class="fas fa-check"></i> Clear pricing and MOQ information</li>
+                    <li><i class="fas fa-check"></i> No counterfeit or prohibited items</li>
+                </ul>
+            </div>
+
+            <div class="standard-card">
+                <div class="standard-icon"><i class="fas fa-clock"></i></div>
+                <h3>Response & Delivery</h3>
+                <p>Timely communication and reliable delivery are essential for buyer trust.</p>
+                <ul class="standard-list">
+                    <li><i class="fas fa-check"></i> Respond to inquiries within 24 hours</li>
+                    <li><i class="fas fa-check"></i> Meet promised delivery timelines</li>
+                    <li><i class="fas fa-check"></i> Provide tracking information</li>
+                    <li><i class="fas fa-check"></i> Maintain 95%+ on-time delivery rate</li>
+                </ul>
+            </div>
+
+            <div class="standard-card">
+                <div class="standard-icon"><i class="fas fa-handshake"></i></div>
+                <h3>Ethical Business</h3>
+                <p>Conduct business with integrity and transparency at all times.</p>
+                <ul class="standard-list">
+                    <li><i class="fas fa-check"></i> No false or misleading claims</li>
+                    <li><i class="fas fa-check"></i> Fair pricing without hidden fees</li>
+                    <li><i class="fas fa-check"></i> Respect buyer confidentiality</li>
+                    <li><i class="fas fa-check"></i> Honest dispute resolution</li>
+                </ul>
+            </div>
+
+            <div class="standard-card">
+                <div class="standard-icon"><i class="fas fa-file-invoice"></i></div>
+                <h3>Documentation & Compliance</h3>
+                <p>Maintain proper business documentation and legal compliance.</p>
+                <ul class="standard-list">
+                    <li><i class="fas fa-check"></i> Valid business registration</li>
+                    <li><i class="fas fa-check"></i> Tax compliance (TIN certificate)</li>
+                    <li><i class="fas fa-check"></i> Product certifications where required</li>
+                    <li><i class="fas fa-check"></i> Updated contact information</li>
+                </ul>
+            </div>
+
+            <div class="standard-card">
+                <div class="standard-icon"><i class="fas fa-star"></i></div>
+                <h3>Customer Service</h3>
+                <p>Provide excellent customer service before, during, and after the sale.</p>
+                <ul class="standard-list">
+                    <li><i class="fas fa-check"></i> Professional communication</li>
+                    <li><i class="fas fa-check"></i> Handle complaints promptly</li>
+                    <li><i class="fas fa-check"></i> Offer fair return policies</li>
+                    <li><i class="fas fa-check"></i> Maintain high satisfaction rating</li>
+                </ul>
+            </div>
+
+            <div class="standard-card">
+                <div class="standard-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Performance Metrics</h3>
+                <p>Meet minimum performance standards to remain active on the platform.</p>
+                <ul class="standard-list">
+                    <li><i class="fas fa-check"></i> 90%+ order completion rate</li>
+                    <li><i class="fas fa-check"></i> 4.5+ star average rating</li>
+                    <li><i class="fas fa-check"></i> Less than 2% cancellation rate</li>
+                    <li><i class="fas fa-check"></i> Regular inventory updates</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Compliance Levels -->
+        <div class="compliance-section">
+            <div class="compliance-header">
+                <h2>Supplier Compliance Levels</h2>
+                <p>Suppliers are ranked based on their adherence to our standards</p>
+            </div>
+            <div class="compliance-grid">
+                <div class="compliance-level bronze">
+                    <h3>Bronze</h3>
+                    <div class="badge">Entry Level</div>
+                    <p>New suppliers start at Bronze. Must complete verification and list 5+ products.</p>
+                </div>
+                <div class="compliance-level silver">
+                    <h3>Silver</h3>
+                    <div class="badge">Trusted</div>
+                    <p>Achieved after 50+ successful orders and 4.5+ rating. Priority support.</p>
+                </div>
+                <div class="compliance-level gold">
+                    <h3>Gold</h3>
+                    <div class="badge">Premium</div>
+                    <p>Top 10% of suppliers. Featured placement, reduced fees, dedicated account manager.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Consequences Section -->
+        <div class="consequences-section">
+            <div class="consequences-header">
+                <h2><i class="fas fa-exclamation-triangle"></i> Non-Compliance Consequences</h2>
+                <p>Failure to meet our standards may result in the following actions</p>
+            </div>
+            <div class="consequences-grid">
+                <div class="consequence-card">
+                    <i class="fas fa-envelope"></i>
+                    <h4>Warning Notice</h4>
+                    <p>First violation: Written warning and action plan</p>
+                </div>
+                <div class="consequence-card">
+                    <i class="fas fa-eye-slash"></i>
+                    <h4>Temporary Suspension</h4>
+                    <p>Second violation: 7-30 day listing suspension</p>
+                </div>
+                <div class="consequence-card">
+                    <i class="fas fa-ban"></i>
+                    <h4>Permanent Ban</h4>
+                    <p>Severe or repeated violations: Permanent removal</p>
+                </div>
+                <div class="consequence-card">
+                    <i class="fas fa-gavel"></i>
+                    <h4>Legal Action</h4>
+                    <p>Fraud or illegal activities: Legal proceedings</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certification Section -->
+        <div class="certification-section">
+            <h2>Get Certified as a Trusted Supplier</h2>
+            <p>Complete our supplier verification process to earn the "Verified" badge and build buyer trust.</p>
+            <div class="cert-buttons">
+                <a href="supplier-verification.html" class="cert-btn cert-btn-primary">
+                    <i class="fas fa-shield-alt"></i> Start Verification
+                </a>
+                <a href="supplier-register.html" class="cert-btn cert-btn-outline">
+                    <i class="fas fa-store"></i> Register as Supplier
+                </a>
+                <a href="supplier-success.html" class="cert-btn cert-btn-outline">
+                    <i class="fas fa-trophy"></i> Success Stories
+                </a>
+            </div>
+        </div>
+
+        <!-- Report Violations -->
+        <div class="report-section">
+            <h2>Report a Standards Violation</h2>
+            <p>If you encounter a supplier not meeting our standards, please report it to our compliance team.</p>
+            <a href="report-violation.html" class="report-btn">
+                <i class="fas fa-flag"></i> Report Violation
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 BuyUganda.online. All rights reserved.</p>
+        <p style="margin-top: 8px;">
+            <a href="terms.html">Terms</a> | 
+            <a href="privacy.html">Privacy</a> | 
+            <a href="contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+
+        async function checkAuth() {
+            try {
+                const { data: { user }, error } = await sb.auth.getUser();
+                if (!error && user) {
+                    currentUser = user;
+                }
+            } catch (error) {
+                console.error('Auth error:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+        });
+    </script>
+</body>
+</html>

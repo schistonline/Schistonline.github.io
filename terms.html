@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Terms of Service - BuyUganda.online | Uganda's B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B21E5;
+            --primary-dark: #4A0D9C;
+            --primary-light: #9B4DFF;
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1F2937;
+            --gray-800: #1F2937;
+            --gray-700: #374151;
+            --gray-600: #4B5563;
+            --gray-500: #6B7280;
+            --gray-400: #9CA3AF;
+            --gray-300: #D1D5DB;
+            --gray-200: #E5E7EB;
+            --gray-100: #F3F4F6;
+            --white: #FFFFFF;
+            --shadow: 0 2px 8px rgba(107, 33, 229, 0.08);
+            --shadow-lg: 0 4px 16px rgba(107, 33, 229, 0.12);
+            --radius: 16px;
+            --radius-sm: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-100);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-cube {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            perspective: 800px;
+        }
+
+        .logo-cube .cube {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(18deg) rotateY(28deg);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-cube .face {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        .logo-cube .front {
+            transform: translateZ(18px);
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+        }
+
+        .logo-cube .right {
+            transform: rotateY(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #4A0D9C, #6B21E5);
+        }
+
+        .logo-cube .top {
+            transform: rotateX(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #9B4DFF, #B47BFF);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        .back-btn {
+            background: var(--gray-100);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--gray-600);
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--gray-200);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Last Updated */
+        .last-updated {
+            text-align: center;
+            padding: 16px;
+            background: var(--gray-100);
+            font-size: 13px;
+            color: var(--gray-500);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        /* Content Container */
+        .content-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .toc h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .toc-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--gray-100);
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--gray-700);
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .toc-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .toc-link i {
+            font-size: 12px;
+        }
+
+        /* Policy Sections */
+        .terms-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .terms-section h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .terms-section h3 {
+            font-size: 18px;
+            margin: 20px 0 12px;
+            color: var(--dark);
+        }
+
+        .terms-section p {
+            margin-bottom: 16px;
+            color: var(--gray-700);
+            line-height: 1.7;
+        }
+
+        .terms-section ul, .terms-section ol {
+            margin: 12px 0 16px 24px;
+            color: var(--gray-700);
+        }
+
+        .terms-section li {
+            margin-bottom: 8px;
+        }
+
+        .info-box {
+            background: var(--gray-100);
+            border-left: 4px solid var(--primary);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: var(--radius-sm);
+        }
+
+        .info-box i {
+            color: var(--primary);
+            margin-right: 8px;
+        }
+
+        .warning-box {
+            background: #FEF2F2;
+            border-left: 4px solid var(--danger);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: var(--radius-sm);
+        }
+
+        .warning-box i {
+            color: var(--danger);
+            margin-right: 8px;
+        }
+
+        .contact-card {
+            background: linear-gradient(135deg, var(--gray-100), var(--white));
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .contact-card i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .contact-card a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        .footer a {
+            color: var(--gray-400);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 24px;
+            }
+            
+            .terms-section {
+                padding: 20px;
+            }
+            
+            .terms-section h2 {
+                font-size: 18px;
+            }
+            
+            .toc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <a href="index.html" class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">BuyUganda<span>.online</span></span>
+            </a>
+            
+            <div style="width: 40px;"></div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Terms of Service</h1>
+        <p>Please read these terms carefully before using our platform</p>
+    </section>
+
+    <div class="last-updated">
+        <i class="fas fa-calendar-alt"></i> Last Updated: April 7, 2026 | Effective: April 7, 2026
+    </div>
+
+    <div class="content-container">
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2><i class="fas fa-list"></i> Table of Contents</h2>
+            <div class="toc-grid">
+                <a href="#acceptance" class="toc-link"><i class="fas fa-check-circle"></i> Acceptance of Terms</a>
+                <a href="#definitions" class="toc-link"><i class="fas fa-book"></i> Definitions</a>
+                <a href="#account" class="toc-link"><i class="fas fa-user"></i> Account Registration</a>
+                <a href="#buyers" class="toc-link"><i class="fas fa-shopping-cart"></i> Buyer Terms</a>
+                <a href="#suppliers" class="toc-link"><i class="fas fa-store"></i> Supplier Terms</a>
+                <a href="#transactions" class="toc-link"><i class="fas fa-exchange-alt"></i> Transactions</a>
+                <a href="#payments" class="toc-link"><i class="fas fa-credit-card"></i> Payments & Fees</a>
+                <a href="#prohibited" class="toc-link"><i class="fas fa-ban"></i> Prohibited Conduct</a>
+                <a href="#intellectual" class="toc-link"><i class="fas fa-copyright"></i> Intellectual Property</a>
+                <a href="#disclaimers" class="toc-link"><i class="fas fa-exclamation-triangle"></i> Disclaimers</a>
+                <a href="#liability" class="toc-link"><i class="fas fa-gavel"></i> Limitation of Liability</a>
+                <a href="#indemnification" class="toc-link"><i class="fas fa-shield-alt"></i> Indemnification</a>
+                <a href="#termination" class="toc-link"><i class="fas fa-trash-alt"></i> Termination</a>
+                <a href="#disputes" class="toc-link"><i class="fas fa-gavel"></i> Dispute Resolution</a>
+                <a href="#governing-law" class="toc-link"><i class="fas fa-balance-scale"></i> Governing Law</a>
+                <a href="#changes" class="toc-link"><i class="fas fa-edit"></i> Changes to Terms</a>
+                <a href="#contact" class="toc-link"><i class="fas fa-envelope"></i> Contact Us</a>
+            </div>
+        </div>
+
+        <!-- Section 1: Acceptance of Terms -->
+        <div id="acceptance" class="terms-section">
+            <h2><i class="fas fa-check-circle"></i> 1. Acceptance of Terms</h2>
+            <p>By accessing or using BuyUganda.online (the "Platform"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our Platform.</p>
+            <p>These Terms constitute a legally binding agreement between you ("User," "you," "your") and BuyUganda.online ("we," "us," "our"). By registering an account or using our services, you represent that you are at least 18 years old and have the legal capacity to enter into this agreement.</p>
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i> <strong>Important:</strong> These Terms apply to all users, including buyers, suppliers, and visitors. Please read them carefully.
+            </div>
+        </div>
+
+        <!-- Section 2: Definitions -->
+        <div id="definitions" class="terms-section">
+            <h2><i class="fas fa-book"></i> 2. Definitions</h2>
+            <ul>
+                <li><strong>"Platform"</strong> refers to BuyUganda.online website, mobile application, and all related services.</li>
+                <li><strong>"Buyer"</strong> refers to any user purchasing products or services through the Platform.</li>
+                <li><strong>"Supplier"</strong> refers to any user selling products or services through the Platform.</li>
+                <li><strong>"Product"</strong> refers to any goods, services, or items listed for sale on the Platform.</li>
+                <li><strong>"Order"</strong> refers to a purchase request submitted by a Buyer to a Supplier.</li>
+                <li><strong>"Transaction"</strong> refers to the complete process of ordering, payment, and delivery.</li>
+                <li><strong>"Content"</strong> refers to all information, data, text, images, videos, and materials posted on the Platform.</li>
+            </ul>
+        </div>
+
+        <!-- Section 3: Account Registration -->
+        <div id="account" class="terms-section">
+            <h2><i class="fas fa-user"></i> 3. Account Registration</h2>
+            <h3>3.1 Eligibility</h3>
+            <p>To register an account, you must:</p>
+            <ul>
+                <li>Be at least 18 years of age</li>
+                <li>Have legal capacity to enter into contracts</li>
+                <li>Provide accurate and complete registration information</li>
+                <li>Not have previously been suspended or removed from our Platform</li>
+            </ul>
+            
+            <h3>3.2 Account Security</h3>
+            <p>You are responsible for maintaining the confidentiality of your account credentials. You agree to:</p>
+            <ul>
+                <li>Notify us immediately of any unauthorized account access</li>
+                <li>Not share your password with any third party</li>
+                <li>Log out of your account after each session</li>
+                <li>Accept responsibility for all activities under your account</li>
+            </ul>
+            
+            <h3>3.3 Account Types</h3>
+            <ul>
+                <li><strong>Buyer Account:</strong> For purchasing products. Free to create and use.</li>
+                <li><strong>Supplier Account:</strong> For selling products. Subject to verification and potential fees.</li>
+            </ul>
+        </div>
+
+        <!-- Section 4: Buyer Terms -->
+        <div id="buyers" class="terms-section">
+            <h2><i class="fas fa-shopping-cart"></i> 4. Buyer Terms</h2>
+            <h3>4.1 Product Listings</h3>
+            <p>Suppliers are responsible for the accuracy of their product listings. Buyers should review product descriptions, pricing, MOQ, and delivery terms before placing orders.</p>
+            
+            <h3>4.2 Order Process</h3>
+            <ul>
+                <li>Submit order with quantity and specifications</li>
+                <li>Receive quote from Supplier (if applicable)</li>
+                <li>Make payment through approved payment methods</li>
+                <li>Track delivery through the Platform</li>
+            </ul>
+            
+            <h3>4.3 Buyer Obligations</h3>
+            <ul>
+                <li>Provide accurate shipping information</li>
+                <li>Make timely payments for orders placed</li>
+                <li>Communicate professionally with Suppliers</li>
+                <li>Provide honest reviews based on actual experience</li>
+            </ul>
+            
+            <h3>4.4 Cancellations & Returns</h3>
+            <p>Cancellation and return policies vary by Supplier. Review each Supplier's policies before ordering. Disputes may be escalated to our resolution center.</p>
+        </div>
+
+        <!-- Section 5: Supplier Terms -->
+        <div id="suppliers" class="terms-section">
+            <h2><i class="fas fa-store"></i> 5. Supplier Terms</h2>
+            <h3>5.1 Supplier Verification</h3>
+            <p>All Suppliers must complete verification by providing:</p>
+            <ul>
+                <li>Valid business registration certificate</li>
+                <li>Tax Identification Number (TIN)</li>
+                <li>Physical business address verification</li>
+                <li>Contact person identification</li>
+            </ul>
+            
+            <h3>5.2 Product Listings</h3>
+            <p>Suppliers agree to:</p>
+            <ul>
+                <li>List only genuine, legal products</li>
+                <li>Provide accurate descriptions and images</li>
+                <li>Maintain updated inventory and pricing</li>
+                <li>Disclose all applicable fees and terms</li>
+            </ul>
+            
+            <h3>5.3 Order Fulfillment</h3>
+            <ul>
+                <li>Respond to inquiries within 24 hours</li>
+                <li>Process orders within stated lead times</li>
+                <li>Provide tracking information for shipments</li>
+                <li>Maintain 95%+ order completion rate</li>
+            </ul>
+            
+            <div class="warning-box">
+                <i class="fas fa-exclamation-triangle"></i> <strong>Failure to fulfill orders</strong> may result in account suspension, removal from the platform, and legal action for fraud.
+            </div>
+        </div>
+
+        <!-- Section 6: Transactions -->
+        <div id="transactions" class="terms-section">
+            <h2><i class="fas fa-exchange-alt"></i> 6. Transactions</h2>
+            <h3>6.1 Contract Formation</h3>
+            <p>A binding contract between Buyer and Supplier is formed when:</p>
+            <ul>
+                <li>Buyer submits an order, and</li>
+                <li>Supplier accepts the order or</li>
+                <li>Buyer makes payment (for instant purchase products)</li>
+            </ul>
+            
+            <h3>6.2 Transaction Process</h3>
+            <ol>
+                <li>Buyer places order</li>
+                <li>Supplier reviews and accepts order</li>
+                <li>Buyer makes payment (if not already done)</li>
+                <li>Supplier ships products</li>
+                <li>Buyer confirms receipt</li>
+                <li>Funds released to Supplier</li>
+            </ol>
+            
+            <h3>6.3 Dispute Resolution</h3>
+            <p>If disputes arise between Buyer and Supplier:</p>
+            <ul>
+                <li>First attempt direct communication through our messaging system</li>
+                <li>Escalate to our dispute resolution team if unresolved</li>
+                <li>We may mediate and make binding decisions</li>
+                <li>Evidence will be reviewed from both parties</li>
+            </ul>
+        </div>
+
+        <!-- Section 7: Payments & Fees -->
+        <div id="payments" class="terms-section">
+            <h2><i class="fas fa-credit-card"></i> 7. Payments & Fees</h2>
+            <h3>7.1 Accepted Payment Methods</h3>
+            <ul>
+                <li><strong>Pesapal:</strong> Credit/debit cards, mobile money (MTN, Airtel)</li>
+                <li><strong>Bank Transfer:</strong> Direct bank transfers (for approved transactions)</li>
+                <li><strong>Mobile Money:</strong> MTN Mobile Money, Airtel Money</li>
+            </ul>
+            
+            <h3>7.2 Fees</h3>
+            <ul>
+                <li><strong>Buyer Fees:</strong> No fees for browsing or purchasing</li>
+                <li><strong>Supplier Fees:</strong> 5-10% commission on successful transactions</li>
+                <li><strong>Promotion Fees:</strong> Additional fees for featured listings and advertising</li>
+                <li><strong>Withdrawal Fees:</strong> Small fee for payout withdrawals (varies by method)</li>
+            </ul>
+            
+            <h3>7.3 Payment Processing</h3>
+            <p>All payments are processed through secure third-party payment gateways. We do not store full payment card information.</p>
+            
+            <div class="info-box">
+                <i class="fas fa-lock"></i> <strong>Secure Payments:</strong> All transactions are encrypted and processed securely. Funds are held in escrow until order completion.
+            </div>
+        </div>
+
+        <!-- Section 8: Prohibited Conduct -->
+        <div id="prohibited" class="terms-section">
+            <h2><i class="fas fa-ban"></i> 8. Prohibited Conduct</h2>
+            <p>The following activities are strictly prohibited on our Platform:</p>
+            <ul>
+                <li><strong>Illegal Products:</strong> Selling counterfeit, stolen, or illegal goods</li>
+                <li><strong>Fraud:</strong> Misrepresenting products, fake reviews, or deceptive practices</li>
+                <li><strong>Harassment:</strong> Abusive, threatening, or harassing behavior toward other users</li>
+                <li><strong>Spam:</strong> Unsolicited promotional messages or excessive messaging</li>
+                <li><strong>Data Scraping:</strong> Automated extraction of data without permission</li>
+                <li><strong>Manipulation:</strong> Artificially inflating ratings, reviews, or search rankings</li>
+                <li><strong>Unauthorized Access:</strong> Attempting to access other accounts or systems</li>
+                <li><strong>Platform Abuse:</strong> Circumventing fees or violating any platform rules</li>
+            </ul>
+            <div class="warning-box">
+                <i class="fas fa-gavel"></i> <strong>Violations</strong> may result in immediate account suspension, permanent ban, and legal action.
+            </div>
+        </div>
+
+        <!-- Section 9: Intellectual Property -->
+        <div id="intellectual" class="terms-section">
+            <h2><i class="fas fa-copyright"></i> 9. Intellectual Property</h2>
+            <h3>9.1 Our IP</h3>
+            <p>The Platform, including its design, logo, content, and underlying technology, is owned by BuyUganda.online and protected by copyright, trademark, and other intellectual property laws.</p>
+            
+            <h3>9.2 Your IP</h3>
+            <p>You retain ownership of content you post on the Platform. By posting, you grant us a non-exclusive, worldwide, royalty-free license to use, display, and distribute your content for Platform operations.</p>
+            
+            <h3>9.3 Infringement</h3>
+            <p>If you believe your intellectual property rights have been infringed, please contact us with:</p>
+            <ul>
+                <li>Description of the copyrighted work</li>
+                <li>Location of the infringing material</li>
+                <li>Your contact information</li>
+                <li>Statement of good faith belief</li>
+            </ul>
+        </div>
+
+        <!-- Section 10: Disclaimers -->
+        <div id="disclaimers" class="terms-section">
+            <h2><i class="fas fa-exclamation-triangle"></i> 10. Disclaimers</h2>
+            <p><strong>As-Is Basis:</strong> The Platform is provided "as is" without warranties of any kind. We do not guarantee uninterrupted or error-free service.</p>
+            <p><strong>Third-Party Content:</strong> We are not responsible for product quality, delivery, or supplier reliability. Buyers should conduct their own due diligence.</p>
+            <p><strong>No Endorsement:</strong> We do not endorse or guarantee any products, suppliers, or user content on the Platform.</p>
+            <p><strong>Platform Changes:</strong> We reserve the right to modify or discontinue any feature without notice.</p>
+        </div>
+
+        <!-- Section 11: Limitation of Liability -->
+        <div id="liability" class="terms-section">
+            <h2><i class="fas fa-gavel"></i> 11. Limitation of Liability</h2>
+            <p>To the maximum extent permitted by law, BuyUganda.online and its affiliates shall not be liable for:</p>
+            <ul>
+                <li>Indirect, incidental, or consequential damages</li>
+                <li>Loss of profits, data, or business opportunities</li>
+                <li>Damages exceeding the total fees paid to us in the past 12 months</li>
+                <li>Third-party conduct or product quality issues</li>
+            </ul>
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i> Some jurisdictions do not allow certain liability limitations. In such cases, our liability is limited to the fullest extent permitted by law.
+            </div>
+        </div>
+
+        <!-- Section 12: Indemnification -->
+        <div id="indemnification" class="terms-section">
+            <h2><i class="fas fa-shield-alt"></i> 12. Indemnification</h2>
+            <p>You agree to indemnify, defend, and hold harmless BuyUganda.online, its officers, directors, employees, and agents from any claims, damages, losses, or expenses arising from:</p>
+            <ul>
+                <li>Your violation of these Terms</li>
+                <li>Your use of the Platform</li>
+                <li>Your violation of any third-party rights</li>
+                <li>Your products or services</li>
+            </ul>
+        </div>
+
+        <!-- Section 13: Termination -->
+        <div id="termination" class="terms-section">
+            <h2><i class="fas fa-trash-alt"></i> 13. Termination</h2>
+            <h3>13.1 By You</h3>
+            <p>You may close your account at any time through account settings or by contacting us. Outstanding obligations will survive termination.</p>
+            
+            <h3>13.2 By Us</h3>
+            <p>We may suspend or terminate your account for:</p>
+            <ul>
+                <li>Violation of these Terms</li>
+                <li>Suspected fraud or illegal activity</li>
+                <li>Extended account inactivity</li>
+                <li>Any other reason at our discretion</li>
+            </ul>
+            
+            <h3>13.3 Effects of Termination</h3>
+            <p>Upon termination:</p>
+            <ul>
+                <li>Your right to use the Platform ends immediately</li>
+                <li>Pending transactions may be cancelled or completed</li>
+                <li>Outstanding payments will be settled</li>
+                <li>Certain obligations survive termination</li>
+            </ul>
+        </div>
+
+        <!-- Section 14: Dispute Resolution -->
+        <div id="disputes" class="terms-section">
+            <h2><i class="fas fa-gavel"></i> 14. Dispute Resolution</h2>
+            <h3>14.1 Informal Resolution</h3>
+            <p>Before filing a formal claim, you agree to contact us to resolve the dispute informally. Most disputes can be resolved through our support team.</p>
+            
+            <h3>14.2 Mediation</h3>
+            <p>If informal resolution fails, disputes shall be submitted to binding mediation in Kampala, Uganda, before resorting to litigation.</p>
+            
+            <h3>14.3 Class Action Waiver</h3>
+            <p>You agree to resolve disputes on an individual basis and waive the right to participate in class actions or representative proceedings.</p>
+        </div>
+
+        <!-- Section 15: Governing Law -->
+        <div id="governing-law" class="terms-section">
+            <h2><i class="fas fa-balance-scale"></i> 15. Governing Law</h2>
+            <p>These Terms shall be governed by and construed in accordance with the laws of the Republic of Uganda, without regard to conflict of law principles. The United Nations Convention on Contracts for the International Sale of Goods (CISG) does not apply.</p>
+            <p>The exclusive jurisdiction and venue for any claims arising from these Terms shall be the courts of Kampala, Uganda.</p>
+        </div>
+
+        <!-- Section 16: Changes to Terms -->
+        <div id="changes" class="terms-section">
+            <h2><i class="fas fa-edit"></i> 16. Changes to These Terms</h2>
+            <p>We may update these Terms periodically. We will notify you of material changes by:</p>
+            <ul>
+                <li>Posting the updated Terms on this page</li>
+                <li>Sending email notifications to registered users</li>
+                <li>Displaying a notice on the Platform</li>
+            </ul>
+            <p>Continued use of the Platform after changes constitutes acceptance of the modified Terms.</p>
+        </div>
+
+        <!-- Section 17: Contact Us -->
+        <div id="contact" class="terms-section">
+            <h2><i class="fas fa-envelope"></i> 17. Contact Us</h2>
+            <p>If you have questions about these Terms, please contact us:</p>
+            <div class="contact-card">
+                <i class="fas fa-building"></i>
+                <p><strong>BuyUganda.online</strong><br>
+                Kampala, Uganda</p>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:legal@buyuganda.online">legal@buyuganda.online</a></p>
+                <p><i class="fas fa-phone"></i> <a href="tel:+256700123456">+256 700 123456</a></p>
+                <p><i class="fas fa-clock"></i> Mon-Fri: 9:00 AM - 5:00 PM (EAT)</p>
+            </div>
+            <div class="info-box">
+                <i class="fas fa-gavel"></i> <strong>Legal Notices:</strong> Formal legal notices should be sent to our registered address and will be effective upon receipt.
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 BuyUganda.online. All rights reserved.</p>
+        <p style="margin-top: 8px;">
+            <a href="terms.html">Terms of Service</a> | 
+            <a href="privacy.html">Privacy Policy</a> | 
+            <a href="contact.html">Contact Us</a>
+        </p>
+    </footer>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('.toc-link, a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId && targetId !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(targetId);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

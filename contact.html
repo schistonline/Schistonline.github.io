@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Contact Us - BuyUganda.online | Uganda's B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B21E5;
+            --primary-dark: #4A0D9C;
+            --primary-light: #9B4DFF;
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1F2937;
+            --gray-800: #1F2937;
+            --gray-700: #374151;
+            --gray-600: #4B5563;
+            --gray-500: #6B7280;
+            --gray-400: #9CA3AF;
+            --gray-300: #D1D5DB;
+            --gray-200: #E5E7EB;
+            --gray-100: #F3F4F6;
+            --white: #FFFFFF;
+            --shadow: 0 2px 8px rgba(107, 33, 229, 0.08);
+            --shadow-lg: 0 4px 16px rgba(107, 33, 229, 0.12);
+            --radius: 16px;
+            --radius-sm: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-100);
+            color: var(--dark);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-cube {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            perspective: 800px;
+        }
+
+        .logo-cube .cube {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(18deg) rotateY(28deg);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-cube .face {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        .logo-cube .front {
+            transform: translateZ(18px);
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+        }
+
+        .logo-cube .right {
+            transform: rotateY(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #4A0D9C, #6B21E5);
+        }
+
+        .logo-cube .top {
+            transform: rotateX(90deg) translateZ(18px);
+            background: linear-gradient(135deg, #9B4DFF, #B47BFF);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        .back-btn {
+            background: var(--gray-100);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--gray-600);
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--gray-200);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Contact Grid */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        /* Contact Info Cards */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: var(--white);
+            padding: 24px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .info-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            color: white;
+        }
+
+        .info-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .info-card p {
+            color: var(--gray-600);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .info-card a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .info-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* Business Hours */
+        .business-hours {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .business-hours h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hours-list {
+            list-style: none;
+        }
+
+        .hours-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .hours-list li:last-child {
+            border-bottom: none;
+        }
+
+        .hours-day {
+            font-weight: 600;
+        }
+
+        .hours-time {
+            color: var(--gray-600);
+        }
+
+        .hours-closed {
+            color: var(--danger);
+        }
+
+        /* Contact Form */
+        .contact-form-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-form-container h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .contact-form-container p {
+            color: var(--gray-600);
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--gray-700);
+        }
+
+        .form-group .required {
+            color: var(--danger);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(107, 33, 229, 0.1);
+        }
+
+        .form-group input.error,
+        .form-group select.error,
+        .form-group textarea.error {
+            border-color: var(--danger);
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Map Section */
+        .map-section {
+            margin-top: 40px;
+        }
+
+        .map-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, var(--gray-200), var(--gray-300));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: var(--gray-500);
+        }
+
+        .map-placeholder i {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-top: 60px;
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .faq-section h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .faq-section p {
+            text-align: center;
+            color: var(--gray-600);
+            margin-bottom: 30px;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .faq-item {
+            padding: 16px;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .faq-item h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .faq-item h4 i {
+            color: var(--primary);
+        }
+
+        .faq-item p {
+            font-size: 13px;
+            color: var(--gray-600);
+            text-align: left;
+            margin-bottom: 0;
+        }
+
+        /* Success Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--radius);
+            max-width: 400px;
+            width: 100%;
+            padding: 30px;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-icon {
+            font-size: 64px;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .modal-content h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .modal-content p {
+            color: var(--gray-600);
+            margin-bottom: 24px;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+            background: var(--gray-800);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-align: center;
+            z-index: 1100;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: var(--secondary);
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 40px;
+        }
+
+        .footer a {
+            color: var(--gray-400);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 24px;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <a href="index.html" class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">BuyUganda<span>.online</span></span>
+            </a>
+            
+            <div style="width: 40px;"></div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Contact Us</h1>
+        <p>We're here to help! Reach out to us anytime</p>
+    </section>
+
+    <div class="content-container">
+        <div class="contact-grid">
+            <!-- Left Side - Contact Information -->
+            <div>
+                <div class="contact-info">
+                    <div class="info-card">
+                        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <h3>Visit Us</h3>
+                        <p>Kampala, Uganda</p>
+                        <p>Central Business District</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+                        <h3>Call Us</h3>
+                        <p><a href="tel:+256700123456">+256 700 123456</a></p>
+                        <p><a href="tel:+256712345678">+256 712 345678</a></p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                        <h3>Email Us</h3>
+                        <p><a href="mailto:info@buyuganda.online">info@buyuganda.online</a></p>
+                        <p><a href="mailto:support@buyuganda.online">support@buyuganda.online</a></p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon"><i class="fab fa-whatsapp"></i></div>
+                        <h3>WhatsApp</h3>
+                        <p><a href="https://wa.me/256700123456">+256 700 123456</a></p>
+                        <p>Quick support via WhatsApp</p>
+                    </div>
+                </div>
+
+                <div class="business-hours">
+                    <h3><i class="fas fa-clock"></i> Business Hours</h3>
+                    <ul class="hours-list">
+                        <li><span class="hours-day">Monday - Friday</span><span class="hours-time">8:00 AM - 6:00 PM</span></li>
+                        <li><span class="hours-day">Saturday</span><span class="hours-time">9:00 AM - 2:00 PM</span></li>
+                        <li><span class="hours-day">Sunday</span><span class="hours-time hours-closed">Closed</span></li>
+                        <li><span class="hours-day">Public Holidays</span><span class="hours-time hours-closed">Closed</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Side - Contact Form -->
+            <div class="contact-form-container">
+                <h2>Send Us a Message</h2>
+                <p>Fill out the form below and we'll get back to you within 24 hours.</p>
+                
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" id="fullName" placeholder="Enter your full name">
+                            <div id="nameError" class="error-message"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Email Address <span class="required">*</span></label>
+                            <input type="email" id="email" placeholder="you@example.com">
+                            <div id="emailError" class="error-message"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="phone" placeholder="+256 XXX XXX XXX">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Subject <span class="required">*</span></label>
+                            <select id="subject">
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="supplier">Become a Supplier</option>
+                                <option value="buyer">Buyer Support</option>
+                                <option value="technical">Technical Support</option>
+                                <option value="billing">Billing & Payments</option>
+                                <option value="partnership">Partnership Opportunity</option>
+                                <option value="complaint">File a Complaint</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <div id="subjectError" class="error-message"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Message <span class="required">*</span></label>
+                        <textarea id="message" rows="5" placeholder="Please provide details about your inquiry..."></textarea>
+                        <div id="messageError" class="error-message"></div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="map-section">
+            <div class="map-container">
+                <div class="map-placeholder">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <p>📍 Kampala, Uganda - Central Business District</p>
+                    <p style="font-size: 12px;">Interactive map loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            <p>Quick answers to common questions</p>
+            
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h4><i class="fas fa-store"></i> How do I become a supplier?</h4>
+                    <p>Register an account, complete verification, and start listing your products. Our team will guide you through the process.</p>
+                </div>
+                <div class="faq-item">
+                    <h4><i class="fas fa-shopping-cart"></i> How do I place an order?</h4>
+                    <p>Browse products, contact suppliers for quotes, negotiate terms, and place your order through our secure platform.</p>
+                </div>
+                <div class="faq-item">
+                    <h4><i class="fas fa-credit-card"></i> What payment methods are accepted?</h4>
+                    <p>We accept Pesapal (cards & mobile money), bank transfers, and mobile money (MTN/Airtel).</p>
+                </div>
+                <div class="faq-item">
+                    <h4><i class="fas fa-clock"></i> How long does verification take?</h4>
+                    <p>Supplier verification typically takes 24-48 hours after submitting all required documents.</p>
+                </div>
+                <div class="faq-item">
+                    <h4><i class="fas fa-truck"></i> Do you offer delivery?</h4>
+                    <p>Delivery is arranged between buyers and suppliers. We partner with trusted logistics providers.</p>
+                </div>
+                <div class="faq-item">
+                    <h4><i class="fas fa-shield-alt"></i> Is my payment secure?</h4>
+                    <p>Yes, all payments are processed through encrypted, PCI-compliant payment gateways.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon"><i class="fas fa-check-circle"></i></div>
+            <h3>Message Sent!</h3>
+            <p>Thank you for contacting us. We'll respond to your inquiry within 24 hours.</p>
+            <button class="modal-btn" onclick="closeModal()">Continue</button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 BuyUganda.online. All rights reserved.</p>
+        <p style="margin-top: 8px;">
+            <a href="terms.html">Terms of Service</a> | 
+            <a href="privacy.html">Privacy Policy</a> | 
+            <a href="contact.html">Contact Us</a>
+        </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+
+        async function getCurrentUser() {
+            const { data: { user } } = await sb.auth.getUser();
+            if (user) {
+                currentUser = user;
+                // Pre-fill form if user is logged in
+                const { data: profile } = await sb
+                    .from('profiles')
+                    .select('full_name, email, phone')
+                    .eq('id', user.id)
+                    .single();
+                    
+                if (profile) {
+                    if (document.getElementById('fullName')) document.getElementById('fullName').value = profile.full_name || '';
+                    if (document.getElementById('email')) document.getElementById('email').value = profile.email || '';
+                    if (document.getElementById('phone')) document.getElementById('phone').value = profile.phone || '';
+                }
+            }
+        }
+
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                if (show) {
+                    overlay.classList.add('show');
+                } else {
+                    overlay.classList.remove('show');
+                }
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function showModal() {
+            document.getElementById('successModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('show');
+            document.getElementById('contactForm').reset();
+        }
+
+        function validateForm() {
+            let isValid = true;
+            
+            const name = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value.trim();
+            
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.classList.remove('show');
+                el.textContent = '';
+            });
+            document.querySelectorAll('input, select, textarea').forEach(el => {
+                el.classList.remove('error');
+            });
+            
+            // Validate name
+            if (!name) {
+                showFieldError('name', 'Please enter your full name');
+                isValid = false;
+            } else if (name.length < 2) {
+                showFieldError('name', 'Name must be at least 2 characters');
+                isValid = false;
+            }
+            
+            // Validate email
+            if (!email) {
+                showFieldError('email', 'Please enter your email address');
+                isValid = false;
+            } else if (!/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email)) {
+                showFieldError('email', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            // Validate subject
+            if (!subject) {
+                showFieldError('subject', 'Please select a subject');
+                isValid = false;
+            }
+            
+            // Validate message
+            if (!message) {
+                showFieldError('message', 'Please enter your message');
+                isValid = false;
+            } else if (message.length < 10) {
+                showFieldError('message', 'Message must be at least 10 characters');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        function showFieldError(field, message) {
+            let errorEl;
+            switch(field) {
+                case 'name':
+                    errorEl = document.getElementById('nameError');
+                    document.getElementById('fullName').classList.add('error');
+                    break;
+                case 'email':
+                    errorEl = document.getElementById('emailError');
+                    document.getElementById('email').classList.add('error');
+                    break;
+                case 'subject':
+                    errorEl = document.getElementById('subjectError');
+                    document.getElementById('subject').classList.add('error');
+                    break;
+                case 'message':
+                    errorEl = document.getElementById('messageError');
+                    document.getElementById('message').classList.add('error');
+                    break;
+                default:
+                    return;
+            }
+            if (errorEl) {
+                errorEl.textContent = message;
+                errorEl.classList.add('show');
+            }
+        }
+
+        async function sendContactMessage(event) {
+            event.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+            
+            showLoading(true);
+            
+            const name = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const subject = document.getElementById('subject').value;
+            const messageText = document.getElementById('message').value.trim();
+            
+            const subjectMap = {
+                'general': 'General Inquiry',
+                'supplier': 'Become a Supplier',
+                'buyer': 'Buyer Support',
+                'technical': 'Technical Support',
+                'billing': 'Billing & Payments',
+                'partnership': 'Partnership Opportunity',
+                'complaint': 'Customer Complaint',
+                'other': 'Other Inquiry'
+            };
+            
+            const subjectDisplay = subjectMap[subject] || subject;
+            
+            try {
+                // Create notification in database (for admin)
+                const { error: notificationError } = await sb
+                    .from('notifications')
+                    .insert({
+                        user_id: currentUser?.id || null,
+                        type: 'admin_alert',
+                        title: `New Contact Message: ${subjectDisplay}`,
+                        message: `From: ${name} (${email})\nPhone: ${phone || 'Not provided'}\n\nMessage: ${messageText}`,
+                        link: '/admin/messages.html',
+                        created_at: new Date().toISOString()
+                    });
+                
+                if (notificationError) {
+                    console.error('Error saving notification:', notificationError);
+                }
+                
+                // Also send email (you can integrate with an email service)
+                console.log('Contact message sent:', { name, email, phone, subject: subjectDisplay, message: messageText });
+                
+                showLoading(false);
+                showModal();
+                
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showLoading(false);
+                showToast('Failed to send message. Please try again.', 'error');
+            }
+        }
+
+        window.closeModal = closeModal;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            getCurrentUser();
+            document.getElementById('contactForm').addEventListener('submit', sendContactMessage);
+        });
+    </script>
+</body>
+</html>
