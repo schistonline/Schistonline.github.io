@@ -30,7 +30,7 @@ const ACCOUNT_TYPES = {
         table: 'suppliers',
         foreignKey: 'profile_id',
         dashboard: 'supplier-dashboard.html',
-        signupPath: 'become-supplier.html',
+        signupPath: 'supplier-register.html',
         badgeClass: 'supplier'
     },
     poultry: {
@@ -40,7 +40,7 @@ const ACCOUNT_TYPES = {
         table: 'poultry_suppliers',
         foreignKey: 'profile_id',
         dashboard: 'poultry-dashboard.html',
-        signupPath: 'become-poultry-supplier.html',
+        signupPath: 'poultry-register.html',
         badgeClass: 'poultry'
     },
     logistics: {
@@ -50,7 +50,7 @@ const ACCOUNT_TYPES = {
         table: 'logistics_providers',
         foreignKey: 'profile_id',
         dashboard: 'logistics-dashboard.html',
-        signupPath: 'become-logistics-partner.html',
+        signupPath: 'logistics-register.html',
         badgeClass: 'logistics'
     },
     admin: {
@@ -381,9 +381,9 @@ const ProfileManager = {
                     <h3>Start Selling on SourceX</h3>
                     <p>Activate a seller account to start listing products</p>
                     <div class="dashboard-actions">
-                        <a href="become-supplier.html" class="btn-primary">Become a Supplier</a>
-                        <a href="become-poultry-supplier.html" class="btn-outline">Become a Poultry Supplier</a>
-                        <a href="become-logistics-partner.html" class="btn-outline">Become a Logistics Partner</a>
+                        <a href="supplier-register.html" class="btn-primary">Become a Supplier</a>
+                        <a href="poultry-register.html" class="btn-outline">Become a Poultry Supplier</a>
+                        <a href="logistics-register.html" class="btn-outline">Become a Logistics Partner</a>
                     </div>
                 </div>
             `;
