@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Sitemap - BuyUganda B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B21E5;
+            --primary-dark: #4A0D9C;
+            --primary-light: #9B4DFF;
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-600);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .page-hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .page-hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        /* Sitemap Grid */
+        .sitemap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .sitemap-col {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .sitemap-col:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(107, 33, 229, 0.15);
+        }
+
+        .sitemap-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sitemap-title i {
+            font-size: 20px;
+        }
+
+        .sitemap-links {
+            list-style: none;
+        }
+
+        .sitemap-links li {
+            margin-bottom: 12px;
+        }
+
+        .sitemap-links a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .sitemap-links a i {
+            color: var(--primary);
+            font-size: 12px;
+            width: 20px;
+        }
+
+        .sitemap-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        /* Category Section */
+        .category-section {
+            margin-top: 40px;
+        }
+
+        .category-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-title i {
+            color: var(--primary);
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .category-link {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            transition: all 0.2s;
+        }
+
+        .category-link i {
+            color: var(--primary);
+            font-size: 12px;
+        }
+
+        .category-link:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 48px 24px 24px;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--gray-400);
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-700);
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-hero h1 {
+                font-size: 32px;
+            }
+            
+            .sitemap-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">BU</div>
+                <span class="logo-text">Buy<span>Uganda</span></span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="suppliers.html">Suppliers</a>
+                <a href="products.html">Products</a>
+                <a href="categories.html">Categories</a>
+                <a href="help.html">Help</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            
+            <div class="auth-buttons" id="authButtons">
+                <a href="login.html" class="btn btn-outline">Sign In</a>
+                <a href="register.html" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="page-hero">
+        <h1>Sitemap</h1>
+        <p>Navigate through all pages of BuyUganda Marketplace</p>
+    </section>
+
+    <!-- Sitemap Grid -->
+    <div class="container">
+        <div class="sitemap-grid">
+            <!-- Main Pages -->
+            <div class="sitemap-col">
+                <div class="sitemap-title">
+                    <i class="fas fa-home"></i>
+                    Main Pages
+                </div>
+                <ul class="sitemap-links">
+                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                    <li><a href="how-it-works.html"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                    <li><a href="pricing.html"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+                    <li><a href="blog.html"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                    <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    <li><a href="help.html"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                    <li><a href="faq.html"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                    <li><a href="sitemap.html"><i class="fas fa-chevron-right"></i> Sitemap</a></li>
+                </ul>
+            </div>
+
+            <!-- For Buyers -->
+            <div class="sitemap-col">
+                <div class="sitemap-title">
+                    <i class="fas fa-shopping-cart"></i>
+                    For Buyers
+                </div>
+                <ul class="sitemap-links">
+                    <li><a href="how-to-buy.html"><i class="fas fa-chevron-right"></i> How to Buy</a></li>
+                    <li><a href="suppliers.html"><i class="fas fa-chevron-right"></i> Browse Suppliers</a></li>
+                    <li><a href="products.html"><i class="fas fa-chevron-right"></i> Browse Products</a></li>
+                    <li><a href="categories.html"><i class="fas fa-chevron-right"></i> Categories</a></li>
+                    <li><a href="request-quote.html"><i class="fas fa-chevron-right"></i> Request for Quote</a></li>
+                    <li><a href="buyer-protection.html"><i class="fas fa-chevron-right"></i> Buyer Protection</a></li>
+                    <li><a href="trade-assurance.html"><i class="fas fa-chevron-right"></i> Trade Assurance</a></li>
+                    <li><a href="supplier-verification.html"><i class="fas fa-chevron-right"></i> Supplier Verification</a></li>
+                </ul>
+            </div>
+
+            <!-- For Suppliers -->
+            <div class="sitemap-col">
+                <div class="sitemap-title">
+                    <i class="fas fa-store"></i>
+                    For Suppliers
+                </div>
+                <ul class="sitemap-links">
+                    <li><a href="become-supplier.html"><i class="fas fa-chevron-right"></i> Become a Supplier</a></li>
+                    <li><a href="supplier-register.html"><i class="fas fa-chevron-right"></i> Supplier Registration</a></li>
+                    <li><a href="supplier-dashboard.html"><i class="fas fa-chevron-right"></i> Supplier Dashboard</a></li>
+                    <li><a href="supplier-success.html"><i class="fas fa-chevron-right"></i> Supplier Success</a></li>
+                    <li><a href="advertise.html"><i class="fas fa-chevron-right"></i> Advertising</a></li>
+                    <li><a href="logistics-partner.html"><i class="fas fa-chevron-right"></i> Logistics Partner</a></li>
+                    <li><a href="supplier-standards.html"><i class="fas fa-chevron-right"></i> Supplier Standards</a></li>
+                    <li><a href="promotion-campaigns.html"><i class="fas fa-chevron-right"></i> Promotion Campaigns</a></li>
+                </ul>
+            </div>
+
+            <!-- Account & Legal -->
+            <div class="sitemap-col">
+                <div class="sitemap-title">
+                    <i class="fas fa-user-circle"></i>
+                    Account & Legal
+                </div>
+                <ul class="sitemap-links">
+                    <li><a href="login.html"><i class="fas fa-chevron-right"></i> Sign In</a></li>
+                    <li><a href="register.html"><i class="fas fa-chevron-right"></i> Create Account</a></li>
+                    <li><a href="profile.html"><i class="fas fa-chevron-right"></i> My Profile</a></li>
+                    <li><a href="forgot-password.html"><i class="fas fa-chevron-right"></i> Forgot Password</a></li>
+                    <li><a href="change-password.html"><i class="fas fa-chevron-right"></i> Change Password</a></li>
+                    <li><a href="terms.html"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                    <li><a href="privacy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="disclaimer.html"><i class="fas fa-chevron-right"></i> Disclaimer</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Product Categories -->
+        <div class="category-section">
+            <div class="category-title">
+                <i class="fas fa-tags"></i>
+                Product Categories
+            </div>
+            <div class="category-grid">
+                <a href="category.html?cat=agriculture" class="category-link"><i class="fas fa-chevron-right"></i> Agriculture & Farming</a>
+                <a href="category.html?cat=electronics" class="category-link"><i class="fas fa-chevron-right"></i> Electronics</a>
+                <a href="category.html?cat=fashion" class="category-link"><i class="fas fa-chevron-right"></i> Fashion & Apparel</a>
+                <a href="category.html?cat=construction" class="category-link"><i class="fas fa-chevron-right"></i> Construction & Building</a>
+                <a href="category.html?cat=automotive" class="category-link"><i class="fas fa-chevron-right"></i> Automotive & Parts</a>
+                <a href="category.html?cat=healthcare" class="category-link"><i class="fas fa-chevron-right"></i> Healthcare & Medical</a>
+                <a href="category.html?cat=beauty" class="category-link"><i class="fas fa-chevron-right"></i> Beauty & Personal Care</a>
+                <a href="category.html?cat=food" class="category-link"><i class="fas fa-chevron-right"></i> Food & Beverage</a>
+                <a href="category.html?cat=furniture" class="category-link"><i class="fas fa-chevron-right"></i> Furniture & Office</a>
+                <a href="category.html?cat=machinery" class="category-link"><i class="fas fa-chevron-right"></i> Machinery & Equipment</a>
+                <a href="category.html?cat=packaging" class="category-link"><i class="fas fa-chevron-right"></i> Packaging & Printing</a>
+                <a href="category.html?cat=chemicals" class="category-link"><i class="fas fa-chevron-right"></i> Chemicals & Pharmaceuticals</a>
+            </div>
+        </div>
+
+        <!-- Popular Searches -->
+        <div class="category-section">
+            <div class="category-title">
+                <i class="fas fa-fire"></i>
+                Popular Searches
+            </div>
+            <div class="category-grid">
+                <a href="B2B-search-results.html?q=maize" class="category-link"><i class="fas fa-search"></i> Maize</a>
+                <a href="B2B-search-results.html?q=beans" class="category-link"><i class="fas fa-search"></i> Beans</a>
+                <a href="B2B-search-results.html?q=coffee" class="category-link"><i class="fas fa-search"></i> Coffee</a>
+                <a href="B2B-search-results.html?q=electronics+wholesale" class="category-link"><i class="fas fa-search"></i> Electronics Wholesale</a>
+                <a href="B2B-search-results.html?q=construction+materials" class="category-link"><i class="fas fa-search"></i> Construction Materials</a>
+                <a href="B2B-search-results.html?q=agricultural+equipment" class="category-link"><i class="fas fa-search"></i> Agricultural Equipment</a>
+                <a href="B2B-search-results.html?q=clothing+wholesale" class="category-link"><i class="fas fa-search"></i> Clothing Wholesale</a>
+                <a href="B2B-search-results.html?q=office+furniture" class="category-link"><i class="fas fa-search"></i> Office Furniture</a>
+                <a href="B2B-search-results.html?q=beauty+products" class="category-link"><i class="fas fa-search"></i> Beauty Products</a>
+                <a href="B2B-search-results.html?q=packaging+materials" class="category-link"><i class="fas fa-search"></i> Packaging Materials</a>
+                <a href="B2B-search-results.html?q=spare+parts" class="category-link"><i class="fas fa-search"></i> Spare Parts</a>
+                <a href="B2B-search-results.html?q=pharmaceuticals" class="category-link"><i class="fas fa-search"></i> Pharmaceuticals</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>About BuyUganda</h4>
+                    <a href="about.html">About Us</a>
+                    <a href="how-it-works.html">How It Works</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Buyers</h4>
+                    <a href="how-to-buy.html">How to Buy</a>
+                    <a href="request-quote.html">Request for Quote</a>
+                    <a href="buyer-protection.html">Buyer Protection</a>
+                    <a href="trade-assurance.html">Trade Assurance</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Suppliers</h4>
+                    <a href="become-supplier.html">Become a Supplier</a>
+                    <a href="supplier-success.html">Supplier Success</a>
+                    <a href="advertise.html">Advertising</a>
+                    <a href="logistics-partner.html">Logistics Partner</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="help.html">Help Center</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="terms.html">Terms & Conditions</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 BuyUganda. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function updateAuthButtons() {
+            const { data: { session } } = await sb.auth.getSession();
+            const authContainer = document.getElementById('authButtons');
+            
+            if (!authContainer) return;
+            
+            if (session?.user) {
+                authContainer.innerHTML = `
+                    <a href="profile.html" class="btn btn-primary"><i class="fas fa-user"></i> My Account</a>
+                    <button onclick="logout()" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                `;
+            } else {
+                authContainer.innerHTML = `
+                    <a href="login.html" class="btn btn-outline">Sign In</a>
+                    <a href="register.html" class="btn btn-primary">Get Started</a>
+                `;
+            }
+        }
+
+        window.logout = async function() {
+            await sb.auth.signOut();
+            window.location.href = 'index.html';
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthButtons();
+        });
+    </script>
+</body>
+</html>

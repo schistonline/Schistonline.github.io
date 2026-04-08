@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>FAQ - BuyUganda B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B21E5;
+            --primary-dark: #4A0D9C;
+            --primary-light: #9B4DFF;
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-600);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .page-hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .page-hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            padding: 30px 24px;
+            margin-top: -30px;
+            border-radius: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: 40px;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(107, 33, 229, 0.1);
+        }
+
+        .search-btn {
+            padding: 14px 28px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 33, 229, 0.3);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .category-tab {
+            padding: 10px 24px;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-tab:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .category-tab.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* FAQ Accordion */
+        .faq-section {
+            display: none;
+        }
+
+        .faq-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .faq-question {
+            padding: 20px 24px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-800);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s;
+        }
+
+        .faq-question:hover {
+            color: var(--primary);
+        }
+
+        .faq-question i {
+            color: var(--primary);
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 24px 20px 24px;
+            font-size: 15px;
+            color: var(--gray-600);
+            line-height: 1.6;
+            border-top: 1px solid var(--gray-200);
+            margin-top: 0;
+            display: none;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Still Need Help */
+        .help-section {
+            background: var(--gray-100);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .help-section h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .help-section p {
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .help-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .help-btn {
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .help-btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .help-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 33, 229, 0.3);
+        }
+
+        .help-btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .help-btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 48px 24px 24px;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--gray-400);
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-700);
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-hero h1 {
+                font-size: 32px;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .faq-question {
+                font-size: 16px;
+                padding: 16px 20px;
+            }
+            
+            .faq-answer {
+                font-size: 14px;
+                padding: 0 20px 16px 20px;
+            }
+            
+            .category-tab {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">BU</div>
+                <span class="logo-text">Buy<span>Uganda</span></span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="suppliers.html">Suppliers</a>
+                <a href="products.html">Products</a>
+                <a href="categories.html">Categories</a>
+                <a href="help.html">Help</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            
+            <div class="auth-buttons" id="authButtons">
+                <a href="login.html" class="btn btn-outline">Sign In</a>
+                <a href="register.html" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="page-hero">
+        <h1>Frequently Asked Questions</h1>
+        <p>Find answers to common questions about BuyUganda marketplace</p>
+    </section>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search for answers...">
+            <button class="search-btn" onclick="searchFAQ()"><i class="fas fa-search"></i> Search</button>
+        </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="container">
+        <div class="category-tabs">
+            <button class="category-tab active" data-category="all">All Questions</button>
+            <button class="category-tab" data-category="getting-started">Getting Started</button>
+            <button class="category-tab" data-category="buying">Buying</button>
+            <button class="category-tab" data-category="selling">Selling</button>
+            <button class="category-tab" data-category="payments">Payments</button>
+            <button class="category-tab" data-category="shipping">Shipping & Logistics</button>
+            <button class="category-tab" data-category="account">Account & Security</button>
+        </div>
+    </div>
+
+    <!-- FAQ Sections -->
+    <div class="container">
+        <!-- Getting Started Section -->
+        <div id="getting-started" class="faq-section">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    What is BuyUganda?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    BuyUganda is Uganda's premier B2B marketplace connecting verified suppliers with serious buyers across East Africa. We facilitate wholesale trade, bulk purchases, and business-to-business transactions.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Is BuyUganda free to use?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Basic membership is completely free for both buyers and suppliers. Suppliers can upgrade to paid plans for additional features like unlimited listings, featured products, and priority support.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How do I create an account?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Click the "Get Started" or "Sign Up" button on the homepage. Fill in your basic information, verify your email, and complete your profile. The process takes less than 2 minutes.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Do I need to verify my business?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Business verification is optional but highly recommended. Verified suppliers receive a trust badge, higher search rankings, and significantly more buyer inquiries. Buyers also benefit from verified supplier status.
+                </div>
+            </div>
+        </div>
+
+        <!-- Buying Section -->
+        <div id="buying" class="faq-section">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How do I find products on BuyUganda?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Use the search bar to look for specific products, browse categories, or filter by supplier type, price range, and location. You can also request quotes by posting your requirements.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Can I request samples before bulk purchase?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes! Most suppliers offer samples for quality verification. Contact the supplier directly through our messaging system to arrange sample orders.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How do I know if a supplier is trustworthy?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Look for the verified badge, check supplier ratings and reviews, review their transaction history, and always use Trade Assurance for payment protection on large orders.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    What is Minimum Order Quantity (MOQ)?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    MOQ is the minimum number of units a supplier requires for a single order. This varies by supplier and product. You can negotiate MOQ directly with suppliers through our chat system.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Can I negotiate prices with suppliers?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Absolutely! B2B transactions often involve negotiation. Use our chat system to discuss pricing, MOQ, payment terms, and delivery arrangements.
+                </div>
+            </div>
+        </div>
+
+        <!-- Selling Section -->
+        <div id="selling" class="faq-section">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How do I become a seller on BuyUganda?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Click "Become a Supplier" on the homepage, complete the registration form, submit your business documents, and start listing your products. Our team reviews applications within 24-48 hours.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    What documents are required for supplier verification?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    You'll need a valid business registration certificate, tax identification number (TIN), director/owner ID, proof of business address, and company bank account details.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How much does it cost to sell on BuyUganda?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Basic membership is free with limited listings. Paid plans start from UGX 99,000/month for unlimited listings, featured products, and premium features. See our Pricing page for details.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How do I get the verified supplier badge?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Complete the supplier verification process by submitting all required business documents. Once verified, you'll receive the trust badge automatically.
+                </div>
+            </div>
+        </div>
+
+        <!-- Payments Section -->
+        <div id="payments" class="faq-section">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    What payment methods do you accept?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    We accept Mobile Money (MTN, Airtel), Credit/Debit Cards (Visa, Mastercard), Bank Transfers, and Escrow payments through our Trade Assurance program.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    What is Trade Assurance?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Trade Assurance is our buyer protection program that secures your payment until you confirm receipt of goods as described. It covers product quality, shipping time, and supplier fraud.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Is my payment information secure?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes! We use enterprise-grade encryption and comply with PCI DSS standards. Your payment information is never stored on our servers.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How long does refund processing take?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Refunds are processed within 5-7 business days after claim approval. The time to reflect in your account depends on your payment provider.
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping Section -->
+        <div id="shipping" class="faq-section">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How long does shipping take?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Shipping times vary by supplier location and shipping method. Domestic deliveries typically take 2-7 days, while international shipping can take 2-6 weeks. Discuss delivery timelines with your supplier.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Who pays for shipping?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Shipping costs can be negotiated with the supplier. Some suppliers offer free shipping on large orders, while others charge based on weight, volume, or destination.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Can I track my order?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes! Once shipped, suppliers provide tracking numbers. You can monitor delivery status in your order dashboard.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    What if my order is damaged or lost?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Open a dispute immediately through your order page. Our team will investigate and help resolve the issue, including refunds or replacements if covered by Trade Assurance.
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Section -->
+        <div id="account" class="faq-section">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How do I reset my password?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Click "Forgot Password" on the login page. Enter your email address, and we'll send you a password reset link. Follow the instructions to create a new password.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How do I update my profile information?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Log in to your account, go to "My Profile" or "Account Settings" to update your personal information, business details, contact information, and preferences.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    Can I delete my account?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes. Contact our support team to request account deletion. Please note that certain information may be retained for legal and transactional purposes.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    How do I change my email address?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Go to Account Settings, select "Change Email," verify your current password, and enter your new email address. You'll receive a verification link to confirm the change.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Still Need Help Section -->
+    <div class="container">
+        <div class="help-section">
+            <h3>Still have questions?</h3>
+            <p>Can't find what you're looking for? Our support team is here to help.</p>
+            <div class="help-buttons">
+                <a href="contact.html" class="help-btn help-btn-primary">Contact Support</a>
+                <a href="mailto:support@buyuganda.ug" class="help-btn help-btn-secondary">Email Us</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>About BuyUganda</h4>
+                    <a href="about.html">About Us</a>
+                    <a href="how-it-works.html">How It Works</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Buyers</h4>
+                    <a href="how-to-buy.html">How to Buy</a>
+                    <a href="request-quote.html">Request for Quote</a>
+                    <a href="buyer-protection.html">Buyer Protection</a>
+                    <a href="trade-assurance.html">Trade Assurance</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Suppliers</h4>
+                    <a href="become-supplier.html">Become a Supplier</a>
+                    <a href="supplier-success.html">Supplier Success</a>
+                    <a href="advertise.html">Advertising</a>
+                    <a href="logistics-partner.html">Logistics Partner</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="help.html">Help Center</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="terms.html">Terms & Conditions</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 BuyUganda. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentCategory = 'all';
+
+        function toggleFaq(element) {
+            element.classList.toggle('open');
+        }
+
+        function switchCategory(category) {
+            currentCategory = category;
+            
+            // Hide all sections
+            document.querySelectorAll('.faq-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section or all
+            if (category === 'all') {
+                document.querySelectorAll('.faq-section').forEach(section => {
+                    section.classList.add('active');
+                });
+            } else {
+                const targetSection = document.getElementById(category);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+            }
+            
+            // Update active tab
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.category === category) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+
+        function searchFAQ() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                // Reset to show all
+                switchCategory('all');
+                return;
+            }
+            
+            // Show all sections for search
+            switchCategory('all');
+            
+            // Search through all FAQ items
+            const allFaqItems = document.querySelectorAll('.faq-item');
+            let hasResults = false;
+            
+            allFaqItems.forEach(item => {
+                const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                    hasResults = true;
+                    // Auto-expand matching items
+                    item.classList.add('open');
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            if (!hasResults) {
+                alert('No matching questions found. Try different keywords or contact support.');
+                // Reset display
+                allFaqItems.forEach(item => {
+                    item.style.display = 'block';
+                });
+            }
+        }
+
+        // Setup category tabs
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const category = tab.dataset.category;
+                switchCategory(category);
+                
+                // Reset search input
+                document.getElementById('searchInput').value = '';
+                
+                // Reset all FAQ items display
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.style.display = 'block';
+                });
+            });
+        });
+
+        async function updateAuthButtons() {
+            const { data: { session } } = await sb.auth.getSession();
+            const authContainer = document.getElementById('authButtons');
+            
+            if (!authContainer) return;
+            
+            if (session?.user) {
+                authContainer.innerHTML = `
+                    <a href="profile.html" class="btn btn-primary"><i class="fas fa-user"></i> My Account</a>
+                    <button onclick="logout()" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                `;
+            } else {
+                authContainer.innerHTML = `
+                    <a href="login.html" class="btn btn-outline">Sign In</a>
+                    <a href="register.html" class="btn btn-primary">Get Started</a>
+                `;
+            }
+        }
+
+        window.logout = async function() {
+            await sb.auth.signOut();
+            window.location.href = 'index.html';
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthButtons();
+            
+            // Show all sections by default
+            switchCategory('all');
+        });
+    </script>
+</body>
+</html>

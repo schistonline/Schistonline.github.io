@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Trade Assurance - BuyUganda B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B21E5;
+            --primary-dark: #4A0D9C;
+            --primary-light: #9B4DFF;
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-600);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .page-hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .page-hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        /* Trust Badge */
+        .trust-badge {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .badge-container {
+            background: white;
+            border-radius: 60px;
+            padding: 16px 32px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .badge-container i {
+            font-size: 32px;
+            color: var(--success);
+        }
+
+        .badge-container span {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Assurance Grid */
+        .assurance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .assurance-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .assurance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(107, 33, 229, 0.15);
+        }
+
+        .assurance-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            color: var(--primary);
+            transition: all 0.3s;
+        }
+
+        .assurance-card:hover .assurance-icon {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .assurance-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .assurance-card p {
+            font-size: 14px;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            background: var(--gray-100);
+            padding: 60px 0;
+            margin: 40px 0;
+            border-radius: 24px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--gray-800);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: var(--gray-500);
+            margin-bottom: 48px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit-item {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            transition: all 0.3s;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .benefit-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gray-100);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .benefit-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .benefit-content p {
+            font-size: 13px;
+            color: var(--gray-500);
+            line-height: 1.5;
+        }
+
+        /* Process Steps */
+        .process-section {
+            margin: 60px 0;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* Coverage Table */
+        .coverage-table {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 40px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .coverage-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .coverage-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .coverage-row {
+            padding: 16px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .coverage-row:last-child {
+            border-bottom: none;
+        }
+
+        .coverage-label {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .coverage-value {
+            color: var(--gray-600);
+        }
+
+        .coverage-value i {
+            color: var(--success);
+            margin-right: 8px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--primary-gradient);
+            color: white;
+            text-align: center;
+            padding: 60px 24px;
+            border-radius: 20px;
+            margin-top: 40px;
+        }
+
+        .cta-section h2 {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .cta-btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .cta-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .cta-btn-secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .cta-btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 48px 24px 24px;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--gray-400);
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-700);
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-hero h1 {
+                font-size: 32px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .coverage-header,
+            .coverage-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .benefit-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .benefit-icon {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">BU</div>
+                <span class="logo-text">Buy<span>Uganda</span></span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="suppliers.html">Suppliers</a>
+                <a href="products.html">Products</a>
+                <a href="categories.html">Categories</a>
+                <a href="help.html">Help</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            
+            <div class="auth-buttons" id="authButtons">
+                <a href="login.html" class="btn btn-outline">Sign In</a>
+                <a href="register.html" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="page-hero">
+        <h1>Trade Assurance</h1>
+        <p>Your complete protection for international and domestic B2B trade</p>
+    </section>
+
+    <!-- Trust Badge -->
+    <div class="container">
+        <div class="trust-badge">
+            <div class="badge-container">
+                <i class="fas fa-shield-alt"></i>
+                <span>100% Trade Protected</span>
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+
+        <!-- Assurance Grid -->
+        <div class="assurance-grid">
+            <div class="assurance-card">
+                <div class="assurance-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Payment Protection</h3>
+                <p>Your payments are held in secure escrow until you confirm satisfaction with the order.</p>
+            </div>
+            <div class="assurance-card">
+                <div class="assurance-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3>Quality Guarantee</h3>
+                <p>Products must match the agreed specifications and quality standards.</p>
+            </div>
+            <div class="assurance-card">
+                <div class="assurance-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <h3>On-Time Delivery</h3>
+                <p>Guaranteed delivery within the agreed timeframe or your money back.</p>
+            </div>
+            <div class="assurance-card">
+                <div class="assurance-icon">
+                    <i class="fas fa-file-signature"></i>
+                </div>
+                <h3>Dispute Resolution</h3>
+                <p>Professional mediation team to resolve any trade disputes quickly.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="benefits-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose Trade Assurance?</h2>
+            <p class="section-subtitle">Benefits that protect your business interests</p>
+            
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h4>Zero Financial Risk</h4>
+                        <p>Your funds are never released until you approve the shipment and quality.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h4>Increase Supplier Trust</h4>
+                        <p>Trade Assurance badge helps you find reliable, vetted suppliers.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h4>Faster Resolution</h4>
+                        <p>Dedicated support team resolves disputes within 7-10 business days.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h4>International Coverage</h4>
+                        <p>Protection for cross-border trades with verified shipping partners.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="container">
+        <div class="process-section">
+            <h2 class="section-title">How Trade Assurance Works</h2>
+            <p class="section-subtitle">Simple 4-step process for secure trading</p>
+            
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Place Order</h3>
+                    <p>Select Trade Assurance order when placing your order.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Pay into Escrow</h3>
+                    <p>Your payment is held securely until you confirm receipt.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Supplier Ships</h3>
+                    <p>Supplier ships goods with tracked shipping.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Confirm & Release</h3>
+                    <p>Inspect goods and release payment when satisfied.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coverage Details -->
+    <div class="container">
+        <h2 class="section-title">What's Covered</h2>
+        <p class="section-subtitle">Trade Assurance protects you against these scenarios</p>
+        
+        <div class="coverage-table">
+            <div class="coverage-header">
+                <h3>Protection Type</h3>
+                <h3>Coverage Details</h3>
+            </div>
+            <div class="coverage-row">
+                <div class="coverage-label">Product Quality</div>
+                <div class="coverage-value"><i class="fas fa-check-circle"></i> Full refund if quality doesn't match specifications</div>
+            </div>
+            <div class="coverage-row">
+                <div class="coverage-label">Shipping Time</div>
+                <div class="coverage-value"><i class="fas fa-check-circle"></i> Compensation for delayed shipments beyond agreed date</div>
+            </div>
+            <div class="coverage-row">
+                <div class="coverage-label">Product Damage</div>
+                <div class="coverage-value"><i class="fas fa-check-circle"></i> Replacement or refund for damaged goods in transit</div>
+            </div>
+            <div class="coverage-row">
+                <div class="coverage-label">Wrong Quantity</div>
+                <div class="coverage-value"><i class="fas fa-check-circle"></i> Refund for missing quantities or overcharging</div>
+            </div>
+            <div class="coverage-row">
+                <div class="coverage-label">Supplier Fraud</div>
+                <div class="coverage-value"><i class="fas fa-check-circle"></i> 100% money-back guarantee against fraudulent suppliers</div>
+            </div>
+            <div class="coverage-row">
+                <div class="coverage-label">Documentation</div>
+                <div class="coverage-value"><i class="fas fa-check-circle"></i> Protection for missing or incorrect trade documents</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Limits Section -->
+    <div class="container">
+        <div class="coverage-table">
+            <div class="coverage-header" style="background: var(--gray-700);">
+                <h3>Coverage Limits</h3>
+                <h3>Maximum Protection</h3>
+            </div>
+            <div class="coverage-row">
+                <div class="coverage-label">Standard Trade Assurance</div>
+                <div class="coverage-value">Up to UGX 50,000,000 per order</div>
+            </div>
+            <div class="coverage-row">
+                <div class="coverage-label">Premium Trade Assurance</div>
+                <div class="coverage-value">Up to UGX 200,000,000 per order</div>
+            </div>
+            <div class="coverage-row">
+                <div class="coverage-label">Claim Processing Time</div>
+                <div class="coverage-value">7-10 business days</div>
+            </div>
+            <div class="coverage-row">
+                <div class="coverage-label">Refund Processing</div>
+                <div class="coverage-value">5-7 business days after claim approval</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How to File a Claim -->
+    <div class="container">
+        <div class="claim-process" style="background: var(--gray-100); border-radius: 20px; padding: 40px; margin: 40px 0;">
+            <h2 style="font-size: 24px; margin-bottom: 24px; text-align: center;">How to File a Trade Assurance Claim</h2>
+            <div class="steps-grid" style="margin-top: 0;">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Open Dispute</h3>
+                    <p>Go to your order and click "Open Dispute" within 15 days of delivery.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Submit Evidence</h3>
+                    <p>Upload photos, videos, inspection reports, or other documentation.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Wait for Review</h3>
+                    <p>Our team investigates and may request additional information.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Get Resolution</h3>
+                    <p>Receive refund or replacement based on claim approval.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="container">
+        <div class="cta-section">
+            <h2>Start Trading with Confidence</h2>
+            <p>Join thousands of businesses protected by Trade Assurance</p>
+            <div class="cta-buttons">
+                <a href="register.html" class="cta-btn cta-btn-primary">Create Free Account</a>
+                <a href="suppliers.html" class="cta-btn cta-btn-secondary">Find Suppliers</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>About BuyUganda</h4>
+                    <a href="about.html">About Us</a>
+                    <a href="how-it-works.html">How It Works</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Buyers</h4>
+                    <a href="how-to-buy.html">How to Buy</a>
+                    <a href="request-quote.html">Request for Quote</a>
+                    <a href="buyer-protection.html">Buyer Protection</a>
+                    <a href="trade-assurance.html">Trade Assurance</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Suppliers</h4>
+                    <a href="become-supplier.html">Become a Supplier</a>
+                    <a href="supplier-success.html">Supplier Success</a>
+                    <a href="advertise.html">Advertising</a>
+                    <a href="logistics-partner.html">Logistics Partner</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="help.html">Help Center</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="terms.html">Terms & Conditions</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 BuyUganda. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function updateAuthButtons() {
+            const { data: { session } } = await sb.auth.getSession();
+            const authContainer = document.getElementById('authButtons');
+            
+            if (!authContainer) return;
+            
+            if (session?.user) {
+                authContainer.innerHTML = `
+                    <a href="profile.html" class="btn btn-primary"><i class="fas fa-user"></i> My Account</a>
+                    <button onclick="logout()" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                `;
+            } else {
+                authContainer.innerHTML = `
+                    <a href="login.html" class="btn btn-outline">Sign In</a>
+                    <a href="register.html" class="btn btn-primary">Get Started</a>
+                `;
+            }
+        }
+
+        window.logout = async function() {
+            await sb.auth.signOut();
+            window.location.href = 'index.html';
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthButtons();
+        });
+    </script>
+</body>
+</html>

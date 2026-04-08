@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Help Center - BuyUganda B2B Marketplace</title>
+    <title>How to Buy - BuyUganda B2B Marketplace</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -171,56 +171,6 @@
             margin: 0 auto;
         }
 
-        /* Search Section */
-        .search-section {
-            background: white;
-            padding: 40px 24px;
-            margin-top: -30px;
-            border-radius: 20px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .search-container {
-            display: flex;
-            gap: 12px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 14px 20px;
-            border: 2px solid var(--gray-200);
-            border-radius: 40px;
-            font-size: 16px;
-            transition: all 0.2s;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(107, 33, 229, 0.1);
-        }
-
-        .search-btn {
-            padding: 14px 28px;
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(107, 33, 229, 0.3);
-        }
-
         /* Container */
         .container {
             max-width: 1200px;
@@ -228,7 +178,11 @@
             padding: 60px 24px;
         }
 
-        /* Category Grid */
+        /* Steps Section */
+        .steps-section {
+            text-align: center;
+        }
+
         .section-title {
             text-align: center;
             font-size: 32px;
@@ -244,147 +198,151 @@
             margin-bottom: 48px;
         }
 
-        .categories-grid {
+        .steps-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
+            gap: 40px;
+            margin: 40px 0;
         }
 
-        .category-card {
+        .step-card {
             background: white;
             border-radius: 20px;
-            padding: 32px 24px;
+            padding: 40px 24px;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             transition: all 0.3s;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
         }
 
-        .category-card:hover {
-            transform: translateY(-5px);
+        .step-card:hover {
+            transform: translateY(-8px);
             box-shadow: 0 12px 24px rgba(107, 33, 229, 0.15);
         }
 
-        .category-icon {
-            width: 70px;
-            height: 70px;
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
             background: var(--gray-100);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 28px;
+            margin: 0 auto 24px;
+            font-size: 36px;
             color: var(--primary);
             transition: all 0.3s;
         }
 
-        .category-card:hover .category-icon {
+        .step-card:hover .step-icon {
             background: var(--primary-gradient);
             color: white;
         }
 
-        .category-card h3 {
+        .step-card h3 {
             font-size: 20px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
-        .category-card p {
-            font-size: 14px;
+        .step-card p {
             color: var(--gray-500);
+            font-size: 14px;
+            line-height: 1.6;
         }
 
-        /* Popular Articles */
-        .popular-section {
+        /* Tips Section */
+        .tips-section {
             background: var(--gray-100);
             padding: 60px 0;
             margin: 40px 0;
             border-radius: 24px;
         }
 
-        .articles-grid {
+        .tips-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-        }
-
-        .article-card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .article-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-
-        .article-tag {
-            display: inline-block;
-            padding: 4px 12px;
-            background: var(--gray-100);
-            color: var(--primary);
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .article-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        .article-excerpt {
-            font-size: 13px;
-            color: var(--gray-500);
-            margin-bottom: 12px;
-            line-height: 1.5;
-        }
-
-        .article-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .article-link:hover {
-            gap: 10px;
-        }
-
-        /* Contact Options */
-        .contact-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 30px;
             margin-top: 40px;
         }
 
-        .contact-card {
+        .tip-card {
             background: white;
-            border-radius: 20px;
-            padding: 32px 24px;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            transition: all 0.3s;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .tip-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gray-100);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .tip-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .tip-content p {
+            font-size: 13px;
+            color: var(--gray-500);
+            line-height: 1.5;
+        }
+
+        /* Payment Methods */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+        }
+
+        .payment-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
             text-align: center;
             transition: all 0.3s;
-            border: 1px solid var(--gray-200);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        .contact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        .payment-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
 
-        .contact-icon {
+        .payment-icon {
             width: 60px;
             height: 60px;
             background: var(--gray-100);
@@ -397,34 +355,23 @@
             color: var(--primary);
         }
 
-        .contact-card h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .contact-card p {
-            font-size: 13px;
-            color: var(--gray-500);
-            margin-bottom: 16px;
-        }
-
-        .contact-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
+        .payment-card h4 {
             font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
 
-        /* FAQ Accordion */
-        .faq-section {
-            margin-top: 60px;
+        .payment-card p {
+            font-size: 12px;
+            color: var(--gray-500);
         }
 
+        /* FAQ Section */
         .faq-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 24px;
+            margin-top: 40px;
         }
 
         .faq-item {
@@ -470,6 +417,63 @@
 
         .faq-item.open .faq-answer {
             display: block;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--primary-gradient);
+            color: white;
+            text-align: center;
+            padding: 60px 24px;
+            border-radius: 20px;
+            margin-top: 40px;
+        }
+
+        .cta-section h2 {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .cta-btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .cta-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .cta-btn-secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .cta-btn-secondary:hover {
+            background: white;
+            color: var(--primary);
         }
 
         /* Footer */
@@ -537,15 +541,34 @@
                 font-size: 24px;
             }
             
-            .search-container {
-                flex-direction: column;
-            }
-            
-            .categories-grid {
+            .steps-grid {
                 grid-template-columns: 1fr;
             }
             
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tip-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .tip-icon {
+                margin: 0 auto;
+            }
+            
+            .payment-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
             .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .payment-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -564,7 +587,7 @@
                 <a href="suppliers.html">Suppliers</a>
                 <a href="products.html">Products</a>
                 <a href="categories.html">Categories</a>
-                <a href="help.html" class="active" style="color: var(--primary);">Help</a>
+                <a href="help.html">Help</a>
                 <a href="contact.html">Contact</a>
             </div>
             
@@ -577,197 +600,243 @@
 
     <!-- Hero Section -->
     <section class="page-hero">
-        <h1>How can we help you?</h1>
-        <p>Find answers to your questions or get in touch with our support team</p>
+        <h1>How to Buy on BuyUganda</h1>
+        <p>Your complete guide to purchasing products from verified suppliers</p>
     </section>
 
-    <!-- Search Section -->
-    <div class="search-section">
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search for help articles...">
-            <button class="search-btn" onclick="searchHelp()"><i class="fas fa-search"></i> Search</button>
-        </div>
-    </div>
-
-    <!-- Help Categories -->
+    <!-- Steps Section -->
     <div class="container">
-        <h2 class="section-title">Browse Help Topics</h2>
-        <p class="section-subtitle">Select a category to find relevant articles</p>
-        
-        <div class="categories-grid" id="categoriesGrid">
-            <div class="category-card" onclick="filterByCategory('getting-started')">
-                <div class="category-icon"><i class="fas fa-rocket"></i></div>
-                <h3>Getting Started</h3>
-                <p>Learn the basics of BuyUganda platform</p>
-            </div>
-            <div class="category-card" onclick="filterByCategory('account')">
-                <div class="category-icon"><i class="fas fa-user-circle"></i></div>
-                <h3>Account & Profile</h3>
-                <p>Manage your account settings</p>
-            </div>
-            <div class="category-card" onclick="filterByCategory('buying')">
-                <div class="category-icon"><i class="fas fa-shopping-cart"></i></div>
-                <h3>Buying on BuyUganda</h3>
-                <p>Tips for buyers and procurement</p>
-            </div>
-            <div class="category-card" onclick="filterByCategory('selling')">
-                <div class="category-icon"><i class="fas fa-store"></i></div>
-                <h3>Selling on BuyUganda</h3>
-                <p>Maximize your sales potential</p>
-            </div>
-            <div class="category-card" onclick="filterByCategory('payments')">
-                <div class="category-icon"><i class="fas fa-credit-card"></i></div>
-                <h3>Payments & Invoicing</h3>
-                <p>Secure payment methods explained</p>
-            </div>
-            <div class="category-card" onclick="filterByCategory('shipping')">
-                <div class="category-icon"><i class="fas fa-truck"></i></div>
-                <h3>Shipping & Logistics</h3>
-                <p>Delivery and tracking information</p>
+        <div class="steps-section">
+            <h2 class="section-title">Simple 5-Step Buying Process</h2>
+            <p class="section-subtitle">Start sourcing products in minutes</p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3>Create Account</h3>
+                    <p>Sign up for free as a buyer. No credit card required.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Search Products</h3>
+                    <p>Browse thousands of products or search for specific items.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <h3>Contact Suppliers</h3>
+                    <p>Send inquiries, request quotes, or chat directly.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Negotiate & Order</h3>
+                    <p>Negotiate prices, MOQ, and place your order.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <div class="step-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Receive & Confirm</h3>
+                    <p>Receive goods, inspect quality, and release payment.</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Popular Articles -->
-    <div class="popular-section">
+    <!-- Tips Section -->
+    <div class="tips-section">
         <div class="container">
-            <h2 class="section-title">Popular Articles</h2>
-            <p class="section-subtitle">Most frequently read help articles</p>
+            <h2 class="section-title">Pro Tips for Buyers</h2>
+            <p class="section-subtitle">Maximize your buying experience</p>
             
-            <div class="articles-grid" id="popularArticles">
-                <div class="article-card">
-                    <span class="article-tag">Getting Started</span>
-                    <h3 class="article-title">How to create your account on BuyUganda</h3>
-                    <p class="article-excerpt">Step-by-step guide to registering as a buyer or supplier on our platform.</p>
-                    <a href="#" class="article-link">Read more <i class="fas fa-arrow-right"></i></a>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="tip-content">
+                        <h4>Use Specific Keywords</h4>
+                        <p>Use detailed search terms to find exactly what you need. Include specifications like size, material, or brand.</p>
+                    </div>
                 </div>
-                <div class="article-card">
-                    <span class="article-tag">Selling</span>
-                    <h3 class="article-title">How to list your products effectively</h3>
-                    <p class="article-excerpt">Tips for creating product listings that attract more buyers.</p>
-                    <a href="#" class="article-link">Read more <i class="fas fa-arrow-right"></i></a>
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="tip-content">
+                        <h4>Check Supplier Ratings</h4>
+                        <p>Always review supplier ratings, transaction history, and customer feedback before engaging.</p>
+                    </div>
                 </div>
-                <div class="article-card">
-                    <span class="article-tag">Buying</span>
-                    <h3 class="article-title">How to request quotes from suppliers</h3>
-                    <p class="article-excerpt">Learn how to send RFQs and get the best prices.</p>
-                    <a href="#" class="article-link">Read more <i class="fas fa-arrow-right"></i></a>
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="tip-content">
+                        <h4>Use Trade Assurance</h4>
+                        <p>Always select Trade Assurance orders for payment protection on large purchases.</p>
+                    </div>
                 </div>
-                <div class="article-card">
-                    <span class="article-tag">Payments</span>
-                    <h3 class="article-title">Secure payment and escrow explained</h3>
-                    <p class="article-excerpt">How our payment protection works for both buyers and sellers.</p>
-                    <a href="#" class="article-link">Read more <i class="fas fa-arrow-right"></i></a>
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    <div class="tip-content">
+                        <h4>Request Samples</h4>
+                        <p>Order samples before bulk purchases to verify quality and specifications.</p>
+                    </div>
                 </div>
-                <div class="article-card">
-                    <span class="article-tag">Verification</span>
-                    <h3 class="article-title">How to get your supplier verification badge</h3>
-                    <p class="article-excerpt">Build trust with buyers through our verification process.</p>
-                    <a href="#" class="article-link">Read more <i class="fas fa-arrow-right"></i></a>
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="tip-content">
+                        <h4>Compare Quotes</h4>
+                        <p>Request quotes from multiple suppliers to get the best price and terms.</p>
+                    </div>
                 </div>
-                <div class="article-card">
-                    <span class="article-tag">Shipping</span>
-                    <h3 class="article-title">Understanding delivery timelines and costs</h3>
-                    <p class="article-excerpt">Everything you need to know about shipping on BuyUganda.</p>
-                    <a href="#" class="article-link">Read more <i class="fas fa-arrow-right"></i></a>
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="tip-content">
+                        <h4>Plan Lead Times</h4>
+                        <p>Factor in production and shipping times when planning your inventory.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Still Need Help -->
+    <!-- Payment Methods -->
     <div class="container">
-        <h2 class="section-title">Still Need Help?</h2>
-        <p class="section-subtitle">We're here to assist you</p>
+        <h2 class="section-title">Payment Methods</h2>
+        <p class="section-subtitle">Secure payment options for your purchases</p>
         
-        <div class="contact-options">
-            <div class="contact-card">
-                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                <h3>Email Support</h3>
-                <p>Send us an email and we'll respond within 24 hours</p>
-                <a href="mailto:support@buyuganda.ug" class="contact-link">support@buyuganda.ug</a>
+        <div class="payment-grid">
+            <div class="payment-card">
+                <div class="payment-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h4>Credit/Debit Card</h4>
+                <p>Visa, Mastercard, American Express</p>
             </div>
-            <div class="contact-card">
-                <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
-                <h3>Phone Support</h3>
-                <p>Call us during business hours for immediate assistance</p>
-                <a href="tel:+256700123456" class="contact-link">+256 700 123456</a>
+            <div class="payment-card">
+                <div class="payment-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h4>Mobile Money</h4>
+                <p>MTN Mobile Money, Airtel Money</p>
             </div>
-            <div class="contact-card">
-                <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
-                <h3>WhatsApp Support</h3>
-                <p>Chat with us on WhatsApp for quick responses</p>
-                <a href="https://wa.me/256700123456" class="contact-link">+256 700 123456</a>
+            <div class="payment-card">
+                <div class="payment-icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <h4>Bank Transfer</h4>
+                <p>Direct bank transfer (local & international)</p>
+            </div>
+            <div class="payment-card">
+                <div class="payment-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h4>Escrow Service</h4>
+                <p>Trade Assurance protected payments</p>
             </div>
         </div>
     </div>
 
-    <!-- FAQ Accordion -->
+    <!-- FAQ Section -->
     <div class="container">
-        <div class="faq-section">
-            <h2 class="section-title">Frequently Asked Questions</h2>
-            <p class="section-subtitle">Quick answers to common questions</p>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Common questions about buying on BuyUganda</p>
+        
+        <div class="faq-grid">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>Is there a minimum order quantity (MOQ)?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    MOQ varies by supplier and product. Each product listing shows the MOQ. You can also negotiate with suppliers for lower quantities.
+                </div>
+            </div>
             
-            <div class="faq-grid">
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">
-                        <span>Is BuyUganda free to use?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Basic membership is free for both buyers and suppliers. Suppliers can upgrade to paid plans for additional features like unlimited listings, featured products, and priority support.
-                    </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>How do I know if a supplier is trustworthy?</span>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-                
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">
-                        <span>How do I become a verified supplier?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Submit your business documents (registration certificate, tax ID) through your dashboard. Our team will review and verify your business within 24-48 hours.
-                    </div>
+                <div class="faq-answer">
+                    Look for verified badges, read customer reviews, check transaction history, and always use Trade Assurance for payment protection.
                 </div>
-                
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">
-                        <span>What payment methods do you accept?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        We accept Mobile Money (MTN, Airtel), Credit/Debit Cards (Visa, Mastercard), and Bank Transfers for subscription payments.
-                    </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>Can I negotiate prices with suppliers?</span>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-                
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">
-                        <span>How do I contact a supplier?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Use the "Contact Supplier" button on any product page or supplier profile. You can also send messages directly through our chat system.
-                    </div>
+                <div class="faq-answer">
+                    Yes! B2B transactions often involve negotiation. Use our chat system to discuss pricing, MOQ, and payment terms.
                 </div>
-                
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">
-                        <span>Is there buyer protection?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Yes, we offer buyer protection through our escrow service. Funds are held securely until you confirm receipt of goods as described.
-                    </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>What is Trade Assurance?</span>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-                
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">
-                        <span>How do I reset my password?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Click "Forgot Password" on the login page. Enter your email, and we'll send you a password reset link.
-                    </div>
+                <div class="faq-answer">
+                    Trade Assurance is our buyer protection program that secures your payment until you confirm receipt of goods as described.
                 </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>How long does shipping take?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Shipping times vary by supplier location and shipping method. Discuss delivery timelines with your supplier before ordering.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>What if I receive damaged or wrong products?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Open a dispute immediately through your order page. Our team will investigate and help resolve the issue.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="container">
+        <div class="cta-section">
+            <h2>Ready to Start Buying?</h2>
+            <p>Join thousands of businesses already sourcing products on BuyUganda</p>
+            <div class="cta-buttons">
+                <a href="register.html" class="cta-btn cta-btn-primary">Create Free Account</a>
+                <a href="suppliers.html" class="cta-btn cta-btn-secondary">Browse Suppliers</a>
             </div>
         </div>
     </div>
@@ -821,25 +890,6 @@
 
         function toggleFaq(element) {
             element.classList.toggle('open');
-        }
-
-        function filterByCategory(category) {
-            // Scroll to popular articles and highlight
-            document.querySelector('.popular-section').scrollIntoView({ behavior: 'smooth' });
-            showToast(`Showing articles about ${category.replace('-', ' ')}`, 'info');
-        }
-
-        function searchHelp() {
-            const searchTerm = document.getElementById('searchInput').value.trim();
-            if (searchTerm) {
-                showToast(`Searching for "${searchTerm}"...`, 'info');
-                // In a real implementation, you would filter articles here
-            }
-        }
-
-        function showToast(message, type = 'info') {
-            // Simple alert for now (can be replaced with toast)
-            alert(message);
         }
 
         async function updateAuthButtons() {

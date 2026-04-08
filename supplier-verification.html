@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Supplier Verification - BuyUganda B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B21E5;
+            --primary-dark: #4A0D9C;
+            --primary-light: #9B4DFF;
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-600);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .page-hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .page-hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        /* Verification Badge Showcase */
+        .badge-showcase {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .badge-card {
+            text-align: center;
+            background: white;
+            padding: 24px;
+            border-radius: 20px;
+            min-width: 150px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .badge-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 36px;
+            color: white;
+        }
+
+        .badge-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .badge-card p {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        /* Verification Grid */
+        .verification-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .verification-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .verification-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(107, 33, 229, 0.15);
+        }
+
+        .verification-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            color: var(--primary);
+            transition: all 0.3s;
+        }
+
+        .verification-card:hover .verification-icon {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .verification-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .verification-card p {
+            font-size: 14px;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        /* Process Section */
+        .process-section {
+            background: var(--gray-100);
+            padding: 60px 0;
+            margin: 40px 0;
+            border-radius: 24px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--gray-800);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: var(--gray-500);
+            margin-bottom: 48px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* Requirements Section */
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .requirement-item {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .requirement-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .requirement-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gray-100);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .requirement-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .requirement-content p {
+            font-size: 13px;
+            color: var(--gray-500);
+            line-height: 1.5;
+        }
+
+        /* Benefits Table */
+        .benefits-table {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 40px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .benefits-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .benefits-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .benefits-row {
+            padding: 16px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .benefits-row:last-child {
+            border-bottom: none;
+        }
+
+        .benefit-label {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .benefit-value {
+            color: var(--gray-600);
+        }
+
+        .benefit-value i {
+            color: var(--success);
+            margin-right: 8px;
+        }
+
+        /* FAQ Section */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .faq-question {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .faq-question i {
+            color: var(--primary);
+            transition: transform 0.2s;
+        }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            font-size: 14px;
+            color: var(--gray-500);
+            line-height: 1.6;
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--primary-gradient);
+            color: white;
+            text-align: center;
+            padding: 60px 24px;
+            border-radius: 20px;
+            margin-top: 40px;
+        }
+
+        .cta-section h2 {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .cta-btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .cta-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .cta-btn-secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .cta-btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 48px 24px 24px;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--gray-400);
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-700);
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-hero h1 {
+                font-size: 32px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .benefits-header,
+            .benefits-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .requirement-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .requirement-icon {
+                margin: 0 auto;
+            }
+            
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">BU</div>
+                <span class="logo-text">Buy<span>Uganda</span></span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="suppliers.html">Suppliers</a>
+                <a href="products.html">Products</a>
+                <a href="categories.html">Categories</a>
+                <a href="help.html">Help</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            
+            <div class="auth-buttons" id="authButtons">
+                <a href="login.html" class="btn btn-outline">Sign In</a>
+                <a href="register.html" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="page-hero">
+        <h1>Supplier Verification</h1>
+        <p>Building trust through rigorous business verification</p>
+    </section>
+
+    <!-- Badge Showcase -->
+    <div class="container">
+        <div class="badge-showcase">
+            <div class="badge-card">
+                <div class="badge-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>Verified Supplier</h3>
+                <p>Business verified</p>
+            </div>
+            <div class="badge-card">
+                <div class="badge-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <h3>Premium Supplier</h3>
+                <p>Top-rated business</p>
+            </div>
+            <div class="badge-card">
+                <div class="badge-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3>Featured Supplier</h3>
+                <p>Recommended partner</p>
+            </div>
+        </div>
+
+        <!-- Verification Grid -->
+        <div class="verification-grid">
+            <div class="verification-card">
+                <div class="verification-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h3>Business Registration</h3>
+                <p>Valid business registration certificate verified with government records.</p>
+            </div>
+            <div class="verification-card">
+                <div class="verification-icon">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <h3>Identity Verification</h3>
+                <p>Director/owner identity verified through official documentation.</p>
+            </div>
+            <div class="verification-card">
+                <div class="verification-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3>Physical Address</h3>
+                <p>Business location verified through utility bills or site visit.</p>
+            </div>
+            <div class="verification-card">
+                <div class="verification-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <h3>Contact Verification</h3>
+                <p>Phone and email confirmed through OTP and callback verification.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Process Section -->
+    <div class="process-section">
+        <div class="container">
+            <h2 class="section-title">Verification Process</h2>
+            <p class="section-subtitle">Simple steps to become a verified supplier</p>
+            
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Submit Application</h3>
+                    <p>Complete the supplier registration form with business details.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Upload Documents</h3>
+                    <p>Provide business registration, tax ID, and ID documents.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Verification Review</h3>
+                    <p>Our team reviews documents (24-48 hours).</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Get Verified Badge</h3>
+                    <p>Receive your verified badge and increased visibility.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Requirements Section -->
+    <div class="container">
+        <h2 class="section-title">Verification Requirements</h2>
+        <p class="section-subtitle">What you need to become a verified supplier</p>
+        
+        <div class="requirements-grid">
+            <div class="requirement-item">
+                <div class="requirement-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="requirement-content">
+                    <h4>Business Registration Certificate</h4>
+                    <p>Certificate of incorporation or business registration from URSB.</p>
+                </div>
+            </div>
+            <div class="requirement-item">
+                <div class="requirement-icon">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <div class="requirement-content">
+                    <h4>Tax Identification Number (TIN)</h4>
+                    <p>Valid TIN certificate from Uganda Revenue Authority.</p>
+                </div>
+            </div>
+            <div class="requirement-item">
+                <div class="requirement-icon">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <div class="requirement-content">
+                    <h4>Director/Owner ID</h4>
+                    <p>National ID or passport of business owners/directors.</p>
+                </div>
+            </div>
+            <div class="requirement-item">
+                <div class="requirement-icon">
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+                <div class="requirement-content">
+                    <h4>Proof of Address</h4>
+                    <p>Recent utility bill or bank statement with business address.</p>
+                </div>
+            </div>
+            <div class="requirement-item">
+                <div class="requirement-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="requirement-content">
+                    <h4>Business Email</h4>
+                    <p>Official company email domain (not @gmail.com).</p>
+                </div>
+            </div>
+            <div class="requirement-item">
+                <div class="requirement-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="requirement-content">
+                    <h4>Bank Account Details</h4>
+                    <p>Company bank account for payment verification.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits Table -->
+    <div class="container">
+        <h2 class="section-title">Benefits of Verification</h2>
+        <p class="section-subtitle">What verified suppliers gain</p>
+        
+        <div class="benefits-table">
+            <div class="benefits-header">
+                <h3>Feature</h3>
+                <h3>Verified Supplier</h3>
+            </div>
+            <div class="benefits-row">
+                <div class="benefit-label">Verified Badge Display</div>
+                <div class="benefit-value"><i class="fas fa-check-circle"></i> Included</div>
+            </div>
+            <div class="benefits-row">
+                <div class="benefit-label">Increased Search Ranking</div>
+                <div class="benefit-value"><i class="fas fa-check-circle"></i> Higher visibility</div>
+            </div>
+            <div class="benefits-row">
+                <div class="benefit-label">Buyer Trust Signal</div>
+                <div class="benefit-value"><i class="fas fa-check-circle"></i> Builds credibility</div>
+            </div>
+            <div class="benefits-row">
+                <div class="benefit-label">More Inquiry Requests</div>
+                <div class="benefit-value"><i class="fas fa-check-circle"></i> Up to 3x more leads</div>
+            </div>
+            <div class="benefits-row">
+                <div class="benefit-label">Trade Assurance Eligibility</div>
+                <div class="benefit-value"><i class="fas fa-check-circle"></i> Required for Trade Assurance</div>
+            </div>
+            <div class="benefits-row">
+                <div class="benefit-label">Featured Listing Priority</div>
+                <div class="benefit-value"><i class="fas fa-check-circle"></i> Priority in category pages</div>
+            </div>
+            <div class="benefits-row">
+                <div class="benefit-label">Verification Cost</div>
+                <div class="benefit-value"><i class="fas fa-check-circle"></i> Free for first year</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Common questions about supplier verification</p>
+        
+        <div class="faq-grid">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>How long does verification take?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Standard verification takes 24-48 hours after document submission. Express verification (24 hours) is available for premium suppliers.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>Is verification mandatory for all suppliers?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Verification is not mandatory but highly recommended. Verified suppliers receive significantly more inquiries and buyer trust.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>What happens if my verification is rejected?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    You'll receive specific feedback on what needs correction. You can re-submit corrected documents at any time.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>Is my business information kept confidential?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes. Only the verified badge and basic business name are public. Detailed documents are for internal verification only.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>Do I need to renew verification annually?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes, verification requires annual renewal to ensure business information remains current.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-question">
+                    <span>Can international suppliers get verified?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes, we verify international suppliers using their local business registration and tax documents.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="container">
+        <div class="cta-section">
+            <h2>Ready to Get Verified?</h2>
+            <p>Join thousands of verified suppliers trusted by buyers across Africa</p>
+            <div class="cta-buttons">
+                <a href="become-supplier.html" class="cta-btn cta-btn-primary">Apply for Verification</a>
+                <a href="contact.html" class="cta-btn cta-btn-secondary">Contact Support</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>About BuyUganda</h4>
+                    <a href="about.html">About Us</a>
+                    <a href="how-it-works.html">How It Works</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Buyers</h4>
+                    <a href="how-to-buy.html">How to Buy</a>
+                    <a href="request-quote.html">Request for Quote</a>
+                    <a href="buyer-protection.html">Buyer Protection</a>
+                    <a href="trade-assurance.html">Trade Assurance</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Suppliers</h4>
+                    <a href="become-supplier.html">Become a Supplier</a>
+                    <a href="supplier-success.html">Supplier Success</a>
+                    <a href="advertise.html">Advertising</a>
+                    <a href="logistics-partner.html">Logistics Partner</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="help.html">Help Center</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="terms.html">Terms & Conditions</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 BuyUganda. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function toggleFaq(element) {
+            element.classList.toggle('open');
+        }
+
+        async function updateAuthButtons() {
+            const { data: { session } } = await sb.auth.getSession();
+            const authContainer = document.getElementById('authButtons');
+            
+            if (!authContainer) return;
+            
+            if (session?.user) {
+                authContainer.innerHTML = `
+                    <a href="profile.html" class="btn btn-primary"><i class="fas fa-user"></i> My Account</a>
+                    <button onclick="logout()" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                `;
+            } else {
+                authContainer.innerHTML = `
+                    <a href="login.html" class="btn btn-outline">Sign In</a>
+                    <a href="register.html" class="btn btn-primary">Get Started</a>
+                `;
+            }
+        }
+
+        window.logout = async function() {
+            await sb.auth.signOut();
+            window.location.href = 'index.html';
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthButtons();
+        });
+    </script>
+</body>
+</html>

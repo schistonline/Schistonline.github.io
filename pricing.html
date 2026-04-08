@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Pricing - BuyUganda B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B21E5;        /* Deep Purple */
+            --primary-dark: #4A0D9C;    /* Darker Purple */
+            --primary-light: #9B4DFF;   /* Lighter Purple */
+            --primary-gradient: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-600);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .page-hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .page-hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        /* Pricing Toggle */
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .toggle-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--gray-600);
+        }
+
+        .toggle-label.active {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: 0.3s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .save-badge {
+            background: var(--success);
+            color: white;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(107, 33, 229, 0.15);
+        }
+
+        .pricing-card.popular {
+            border: 2px solid var(--primary);
+            transform: scale(1.02);
+        }
+
+        .pricing-card.popular:hover {
+            transform: scale(1.02) translateY(-8px);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            border-bottom-left-radius: 12px;
+        }
+
+        .pricing-header {
+            padding: 32px 24px;
+            text-align: center;
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .pricing-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .pricing-card:hover .pricing-icon {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .pricing-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pricing-price {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .pricing-price small {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--gray-500);
+        }
+
+        .pricing-period {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-top: 8px;
+        }
+
+        .pricing-features {
+            padding: 32px 24px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        .feature-list li i {
+            width: 20px;
+            color: var(--success);
+            font-size: 14px;
+        }
+
+        .feature-list li.disabled {
+            color: var(--gray-400);
+        }
+
+        .feature-list li.disabled i {
+            color: var(--gray-400);
+        }
+
+        .pricing-btn {
+            display: block;
+            text-align: center;
+            padding: 14px;
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .pricing-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 33, 229, 0.3);
+        }
+
+        .pricing-btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .pricing-btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Add-on Services */
+        .addons-section {
+            background: var(--gray-100);
+            padding: 60px 0;
+            margin: 40px 0;
+            border-radius: 24px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--gray-800);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: var(--gray-500);
+            margin-bottom: 48px;
+        }
+
+        .addons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .addon-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .addon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        .addon-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gray-100);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .addon-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .addon-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 12px 0;
+        }
+
+        .addon-price small {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--gray-500);
+        }
+
+        .addon-card p {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-bottom: 16px;
+        }
+
+        .addon-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .addon-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-top: 60px;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .faq-question {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-question i {
+            color: var(--primary);
+        }
+
+        .faq-answer {
+            font-size: 14px;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--primary-gradient);
+            color: white;
+            text-align: center;
+            padding: 60px 24px;
+            border-radius: 20px;
+            margin-top: 40px;
+        }
+
+        .cta-section h2 {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .cta-btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .cta-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .cta-btn-secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .cta-btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 48px 24px 24px;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--gray-400);
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-700);
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-hero h1 {
+                font-size: 32px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.popular {
+                transform: scale(1);
+            }
+            
+            .pricing-card.popular:hover {
+                transform: translateY(-8px);
+            }
+            
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">BU</div>
+                <span class="logo-text">Buy<span>Uganda</span></span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="suppliers.html">Suppliers</a>
+                <a href="products.html">Products</a>
+                <a href="categories.html">Categories</a>
+                <a href="help.html">Help</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            
+            <div class="auth-buttons" id="authButtons">
+                <a href="login.html" class="btn btn-outline">Sign In</a>
+                <a href="register.html" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="page-hero">
+        <h1>Simple, Transparent Pricing</h1>
+        <p>Choose the perfect plan for your business. No hidden fees, no surprises.</p>
+    </section>
+
+    <!-- Pricing Section -->
+    <div class="container">
+        <!-- Pricing Toggle -->
+        <div class="pricing-toggle">
+            <span class="toggle-label active" id="monthlyLabel">Monthly</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="pricingToggle">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label" id="yearlyLabel">Yearly <span class="save-badge">Save 20%</span></span>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="pricing-grid" id="pricingGrid">
+            <!-- Basic Plan -->
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h2 class="pricing-name">Basic</h2>
+                    <div class="pricing-price" id="basicPrice">UGX 0</div>
+                    <div class="pricing-period" id="basicPeriod">Free forever</div>
+                </div>
+                <div class="pricing-features">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> 5 Product Listings</li>
+                        <li><i class="fas fa-check-circle"></i> Basic Analytics</li>
+                        <li><i class="fas fa-check-circle"></i> Email Support</li>
+                        <li><i class="fas fa-check-circle"></i> 24/7 Chat Support</li>
+                        <li class="disabled"><i class="fas fa-times-circle"></i> Featured Products</li>
+                        <li class="disabled"><i class="fas fa-times-circle"></i> Priority Support</li>
+                        <li class="disabled"><i class="fas fa-times-circle"></i> API Access</li>
+                    </ul>
+                    <a href="register.html" class="pricing-btn">Get Started</a>
+                </div>
+            </div>
+
+            <!-- Pro Plan (Popular) -->
+            <div class="pricing-card popular">
+                <div class="popular-badge">🔥 Most Popular</div>
+                <div class="pricing-header">
+                    <div class="pricing-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h2 class="pricing-name">Pro</h2>
+                    <div class="pricing-price" id="proPrice">UGX 99,000</div>
+                    <div class="pricing-period" id="proPeriod">per month</div>
+                </div>
+                <div class="pricing-features">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Unlimited Product Listings</li>
+                        <li><i class="fas fa-check-circle"></i> Advanced Analytics</li>
+                        <li><i class="fas fa-check-circle"></i> Priority Email Support</li>
+                        <li><i class="fas fa-check-circle"></i> 24/7 Priority Chat</li>
+                        <li><i class="fas fa-check-circle"></i> 10 Featured Products</li>
+                        <li><i class="fas fa-check-circle"></i> Verified Badge</li>
+                        <li class="disabled"><i class="fas fa-times-circle"></i> API Access</li>
+                    </ul>
+                    <a href="register.html?plan=pro" class="pricing-btn">Start Free Trial</a>
+                </div>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h2 class="pricing-name">Enterprise</h2>
+                    <div class="pricing-price" id="enterprisePrice">UGX 299,000</div>
+                    <div class="pricing-period" id="enterprisePeriod">per month</div>
+                </div>
+                <div class="pricing-features">
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Unlimited Product Listings</li>
+                        <li><i class="fas fa-check-circle"></i> Custom Analytics & Reports</li>
+                        <li><i class="fas fa-check-circle"></i> Dedicated Account Manager</li>
+                        <li><i class="fas fa-check-circle"></i> 24/7 Premium Support</li>
+                        <li><i class="fas fa-check-circle"></i> Unlimited Featured Products</li>
+                        <li><i class="fas fa-check-circle"></i> Verified Badge + Trust Seal</li>
+                        <li><i class="fas fa-check-circle"></i> Full API Access</li>
+                    </ul>
+                    <a href="contact.html" class="pricing-btn pricing-btn-outline">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add-on Services -->
+    <div class="addons-section">
+        <div class="container">
+            <h2 class="section-title">Premium Add-ons</h2>
+            <p class="section-subtitle">Enhance your experience with additional services</p>
+            
+            <div class="addons-grid">
+                <div class="addon-card">
+                    <div class="addon-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Promotion Campaign</h3>
+                    <div class="addon-price">UGX 50,000 <small>/month</small></div>
+                    <p>Get your products featured on homepage and category pages. Reach more buyers.</p>
+                    <a href="#" class="addon-btn">Learn More</a>
+                </div>
+                
+                <div class="addon-card">
+                    <div class="addon-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3>Spotlight Package</h3>
+                    <div class="addon-price">UGX 100,000 <small>/month</small></div>
+                    <p>Premium placement in search results and "Hot Suppliers" section.</p>
+                    <a href="#" class="addon-btn">Learn More</a>
+                </div>
+                
+                <div class="addon-card">
+                    <div class="addon-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>API Integration</h3>
+                    <div class="addon-price">UGX 150,000 <small>/month</small></div>
+                    <p>Connect your ERP system with our API for automated product management.</p>
+                    <a href="#" class="addon-btn">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="container">
+        <div class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-subtitle">Got questions? We've got answers.</p>
+            
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Can I switch plans later?</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Is there a free trial?</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! All paid plans come with a 14-day free trial. No credit card required to start.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <span>What payment methods do you accept?</span>
+                    </div>
+                    <div class="faq-answer">
+                        We accept Mobile Money (MTN, Airtel), Credit/Debit Cards, and Bank Transfers.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Can I cancel anytime?</span>
+                    </div>
+                    <div class="faq-answer">
+                        Absolutely. You can cancel your subscription at any time with no cancellation fees.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Do you offer custom enterprise plans?</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, we offer custom plans for large enterprises. Contact our sales team for a personalized quote.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Is there a setup fee?</span>
+                    </div>
+                    <div class="faq-answer">
+                        No setup fees for any plan. You only pay the monthly or yearly subscription fee.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="container">
+        <div class="cta-section">
+            <h2>Ready to Grow Your Business?</h2>
+            <p>Join thousands of businesses already thriving on BuyUganda.</p>
+            <div class="cta-buttons">
+                <a href="register.html" class="cta-btn cta-btn-primary">Start Free Trial</a>
+                <a href="contact.html" class="cta-btn cta-btn-secondary">Contact Sales</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>About BuyUganda</h4>
+                    <a href="about.html">About Us</a>
+                    <a href="how-it-works.html">How It Works</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Buyers</h4>
+                    <a href="how-to-buy.html">How to Buy</a>
+                    <a href="request-quote.html">Request for Quote</a>
+                    <a href="buyer-protection.html">Buyer Protection</a>
+                    <a href="trade-assurance.html">Trade Assurance</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Suppliers</h4>
+                    <a href="become-supplier.html">Become a Supplier</a>
+                    <a href="supplier-success.html">Supplier Success</a>
+                    <a href="advertise.html">Advertising</a>
+                    <a href="logistics-partner.html">Logistics Partner</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="help.html">Help Center</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="terms.html">Terms & Conditions</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 BuyUganda. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Pricing data
+        const monthlyPrices = {
+            basic: 0,
+            pro: 99000,
+            enterprise: 299000
+        };
+
+        const yearlyPrices = {
+            basic: 0,
+            pro: 950000,  // ~80k per month (20% savings)
+            enterprise: 2870000  // ~239k per month (20% savings)
+        };
+
+        let isYearly = false;
+
+        function updatePrices() {
+            const prices = isYearly ? yearlyPrices : monthlyPrices;
+            const period = isYearly ? 'per year' : 'per month';
+            
+            document.getElementById('basicPrice').innerHTML = `UGX ${prices.basic.toLocaleString()}`;
+            document.getElementById('basicPeriod').innerHTML = prices.basic === 0 ? 'Free forever' : period;
+            
+            document.getElementById('proPrice').innerHTML = `UGX ${prices.pro.toLocaleString()}`;
+            document.getElementById('proPeriod').innerHTML = period;
+            
+            document.getElementById('enterprisePrice').innerHTML = `UGX ${prices.enterprise.toLocaleString()}`;
+            document.getElementById('enterprisePeriod').innerHTML = period;
+        }
+
+        // Toggle functionality
+        const toggle = document.getElementById('pricingToggle');
+        const monthlyLabel = document.getElementById('monthlyLabel');
+        const yearlyLabel = document.getElementById('yearlyLabel');
+
+        toggle.addEventListener('change', function() {
+            isYearly = this.checked;
+            updatePrices();
+            
+            if (isYearly) {
+                monthlyLabel.classList.remove('active');
+                yearlyLabel.classList.add('active');
+            } else {
+                monthlyLabel.classList.add('active');
+                yearlyLabel.classList.remove('active');
+            }
+        });
+
+        async function updateAuthButtons() {
+            const { data: { session } } = await sb.auth.getSession();
+            const authContainer = document.getElementById('authButtons');
+            
+            if (!authContainer) return;
+            
+            if (session?.user) {
+                authContainer.innerHTML = `
+                    <a href="profile.html" class="btn btn-primary"><i class="fas fa-user"></i> My Account</a>
+                    <button onclick="logout()" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                `;
+            } else {
+                authContainer.innerHTML = `
+                    <a href="login.html" class="btn btn-outline">Sign In</a>
+                    <a href="register.html" class="btn btn-primary">Get Started</a>
+                `;
+            }
+        }
+
+        window.logout = async function() {
+            await sb.auth.signOut();
+            window.location.href = 'index.html';
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthButtons();
+            updatePrices();
+        });
+    </script>
+</body>
+</html>
