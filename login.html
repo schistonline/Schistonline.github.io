@@ -87,120 +87,57 @@
       width: 100%;
     }
 
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--gray-700);
-      margin-bottom: 6px;
-    }
-
-    .input-wrapper {
-      position: relative;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1.5px solid var(--gray-300);
-      border-radius: 14px;
-      font-size: 16px;
-      transition: all 0.2s;
-      background: white;
-      font-family: inherit;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(11, 79, 108, 0.1);
-    }
-
-    input.error {
-      border-color: var(--danger);
-    }
-
-    .error-message {
-      color: var(--danger);
-      font-size: 12px;
-      margin-top: 6px;
-      display: none;
-    }
-
-    .error-message.show {
-      display: block;
-    }
-
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .checkbox {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
-
-    .checkbox input {
-      width: 18px;
-      height: 18px;
-      margin: 0;
-      cursor: pointer;
-      accent-color: var(--primary);
-    }
-
-    .checkbox span {
-      font-size: 14px;
-      color: var(--gray-600);
-    }
-
-    .forgot-link {
-      font-size: 14px;
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .forgot-link:hover {
-      text-decoration: underline;
-    }
-
-    button {
+    .google-btn {
       width: 100%;
       padding: 14px;
-      background: var(--primary-gradient);
-      color: white;
-      border: none;
+      background: white;
+      color: var(--gray-700);
+      border: 2px solid var(--gray-300);
       border-radius: 14px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
     }
 
-    button:hover {
-      opacity: 0.9;
+    .google-btn:hover {
+      background: var(--gray-50);
+      border-color: var(--gray-400);
       transform: translateY(-1px);
     }
 
-    button:active {
+    .google-btn:active {
       transform: scale(0.98);
     }
 
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
+    .google-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .divider span {
+      padding: 0 10px;
+      color: var(--gray-500);
+      font-size: 12px;
     }
 
     .register-link {
@@ -332,52 +269,14 @@
 
       <div id="alert" class="alert"></div>
 
-      <form id="loginForm" novalidate>
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <div class="input-wrapper">
-            <input 
-              type="email" 
-              id="email" 
-              name="email" 
-              placeholder="you@company.com"
-              autocomplete="email"
-              required
-            />
-          </div>
-          <div id="emailError" class="error-message"></div>
-        </div>
-
-        <div class="form-group">
-          <label for="password">Password</label>
-          <div class="input-wrapper">
-            <input 
-              type="password" 
-              id="password" 
-              name="password" 
-              placeholder="Enter your password"
-              autocomplete="current-password"
-              required
-            />
-          </div>
-          <div id="passwordError" class="error-message"></div>
-        </div>
-
-        <div class="checkbox-group">
-          <label class="checkbox">
-            <input type="checkbox" id="rememberMe" />
-            <span>Remember me</span>
-          </label>
-          <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
-        </div>
-
-        <button type="submit" id="loginBtn">
-          Sign In
-        </button>
-      </form>
+      <!-- Google Sign In Button -->
+      <button id="googleSignInBtn" class="google-btn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Continue with Google
+      </button>
 
       <div class="register-link">
-        <p>Don't have an account? <a href="register.html">Create Business Account</a></p>
+        <p>New to Buy Uganda? <a href="register.html">Create Business Account</a></p>
       </div>
 
       <div class="security-note">
@@ -398,7 +297,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Wait for DOM and Supabase to be ready
     document.addEventListener('DOMContentLoaded', function() {
       
       // Supabase Configuration
@@ -416,14 +314,8 @@
       });
 
       // DOM Elements
-      const form = document.getElementById('loginForm');
-      const emailInput = document.getElementById('email');
-      const passwordInput = document.getElementById('password');
-      const rememberMeCheckbox = document.getElementById('rememberMe');
-      const loginBtn = document.getElementById('loginBtn');
+      const googleBtn = document.getElementById('googleSignInBtn');
       const alertDiv = document.getElementById('alert');
-      const emailError = document.getElementById('emailError');
-      const passwordError = document.getElementById('passwordError');
 
       function showAlert(message, type = 'error') {
         alertDiv.textContent = message;
@@ -433,32 +325,11 @@
         }
       }
 
-      function clearErrors() {
-        emailError.classList.remove('show');
-        passwordError.classList.remove('show');
-        emailInput.classList.remove('error');
-        passwordInput.classList.remove('error');
-      }
-
-      function showFieldError(field, message) {
-        if (field === 'email') {
-          emailError.textContent = message;
-          emailError.classList.add('show');
-          emailInput.classList.add('error');
-        } else {
-          passwordError.textContent = message;
-          passwordError.classList.add('show');
-          passwordInput.classList.add('error');
-        }
-      }
-
-      function validateEmail(email) {
-        return /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
-      }
-
       function setLoading(isLoading) {
-        loginBtn.disabled = isLoading;
-        loginBtn.innerHTML = isLoading ? '<span class="spinner"></span> Signing in...' : 'Sign In';
+        googleBtn.disabled = isLoading;
+        googleBtn.innerHTML = isLoading ? 
+          '<span class="spinner"></span> Signing in...' : 
+          '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
       }
 
       async function getUserRole(userId) {
@@ -488,25 +359,6 @@
         window.location.href = dashboards[role] || 'index.html';
       }
 
-      function saveSessionPreference(email) {
-        if (rememberMeCheckbox.checked) {
-          localStorage.setItem('buyuganda_saved_email', email);
-          localStorage.setItem('buyuganda_remember_me', 'true');
-        } else {
-          localStorage.removeItem('buyuganda_saved_email');
-          localStorage.setItem('buyuganda_remember_me', 'false');
-        }
-      }
-
-      function loadSavedEmail() {
-        const savedEmail = localStorage.getItem('buyuganda_saved_email');
-        const rememberMe = localStorage.getItem('buyuganda_remember_me') === 'true';
-        if (savedEmail && rememberMe) {
-          emailInput.value = savedEmail;
-          rememberMeCheckbox.checked = true;
-        }
-      }
-
       async function checkExistingSession() {
         try {
           const { data: { session } } = await supabase.auth.getSession();
@@ -519,78 +371,86 @@
         }
       }
 
-      async function handleLogin(event) {
-        event.preventDefault();
-        clearErrors();
-
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-
-        if (!email) {
-          showFieldError('email', 'Email is required');
-          return;
-        }
-        if (!validateEmail(email)) {
-          showFieldError('email', 'Enter a valid email address');
-          return;
-        }
-        if (!password) {
-          showFieldError('password', 'Password is required');
-          return;
-        }
-
+      async function handleGoogleSignIn() {
         setLoading(true);
-
+        
         try {
-          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+              redirectTo: `${window.location.origin}/login.html`,
+              queryParams: {
+                access_type: 'offline',
+                prompt: 'consent',
+              }
+            }
+          });
 
           if (error) {
-            if (error.message === 'Invalid login credentials') {
-              showAlert('Invalid email or password', 'error');
-              showFieldError('password', 'Incorrect password');
-            } else if (error.message.includes('Email not confirmed')) {
-              showAlert('Please verify your email before logging in', 'info');
-            } else {
-              showAlert(error.message, 'error');
-            }
+            console.error('Google sign in error:', error);
+            showAlert(error.message || 'Failed to sign in with Google', 'error');
             setLoading(false);
-            return;
           }
-
-          if (data?.user) {
-            saveSessionPreference(email);
-            showAlert('Login successful! Redirecting...', 'success');
-            setTimeout(() => redirectToDashboard(data.user.id), 1000);
-          }
+          // Note: When using signInWithOAuth, the page will redirect to Google
+          // No need to handle loading state further as page will redirect
+          
         } catch (err) {
+          console.error('Google sign in exception:', err);
           showAlert('Network error. Please try again.', 'error');
           setLoading(false);
         }
       }
 
-      // Setup event listeners
-      emailInput.addEventListener('input', () => {
-        emailInput.classList.remove('error');
-        emailError.classList.remove('show');
-      });
+      // Handle OAuth callback
+      async function handleOAuthCallback() {
+        try {
+          // Check if we have a hash fragment or query params from OAuth
+          const { data: { session }, error } = await supabase.auth.getSession();
+          
+          if (error) {
+            console.error('Session error:', error);
+            return;
+          }
 
-      passwordInput.addEventListener('input', () => {
-        passwordInput.classList.remove('error');
-        passwordError.classList.remove('show');
-      });
+          if (session?.user) {
+            // Check if profile exists, if not, create it
+            const { data: profile, error: profileError } = await supabase
+              .from('profiles')
+              .select('*')
+              .eq('id', session.user.id)
+              .single();
 
-      form.addEventListener('submit', handleLogin);
-
-      // Check URL params for registration success
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('registered') === 'success') {
-        showAlert('Account created! Please check your email to verify.', 'success');
-      } else if (urlParams.get('verified') === 'true') {
-        showAlert('Email verified! You can now log in.', 'success');
+            if (profileError && profileError.code === 'PGRST116') {
+              // Profile doesn't exist, create it
+              const userMetadata = session.user.user_metadata;
+              await supabase
+                .from('profiles')
+                .insert([{
+                  id: session.user.id,
+                  full_name: userMetadata.full_name || userMetadata.name,
+                  account_type: 'buyer', // Default account type
+                  is_supplier: false,
+                  is_admin: false
+                }]);
+            }
+            
+            showAlert('Login successful! Redirecting...', 'success');
+            setTimeout(() => redirectToDashboard(session.user.id), 1000);
+          }
+        } catch (err) {
+          console.error('OAuth callback error:', err);
+        }
       }
 
-      // Load saved email and check session
-      loadSavedEmail();
+      // Check for OAuth callback on page load
+      if (window.location.hash || window.location.search.includes('code')) {
+        handleOAuthCallback();
+      }
+
+      // Setup event listeners
+      googleBtn.addEventListener('click', handleGoogleSignIn);
+
+      // Check existing session
       checkExistingSession();
       
     });
