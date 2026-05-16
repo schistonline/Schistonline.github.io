@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>Sign In - Buy Uganda B2B Marketplace</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
       --primary: #0B4F6C;
@@ -18,7 +14,6 @@
       --primary-gradient: linear-gradient(135deg, #0B4F6C 0%, #1a6b8a 100%);
       --success: #10B981;
       --danger: #EF4444;
-      --warning: #F59E0B;
       --gray-50: #F9FAFB;
       --gray-100: #F3F4F6;
       --gray-200: #E5E7EB;
@@ -28,7 +23,6 @@
       --gray-600: #4B5563;
       --gray-700: #374151;
       --gray-800: #1F2937;
-      --gray-900: #111827;
     }
 
     body {
@@ -38,206 +32,31 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      min-height: 100dvh;
       padding: 16px;
     }
 
-    .container {
-      width: 100%;
-      max-width: 440px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 28px;
-      padding: 32px 28px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-
-    .logo {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .logo h1 {
-      font-size: 28px;
-      font-weight: 700;
-      background: var(--primary-gradient);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      letter-spacing: -0.5px;
-    }
-
-    .logo p {
-      color: var(--gray-500);
-      font-size: 13px;
-      margin-top: 6px;
-    }
-
-    .brand-badge {
-      display: inline-block;
-      background: var(--gray-100);
-      color: var(--gray-600);
-      font-size: 12px;
-      padding: 6px 14px;
-      border-radius: 30px;
-      margin-bottom: 24px;
-      text-align: center;
-      width: 100%;
-    }
-
-    .google-btn {
-      width: 100%;
-      padding: 14px;
-      background: white;
-      color: var(--gray-700);
-      border: 2px solid var(--gray-300);
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .google-btn:hover {
-      background: var(--gray-50);
-      border-color: var(--gray-400);
-      transform: translateY(-1px);
-    }
-
-    .google-btn:active {
-      transform: scale(0.98);
-    }
-
-    .google-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    .google-btn img {
-      width: 20px;
-      height: 20px;
-    }
-
-    .register-link {
-      text-align: center;
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .register-link p {
-      color: var(--gray-600);
-      font-size: 14px;
-    }
-
-    .register-link a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .register-link a:hover {
-      text-decoration: underline;
-    }
-
-    .alert {
-      padding: 12px 16px;
-      border-radius: 14px;
-      margin-bottom: 24px;
-      font-size: 14px;
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .alert.show {
-      display: block;
-    }
-
-    .alert-error {
-      background: #FEF2F2;
-      color: #991B1B;
-      border-left: 4px solid var(--danger);
-    }
-
-    .alert-success {
-      background: #ECFDF5;
-      color: #065F46;
-      border-left: 4px solid var(--success);
-    }
-
-    .alert-info {
-      background: #EFF6FF;
-      color: #1E40AF;
-      border-left: 4px solid var(--primary);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .spinner {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-      margin-right: 8px;
-      vertical-align: middle;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .legal-footer {
-      text-align: center;
-      margin-top: 24px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.8);
-    }
-
-    .legal-footer p {
-      margin-bottom: 8px;
-    }
-
-    .legal-footer a {
-      color: rgba(255,255,255,0.9);
-      text-decoration: none;
-    }
-
-    .legal-footer a:hover {
-      text-decoration: underline;
-    }
-
-    .security-note {
-      background: var(--gray-50);
-      border-radius: 12px;
-      padding: 10px 14px;
-      margin-top: 16px;
-      font-size: 11px;
-      color: var(--gray-500);
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    @media (max-width: 480px) {
-      .card {
-        padding: 24px 20px;
-      }
-    }
+    .container { max-width: 440px; width: 100%; }
+    .card { background: white; border-radius: 28px; padding: 32px 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+    .logo { text-align: center; margin-bottom: 28px; }
+    .logo h1 { font-size: 28px; font-weight: 700; background: var(--primary-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .logo p { color: var(--gray-500); font-size: 13px; margin-top: 6px; }
+    .brand-badge { display: inline-block; background: var(--gray-100); color: var(--gray-600); font-size: 12px; padding: 6px 14px; border-radius: 30px; margin-bottom: 24px; text-align: center; width: 100%; }
+    .google-btn { width: 100%; padding: 14px; background: white; color: var(--gray-700); border: 2px solid var(--gray-300); border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
+    .google-btn:hover { background: var(--gray-50); border-color: var(--gray-400); transform: translateY(-1px); }
+    .google-btn:active { transform: scale(0.98); }
+    .google-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+    .register-link { text-align: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--gray-200); }
+    .register-link p { color: var(--gray-600); font-size: 14px; }
+    .register-link a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .alert { padding: 12px 16px; border-radius: 14px; margin-bottom: 24px; font-size: 14px; display: none; }
+    .alert.show { display: block; }
+    .alert-error { background: #FEF2F2; color: #991B1B; border-left: 4px solid #EF4444; }
+    .alert-success { background: #ECFDF5; color: #065F46; border-left: 4px solid #10B981; }
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .legal-footer { text-align: center; margin-top: 24px; font-size: 12px; color: rgba(255,255,255,0.8); }
+    .security-note { background: var(--gray-50); border-radius: 12px; padding: 10px 14px; margin-top: 16px; font-size: 11px; color: var(--gray-500); text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    @media (max-width: 480px) { .card { padding: 24px 20px; } }
   </style>
 </head>
 <body>
@@ -271,29 +90,18 @@
 
     <div class="legal-footer">
       <p>© 2026 Buy Uganda. All rights reserved.</p>
-      <p>
-        <a href="terms.html">Terms of Service</a> | 
-        <a href="privacy.html">Privacy Policy</a> | 
-        <a href="contact.html">Contact Us</a>
-      </p>
+      <p><a href="terms.html">Terms of Service</a> | <a href="privacy.html">Privacy Policy</a></p>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     (async function() {
-      // Supabase Configuration
       const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
 
       const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: {
-          autoRefreshToken: true,
-          persistSession: true,
-          detectSessionInUrl: true,
-          storage: localStorage,
-          debug: true // This will help see what's happening
-        }
+        auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true, storage: localStorage }
       });
 
       const googleBtn = document.getElementById('googleSignInBtn');
@@ -312,188 +120,58 @@
           '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
       }
 
-      // Clear any corrupted session
-      async function clearSession() {
-        console.log('Clearing any corrupted session...');
-        await sb.auth.signOut();
-        localStorage.removeItem('sb-uufhvmmgwzkxvvdbqemz-auth-token');
-        sessionStorage.clear();
-      }
-
-      // Create profile for new users
-      async function createProfile(userId, email, fullName) {
-        console.log('Creating profile for new user:', userId, email, fullName);
-        
-        const profileData = {
-          id: userId,
-          email: email,
-          full_name: fullName || email.split('@')[0],
-          is_supplier: false,
-          is_buyer: true,
-          is_admin: false,
-          is_verified: false,
-          phone: null,
-          avatar_url: null,
-          location: null,
-          district: null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          last_active: new Date().toISOString(),
-          total_ads: 0,
-          onboarding_step: 'complete',
-          country_code: '+256'
-        };
-        
-        const { error } = await sb
-          .from('profiles')
-          .upsert([profileData], { onConflict: 'id' });
-        
-        if (error) {
-          console.error('Profile creation error:', error);
-          throw error;
-        }
-        
-        console.log('Profile created successfully');
-        return true;
-      }
-
-      // Get user role for redirect
-      async function getUserRole(userId) {
+      async function redirectToDashboard(userId) {
         try {
-          const { data: profile, error } = await sb
+          const { data: profile } = await sb
             .from('profiles')
             .select('is_supplier, is_admin')
             .eq('id', userId)
             .single();
 
-          if (error || !profile) return 'buyer';
-          if (profile.is_admin === true) return 'admin';
-          if (profile.is_supplier === true) return 'supplier';
-          return 'buyer';
+          const role = profile?.is_admin ? 'admin' : profile?.is_supplier ? 'supplier' : 'buyer';
+          const dashboards = { admin: 'admin-dashboard.html', supplier: 'supplier-dashboard.html', buyer: 'index.html' };
+          window.location.href = dashboards[role] || 'index.html';
         } catch (err) {
-          return 'buyer';
+          window.location.href = 'index.html';
         }
       }
 
-      async function redirectToDashboard(userId) {
-        const role = await getUserRole(userId);
-        const dashboards = {
-          admin: 'admin-dashboard.html',
-          supplier: 'supplier-dashboard.html',
-          buyer: 'index.html'
-        };
-        window.location.href = dashboards[role] || 'index.html';
-      }
-
-      // Handle OAuth callback (when coming back from Google)
       async function handleOAuthCallback() {
-        console.log('Processing OAuth callback...');
-        console.log('URL hash:', window.location.hash);
-        console.log('URL search:', window.location.search);
-        
         try {
-          // Clear any existing corrupted session first
-          await clearSession();
-          
-          // Get the session after OAuth
           const { data: { session }, error } = await sb.auth.getSession();
           
-          if (error) {
-            console.error('Session error:', error);
-            
-            // If it's a refresh token error, try to recover by getting the user directly
-            if (error.message?.includes('Refresh Token')) {
-              console.log('Refresh token error, trying to get user from URL...');
-              
-              // Try to exchange the code for session
-              const { data: exchangeData, error: exchangeError } = await sb.auth.exchangeCodeForSession(
-                window.location.search
-              );
-              
-              if (exchangeError) {
-                console.error('Exchange error:', exchangeError);
-                showAlert('Authentication failed. Please try again.');
-                window.location.href = 'login.html';
-                return;
-              }
-              
-              if (exchangeData.session?.user) {
-                console.log('Got user from code exchange:', exchangeData.session.user.email);
-                await handleUser(exchangeData.session.user);
-                return;
-              }
-            }
-            
-            showAlert('Authentication error. Please try again.');
-            window.location.href = 'login.html';
-            return;
-          }
-
+          if (error) throw error;
           if (!session?.user) {
-            console.log('No user in session');
             window.location.href = 'login.html';
             return;
           }
 
-          await handleUser(session.user);
+          // Profile is auto-created by database trigger
+          // Just wait a moment for the trigger to complete
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          showAlert('Welcome! Redirecting...', 'success');
+          setTimeout(() => redirectToDashboard(session.user.id), 1000);
           
         } catch (err) {
-          console.error('OAuth callback error:', err);
-          showAlert('Something went wrong. Please try again.');
+          console.error('OAuth error:', err);
+          showAlert('Authentication failed. Please try again.');
           window.location.href = 'login.html';
         }
       }
 
-      async function handleUser(user) {
-        console.log('Handling user:', user.email);
-        
-        // Check if profile exists
-        const { data: existingProfile, error: profileError } = await sb
-          .from('profiles')
-          .select('id, is_supplier')
-          .eq('id', user.id)
-          .single();
-
-        if (existingProfile) {
-          console.log('Profile exists, redirecting...');
-          showAlert('Welcome back! Redirecting...', 'success');
-          setTimeout(() => redirectToDashboard(user.id), 1000);
-          return;
-        }
-        
-        // NEW USER - Create profile
-        console.log('New user, creating profile...');
-        const userMetadata = user.user_metadata;
-        const email = user.email;
-        const fullName = userMetadata.full_name || userMetadata.name;
-        
-        await createProfile(user.id, email, fullName);
-        
-        showAlert('Account created! Redirecting...', 'success');
-        setTimeout(() => redirectToDashboard(user.id), 1500);
-      }
-
-      // Handle Google Sign In
       async function handleGoogleSignIn() {
         setLoading(true);
         
         try {
-          // Clear any existing session before starting new OAuth
-          await clearSession();
-          
           const { error } = await sb.auth.signInWithOAuth({
             provider: 'google',
             options: {
               redirectTo: `${window.location.origin}/login.html`,
-              queryParams: {
-                access_type: 'offline',
-                prompt: 'select_account',
-              }
+              queryParams: { access_type: 'offline', prompt: 'select_account' }
             }
           });
-
           if (error) throw error;
-          
         } catch (err) {
           console.error('Google sign in error:', err);
           showAlert(err.message || 'Failed to sign in with Google');
@@ -501,33 +179,20 @@
         }
       }
 
-      // Check if this is an OAuth redirect
       const isOAuthRedirect = window.location.hash || window.location.search.includes('code');
-      console.log('Is OAuth redirect?', isOAuthRedirect);
       
       if (isOAuthRedirect) {
-        // Show loading
         googleBtn.disabled = true;
         googleBtn.innerHTML = '<span class="spinner"></span> Completing sign in...';
         await handleOAuthCallback();
       } else {
-        // Check existing session
         const { data: { session } } = await sb.auth.getSession();
         if (session?.user) {
-          const { data: profile } = await sb
-            .from('profiles')
-            .select('id')
-            .eq('id', session.user.id)
-            .single();
-          
-          if (profile) {
-            redirectToDashboard(session.user.id);
-          }
+          redirectToDashboard(session.user.id);
         }
       }
 
       googleBtn.addEventListener('click', handleGoogleSignIn);
-      
     })();
   </script>
 </body>
