@@ -37,18 +37,18 @@ const REASON_LABELS = {
 };
 
 // ============================================
-// INITIALIZATION
+// INITIALIZATION - Alibaba Style
 // ============================================
 document.addEventListener('DOMContentLoaded', async function() {
-    console.log('🚀 BuyUganda.online...');
+    console.log('🚀 BuyUganda.online loading...');
     
-    // Show loading overlay
-    showLoading(true, 'Loading BuyUganda.online...');
+    // Step 1: Show skeletons immediately (no spinner)
+    showSkeletons();
     
-    // Check authentication
+    // Step 2: Check auth in background
     await checkAuth();
     
-    // Restore scroll position from localStorage
+    // Step 3: Restore scroll position
     var savedPosition = localStorage.getItem('homeScrollPosition');
     if (savedPosition) {
         setTimeout(function() {
@@ -56,41 +56,20 @@ document.addEventListener('DOMContentLoaded', async function() {
         }, 100);
     }
     
-    // Show loading states
-    showLoadingStates();
+    // Step 4: Load content progressively (not all at once)
+    await loadContentProgressively();
     
-    // Load all sections in parallel for speed
-    await Promise.all([
-        loadBanners(),
-        loadQuickActions(),
-        loadFeaturedDeals(),
-        loadCategories(),
-        loadHotSuppliers(),
-        loadRecentItems(),
-        loadCategoryProducts()
-    ]);
-    
-    // Load recommendations after user interests are loaded
-    if (currentUser) {
-        await loadRecommendations();
-    } else {
-        await loadPopularProducts();
-    }
-    
-    // Hide loading overlay
-    showLoading(false);
-    
-    // Initialize Swiper after content loads
+    // Step 5: Initialize Swiper after content loads
     setTimeout(function() {
         initSwiper();
-    }, 200);
+    }, 100);
     
-    // Save scroll position
+    // Step 6: Save scroll position
     window.addEventListener('scroll', function() {
         localStorage.setItem('homeScrollPosition', window.scrollY);
     });
     
-    // Search button
+    // Step 7: Search button
     var searchBtn = document.getElementById('searchBtn');
     if (searchBtn) {
         searchBtn.addEventListener('click', function() {
@@ -100,175 +79,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 // ============================================
-// AUTHENTICATION
+// SHOW SKELETONS FIRST (Alibaba style)
 // ============================================
-async function checkAuth() {
-    try {
-        var userData = await sb.auth.getUser();
-        currentUser = userData.data.user;
-        
-        if (currentUser) {
-            console.log('✅ User logged in:', currentUser.id);
-            await loadUserInterests();
-            // Track this page view
-            await trackPageView();
-            // Hide auth prompt if it exists
-            var authContainer = document.getElementById('authPromptContainer');
-            if (authContainer) {
-                authContainer.innerHTML = '';
-            }
-        } else {
-            console.log('👤 User not logged in');
-            // Show auth prompt after quick actions
-            showAuthPrompt();
-        }
-    } catch (error) {
-        console.error('❌ Auth error:', error);
-        currentUser = null;
-        showAuthPrompt();
-    }
-}
-
-// ============================================
-// TRACK USER ACTIVITY
-// ============================================
-async function trackPageView() {
-    if (!currentUser) return;
-    
-    try {
-        // Track homepage view
-        var error = await sb
-            .from('user_activity_log')
-            .insert([{
-                user_id: currentUser.id,
-                activity_type: 'page_view',
-                page: 'homepage',
-                timestamp: new Date().toISOString()
-            }]);
-            
-        if (error.error) console.error('Error tracking page view:', error.error);
-    } catch (error) {
-        console.error('Error in trackPageView:', error);
-    }
-}
-
-async function trackProductView(productId) {
-    if (!currentUser) return;
-    
-    try {
-        var result = await sb
-            .from('user_product_interactions')
-            .insert([{
-                user_id: currentUser.id,
-                ad_id: productId,
-                interaction_type: 'view',
-                created_at: new Date().toISOString()
-            }]);
-            
-        if (result.error) console.error('Error tracking product view:', result.error);
-    } catch (error) {
-        console.error('Error in trackProductView:', error);
-    }
-}
-
-// ============================================
-// SHOW AUTH PROMPT (Login/Signup)
-// ============================================
-function showAuthPrompt() {
-    var quickActions = document.querySelector('.quick-actions-section');
-    if (!quickActions) return;
-    
-    var authHTML = `
-        <div class="auth-prompt-section" id="authPrompt">
-            <div class="auth-prompt-content">
-                <h3>👋 Welcome to BuyUganda.online!</h3>
-                <p>Sign in for personalized recommendations and faster checkout</p>
-                <div class="auth-prompt-actions">
-                    <a href="login.html" class="login-btn">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
-                    </a>
-                    <a href="register.html" class="register-btn">
-                        <i class="fas fa-user-plus"></i> Register
-                    </a>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    var authContainer = document.getElementById('authPromptContainer');
-    if (authContainer) {
-        authContainer.innerHTML = authHTML;
-    }
-}
-
-// ============================================
-// LOAD USER INTERESTS (for recommendations)
-// ============================================
-async function loadUserInterests() {
-    if (!currentUser) return;
-    
-    try {
-        // Load viewed products from user_product_interactions table
-        var viewsData = await sb
-            .from('user_product_interactions')
-            .select('ad_id, created_at')
-            .eq('user_id', currentUser.id)
-            .eq('interaction_type', 'view')
-            .order('created_at', { ascending: false })
-            .limit(20);
-            
-        if (viewsData.error) throw viewsData.error;
-        
-        if (viewsData.data) {
-            userInterests.viewedProducts = viewsData.data.map(function(v) { 
-                return v.ad_id; 
-            });
-        }
-        
-        // Load recent searches
-        var searchesData = await sb
-            .from('search_history')
-            .select('query, searched_at')
-            .eq('user_id', currentUser.id)
-            .order('searched_at', { ascending: false })
-            .limit(10);
-            
-        if (searchesData.error) throw searchesData.error;
-        
-        if (searchesData.data) {
-            userInterests.recentSearches = searchesData.data.map(function(s) { 
-                return s.query; 
-            });
-        }
-        
-        // Get categories from viewed products
-        if (userInterests.viewedProducts.length > 0) {
-            var productsData = await sb
-                .from('ads')
-                .select('category_id')
-                .in('id', userInterests.viewedProducts);
-                
-            if (productsData.error) throw productsData.error;
-                
-            if (productsData.data) {
-                var categories = productsData.data.map(function(p) { 
-                    return p.category_id; 
-                });
-                userInterests.viewedCategories = [...new Set(categories)];
-            }
-        }
-        
-        console.log('📊 User interests loaded:', userInterests);
-        
-    } catch (error) {
-        console.error('Error loading user interests:', error);
-    }
-}
-
-// ============================================
-// LOADING STATES
-// ============================================
-function showLoadingStates() {
+function showSkeletons() {
     // Banners skeleton
     var bannerWrapper = document.getElementById('bannerWrapper');
     if (bannerWrapper) {
@@ -325,7 +138,7 @@ function getSkeletonItems(count, type) {
         } else if (type === 'product') {
             html += `
                 <div class="swiper-slide">
-                    <div class="product-card">
+                    <div class="product-card skeleton-card">
                         <div class="product-image skeleton"></div>
                         <div class="product-info">
                             <div class="skeleton-text" style="width: 90%; height: 16px;"></div>
@@ -347,6 +160,187 @@ function getSkeletonItems(count, type) {
         }
     }
     return html;
+}
+
+// ============================================
+// LOAD CONTENT PROGRESSIVELY (Alibaba style)
+// ============================================
+async function loadContentProgressively() {
+    // Load sections in order of importance (visible first)
+    // Banner is most important
+    await loadBanners();
+    
+    // Quick actions (second)
+    await loadQuickActions();
+    
+    // Then load the rest in parallel but with staggered display
+    setTimeout(() => loadFeaturedDeals(), 50);
+    setTimeout(() => loadCategories(), 100);
+    setTimeout(() => loadHotSuppliers(), 150);
+    setTimeout(() => loadRecentItems(), 200);
+    setTimeout(() => loadCategoryProducts(), 300);
+    
+    // Recommendations load last (after user data)
+    if (currentUser) {
+        setTimeout(() => loadRecommendations(), 500);
+    } else {
+        setTimeout(() => loadPopularProducts(), 400);
+    }
+}
+
+// ============================================
+// AUTHENTICATION
+// ============================================
+async function checkAuth() {
+    try {
+        var userData = await sb.auth.getUser();
+        currentUser = userData.data.user;
+        
+        if (currentUser) {
+            console.log('✅ User logged in:', currentUser.id);
+            await loadUserInterests();
+            await trackPageView();
+            var authContainer = document.getElementById('authPromptContainer');
+            if (authContainer) {
+                authContainer.innerHTML = '';
+            }
+        } else {
+            console.log('👤 User not logged in');
+            showAuthPrompt();
+        }
+    } catch (error) {
+        console.error('❌ Auth error:', error);
+        currentUser = null;
+        showAuthPrompt();
+    }
+}
+
+// ============================================
+// TRACK USER ACTIVITY
+// ============================================
+async function trackPageView() {
+    if (!currentUser) return;
+    
+    try {
+        await sb
+            .from('user_activity_log')
+            .insert([{
+                user_id: currentUser.id,
+                activity_type: 'page_view',
+                page: 'homepage',
+                timestamp: new Date().toISOString()
+            }]);
+    } catch (error) {
+        console.error('Error in trackPageView:', error);
+    }
+}
+
+async function trackProductView(productId) {
+    if (!currentUser) return;
+    
+    try {
+        await sb
+            .from('user_product_interactions')
+            .insert([{
+                user_id: currentUser.id,
+                ad_id: productId,
+                interaction_type: 'view',
+                created_at: new Date().toISOString()
+            }]);
+    } catch (error) {
+        console.error('Error tracking product view:', error);
+    }
+}
+
+// ============================================
+// SHOW AUTH PROMPT
+// ============================================
+function showAuthPrompt() {
+    var quickActions = document.querySelector('.quick-actions-section');
+    if (!quickActions) return;
+    
+    var authHTML = `
+        <div class="auth-prompt-section" id="authPrompt">
+            <div class="auth-prompt-content">
+                <h3>👋 Welcome to BuyUganda.online!</h3>
+                <p>Sign in for personalized recommendations and faster checkout</p>
+                <div class="auth-prompt-actions">
+                    <a href="login.html" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </a>
+                    <a href="register.html" class="register-btn">
+                        <i class="fas fa-user-plus"></i> Register
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    var authContainer = document.getElementById('authPromptContainer');
+    if (authContainer) {
+        authContainer.innerHTML = authHTML;
+    }
+}
+
+// ============================================
+// LOAD USER INTERESTS
+// ============================================
+async function loadUserInterests() {
+    if (!currentUser) return;
+    
+    try {
+        var viewsData = await sb
+            .from('user_product_interactions')
+            .select('ad_id, created_at')
+            .eq('user_id', currentUser.id)
+            .eq('interaction_type', 'view')
+            .order('created_at', { ascending: false })
+            .limit(20);
+            
+        if (viewsData.error) throw viewsData.error;
+        
+        if (viewsData.data) {
+            userInterests.viewedProducts = viewsData.data.map(function(v) { 
+                return v.ad_id; 
+            });
+        }
+        
+        var searchesData = await sb
+            .from('search_history')
+            .select('query, searched_at')
+            .eq('user_id', currentUser.id)
+            .order('searched_at', { ascending: false })
+            .limit(10);
+            
+        if (searchesData.error) throw searchesData.error;
+        
+        if (searchesData.data) {
+            userInterests.recentSearches = searchesData.data.map(function(s) { 
+                return s.query; 
+            });
+        }
+        
+        if (userInterests.viewedProducts.length > 0) {
+            var productsData = await sb
+                .from('ads')
+                .select('category_id')
+                .in('id', userInterests.viewedProducts);
+                
+            if (productsData.error) throw productsData.error;
+                
+            if (productsData.data) {
+                var categories = productsData.data.map(function(p) { 
+                    return p.category_id; 
+                });
+                userInterests.viewedCategories = [...new Set(categories)];
+            }
+        }
+        
+        console.log('📊 User interests loaded:', userInterests);
+        
+    } catch (error) {
+        console.error('Error loading user interests:', error);
+    }
 }
 
 // ============================================
@@ -372,11 +366,9 @@ async function loadBanners() {
         }
 
         var bannersHtml = bannersData.data.map(function(banner) {
-            // Use background_color from database, fallback to primary purple
             var bgColor = banner.background_color || '#6B21E5';
             var textColor = banner.text_color || '#FFFFFF';
             
-            // Handle link based on link_type
             var linkUrl = '#';
             if (banner.link_type && banner.link_value) {
                 switch(banner.link_type) {
@@ -399,7 +391,6 @@ async function loadBanners() {
                 }
             }
             
-            // Use button_text from database
             var buttonText = banner.button_text;
             
             var imageHtml = banner.image_url ? 
@@ -424,12 +415,21 @@ async function loadBanners() {
         
         wrapper.innerHTML = bannersHtml;
         
+        // Reinit swiper for banners
+        setTimeout(function() {
+            if (document.querySelector('.banner-swiper') && document.querySelector('.banner-swiper .swiper-slide')) {
+                if (swiperInstances.banner) swiperInstances.banner.destroy(true, true);
+                swiperInstances.banner = new Swiper('.banner-swiper', {
+                    autoplay: { delay: 3000 },
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    loop: true,
+                    speed: 500
+                });
+            }
+        }, 50);
+        
     } catch (error) {
         console.error('Error loading banners:', error);
-        var wrapper = document.getElementById('bannerWrapper');
-        if (wrapper) {
-            wrapper.innerHTML = '';
-        }
     }
 }
 
@@ -438,7 +438,6 @@ async function loadBanners() {
 // ============================================
 async function loadQuickActions() {
     try {
-        // You can store quick actions in a database table or use this static list
         var actions = [
             { icon: 'fa-search', label: 'Source by Category', link: 'categories.html', color: '#6B21E5' },
             { icon: 'fa-file-invoice', label: 'request-quote', link: 'request-quote.html', color: '#10B981' },
@@ -529,10 +528,6 @@ async function loadFeaturedDeals() {
         
     } catch (error) {
         console.error('Error loading featured deals:', error);
-        var wrapper = document.getElementById('featuredDealsWrapper');
-        if (wrapper) {
-            wrapper.innerHTML = '';
-        }
     }
 }
 
@@ -584,10 +579,6 @@ async function loadCategories() {
         
     } catch (error) {
         console.error('Error loading categories:', error);
-        var wrapper = document.getElementById('categoriesWrapper');
-        if (wrapper) {
-            wrapper.innerHTML = '';
-        }
     }
 }
 
@@ -619,7 +610,6 @@ async function loadHotSuppliers() {
             return;
         }
 
-        // Get spotlight data from supplier_spotlights
         var supplierIds = suppliersData.data.map(function(s) { return s.id; });
         var spotlightsData = await sb
             .from('supplier_spotlights')
@@ -671,10 +661,6 @@ async function loadHotSuppliers() {
         
     } catch (error) {
         console.error('Error loading suppliers:', error);
-        var wrapper = document.getElementById('hotSuppliersWrapper');
-        if (wrapper) {
-            wrapper.innerHTML = '';
-        }
     }
 }
 
@@ -737,26 +723,19 @@ async function loadRecentItems() {
         
     } catch (error) {
         console.error('Error loading recent items:', error);
-        var wrapper = document.getElementById('recentItemsWrapper');
-        if (wrapper) {
-            wrapper.innerHTML = '';
-        }
     }
 }
 
 // ============================================
-// LOAD RECOMMENDATIONS (For logged in users)
+// LOAD RECOMMENDATIONS
 // ============================================
 async function loadRecommendations() {
     if (!currentUser) return;
     
     try {
-        showLoading(true, 'Personalizing your recommendations...');
-        
         var recommendations = [];
         var recommendationReason = 'category_match';
         
-        // Strategy 1: Based on viewed categories
         if (userInterests.viewedCategories.length > 0) {
             var productsData = await sb
                 .from('ads')
@@ -780,7 +759,6 @@ async function loadRecommendations() {
             }
         }
         
-        // Strategy 2: If no category-based recommendations, use trending products
         if (recommendations.length === 0) {
             var trendingData = await sb
                 .from('ads')
@@ -804,7 +782,6 @@ async function loadRecommendations() {
             }
         }
         
-        // Strategy 3: If still no recommendations, use recent products
         if (recommendations.length === 0) {
             var recentData = await sb
                 .from('ads')
@@ -827,8 +804,6 @@ async function loadRecommendations() {
             }
         }
         
-        showLoading(false);
-        
         var container = document.getElementById('recommendationsContainer');
         if (!container) return;
         
@@ -837,7 +812,6 @@ async function loadRecommendations() {
             return;
         }
         
-        // Get title based on reason
         var sectionTitle = 'Recommended for You';
         var sectionIcon = 'fa-magic';
         
@@ -851,7 +825,6 @@ async function loadRecommendations() {
         
         var recommendationsHtml = recommendations.map(function(product) {
             var reasonIcon = REASON_ICONS[recommendationReason] || '✨';
-            var reasonLabel = REASON_LABELS[recommendationReason] || 'Recommended for you';
             var imageUrl = (product.image_urls && product.image_urls[0]) ? product.image_urls[0] : 'https://via.placeholder.com/200';
             var moqHtml = product.moq ? '<div class="product-moq">MOQ: ' + product.moq + '</div>' : '';
             
@@ -863,7 +836,7 @@ async function loadRecommendations() {
                                  alt="${escapeHtml(product.title)}"
                                  loading="lazy"
                                  onerror="this.src='https://via.placeholder.com/200'">
-                            <span class="product-badge recommendation" title="${reasonLabel}">${reasonIcon}</span>
+                            <span class="product-badge recommendation" title="${REASON_LABELS[recommendationReason]}">${reasonIcon}</span>
                         </div>
                         <div class="product-info">
                             <div class="product-title">${escapeHtml(product.title.substring(0, 25))}${product.title.length > 25 ? '...' : ''}</div>
@@ -891,7 +864,6 @@ async function loadRecommendations() {
             </section>
         `;
         
-        // Initialize recommendations swiper
         setTimeout(function() {
             if (document.querySelector('.recommendations-swiper')) {
                 swiperInstances.recommendations = new Swiper('.recommendations-swiper', {
@@ -904,15 +876,12 @@ async function loadRecommendations() {
         
     } catch (error) {
         console.error('Error loading recommendations:', error);
-        showLoading(false);
-        
-        // Fallback to popular products
         await loadPopularProducts();
     }
 }
 
 // ============================================
-// LOAD POPULAR PRODUCTS (Fallback for non-logged in users)
+// LOAD POPULAR PRODUCTS
 // ============================================
 async function loadPopularProducts() {
     try {
@@ -944,8 +913,6 @@ async function loadPopularProducts() {
         }
         
         var productsHtml = productsData.data.map(function(product) {
-            var reasonIcon = REASON_ICONS.popular || '🔥';
-            var reasonLabel = REASON_LABELS.popular || 'Popular products';
             var imageUrl = (product.image_urls && product.image_urls[0]) ? product.image_urls[0] : 'https://via.placeholder.com/200';
             var moqHtml = product.moq ? '<div class="product-moq">MOQ: ' + product.moq + '</div>' : '';
             
@@ -957,7 +924,7 @@ async function loadPopularProducts() {
                                  alt="${escapeHtml(product.title)}"
                                  loading="lazy"
                                  onerror="this.src='https://via.placeholder.com/200'">
-                            <span class="product-badge recommendation" title="${reasonLabel}">${reasonIcon}</span>
+                            <span class="product-badge recommendation" title="Popular products">🔥</span>
                         </div>
                         <div class="product-info">
                             <div class="product-title">${escapeHtml(product.title.substring(0, 25))}${product.title.length > 25 ? '...' : ''}</div>
@@ -985,7 +952,6 @@ async function loadPopularProducts() {
             </section>
         `;
         
-        // Initialize swiper
         setTimeout(function() {
             if (document.querySelector('.recommendations-swiper')) {
                 swiperInstances.recommendations = new Swiper('.recommendations-swiper', {
@@ -1085,10 +1051,6 @@ async function loadCategoryProducts() {
         
     } catch (error) {
         console.error('Error loading category products:', error);
-        var container = document.getElementById('categoryProductSections');
-        if (container) {
-            container.innerHTML = '';
-        }
     }
 }
 
@@ -1096,25 +1058,9 @@ async function loadCategoryProducts() {
 // INIT SWIPER
 // ============================================
 function initSwiper() {
-    // Destroy existing instances
-    for (var key in swiperInstances) {
-        if (swiperInstances[key] && swiperInstances[key].destroy) {
-            swiperInstances[key].destroy(true, true);
-        }
-    }
-
-    // Banner Swiper
-    if (document.querySelector('.banner-swiper') && document.querySelector('.banner-swiper .swiper-slide')) {
-        swiperInstances.banner = new Swiper('.banner-swiper', {
-            autoplay: { delay: 3000 },
-            pagination: { el: '.swiper-pagination', clickable: true },
-            loop: true,
-            speed: 500
-        });
-    }
-
     // Quick Actions Swiper
     if (document.querySelector('.quick-actions-swiper') && document.querySelector('.quick-actions-swiper .swiper-slide')) {
+        if (swiperInstances.quick) swiperInstances.quick.destroy(true, true);
         swiperInstances.quick = new Swiper('.quick-actions-swiper', {
             slidesPerView: 3.5,
             spaceBetween: 8,
@@ -1124,6 +1070,7 @@ function initSwiper() {
 
     // Deals Swiper
     if (document.querySelector('.deals-swiper') && document.querySelector('.deals-swiper .swiper-slide')) {
+        if (swiperInstances.deals) swiperInstances.deals.destroy(true, true);
         swiperInstances.deals = new Swiper('.deals-swiper', {
             slidesPerView: 2.2,
             spaceBetween: 12,
@@ -1133,6 +1080,7 @@ function initSwiper() {
 
     // Categories Swiper
     if (document.querySelector('.categories-swiper') && document.querySelector('.categories-swiper .swiper-slide')) {
+        if (swiperInstances.categories) swiperInstances.categories.destroy(true, true);
         swiperInstances.categories = new Swiper('.categories-swiper', {
             slidesPerView: 3.5,
             spaceBetween: 8,
@@ -1142,6 +1090,7 @@ function initSwiper() {
 
     // Suppliers Swiper
     if (document.querySelector('.suppliers-swiper') && document.querySelector('.suppliers-swiper .swiper-slide')) {
+        if (swiperInstances.suppliers) swiperInstances.suppliers.destroy(true, true);
         swiperInstances.suppliers = new Swiper('.suppliers-swiper', {
             slidesPerView: 3.5,
             spaceBetween: 8,
@@ -1151,6 +1100,7 @@ function initSwiper() {
 
     // Recent Items Swiper
     if (document.querySelector('.recent-swiper') && document.querySelector('.recent-swiper .swiper-slide')) {
+        if (swiperInstances.recent) swiperInstances.recent.destroy(true, true);
         swiperInstances.recent = new Swiper('.recent-swiper', {
             slidesPerView: 2.2,
             spaceBetween: 12,
@@ -1162,21 +1112,6 @@ function initSwiper() {
 // ============================================
 // UTILITIES
 // ============================================
-function showLoading(show, message) {
-    if (!message) message = 'Loading...';
-    var overlay = document.getElementById('loadingOverlay');
-    var messageEl = document.getElementById('loadingMessage');
-    
-    if (!overlay || !messageEl) return;
-    
-    if (show) {
-        messageEl.textContent = message;
-        overlay.classList.add('show');
-    } else {
-        overlay.classList.remove('show');
-    }
-}
-
 function showToast(message, type) {
     if (!type) type = 'info';
     var toast = document.getElementById('toast');
@@ -1210,11 +1145,7 @@ function formatNumber(num) {
     return parseInt(num).toLocaleString('en-UG');
 }
 
-// Make trackProductView globally available
+// Make functions global
 window.trackProductView = trackProductView;
-
-// ============================================
-// MAKE FUNCTIONS GLOBAL
-// ============================================
 window.escapeHtml = escapeHtml;
 window.formatNumber = formatNumber;
