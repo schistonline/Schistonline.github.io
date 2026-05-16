@@ -1,7 +1,11 @@
 // ============================================
-// SOURCEX SUPPLIER REGISTRATION
+// SUPPLIER REGISTRATION - BUY UGANDA
+// Mobile Responsive Version
 // ============================================
 
+console.log('🚀 Supplier Registration loading...');
+
+// Supabase Configuration
 const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
 
@@ -12,13 +16,14 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // ============================================
 let currentStep = 1;
 let currentUser = null;
+let currentProfile = null;
 let map = null;
 let marker = null;
 let districts = [];
 let selectedLat = null;
 let selectedLng = null;
 
-// Uganda districts list (hardcoded fallback)
+// Uganda districts list (fallback if database doesn't have districts)
 const ugandaDistricts = [
     'Kampala', 'Wakiso', 'Mukono', 'Jinja', 'Mbarara', 'Gulu', 'Lira',
     'Masaka', 'Mbale', 'Arua', 'Fort Portal', 'Kabale', 'Bushenyi',
@@ -27,76 +32,11 @@ const ugandaDistricts = [
     'Kamuli', 'Kapchorwa', 'Katakwi', 'Kayunga', 'Kibaale', 'Kiboga',
     'Kisoro', 'Kotido', 'Kumi', 'Kyenjojo', 'Luwero', 'Masindi',
     'Mayuge', 'Mityana', 'Mpigi', 'Mubende', 'Nakapiripirit', 'Nakasongola',
-    'Pader', 'Rakai', 'Rukungiri', 'Sembabule', 'Sironko', 'Soroti',
-    'Wakiso', 'Yumbe'
+    'Pader', 'Rakai', 'Rukungiri', 'Sembabule', 'Sironko', 'Yumbe'
 ];
 
 // ============================================
-// WHATSAPP FUNCTIONS
-// ============================================
-function isValidWhatsApp(phone) {
-    if (!phone) return false;
-    // Allow 7-12 digits (local number without country code)
-    return /^[0-9]{7,12}$/.test(phone.replace(/\D/g, ''));
-}
-
-function formatWhatsAppNumber(input) {
-    let value = input.value.replace(/\D/g, '');
-    if (value.length > 0) {
-        input.value = value;
-    }
-}
-
-// Generate WhatsApp deep link
-function generateWhatsAppLink(whatsappNumber, businessName) {
-    const cleanNumber = whatsappNumber.replace(/\D/g, '');
-    const message = encodeURIComponent(`Hello ${businessName}, I'm interested in your products.`);
-    return `https://wa.me/${cleanNumber}?text=${message}`;
-}
-
-// ============================================
-// INITIALIZATION
-// ============================================
-document.addEventListener('DOMContentLoaded', async () => {
-    await checkAuth();
-    await loadDistricts();
-    initMap();
-    setupEventListeners();
-    initLocationSearch();
-    updatePhonePrefixes();
-    
-    // Show WhatsApp department field when number is entered
-    const whatsappInput = document.getElementById('whatsappNumber');
-    if (whatsappInput) {
-        whatsappInput.addEventListener('input', function() {
-            const deptGroup = document.getElementById('whatsappDepartmentGroup');
-            if (deptGroup) {
-                if (this.value.length > 0) {
-                    deptGroup.style.display = 'block';
-                } else {
-                    deptGroup.style.display = 'none';
-                }
-            }
-        });
-    }
-});
-
-// Update phone prefixes when country code changes
-function updatePhonePrefixes() {
-    const countryCodeSelect = document.getElementById('countryCode');
-    if (!countryCodeSelect) return;
-    
-    countryCodeSelect.addEventListener('change', function() {
-        const code = this.value;
-        document.getElementById('phonePrefix').textContent = code;
-        document.getElementById('altPhonePrefix').textContent = code;
-        document.getElementById('verificationPhonePrefix').textContent = code;
-        document.getElementById('whatsappPrefix').textContent = code;
-    });
-}
-
-// ============================================
-// CHECK AUTH
+// AUTH CHECK - GET USER AND PROFILE
 // ============================================
 async function checkAuth() {
     try {
@@ -111,10 +51,30 @@ async function checkAuth() {
             setTimeout(() => {
                 window.location.href = 'login.html?redirect=supplier-register.html';
             }, 2000);
-            return;
+            return false;
         }
         
         currentUser = user;
+        console.log('✅ User authenticated:', user.email);
+        
+        // Get profile (should exist due to database trigger)
+        const { data: profile, error: profileError } = await sb
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+        
+        if (profileError) {
+            console.error('Profile not found:', profileError);
+            showToast('Please complete your profile first', 'error');
+            setTimeout(() => {
+                window.location.href = 'profile.html';
+            }, 2000);
+            return false;
+        }
+        
+        currentProfile = profile;
+        console.log('✅ Profile found:', profile.full_name || profile.email);
         
         // Check if already a supplier
         const { data: existingSupplier, error: supplierError } = await sb
@@ -123,28 +83,33 @@ async function checkAuth() {
             .eq('profile_id', user.id)
             .maybeSingle();
         
-        if (supplierError) throw supplierError;
-        
         if (existingSupplier) {
             showToast('You are already registered as a supplier', 'success');
             setTimeout(() => {
                 window.location.href = 'supplier-dashboard.html';
             }, 1500);
-            return;
+            return false;
         }
         
-        // Pre-fill email from auth
-        const emailInput = document.getElementById('businessEmail');
-        if (emailInput) emailInput.value = user.email || '';
+        // Pre-fill business name from profile if available
+        const businessNameInput = document.getElementById('businessName');
+        if (businessNameInput && currentProfile.business_name) {
+            businessNameInput.value = currentProfile.business_name;
+        } else if (businessNameInput && currentProfile.full_name) {
+            businessNameInput.value = currentProfile.full_name;
+        }
+        
+        showLoading(false);
+        return true;
         
     } catch (error) {
         console.error('Auth check error:', error);
+        showLoading(false);
         showToast('Authentication error. Please login again.', 'error');
         setTimeout(() => {
             window.location.href = 'login.html';
         }, 2000);
-    } finally {
-        showLoading(false);
+        return false;
     }
 }
 
@@ -153,22 +118,15 @@ async function checkAuth() {
 // ============================================
 async function loadDistricts() {
     try {
-        // Try to load from database first
         const { data, error } = await sb
             .from('districts')
             .select('id, name')
             .eq('is_active', true)
             .order('name', { ascending: true });
             
-        // Check if data exists and is an array
-        if (error) {
-            console.warn('Error loading districts from DB:', error);
-            districts = [...ugandaDistricts].sort();
-        } else if (!data || !Array.isArray(data) || data.length === 0) {
-            console.log('No districts in database, using hardcoded list');
+        if (error || !data || data.length === 0) {
             districts = [...ugandaDistricts].sort();
         } else {
-            console.log('Loaded districts from database:', data.length);
             districts = data.map(d => d.name).sort();
         }
         
@@ -190,38 +148,42 @@ function populateDistrictDropdown() {
 }
 
 // ============================================
-// MAP INITIALIZATION (Optional)
+// MAP INITIALIZATION (Optional - won't break if map not loaded)
 // ============================================
 function initMap() {
     const mapContainer = document.getElementById('map');
     if (!mapContainer) return;
     
-    // Initialize map with default view
-    map = L.map('map').setView([0.3136, 32.5811], 12); // Kampala
-    
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-    
-    // Add click handler to place marker (optional)
-    map.on('click', function(e) {
-        placeMarker(e.latlng.lat, e.latlng.lng);
-        reverseGeocode(e.latlng.lat, e.latlng.lng);
-    });
+    try {
+        map = L.map('map').setView([0.3136, 32.5811], 12);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        map.on('click', function(e) {
+            placeMarker(e.latlng.lat, e.latlng.lng);
+        });
+        
+        console.log('✅ Map initialized');
+    } catch (error) {
+        console.warn('Map initialization failed (non-critical):', error);
+    }
 }
 
 function placeMarker(lat, lng) {
+    if (!map) return;
+    
     if (marker) {
         map.removeLayer(marker);
     }
     
-    marker = L.marker([lat, lng], {
-        draggable: true
-    }).addTo(map);
+    marker = L.marker([lat, lng], { draggable: true }).addTo(map);
     
     marker.on('dragend', function(e) {
         const position = e.target.getLatLng();
-        reverseGeocode(position.lat, position.lng);
+        selectedLat = position.lat;
+        selectedLng = position.lng;
     });
     
     selectedLat = lat;
@@ -229,7 +191,7 @@ function placeMarker(lat, lng) {
 }
 
 // ============================================
-// OPTIONAL GEOCODING (with error suppression)
+// LOCATION SEARCH (Optional)
 // ============================================
 function initLocationSearch() {
     const searchBtn = document.getElementById('searchLocationBtn');
@@ -237,101 +199,56 @@ function initLocationSearch() {
     
     if (!searchBtn || !searchInput) return;
     
-    searchBtn.addEventListener('click', function() {
-        performLocationSearch();
-    });
-    
-    searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            performLocationSearch();
+    searchBtn.addEventListener('click', async function() {
+        const query = searchInput.value.trim();
+        if (!query || query.length < 3) {
+            showToast('Please enter at least 3 characters to search', 'warning');
+            return;
         }
-    });
-}
-
-async function performLocationSearch() {
-    const query = document.getElementById('locationSearch').value;
-    if (!query || query.length < 3) {
-        showToast('Please enter at least 3 characters to search', 'warning');
-        return;
-    }
-    
-    showLoading(true, 'Searching location...');
-    
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
         
-        const response = await fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}, Uganda&limit=1`,
-            {
-                signal: controller.signal,
-                headers: {
-                    'Accept': 'application/json',
-                    'User-Agent': 'SourceXB2B/1.0'
+        showLoading(true, 'Searching location...');
+        
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}, Uganda&limit=1`,
+                { signal: controller.signal }
+            );
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) throw new Error('Network error');
+            
+            const data = await response.json();
+            
+            if (data && data.length > 0) {
+                const location = data[0];
+                const lat = parseFloat(location.lat);
+                const lng = parseFloat(location.lon);
+                
+                if (map) {
+                    map.setView([lat, lng], 15);
+                    placeMarker(lat, lng);
                 }
-            }
-        );
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) throw new Error('Network error');
-        
-        const data = await response.json();
-        
-        if (data && data.length > 0) {
-            const location = data[0];
-            const lat = parseFloat(location.lat);
-            const lng = parseFloat(location.lon);
-            
-            map.setView([lat, lng], 15);
-            placeMarker(lat, lng);
-            
-            if (location.display_name) {
-                document.getElementById('detailedAddress').value = location.display_name;
-            }
-            
-            showToast('Location found!', 'success');
-        } else {
-            showToast('Location not found', 'warning');
-        }
-    } catch (error) {
-        console.warn('Geocoding error (non-critical):', error);
-        showToast('Search failed - please enter address manually', 'warning');
-    } finally {
-        showLoading(false);
-    }
-}
-
-async function reverseGeocode(lat, lng) {
-    // This is optional - don't show errors
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-        const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
-            {
-                signal: controller.signal,
-                headers: {
-                    'Accept': 'application/json',
-                    'User-Agent': 'SourceXB2B/1.0'
+                
+                const addressInput = document.getElementById('detailedAddress');
+                if (addressInput && location.display_name) {
+                    addressInput.value = location.display_name;
                 }
+                
+                showToast('Location found!', 'success');
+            } else {
+                showToast('Location not found', 'warning');
             }
-        );
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) return;
-        
-        const data = await response.json();
-        
-        if (data && data.display_name) {
-            document.getElementById('detailedAddress').value = data.display_name;
+        } catch (error) {
+            console.warn('Geocoding error:', error);
+            showToast('Search failed - please enter address manually', 'warning');
+        } finally {
+            showLoading(false);
         }
-    } catch (error) {
-        // Silently fail - this is optional
-    }
+    });
 }
 
 // ============================================
@@ -339,39 +256,27 @@ async function reverseGeocode(lat, lng) {
 // ============================================
 function isValidPhone(phone) {
     if (!phone) return false;
-    // Allow 7-12 digits (local number without country code)
     return /^[0-9]{7,12}$/.test(phone.replace(/\D/g, ''));
 }
 
 function formatPhoneNumber(input) {
     let value = input.value.replace(/\D/g, '');
     if (value.length > 0) {
-        // Just store the digits - country code will be added separately
         input.value = value;
     }
 }
 
-// ============================================
-// SETUP EVENT LISTENERS
-// ============================================
-function setupEventListeners() {
-    const nextBtn = document.getElementById('nextToStep2');
-    const backBtn = document.getElementById('backToStep1');
-    const submitBtn = document.getElementById('submitVerification');
+// Update all phone prefixes when country code changes
+function updatePhonePrefixes() {
+    const countryCodeSelect = document.getElementById('countryCode');
+    if (!countryCodeSelect) return;
     
-    if (nextBtn) nextBtn.addEventListener('click', validateStep1);
-    if (backBtn) backBtn.addEventListener('click', () => goToStep(1));
-    if (submitBtn) submitBtn.addEventListener('click', submitVerification);
-    
-    // Phone input formatting (including WhatsApp)
-    const phoneInputs = ['phone', 'altPhone', 'verificationPhone', 'whatsappNumber'];
-    phoneInputs.forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-            input.addEventListener('input', function() {
-                formatPhoneNumber(this);
-            });
-        }
+    countryCodeSelect.addEventListener('change', function() {
+        const code = this.value;
+        const prefixes = document.querySelectorAll('.phone-prefix');
+        prefixes.forEach(prefix => {
+            prefix.textContent = code;
+        });
     });
 }
 
@@ -379,6 +284,7 @@ function setupEventListeners() {
 // STEP NAVIGATION
 // ============================================
 function goToStep(step) {
+    // Update step display
     document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
     const stepEl = document.getElementById(`step${step}`);
     if (stepEl) stepEl.classList.add('active');
@@ -395,9 +301,10 @@ function goToStep(step) {
         }
     });
     
-    const fill = document.getElementById('progressFill');
-    if (fill) {
-        fill.style.width = `${((step - 1) / 1) * 100}%`;
+    // Update step badge
+    const stepBadge = document.getElementById('stepBadge');
+    if (stepBadge) {
+        stepBadge.textContent = `Step ${step} of 2`;
     }
     
     currentStep = step;
@@ -410,27 +317,17 @@ function goToStep(step) {
 async function validateStep1() {
     // Clear previous errors
     document.querySelectorAll('.error-message').forEach(e => e.classList.remove('show'));
-    document.querySelectorAll('.form-input, .form-select').forEach(e => e.classList.remove('error'));
+    document.querySelectorAll('.form-input, input, select').forEach(e => e.classList.remove('error'));
     
     let isValid = true;
     
     // Get values
-    const email = document.getElementById('businessEmail')?.value.trim() || '';
     const businessName = document.getElementById('businessName')?.value.trim() || '';
     const phone = document.getElementById('phone')?.value.trim() || '';
     const altPhone = document.getElementById('altPhone')?.value.trim() || '';
     const whatsapp = document.getElementById('whatsappNumber')?.value.trim() || '';
     const businessType = document.getElementById('businessType')?.value || '';
     const terms = document.getElementById('acceptTerms')?.checked || false;
-    
-    // Validate email
-    if (!email) {
-        showFieldError('businessEmail', 'Email is required');
-        isValid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showFieldError('businessEmail', 'Enter a valid email address');
-        isValid = false;
-    }
     
     // Validate business name
     if (!businessName) {
@@ -443,11 +340,11 @@ async function validateStep1() {
         showFieldError('phone', 'Phone number is required');
         isValid = false;
     } else if (!isValidPhone(phone)) {
-        showFieldError('phone', 'Enter a valid phone number');
+        showFieldError('phone', 'Enter a valid phone number (7-12 digits)');
         isValid = false;
     }
     
-    // Validate alternative phone if provided
+    // Validate alt phone if provided
     if (altPhone && !isValidPhone(altPhone)) {
         showFieldError('altPhone', 'Enter a valid phone number');
         isValid = false;
@@ -457,8 +354,8 @@ async function validateStep1() {
     if (!whatsapp) {
         showFieldError('whatsappNumber', 'WhatsApp number is required');
         isValid = false;
-    } else if (!isValidWhatsApp(whatsapp)) {
-        showFieldError('whatsappNumber', 'Enter a valid WhatsApp number');
+    } else if (!isValidPhone(whatsapp)) {
+        showFieldError('whatsappNumber', 'Enter a valid WhatsApp number (7-12 digits)');
         isValid = false;
     }
     
@@ -486,9 +383,8 @@ async function validateStep1() {
     }
     
     if (isValid) {
-        // Store data in session (including WhatsApp)
+        // Save business info to session storage
         const businessInfo = {
-            email,
             businessName,
             countryCode: document.getElementById('countryCode')?.value || '+256',
             phone,
@@ -526,45 +422,49 @@ function showFieldError(fieldId, message) {
 }
 
 // ============================================
-// SUBMIT VERIFICATION
+// SUBMIT SUPPLIER REGISTRATION
 // ============================================
 async function submitVerification() {
-    // Validate form
+    // Validate Step 2 fields
     const detailedAddress = document.getElementById('detailedAddress')?.value.trim() || '';
     const city = document.getElementById('city')?.value.trim() || '';
     const district = document.getElementById('district')?.value || '';
-    const country = document.getElementById('country')?.value || 'Uganda';
     const contactPerson = document.getElementById('contactPerson')?.value.trim() || '';
     const verificationPhone = document.getElementById('verificationPhone')?.value.trim() || '';
     const verifyLocation = document.getElementById('verifyLocation')?.checked || false;
     
     if (!detailedAddress) {
         showToast('Please enter your business address', 'error');
+        document.getElementById('detailedAddress')?.focus();
         return;
     }
     
     if (!city) {
         showToast('Please enter city/town', 'error');
+        document.getElementById('city')?.focus();
         return;
     }
     
     if (!district) {
         showToast('Please select district', 'error');
+        document.getElementById('district')?.focus();
         return;
     }
     
     if (!contactPerson) {
         showToast('Please enter contact person name', 'error');
+        document.getElementById('contactPerson')?.focus();
         return;
     }
     
     if (!verificationPhone) {
         showToast('Please enter verification phone number', 'error');
+        document.getElementById('verificationPhone')?.focus();
         return;
     }
     
     if (!isValidPhone(verificationPhone)) {
-        showToast('Please enter a valid phone number', 'error');
+        showToast('Please enter a valid verification phone number', 'error');
         return;
     }
     
@@ -576,7 +476,7 @@ async function submitVerification() {
     showLoading(true, 'Submitting your application...');
     
     try {
-        // Get business info from session
+        // Get business info from session storage
         const businessInfo = JSON.parse(sessionStorage.getItem('supplierBusinessInfo'));
         
         if (!businessInfo) {
@@ -589,7 +489,7 @@ async function submitVerification() {
         const fullVerificationPhone = businessInfo.countryCode + verificationPhone;
         const fullWhatsapp = businessInfo.countryCode + businessInfo.whatsapp;
         
-        // Update profile
+        // Update profile with business info
         const { error: profileError } = await sb
             .from('profiles')
             .update({
@@ -618,7 +518,7 @@ async function submitVerification() {
                 business_type: businessInfo.businessType,
                 year_established: businessInfo.yearEstablished ? parseInt(businessInfo.yearEstablished) : null,
                 business_phone: fullPhone,
-                business_email: businessInfo.email,
+                business_email: currentUser.email,
                 country_code: businessInfo.countryCode,
                 warehouse_location: detailedAddress,
                 warehouse_district: district,
@@ -640,7 +540,7 @@ async function submitVerification() {
 
         if (supplierError) throw supplierError;
 
-        // Insert WhatsApp number into supplier_whatsapp table
+        // Insert WhatsApp number
         const { error: whatsappError } = await sb
             .from('supplier_whatsapp')
             .insert({
@@ -658,29 +558,8 @@ async function submitVerification() {
 
         if (whatsappError) {
             console.error('Error saving WhatsApp number:', whatsappError);
-            // Don't throw - continue with registration even if WhatsApp save fails
-            // But notify admin
-            await sb
-                .from('notifications')
-                .insert({
-                    user_id: currentUser.id,
-                    type: 'admin_alert',
-                    title: 'WhatsApp Save Failed',
-                    message: `Failed to save WhatsApp for ${businessInfo.businessName}: ${whatsappError.message}`,
-                    link: '/admin/supplier-approvals.html'
-                });
+            // Don't throw - this is non-critical
         }
-
-        // Create notification for admin
-        await sb
-            .from('notifications')
-            .insert({
-                user_id: currentUser.id,
-                type: 'admin_alert',
-                title: 'New Supplier Registration',
-                message: `${businessInfo.businessName} has registered and awaits verification`,
-                link: '/admin/supplier-approvals.html'
-            });
 
         // Update WhatsApp preview in success modal
         const previewEl = document.getElementById('previewWhatsapp');
@@ -691,8 +570,9 @@ async function submitVerification() {
         // Clear session storage
         sessionStorage.removeItem('supplierBusinessInfo');
         
-        // Show success modal
         showLoading(false);
+        
+        // Show success modal
         const successModal = document.getElementById('successModal');
         if (successModal) successModal.classList.add('show');
         
@@ -706,7 +586,7 @@ async function submitVerification() {
 // ============================================
 // UTILITIES
 // ============================================
-function showLoading(show, message = 'Loading...') {
+function showLoading(show, message = 'Processing...') {
     const overlay = document.getElementById('loadingOverlay');
     const messageEl = document.getElementById('loadingMessage');
     
@@ -727,7 +607,7 @@ function showToast(message, type = 'info') {
     const colors = {
         success: '#10B981',
         error: '#EF4444',
-        info: '#6B21E5',  // SourceX Purple
+        info: '#0B4F6C',
         warning: '#F59E0B'
     };
     
@@ -740,14 +620,68 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
-// Modal functions
+function setupEventListeners() {
+    // Step navigation buttons
+    const nextBtn = document.getElementById('nextToStep2');
+    const backBtn = document.getElementById('backToStep1');
+    const submitBtn = document.getElementById('submitVerification');
+    
+    if (nextBtn) nextBtn.addEventListener('click', validateStep1);
+    if (backBtn) backBtn.addEventListener('click', () => goToStep(1));
+    if (submitBtn) submitBtn.addEventListener('click', submitVerification);
+    
+    // Phone number formatting
+    const phoneInputs = ['phone', 'altPhone', 'verificationPhone', 'whatsappNumber'];
+    phoneInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('input', function() {
+                formatPhoneNumber(this);
+            });
+        }
+    });
+    
+    // Show WhatsApp department field when number is entered
+    const whatsappInput = document.getElementById('whatsappNumber');
+    if (whatsappInput) {
+        whatsappInput.addEventListener('input', function() {
+            const deptGroup = document.getElementById('whatsappDepartmentGroup');
+            if (deptGroup) {
+                deptGroup.style.display = this.value.length > 0 ? 'block' : 'none';
+            }
+        });
+    }
+    
+    // Phone prefix updates
+    updatePhonePrefixes();
+}
+
+// Modal close function
 window.closeSuccessModal = function() {
     const modal = document.getElementById('successModal');
     if (modal) modal.classList.remove('show');
     window.location.href = 'supplier-dashboard.html';
 };
 
-// Expose functions globally
-window.validateStep1 = validateStep1;
-window.goToStep = goToStep;
-window.submitVerification = submitVerification;
+// ============================================
+// INITIALIZATION
+// ============================================
+document.addEventListener('DOMContentLoaded', async () => {
+    // Check authentication
+    const isAuthenticated = await checkAuth();
+    if (!isAuthenticated) return;
+    
+    // Load districts
+    await loadDistricts();
+    
+    // Setup event listeners
+    setupEventListeners();
+    
+    // Initialize map (optional - won't break if fails)
+    setTimeout(() => {
+        if (document.getElementById('map')) {
+            initMap();
+            initLocationSearch();
+        }
+    }, 500);
+});
