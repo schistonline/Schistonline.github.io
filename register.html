@@ -3,296 +3,555 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Create Account - SourceX B2B</title>
+    <title>Create Account - Buy Uganda B2B</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/register.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0B4F6C;
+            --primary-dark: #083b4f;
+            --primary-light: #1a6b8a;
+            --primary-gradient: linear-gradient(135deg, #0B4F6C 0%, #1a6b8a 100%);
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo-section h1 {
+            font-size: 32px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-section .subtitle {
+            color: var(--gray-500);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .badge-container {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .badge {
+            background: var(--gray-100);
+            color: var(--gray-600);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+        }
+
+        .progress-container {
+            margin-bottom: 32px;
+        }
+
+        .progress-line {
+            height: 4px;
+            background: var(--gray-200);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            font-size: 12px;
+            color: var(--gray-400);
+            transition: color 0.3s ease;
+        }
+
+        .progress-step.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .progress-step i {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 20px;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+        }
+
+        .form-label.required::after {
+            content: '*';
+            color: var(--danger);
+            margin-left: 4px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(11, 79, 108, 0.1);
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .account-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .account-option {
+            padding: 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .account-option:hover {
+            border-color: var(--primary);
+            background: var(--gray-50);
+        }
+
+        .account-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .account-option.active {
+            border-color: var(--primary);
+            background: rgba(11, 79, 108, 0.05);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+            margin-top: 32px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        .google-signin-section {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .google-btn {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            color: var(--gray-700);
+            border: 2px solid var(--gray-300);
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .google-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 32px;
+            border-radius: 24px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .modal-icon.success {
+            color: var(--success);
+        }
+
+        .modal-icon.error {
+            color: var(--danger);
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            flex-direction: column;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-overlay p {
+            color: white;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 24px;
+            }
+            .row-2 {
+                grid-template-columns: 1fr;
+            }
+            .account-types {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="card">
-        <!-- 3D Cube Logo -->
         <div class="logo-section">
-            <div class="logo-cube">
-                <div class="cube">
-                    <div class="face front"></div>
-                    <div class="face right"></div>
-                    <div class="face top"></div>
-                </div>
+            <h1>Buy Uganda</h1>
+            <div class="subtitle">Join Uganda's Premier B2B Marketplace</div>
+        </div>
+
+        <!-- Google Sign In Section (Step 0) -->
+        <div id="googleSigninStep">
+            <div class="badge-container">
+                <span class="badge">🇺🇬 Trusted by 5,000+ Ugandan Businesses 🇺🇬</span>
             </div>
-            <div class="logo-text">
-                <h1>Source<span>X</span></h1>
-                <div class="subtitle">B2B Marketplace</div>
+
+            <button id="googleSignUpBtn" class="google-btn">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                Continue with Google
+            </button>
+
+            <div class="login-link">
+                Already have an account? <a href="login.html">Sign in</a>
             </div>
         </div>
 
-        <div class="badge-container">
-            <span class="badge">Join Uganda's B2B Marketplace</span>
-        </div>
-
-        <!-- Progress Bar -->
-        <div class="progress-container">
-            <div class="progress-line">
-                <div class="progress-fill" id="progressFill" style="width: 33%"></div>
+        <!-- Profile Completion Form (shown after Google sign in) -->
+        <div id="profileCompletionStep" style="display: none;">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-line">
+                    <div class="progress-fill" id="progressFill" style="width: 33%"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="progress-step active" id="step1Label">
+                        <i class="fas fa-user"></i>
+                        <span>Personal Info</span>
+                    </div>
+                    <div class="progress-step" id="step2Label">
+                        <i class="fas fa-building"></i>
+                        <span>Business Info</span>
+                    </div>
+                    <div class="progress-step" id="step3Label">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Complete</span>
+                    </div>
+                </div>
             </div>
-            <div class="progress-steps">
-                <div class="progress-step active" id="step1Label">
-                    <i class="fas fa-user"></i>
-                    <span>Personal Info</span>
-                </div>
-                <div class="progress-step" id="step2Label">
-                    <i class="fas fa-building"></i>
-                    <span>Business Info</span>
-                </div>
-                <div class="progress-step" id="step3Label">
-                    <i class="fas fa-lock"></i>
-                    <span>Security</span>
-                </div>
-            </div>
-        </div>
 
-        <!-- Step 1: Personal Information -->
-        <div class="step active" id="step1">
-            <form id="personalInfoForm">
-                <div class="form-group">
-                    <label class="form-label required">Full Name</label>
-                    <input type="text" class="form-input" id="fullName" placeholder="John Doe">
-                    <div class="hint">As it appears on your ID</div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label required">Email Address</label>
-                    <input type="email" class="form-input" id="email" placeholder="you@example.com">
-                    <div class="hint">We'll send verification to this email</div>
-                </div>
-
-                <div class="row-2">
+            <!-- Step 1: Personal Information -->
+            <div class="step active" id="step1">
+                <form id="personalInfoForm">
                     <div class="form-group">
-                        <label class="form-label required">Phone Number</label>
-                        <div class="phone-input-container">
-                            <select id="countryCode" class="country-code">
-                                <option value="+256">+256 (Uganda)</option>
-                                <option value="+254">+254 (Kenya)</option>
-                                <option value="+255">+255 (Tanzania)</option>
-                                <option value="+250">+250 (Rwanda)</option>
-                                <option value="+257">+257 (Burundi)</option>
-                                <option value="+211">+211 (South Sudan)</option>
-                            </select>
-                            <input type="tel" class="form-input phone-number" id="phone" placeholder="712345678">
-                        </div>
-                        <div class="hint">Enter number without country code</div>
+                        <label class="form-label required">Full Name</label>
+                        <input type="text" class="form-input" id="fullName" placeholder="John Doe">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Alternative Phone (Optional)</label>
-                        <div class="phone-input-container">
-                            <span class="phone-prefix" id="altPhonePrefix">+256</span>
-                            <input type="tel" class="form-input phone-number" id="altPhone" placeholder="712345678">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label required">Account Type</label>
-                    <div class="account-types">
-                        <label class="account-option">
-                            <input type="radio" name="accountType" value="buyer" checked>
-                            <i class="fas fa-shopping-cart"></i>
-                            <div>
-                                <strong>Buyer</strong>
-                                <small>Purchase products from suppliers</small>
-                            </div>
-                        </label>
-                        <label class="account-option">
-                            <input type="radio" name="accountType" value="supplier">
-                            <i class="fas fa-store"></i>
-                            <div>
-                                <strong>Supplier</strong>
-                                <small>Sell your products to businesses</small>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn btn-primary" id="continueToStep2">
-                        Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Step 2: Business Information (For Suppliers) -->
-        <div class="step" id="step2">
-            <form id="businessInfoForm">
-                <div class="business-toggle-note" id="buyerNote" style="display: none;">
-                    <i class="fas fa-info-circle"></i>
-                    <p>As a buyer, you can skip business details for now. You can add them later from your profile.</p>
-                </div>
-
-                <div class="business-fields" id="businessFields">
-                    <div class="form-group">
-                        <label class="form-label required" id="businessNameLabel">Business Name</label>
-                        <input type="text" class="form-input" id="businessName" placeholder="Your business name">
+                        <label class="form-label required">Email Address</label>
+                        <input type="email" class="form-input" id="email" readonly disabled>
                     </div>
 
                     <div class="row-2">
                         <div class="form-group">
-                            <label class="form-label">Business Registration No.</label>
-                            <input type="text" class="form-input" id="businessReg" placeholder="Optional">
+                            <label class="form-label required">Phone Number</label>
+                            <input type="tel" class="form-input" id="phone" placeholder="+256 712 345 678">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">TIN Number</label>
-                            <input type="text" class="form-input" id="tinNumber" placeholder="Tax ID (Optional)">
-                        </div>
-                    </div>
 
-                    <div class="row-2">
                         <div class="form-group">
-                            <label class="form-label required">Business Type</label>
-                            <select class="form-select" id="businessType">
-                                <option value="">Select business type</option>
-                                <option value="Manufacturer">Manufacturer</option>
-                                <option value="Wholesaler">Wholesaler</option>
-                                <option value="Distributor">Distributor</option>
-                                <option value="Exporter">Exporter</option>
-                                <option value="Importer">Importer</option>
-                                <option value="Retailer">Retailer (Bulk)</option>
-                                <option value="Service Provider">Service Provider</option>
-                                <option value="Farm">Farm/Poultry</option>
-                                <option value="Logistics">Logistics/Transport</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Year Established</label>
-                            <input type="number" class="form-input" id="yearEstablished" placeholder="2020" min="1900" max="2026">
+                            <label class="form-label">Alternative Phone (Optional)</label>
+                            <input type="tel" class="form-input" id="altPhone" placeholder="+256 712 345 678">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label required">Region</label>
-                        <select class="form-select" id="region" required>
-                            <option value="">Select region</option>
-                            <!-- Populated by JS -->
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label required">District</label>
-                        <select class="form-select" id="district" required disabled>
-                            <option value="">First select a region</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">County/Municipality (Optional)</label>
-                        <select class="form-select" id="county" disabled>
-                            <option value="">First select a district</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label required">Business Address</label>
-                        <textarea class="form-textarea" id="businessAddress" rows="2" placeholder="Street address, building, landmark"></textarea>
-                    </div>
-
-                    <div class="row-2">
-                        <div class="form-group">
-                            <label class="form-label">Service Areas</label>
-                            <select class="form-select" id="serviceAreas" multiple size="3">
-                                <option value="nationwide">Nationwide</option>
-                                <option value="kampala">Kampala</option>
-                                <option value="wakiso">Wakiso</option>
-                                <option value="mukono">Mukono</option>
-                                <option value="jinja">Jinja</option>
-                                <option value="mbale">Mbale</option>
-                                <option value="gulu">Gulu</option>
-                            </select>
-                            <div class="hint">Hold Ctrl/Cmd to select multiple</div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Delivery Options</label>
-                            <select class="form-select" id="deliveryOptions" multiple size="3">
-                                <option value="pickup">Buyer Pickup</option>
-                                <option value="supplier_delivery">Supplier Delivery</option>
-                                <option value="third_party">Third Party Logistics</option>
-                            </select>
+                        <label class="form-label required">Account Type</label>
+                        <div class="account-types">
+                            <label class="account-option">
+                                <input type="radio" name="accountType" value="buyer" checked>
+                                <i class="fas fa-shopping-cart"></i>
+                                <div>
+                                    <strong>Buyer</strong>
+                                    <small>Purchase products from suppliers</small>
+                                </div>
+                            </label>
+                            <label class="account-option">
+                                <input type="radio" name="accountType" value="supplier">
+                                <i class="fas fa-store"></i>
+                                <div>
+                                    <strong>Supplier</strong>
+                                    <small>Sell your products to businesses</small>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Minimum Order Value (UGX)</label>
-                        <input type="number" class="form-input" id="minOrderValue" placeholder="0" min="0" step="1000">
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="backToStep1">
-                        <i class="fas fa-arrow-left"></i> Back
-                    </button>
-                    <button type="button" class="btn btn-primary" id="continueToStep3">
-                        Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Step 3: Security & Password -->
-        <div class="step" id="step3">
-            <form id="securityForm">
-                <div class="form-group">
-                    <label class="form-label required">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" class="form-input" id="password" placeholder="Create a strong password">
-                        <button type="button" class="toggle-password" data-target="password">
-                            <i class="fas fa-eye"></i>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" id="continueToStep2">
+                            Continue <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
-                    <div class="password-strength" id="passwordStrength">
-                        <div class="strength-bar"></div>
-                        <span class="strength-text">Enter a password</span>
-                    </div>
-                    <div class="hint">Minimum 8 characters with at least one number and special character</div>
-                </div>
+                </form>
+            </div>
 
-                <div class="form-group">
-                    <label class="form-label required">Confirm Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm your password">
-                        <button type="button" class="toggle-password" data-target="confirmPassword">
-                            <i class="fas fa-eye"></i>
+            <!-- Step 2: Business Information -->
+            <div class="step" id="step2">
+                <form id="businessInfoForm">
+                    <div class="business-fields" id="businessFields">
+                        <div class="form-group">
+                            <label class="form-label" id="businessNameLabel">Business Name</label>
+                            <input type="text" class="form-input" id="businessName" placeholder="Your business name">
+                        </div>
+
+                        <div class="row-2">
+                            <div class="form-group">
+                                <label class="form-label">Business Registration No.</label>
+                                <input type="text" class="form-input" id="businessReg" placeholder="Optional">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">TIN Number</label>
+                                <input type="text" class="form-input" id="tinNumber" placeholder="Tax ID (Optional)">
+                            </div>
+                        </div>
+
+                        <div class="row-2">
+                            <div class="form-group">
+                                <label class="form-label">Business Type</label>
+                                <select class="form-select" id="businessType">
+                                    <option value="">Select business type</option>
+                                    <option value="Manufacturer">Manufacturer</option>
+                                    <option value="Wholesaler">Wholesaler</option>
+                                    <option value="Distributor">Distributor</option>
+                                    <option value="Exporter">Exporter</option>
+                                    <option value="Importer">Importer</option>
+                                    <option value="Retailer">Retailer (Bulk)</option>
+                                    <option value="Service Provider">Service Provider</option>
+                                    <option value="Farm">Farm/Poultry</option>
+                                    <option value="Logistics">Logistics/Transport</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Year Established</label>
+                                <input type="number" class="form-input" id="yearEstablished" placeholder="2020" min="1900" max="2026">
+                            </div>
+                        </div>
+
+                        <div class="row-2">
+                            <div class="form-group">
+                                <label class="form-label">Region</label>
+                                <select class="form-select" id="region">
+                                    <option value="">Select region</option>
+                                    <option value="Central">Central</option>
+                                    <option value="Eastern">Eastern</option>
+                                    <option value="Western">Western</option>
+                                    <option value="Northern">Northern</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">District</label>
+                                <input type="text" class="form-input" id="district" placeholder="e.g., Kampala">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Business Address</label>
+                            <textarea class="form-textarea" id="businessAddress" rows="2" placeholder="Street address, building, landmark"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="backToStep1">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="button" class="btn btn-primary" id="completeRegistration">
+                            Complete Registration <i class="fas fa-check"></i>
                         </button>
                     </div>
-                    <div class="password-match" id="passwordMatch"></div>
-                </div>
-
-                <div class="terms-section">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="acceptTerms">
-                        <span>I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a></span>
-                    </label>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="backToStep2">
-                        <i class="fas fa-arrow-left"></i> Back
-                    </button>
-                    <button type="button" class="btn btn-primary btn-large" id="submitRegister" disabled>
-                        <i class="fas fa-user-plus"></i> Create Account
-                    </button>
-                </div>
-
-                <div class="info-note">
-                    <i class="fas fa-shield-alt"></i>
-                    <p>By creating an account, you agree to receive important updates about your business activity.</p>
-                </div>
-            </form>
-        </div>
-
-        <div class="login-link">
-            Already have an account? <a href="login.html">Sign in</a>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -302,11 +561,10 @@
             <div class="modal-icon success">
                 <i class="fas fa-check-circle"></i>
             </div>
-            <h3>Account Created Successfully!</h3>
-            <p id="successMessage">Please check your email to verify your account.</p>
-            <div class="modal-actions">
-                <a href="login.html" class="btn btn-primary">Go to Login</a>
-                <a href="index.html" class="btn btn-secondary">Browse Marketplace</a>
+            <h3>Registration Complete!</h3>
+            <p>Your account has been successfully created.</p>
+            <div class="form-actions" style="margin-top: 24px;">
+                <a href="login.html" class="btn btn-primary">Go to Dashboard</a>
             </div>
         </div>
     </div>
@@ -319,23 +577,296 @@
             </div>
             <h3>Registration Error</h3>
             <p id="errorMessage">Something went wrong. Please try again.</p>
-            <div class="modal-actions">
+            <div class="form-actions" style="margin-top: 24px;">
                 <button class="btn btn-primary" onclick="closeErrorModal()">Try Again</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast"></div>
-
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
-        <p id="loadingMessage">Creating your account...</p>
+        <p id="loadingMessage">Setting up your account...</p>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/register.js"></script>
+    <script>
+        // Supabase Configuration       
+    const SUPABASE_URL = "https://uufhvmmgwzkxvvdbqemz.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc";
+
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: {
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: true,
+                storage: localStorage
+            }
+        });
+
+        let currentUser = null;
+        let selectedAccountType = 'buyer';
+
+        // DOM Elements
+        const googleSignupStep = document.getElementById('googleSigninStep');
+        const profileCompletionStep = document.getElementById('profileCompletionStep');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const successModal = document.getElementById('successModal');
+        const errorModal = document.getElementById('errorModal');
+        const errorMessage = document.getElementById('errorMessage');
+
+        function showLoading(message = 'Setting up your account...') {
+            document.getElementById('loadingMessage').textContent = message;
+            loadingOverlay.classList.add('active');
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.remove('active');
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorModal.classList.add('active');
+        }
+
+        function closeErrorModal() {
+            errorModal.classList.remove('active');
+        }
+
+        function showSuccess() {
+            successModal.classList.add('active');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        }
+
+        // Update progress bar and step visibility
+        function updateProgress(step) {
+            const progressFill = document.getElementById('progressFill');
+            const step1Label = document.getElementById('step1Label');
+            const step2Label = document.getElementById('step2Label');
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+
+            if (step === 1) {
+                progressFill.style.width = '50%';
+                step1Label.classList.add('active');
+                step2Label.classList.remove('active');
+                step1.classList.add('active');
+                step2.classList.remove('active');
+            } else if (step === 2) {
+                progressFill.style.width = '100%';
+                step1Label.classList.remove('active');
+                step2Label.classList.add('active');
+                step1.classList.remove('active');
+                step2.classList.add('active');
+            }
+        }
+
+        // Handle account type selection
+        document.querySelectorAll('input[name="accountType"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                selectedAccountType = e.target.value;
+                const businessFields = document.getElementById('businessFields');
+                const businessNameLabel = document.getElementById('businessNameLabel');
+                
+                if (selectedAccountType === 'supplier') {
+                    businessNameLabel.classList.add('required');
+                } else {
+                    businessNameLabel.classList.remove('required');
+                }
+            });
+        });
+
+        // Google Sign Up
+        async function handleGoogleSignUp() {
+            showLoading('Redirecting to Google...');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: `${window.location.origin}/register.html`,
+                        queryParams: {
+                            access_type: 'offline',
+                            prompt: 'consent',
+                        }
+                    }
+                });
+
+                if (error) {
+                    console.error('Google sign up error:', error);
+                    showError(error.message || 'Failed to sign up with Google');
+                    hideLoading();
+                }
+            } catch (err) {
+                console.error('Google sign up exception:', err);
+                showError('Network error. Please try again.');
+                hideLoading();
+            }
+        }
+
+        // Handle OAuth callback and show profile completion form
+        async function handleOAuthCallback() {
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error) {
+                    console.error('Session error:', error);
+                    return;
+                }
+
+                if (session?.user) {
+                    currentUser = session.user;
+                    
+                    // Check if profile already exists and is complete
+                    const { data: profile, error: profileError } = await supabase
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', currentUser.id)
+                        .single();
+
+                    // If profile exists and has business name (for suppliers) or basic info, redirect to dashboard
+                    if (profile && !profileError) {
+                        // Check if profile is complete (has basic required info)
+                        if (profile.full_name && profile.phone) {
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                    }
+                    
+                    // Show profile completion form
+                    googleSignupStep.style.display = 'none';
+                    profileCompletionStep.style.display = 'block';
+                    
+                    // Pre-fill email and name from Google
+                    document.getElementById('email').value = currentUser.email || '';
+                    document.getElementById('fullName').value = currentUser.user_metadata?.full_name || currentUser.user_metadata?.name || '';
+                    
+                    hideLoading();
+                } else {
+                    // No session, show Google signup button
+                    googleSignupStep.style.display = 'block';
+                    profileCompletionStep.style.display = 'none';
+                    hideLoading();
+                }
+            } catch (err) {
+                console.error('OAuth callback error:', err);
+                googleSignupStep.style.display = 'block';
+                profileCompletionStep.style.display = 'none';
+                hideLoading();
+            }
+        }
+
+        // Complete registration and save profile
+        async function completeRegistration() {
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const altPhone = document.getElementById('altPhone').value.trim();
+            const accountType = selectedAccountType;
+            
+            // Validate required fields
+            if (!fullName) {
+                showError('Please enter your full name');
+                return;
+            }
+            
+            if (!phone) {
+                showError('Please enter your phone number');
+                return;
+            }
+            
+            // Prepare profile data
+            const profileData = {
+                full_name: fullName,
+                phone: phone,
+                alt_phone: altPhone || null,
+                account_type: accountType,
+                is_supplier: accountType === 'supplier',
+                updated_at: new Date().toISOString()
+            };
+            
+            // Add business fields if supplier
+            if (accountType === 'supplier') {
+                const businessName = document.getElementById('businessName').value.trim();
+                if (!businessName) {
+                    showError('Please enter your business name');
+                    return;
+                }
+                
+                profileData.business_name = businessName;
+                profileData.business_reg = document.getElementById('businessReg').value.trim() || null;
+                profileData.tin_number = document.getElementById('tinNumber').value.trim() || null;
+                profileData.business_type = document.getElementById('businessType').value || null;
+                profileData.year_established = document.getElementById('yearEstablished').value ? parseInt(document.getElementById('yearEstablished').value) : null;
+                profileData.region = document.getElementById('region').value || null;
+                profileData.district = document.getElementById('district').value.trim() || null;
+                profileData.business_address = document.getElementById('businessAddress').value.trim() || null;
+            }
+            
+            showLoading('Saving your information...');
+            
+            try {
+                // Check if profile exists
+                const { data: existingProfile, error: checkError } = await supabase
+                    .from('profiles')
+                    .select('id')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                let result;
+                if (existingProfile) {
+                    // Update existing profile
+                    result = await supabase
+                        .from('profiles')
+                        .update(profileData)
+                        .eq('id', currentUser.id);
+                } else {
+                    // Insert new profile
+                    result = await supabase
+                        .from('profiles')
+                        .insert([{ id: currentUser.id, ...profileData }]);
+                }
+                
+                if (result.error) {
+                    console.error('Profile save error:', result.error);
+                    showError('Failed to save your information. Please try again.');
+                    hideLoading();
+                    return;
+                }
+                
+                hideLoading();
+                showSuccess();
+                
+            } catch (err) {
+                console.error('Registration error:', err);
+                showError('An error occurred. Please try again.');
+                hideLoading();
+            }
+        }
+
+        // Event listeners
+        document.getElementById('googleSignUpBtn').addEventListener('click', handleGoogleSignUp);
+        document.getElementById('continueToStep2').addEventListener('click', () => updateProgress(2));
+        document.getElementById('backToStep1').addEventListener('click', () => updateProgress(1));
+        document.getElementById('completeRegistration').addEventListener('click', completeRegistration);
+        
+        // Check for OAuth callback on page load
+        if (window.location.hash || window.location.search.includes('code')) {
+            showLoading('Completing Google sign in...');
+            handleOAuthCallback();
+        } else {
+            // Check if user is already logged in
+            supabase.auth.getSession().then(({ data: { session } }) => {
+                if (session?.user) {
+                    currentUser = session.user;
+                    handleOAuthCallback();
+                } else {
+                    hideLoading();
+                }
+            });
+        }
+    </script>
 </body>
 </html>
