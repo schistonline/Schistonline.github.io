@@ -2,142 +2,786 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>SourceX B2B - Register as Supplier</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Become a Supplier - Buy Uganda B2B</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Leaflet Maps -->
+    <!-- Leaflet Maps (Optional) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/supplier-register.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #0B4F6C;
+            --primary-dark: #083b4f;
+            --primary-light: #1a6b8a;
+            --primary-gradient: linear-gradient(135deg, #0B4F6C 0%, #1a6b8a 100%);
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1F2937;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --white: #FFFFFF;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --radius: 16px;
+            --radius-sm: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 16px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--gray-600);
+            cursor: pointer;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .header .step-badge {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: white;
+            padding: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            background: var(--gray-200);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 600;
+            color: var(--gray-500);
+            transition: all 0.3s;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--primary);
+            color: white;
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+
+        .progress-step.active .step-label {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gray-200);
+            z-index: 1;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px 16px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding-bottom: 100px;
+        }
+
+        /* Step Container */
+        .step {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Sections */
+        .form-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray-800);
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+        }
+
+        .required::after {
+            content: '*';
+            color: var(--danger);
+            margin-left: 4px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(11, 79, 108, 0.1);
+        }
+
+        input.error, select.error {
+            border-color: var(--danger);
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .hint {
+            color: var(--gray-500);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* Row Layouts */
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Phone Input */
+        .phone-input-container {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: white;
+        }
+
+        .phone-input-container:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(11, 79, 108, 0.1);
+        }
+
+        .phone-prefix {
+            background: var(--gray-100);
+            padding: 12px 12px;
+            border-right: 1.5px solid var(--gray-200);
+            color: var(--gray-700);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .phone-number {
+            border: none !important;
+            flex: 1;
+            padding: 12px;
+        }
+
+        .phone-number:focus {
+            box-shadow: none !important;
+        }
+
+        /* Map */
+        .map-container {
+            margin-bottom: 16px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        #map {
+            height: 200px;
+            width: 100%;
+        }
+
+        /* Location Search */
+        .location-search-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .location-search-container input {
+            flex: 1;
+        }
+
+        .location-search-container button {
+            padding: 0 16px;
+            background: var(--gray-100);
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            color: var(--gray-700);
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Business Hours */
+        .business-hours {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .hour-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hour-row span {
+            width: 70px;
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        .hour-row input {
+            flex: 1;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .checkbox-group input {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+        }
+
+        .checkbox-group label {
+            flex: 1;
+            margin-bottom: 0;
+            font-weight: normal;
+            font-size: 13px;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        /* Verification Badge */
+        .verification-badge {
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .verification-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .verification-text h3 {
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .verification-text p {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 16px;
+            right: 16px;
+            background: var(--gray-800);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success { background: var(--secondary); }
+        .toast.error { background: var(--danger); }
+        .toast.warning { background: var(--accent); }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 3000;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--gray-300);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #loadingMessage {
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Success Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 4000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            padding: 32px 24px;
+            text-align: center;
+            max-width: 320px;
+            width: 100%;
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+            color: white;
+        }
+
+        .modal h2 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .modal p {
+            color: var(--gray-500);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .whatsapp-preview {
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .whatsapp-preview i {
+            font-size: 28px;
+            color: #25D366;
+        }
+
+        .whatsapp-preview span {
+            font-size: 16px;
+            font-weight: 700;
+            color: #075E54;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modal-actions a {
+            flex: 1;
+            padding: 12px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .modal-actions .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .modal-actions .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: var(--gray-400);
+            border-top: 1px solid var(--gray-200);
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .row-2, .row-3 {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .hour-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .hour-row span {
+                width: auto;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .verification-badge {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-label {
+                font-size: 10px;
+            }
+            
+            .step-circle {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            
+            .progress-line {
+                top: 16px;
+            }
+        }
+
+        /* Hide number input spinners */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 <body>
-    <div class="card">
-        <!-- 3D Cube Logo -->
-        <div class="logo-section">
-            <div class="logo-cube">
-                <div class="cube">
-                    <div class="face front"></div>
-                    <div class="face right"></div>
-                    <div class="face top"></div>
-                </div>
-            </div>
-            <div class="logo-text">
-                <h1>Source<span>X</span></h1>
-                <div class="subtitle">Become a Supplier</div>
-            </div>
-        </div>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1>Become a Supplier</h1>
+        <div class="step-badge" id="stepBadge">Step 1 of 2</div>
+    </div>
 
-        <div class="badge-container">
-            <span class="badge">B2B Marketplace</span>
-            <span class="badge badge-supplier">Supplier Registration</span>
-        </div>
-
-        <!-- Progress Bar -->
-        <div class="progress-container">
-            <div class="progress-line">
-                <div class="progress-fill" id="progressFill" style="width: 50%"></div>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-steps">
+            <div class="progress-step active" id="step1Label">
+                <div class="step-circle">1</div>
+                <div class="step-label">Business Info</div>
             </div>
-            <div class="progress-steps">
-                <div class="progress-step active" id="step1Label">
-                    <i class="fas fa-building"></i>
-                    <span>Business Info</span>
-                </div>
-                <div class="progress-step" id="step2Label">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Location Details</span>
-                </div>
+            <div class="progress-step" id="step2Label">
+                <div class="step-circle">2</div>
+                <div class="step-label">Location Details</div>
             </div>
+            <div class="progress-line"></div>
         </div>
+    </div>
 
+    <!-- Main Content -->
+    <div class="main-content">
         <!-- Step 1: Business Information -->
         <div class="step active" id="step1">
-            <form id="businessInfoForm">
-                <div class="form-group">
-                    <label class="form-label required">Business Email</label>
-                    <input type="email" class="form-input" id="businessEmail" placeholder="contact@yourbusiness.com">
-                    <div class="error-message" id="emailError"></div>
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-building"></i>
+                    Business Information
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label required">Business Name</label>
-                    <input type="text" class="form-input" id="businessName" placeholder="Your registered business name">
+                    <label class="required">Business Name</label>
+                    <input type="text" id="businessName" placeholder="Your registered business name">
+                    <div class="error-message" id="businessNameError"></div>
                 </div>
 
                 <div class="row-2">
                     <div class="form-group">
-                        <label class="form-label required">Country Code</label>
-                        <select class="form-select" id="countryCode">
-                            <option value="+256" selected>Uganda (+256)</option>
-                            <option value="+254">Kenya (+254)</option>
-                            <option value="+255">Tanzania (+255)</option>
-                            <option value="+250">Rwanda (+250)</option>
-                            <option value="+257">Burundi (+257)</option>
-                            <option value="+211">South Sudan (+211)</option>
+                        <label class="required">Country Code</label>
+                        <select id="countryCode">
+                            <option value="+256" selected>🇺🇬 Uganda (+256)</option>
+                            <option value="+254">🇰🇪 Kenya (+254)</option>
+                            <option value="+255">🇹🇿 Tanzania (+255)</option>
+                            <option value="+250">🇷🇼 Rwanda (+250)</option>
+                            <option value="+257">🇧🇮 Burundi (+257)</option>
+                            <option value="+211">🇸🇸 South Sudan (+211)</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label required">Phone Number</label>
+                        <label class="required">Phone Number</label>
                         <div class="phone-input-container">
                             <span class="phone-prefix" id="phonePrefix">+256</span>
-                            <input type="tel" class="form-input phone-number" id="phone" placeholder="712345678">
+                            <input type="tel" class="phone-number" id="phone" placeholder="712345678">
                         </div>
                         <div class="hint">Enter number without country code</div>
+                        <div class="error-message" id="phoneError"></div>
                     </div>
                 </div>
 
                 <div class="row-2">
                     <div class="form-group">
-                        <label class="form-label">Alternative Phone</label>
+                        <label>Alternative Phone</label>
                         <div class="phone-input-container">
                             <span class="phone-prefix" id="altPhonePrefix">+256</span>
-                            <input type="tel" class="form-input phone-number" id="altPhone" placeholder="712345678">
+                            <input type="tel" class="phone-number" id="altPhone" placeholder="712345678">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label required">
-                            <i class="fab fa-whatsapp" style="color: #25D366;"></i> 
-                            WhatsApp Number
+                        <label class="required">
+                            <i class="fab fa-whatsapp" style="color: #25D366;"></i> WhatsApp Number
                         </label>
-                        <div class="phone-input-container whatsapp-container">
+                        <div class="phone-input-container">
                             <span class="phone-prefix" id="whatsappPrefix">+256</span>
-                            <input type="tel" class="form-input phone-number" id="whatsappNumber" placeholder="712345678" required>
+                            <input type="tel" class="phone-number" id="whatsappNumber" placeholder="712345678">
                         </div>
-                        <div class="hint">
-                            <i class="fas fa-info-circle"></i> 
-                            This will be used for customer negotiations and inquiries
-                        </div>
+                        <div class="hint">Used for customer negotiations</div>
                         <div class="error-message" id="whatsappError"></div>
                     </div>
                 </div>
 
-                <!-- WhatsApp Department Selection (hidden initially) -->
+                <!-- WhatsApp Department (shown when number entered) -->
                 <div class="form-group" id="whatsappDepartmentGroup" style="display: none;">
-                    <label class="form-label">
-                        <i class="fas fa-building"></i>
-                        WhatsApp Department (Optional)
-                    </label>
-                    <select class="form-select" id="whatsappDepartment">
+                    <label>WhatsApp Department</label>
+                    <select id="whatsappDepartment">
                         <option value="sales">Sales</option>
                         <option value="support">Customer Support</option>
                         <option value="orders">Orders</option>
                         <option value="accounts">Accounts</option>
                         <option value="general">General</option>
                     </select>
-                    <div class="hint">Select which department handles this WhatsApp number</div>
+                    <div class="hint">Which department handles this number</div>
                 </div>
 
                 <div class="row-2">
                     <div class="form-group">
-                        <label class="form-label required">Business Type</label>
-                        <select class="form-select" id="businessType">
-                            <option value="">Select business type</option>
+                        <label class="required">Business Type</label>
+                        <select id="businessType">
+                            <option value="">Select type</option>
                             <option value="Manufacturer">Manufacturer</option>
                             <option value="Wholesaler">Wholesaler</option>
                             <option value="Distributor">Distributor</option>
@@ -146,90 +790,89 @@
                             <option value="Retailer (Bulk)">Retailer (Bulk)</option>
                             <option value="Service Provider">Service Provider</option>
                         </select>
+                        <div class="error-message" id="businessTypeError"></div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Year Established</label>
-                        <input type="number" class="form-input" id="yearEstablished" placeholder="2020" min="1900" max="2026">
+                        <label>Year Established</label>
+                        <input type="number" id="yearEstablished" placeholder="2020" min="1900" max="2026">
+                        <div class="error-message" id="yearEstablishedError"></div>
                     </div>
                 </div>
 
                 <div class="row-2">
                     <div class="form-group">
-                        <label class="form-label">Business Registration No.</label>
-                        <input type="text" class="form-input" id="businessReg" placeholder="Optional">
+                        <label>Business Registration No.</label>
+                        <input type="text" id="businessReg" placeholder="Optional">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">TIN Number</label>
-                        <input type="text" class="form-input" id="tinNumber" placeholder="Tax ID (Optional)">
+                        <label>TIN Number</label>
+                        <input type="text" id="tinNumber" placeholder="Tax ID (Optional)">
                     </div>
                 </div>
 
                 <div class="checkbox-group">
-                    <input type="checkbox" id="acceptTerms" required>
-                    <label for="acceptTerms">I confirm that the information provided is accurate and I agree to the <a href="terms-conditions.html" target="_blank">Terms of Service</a></label>
+                    <input type="checkbox" id="acceptTerms">
+                    <label for="acceptTerms">I confirm that the information provided is accurate and I agree to the <a href="terms.html" target="_blank">Terms of Service</a></label>
                 </div>
+            </div>
 
-                <div class="button-group">
-                    <button type="button" class="btn btn-primary" id="nextToStep2">Continue to Location Details <i class="fas fa-arrow-right"></i></button>
-                </div>
-            </form>
+            <div class="button-group">
+                <button class="btn btn-primary" id="nextToStep2">Continue →</button>
+            </div>
         </div>
 
         <!-- Step 2: Location Details -->
         <div class="step" id="step2">
-            <form id="locationForm">
+            <div class="form-section">
                 <div class="verification-badge">
                     <div class="verification-icon">
                         <i class="fas fa-map-marked-alt"></i>
                     </div>
                     <div class="verification-text">
-                        <h3>Business Location Details</h3>
-                        <p>Provide your business location information for verification</p>
+                        <h3>Business Location</h3>
+                        <p>Provide your business location for verification</p>
                     </div>
                 </div>
 
                 <!-- Location Search (Optional) -->
-                <div class="form-group">
-                    <label class="form-label">Search Location (Optional)</label>
-                    <div class="location-search-container">
-                        <input type="text" class="form-input" id="locationSearch" placeholder="Search for your business address">
-                        <button type="button" class="btn btn-secondary" id="searchLocationBtn">
-                            <i class="fas fa-search"></i> Search
-                        </button>
-                    </div>
-                    <div class="hint">Optional: Use map to find your location</div>
+                <div class="location-search-container">
+                    <input type="text" id="locationSearch" placeholder="Search address...">
+                    <button type="button" id="searchLocationBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
 
-                <!-- Map Container (Optional) -->
-                <div class="map-container" id="mapContainer">
-                    <div id="map" style="height: 250px; width: 100%; border-radius: 8px;"></div>
+                <!-- Map (Optional) -->
+                <div class="map-container">
+                    <div id="map"></div>
                 </div>
-                <div class="hint map-hint">You can click on the map to drop a pin (optional)</div>
 
-                <!-- Manual Address Entry -->
                 <div class="form-group">
-                    <label class="form-label required">Detailed Business Address</label>
-                    <textarea class="form-textarea" id="detailedAddress" rows="3" placeholder="Street address, building name, landmark, etc." required></textarea>
+                    <label class="required">Detailed Business Address</label>
+                    <textarea id="detailedAddress" rows="3" placeholder="Street address, building name, landmark"></textarea>
+                    <div class="error-message" id="addressError"></div>
                 </div>
 
                 <div class="row-3">
                     <div class="form-group">
-                        <label class="form-label required">City/Town</label>
-                        <input type="text" class="form-input" id="city" placeholder="e.g., Kampala" required>
+                        <label class="required">City/Town</label>
+                        <input type="text" id="city" placeholder="Kampala">
+                        <div class="error-message" id="cityError"></div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label required">District</label>
-                        <select class="form-select" id="district" required>
+                        <label class="required">District</label>
+                        <select id="district">
                             <option value="">Select district</option>
                         </select>
+                        <div class="error-message" id="districtError"></div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label required">Country</label>
-                        <select class="form-select" id="country">
+                        <label class="required">Country</label>
+                        <select id="country">
                             <option value="Uganda" selected>Uganda</option>
                             <option value="Kenya">Kenya</option>
                             <option value="Tanzania">Tanzania</option>
@@ -241,98 +884,81 @@
                 </div>
 
                 <!-- Business Hours -->
-                <div class="form-group">
-                    <label class="form-label">Business Hours (Optional)</label>
-                    <div class="business-hours">
-                        <div class="hour-row">
-                            <span>Weekdays:</span>
-                            <input type="text" class="form-input" id="weekdayHours" placeholder="e.g., 8:00 AM - 6:00 PM">
-                        </div>
-                        <div class="hour-row">
-                            <span>Weekends:</span>
-                            <input type="text" class="form-input" id="weekendHours" placeholder="e.g., 9:00 AM - 2:00 PM">
-                        </div>
+                <div class="business-hours">
+                    <div class="hour-row">
+                        <span>Weekdays:</span>
+                        <input type="text" id="weekdayHours" placeholder="8:00 AM - 6:00 PM">
                     </div>
-                </div>
-
-                <!-- Contact Person -->
-                <div class="form-group">
-                    <label class="form-label required">Contact Person Name</label>
-                    <input type="text" class="form-input" id="contactPerson" placeholder="Full name of contact person" required>
+                    <div class="hour-row">
+                        <span>Weekends:</span>
+                        <input type="text" id="weekendHours" placeholder="9:00 AM - 2:00 PM">
+                    </div>
                 </div>
 
                 <div class="row-2">
                     <div class="form-group">
-                        <label class="form-label required">Verification Phone</label>
-                        <div class="phone-input-container">
-                            <span class="phone-prefix" id="verificationPhonePrefix">+256</span>
-                            <input type="tel" class="form-input phone-number" id="verificationPhone" placeholder="712345678" required>
-                        </div>
+                        <label class="required">Contact Person Name</label>
+                        <input type="text" id="contactPerson" placeholder="Full name">
+                        <div class="error-message" id="contactPersonError"></div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Preferred Call Time</label>
-                        <select class="form-select" id="callTime">
-                            <option value="morning">Morning (9AM - 12PM)</option>
-                            <option value="afternoon">Afternoon (12PM - 3PM)</option>
-                            <option value="late_afternoon">Late Afternoon (3PM - 6PM)</option>
-                        </select>
+                        <label class="required">Verification Phone</label>
+                        <div class="phone-input-container">
+                            <span class="phone-prefix" id="verificationPhonePrefix">+256</span>
+                            <input type="tel" class="phone-number" id="verificationPhone" placeholder="712345678">
+                        </div>
+                        <div class="error-message" id="verificationPhoneError"></div>
                     </div>
                 </div>
 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="verifyLocation" required>
-                    <label for="verifyLocation">I confirm that the business location information provided is accurate</label>
+                <div class="form-group">
+                    <label>Preferred Call Time</label>
+                    <select id="callTime">
+                        <option value="morning">Morning (9AM - 12PM)</option>
+                        <option value="afternoon">Afternoon (12PM - 3PM)</option>
+                        <option value="late_afternoon">Late Afternoon (3PM - 6PM)</option>
+                    </select>
                 </div>
 
-                <div class="button-group">
-                    <button type="button" class="btn btn-secondary" id="backToStep1"><i class="fas fa-arrow-left"></i> Back</button>
-                    <button type="button" class="btn btn-primary" id="submitVerification">Submit for Verification <i class="fas fa-check-circle"></i></button>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="verifyLocation">
+                    <label for="verifyLocation">I confirm that the business location information provided is accurate</label>
                 </div>
-            </form>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" id="backToStep1">← Back</button>
+                <button class="btn btn-primary" id="submitVerification">Submit Application</button>
+            </div>
         </div>
     </div>
 
-    <!-- Professional Footer -->
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-content">
-                <p>&copy; 2026 SourceX B2B Marketplace. All rights reserved.</p>
-                <div class="footer-links">
-                    <a href="terms.html">Terms</a>
-                    <a href="privacy.html">Privacy</a>
-                    <a href="contact.html">Contact</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <div class="footer">
+        <p>© 2026 Buy Uganda. All rights reserved.</p>
+    </div>
 
     <!-- Success Modal -->
     <div class="modal" id="successModal">
         <div class="modal-content">
-            <div class="modal-icon success">
+            <div class="modal-icon">
                 <i class="fas fa-check-circle"></i>
             </div>
             <h2>Application Submitted!</h2>
             <p>Your supplier application has been submitted successfully.</p>
             
-            <!-- WhatsApp Preview -->
             <div class="whatsapp-preview">
                 <i class="fab fa-whatsapp"></i>
-                <p style="margin-top: 10px; font-size: 14px;">
-                    <strong>WhatsApp Business Number:</strong><br>
-                    <span id="previewWhatsapp" style="font-size: 18px; font-weight: 600; color: #075E54;">+256XXXXXXXXX</span>
-                </p>
-                <p class="hint" style="margin-top: 8px;">
-                    <i class="fas fa-clock"></i> 
-                    This will be used for customer negotiations within 24 hours
-                </p>
+                <p style="margin-top: 8px;"><strong>WhatsApp Business Number:</strong></p>
+                <span id="previewWhatsapp">+256XXXXXXXXX</span>
+                <p class="hint" style="margin-top: 8px;">This will be used for customer negotiations</p>
             </div>
             
-            <p class="thank-you-message">Our team will verify your business information within 24-48 hours.</p>
+            <p style="font-size: 13px; color: var(--gray-500);">Our team will verify your business within 24-48 hours.</p>
+            
             <div class="modal-actions">
-                <a href="supplier-dashboard.html" class="btn btn-primary">Go to Dashboard</a>
-                <a href="index.html" class="btn btn-secondary">Browse Marketplace</a>
+                <a href="supplier-dashboard.html" class="btn-primary">Go to Dashboard</a>
+                <a href="index.html" class="btn-secondary">Browse Marketplace</a>
             </div>
         </div>
     </div>
@@ -346,10 +972,7 @@
         <p id="loadingMessage">Processing...</p>
     </div>
 
-    <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Custom JS -->
     <script src="js/supplier-register.js"></script>
 </body>
 </html>
