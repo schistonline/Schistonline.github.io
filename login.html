@@ -115,29 +115,14 @@
       transform: scale(0.98);
     }
 
+    .google-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
     .google-btn img {
       width: 20px;
       height: 20px;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid var(--gray-200);
-    }
-
-    .divider span {
-      padding: 0 10px;
-      color: var(--gray-500);
-      font-size: 12px;
     }
 
     .register-link {
@@ -269,7 +254,6 @@
 
       <div id="alert" class="alert"></div>
 
-      <!-- Google Sign In Button -->
       <button id="googleSignInBtn" class="google-btn">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
         Continue with Google
@@ -297,32 +281,28 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      
+    (async function() {
       // Supabase Configuration
       const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
 
-      // Initialize Supabase client
-      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
           autoRefreshToken: true,
           persistSession: true,
           detectSessionInUrl: true,
-          storage: localStorage
+          storage: localStorage,
+          debug: true // This will help see what's happening
         }
       });
 
-      // DOM Elements
       const googleBtn = document.getElementById('googleSignInBtn');
       const alertDiv = document.getElementById('alert');
 
       function showAlert(message, type = 'error') {
         alertDiv.textContent = message;
         alertDiv.className = `alert alert-${type} show`;
-        if (type !== 'error') {
-          setTimeout(() => alertDiv.classList.remove('show'), 5000);
-        }
+        setTimeout(() => alertDiv.classList.remove('show'), 5000);
       }
 
       function setLoading(isLoading) {
@@ -332,17 +312,63 @@
           '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
       }
 
+      // Clear any corrupted session
+      async function clearSession() {
+        console.log('Clearing any corrupted session...');
+        await sb.auth.signOut();
+        localStorage.removeItem('sb-uufhvmmgwzkxvvdbqemz-auth-token');
+        sessionStorage.clear();
+      }
+
+      // Create profile for new users
+      async function createProfile(userId, email, fullName) {
+        console.log('Creating profile for new user:', userId, email, fullName);
+        
+        const profileData = {
+          id: userId,
+          email: email,
+          full_name: fullName || email.split('@')[0],
+          is_supplier: false,
+          is_buyer: true,
+          is_admin: false,
+          is_verified: false,
+          phone: null,
+          avatar_url: null,
+          location: null,
+          district: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          last_active: new Date().toISOString(),
+          total_ads: 0,
+          onboarding_step: 'complete',
+          country_code: '+256'
+        };
+        
+        const { error } = await sb
+          .from('profiles')
+          .upsert([profileData], { onConflict: 'id' });
+        
+        if (error) {
+          console.error('Profile creation error:', error);
+          throw error;
+        }
+        
+        console.log('Profile created successfully');
+        return true;
+      }
+
+      // Get user role for redirect
       async function getUserRole(userId) {
         try {
-          const { data: profile, error } = await supabase
+          const { data: profile, error } = await sb
             .from('profiles')
             .select('is_supplier, is_admin')
             .eq('id', userId)
             .single();
 
-          if (error) return 'buyer';
-          if (profile?.is_admin === true) return 'admin';
-          if (profile?.is_supplier === true) return 'supplier';
+          if (error || !profile) return 'buyer';
+          if (profile.is_admin === true) return 'admin';
+          if (profile.is_supplier === true) return 'supplier';
           return 'buyer';
         } catch (err) {
           return 'buyer';
@@ -359,101 +385,150 @@
         window.location.href = dashboards[role] || 'index.html';
       }
 
-      async function checkExistingSession() {
+      // Handle OAuth callback (when coming back from Google)
+      async function handleOAuthCallback() {
+        console.log('Processing OAuth callback...');
+        console.log('URL hash:', window.location.hash);
+        console.log('URL search:', window.location.search);
+        
         try {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user) {
-            showAlert('Already logged in. Redirecting...', 'success');
-            setTimeout(() => redirectToDashboard(session.user.id), 1500);
+          // Clear any existing corrupted session first
+          await clearSession();
+          
+          // Get the session after OAuth
+          const { data: { session }, error } = await sb.auth.getSession();
+          
+          if (error) {
+            console.error('Session error:', error);
+            
+            // If it's a refresh token error, try to recover by getting the user directly
+            if (error.message?.includes('Refresh Token')) {
+              console.log('Refresh token error, trying to get user from URL...');
+              
+              // Try to exchange the code for session
+              const { data: exchangeData, error: exchangeError } = await sb.auth.exchangeCodeForSession(
+                window.location.search
+              );
+              
+              if (exchangeError) {
+                console.error('Exchange error:', exchangeError);
+                showAlert('Authentication failed. Please try again.');
+                window.location.href = 'login.html';
+                return;
+              }
+              
+              if (exchangeData.session?.user) {
+                console.log('Got user from code exchange:', exchangeData.session.user.email);
+                await handleUser(exchangeData.session.user);
+                return;
+              }
+            }
+            
+            showAlert('Authentication error. Please try again.');
+            window.location.href = 'login.html';
+            return;
           }
+
+          if (!session?.user) {
+            console.log('No user in session');
+            window.location.href = 'login.html';
+            return;
+          }
+
+          await handleUser(session.user);
+          
         } catch (err) {
-          console.error('Session check error:', err);
+          console.error('OAuth callback error:', err);
+          showAlert('Something went wrong. Please try again.');
+          window.location.href = 'login.html';
         }
       }
 
+      async function handleUser(user) {
+        console.log('Handling user:', user.email);
+        
+        // Check if profile exists
+        const { data: existingProfile, error: profileError } = await sb
+          .from('profiles')
+          .select('id, is_supplier')
+          .eq('id', user.id)
+          .single();
+
+        if (existingProfile) {
+          console.log('Profile exists, redirecting...');
+          showAlert('Welcome back! Redirecting...', 'success');
+          setTimeout(() => redirectToDashboard(user.id), 1000);
+          return;
+        }
+        
+        // NEW USER - Create profile
+        console.log('New user, creating profile...');
+        const userMetadata = user.user_metadata;
+        const email = user.email;
+        const fullName = userMetadata.full_name || userMetadata.name;
+        
+        await createProfile(user.id, email, fullName);
+        
+        showAlert('Account created! Redirecting...', 'success');
+        setTimeout(() => redirectToDashboard(user.id), 1500);
+      }
+
+      // Handle Google Sign In
       async function handleGoogleSignIn() {
         setLoading(true);
         
         try {
-          const { data, error } = await supabase.auth.signInWithOAuth({
+          // Clear any existing session before starting new OAuth
+          await clearSession();
+          
+          const { error } = await sb.auth.signInWithOAuth({
             provider: 'google',
             options: {
               redirectTo: `${window.location.origin}/login.html`,
               queryParams: {
                 access_type: 'offline',
-                prompt: 'consent',
+                prompt: 'select_account',
               }
             }
           });
 
-          if (error) {
-            console.error('Google sign in error:', error);
-            showAlert(error.message || 'Failed to sign in with Google', 'error');
-            setLoading(false);
-          }
-          // Note: When using signInWithOAuth, the page will redirect to Google
-          // No need to handle loading state further as page will redirect
+          if (error) throw error;
           
         } catch (err) {
-          console.error('Google sign in exception:', err);
-          showAlert('Network error. Please try again.', 'error');
+          console.error('Google sign in error:', err);
+          showAlert(err.message || 'Failed to sign in with Google');
           setLoading(false);
         }
       }
 
-      // Handle OAuth callback
-      async function handleOAuthCallback() {
-        try {
-          // Check if we have a hash fragment or query params from OAuth
-          const { data: { session }, error } = await supabase.auth.getSession();
+      // Check if this is an OAuth redirect
+      const isOAuthRedirect = window.location.hash || window.location.search.includes('code');
+      console.log('Is OAuth redirect?', isOAuthRedirect);
+      
+      if (isOAuthRedirect) {
+        // Show loading
+        googleBtn.disabled = true;
+        googleBtn.innerHTML = '<span class="spinner"></span> Completing sign in...';
+        await handleOAuthCallback();
+      } else {
+        // Check existing session
+        const { data: { session } } = await sb.auth.getSession();
+        if (session?.user) {
+          const { data: profile } = await sb
+            .from('profiles')
+            .select('id')
+            .eq('id', session.user.id)
+            .single();
           
-          if (error) {
-            console.error('Session error:', error);
-            return;
+          if (profile) {
+            redirectToDashboard(session.user.id);
           }
-
-          if (session?.user) {
-            // Check if profile exists, if not, create it
-            const { data: profile, error: profileError } = await supabase
-              .from('profiles')
-              .select('*')
-              .eq('id', session.user.id)
-              .single();
-
-            if (profileError && profileError.code === 'PGRST116') {
-              // Profile doesn't exist, create it
-              const userMetadata = session.user.user_metadata;
-              await supabase
-                .from('profiles')
-                .insert([{
-                  id: session.user.id,
-                  full_name: userMetadata.full_name || userMetadata.name,
-                  account_type: 'buyer', // Default account type
-                  is_supplier: false,
-                  is_admin: false
-                }]);
-            }
-            
-            showAlert('Login successful! Redirecting...', 'success');
-            setTimeout(() => redirectToDashboard(session.user.id), 1000);
-          }
-        } catch (err) {
-          console.error('OAuth callback error:', err);
         }
       }
 
-      // Check for OAuth callback on page load
-      if (window.location.hash || window.location.search.includes('code')) {
-        handleOAuthCallback();
-      }
-
-      // Setup event listeners
       googleBtn.addEventListener('click', handleGoogleSignIn);
-
-      // Check existing session
-      checkExistingSession();
       
-    });
+    })();
   </script>
 </body>
 </html>
