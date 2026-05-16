@@ -3,13 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>Create Account - Buy Uganda B2B Marketplace</title>
+  <title>Sign In - Buy Uganda B2B Marketplace</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
       --primary: #0B4F6C;
@@ -18,7 +14,6 @@
       --primary-gradient: linear-gradient(135deg, #0B4F6C 0%, #1a6b8a 100%);
       --success: #10B981;
       --danger: #EF4444;
-      --warning: #F59E0B;
       --gray-50: #F9FAFB;
       --gray-100: #F3F4F6;
       --gray-200: #E5E7EB;
@@ -28,7 +23,6 @@
       --gray-600: #4B5563;
       --gray-700: #374151;
       --gray-800: #1F2937;
-      --gray-900: #111827;
     }
 
     body {
@@ -38,908 +32,168 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      min-height: 100dvh;
       padding: 16px;
     }
 
-    .container {
-      width: 100%;
-      max-width: 480px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 28px;
-      padding: 32px 28px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-
-    .logo {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .logo h1 {
-      font-size: 28px;
-      font-weight: 700;
-      background: var(--primary-gradient);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      letter-spacing: -0.5px;
-    }
-
-    .logo p {
-      color: var(--gray-500);
-      font-size: 13px;
-      margin-top: 6px;
-    }
-
-    .brand-badge {
-      display: inline-block;
-      background: var(--gray-100);
-      color: var(--gray-600);
-      font-size: 12px;
-      padding: 6px 14px;
-      border-radius: 30px;
-      margin-bottom: 24px;
-      text-align: center;
-      width: 100%;
-    }
-
-    .google-btn {
-      width: 100%;
-      padding: 14px;
-      background: white;
-      color: var(--gray-700);
-      border: 2px solid var(--gray-300);
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .google-btn:hover {
-      background: var(--gray-50);
-      border-color: var(--gray-400);
-      transform: translateY(-1px);
-    }
-
-    .google-btn:active {
-      transform: scale(0.98);
-    }
-
-    .google-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .google-btn img {
-      width: 20px;
-      height: 20px;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid var(--gray-200);
-    }
-
-    .divider span {
-      padding: 0 10px;
-      color: var(--gray-500);
-      font-size: 12px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: var(--gray-700);
-      font-size: 14px;
-    }
-
-    label .optional {
-      color: var(--gray-400);
-      font-weight: normal;
-      font-size: 12px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px 14px;
-      border: 2px solid var(--gray-200);
-      border-radius: 12px;
-      font-size: 15px;
-      transition: all 0.2s;
-      font-family: inherit;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(11, 79, 108, 0.1);
-    }
-
-    input.error, select.error {
-      border-color: var(--danger);
-    }
-
-    .error-message {
-      color: var(--danger);
-      font-size: 12px;
-      margin-top: 6px;
-      display: none;
-    }
-
-    .error-message.visible {
-      display: block;
-    }
-
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 20px 0;
-    }
-
-    .checkbox-group input {
-      width: auto;
-      width: 18px;
-      height: 18px;
-    }
-
-    .checkbox-group label {
-      margin: 0;
-      font-weight: normal;
-      font-size: 13px;
-    }
-
-    .btn-primary {
-      width: 100%;
-      padding: 14px;
-      background: var(--primary-gradient);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(11, 79, 108, 0.3);
-    }
-
-    .btn-primary:active {
-      transform: scale(0.98);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .login-link {
-      text-align: center;
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .login-link p {
-      color: var(--gray-600);
-      font-size: 14px;
-    }
-
-    .login-link a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .login-link a:hover {
-      text-decoration: underline;
-    }
-
-    .alert {
-      padding: 12px 16px;
-      border-radius: 14px;
-      margin-bottom: 24px;
-      font-size: 14px;
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .alert.show {
-      display: block;
-    }
-
-    .alert-error {
-      background: #FEF2F2;
-      color: #991B1B;
-      border-left: 4px solid var(--danger);
-    }
-
-    .alert-success {
-      background: #ECFDF5;
-      color: #065F46;
-      border-left: 4px solid var(--success);
-    }
-
-    .alert-info {
-      background: #EFF6FF;
-      color: #1E40AF;
-      border-left: 4px solid var(--primary);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .spinner {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-      margin-right: 8px;
-      vertical-align: middle;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .security-note {
-      background: var(--gray-50);
-      border-radius: 12px;
-      padding: 10px 14px;
-      margin-top: 20px;
-      font-size: 11px;
-      color: var(--gray-500);
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .role-selector {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 20px;
-      padding: 8px;
-      background: var(--gray-50);
-      border-radius: 16px;
-    }
-
-    .role-option {
-      flex: 1;
-      text-align: center;
-      padding: 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: 2px solid transparent;
-    }
-
-    .role-option.selected {
-      background: white;
-      border-color: var(--primary);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .role-option .emoji {
-      font-size: 24px;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .role-option .title {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--gray-700);
-    }
-
-    .role-option .desc {
-      font-size: 11px;
-      color: var(--gray-500);
-      margin-top: 4px;
-    }
-
-    @media (max-width: 480px) {
-      .card {
-        padding: 24px 20px;
-      }
-      .form-row {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-      .role-option .desc {
-        display: none;
-      }
-    }
+    .container { max-width: 440px; width: 100%; }
+    .card { background: white; border-radius: 28px; padding: 32px 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+    .logo { text-align: center; margin-bottom: 28px; }
+    .logo h1 { font-size: 28px; font-weight: 700; background: var(--primary-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .logo p { color: var(--gray-500); font-size: 13px; margin-top: 6px; }
+    .brand-badge { display: inline-block; background: var(--gray-100); color: var(--gray-600); font-size: 12px; padding: 6px 14px; border-radius: 30px; margin-bottom: 24px; text-align: center; width: 100%; }
+    .google-btn { width: 100%; padding: 14px; background: white; color: var(--gray-700); border: 2px solid var(--gray-300); border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
+    .google-btn:hover { background: var(--gray-50); border-color: var(--gray-400); transform: translateY(-1px); }
+    .google-btn:active { transform: scale(0.98); }
+    .google-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+    .register-link { text-align: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--gray-200); }
+    .register-link p { color: var(--gray-600); font-size: 14px; }
+    .register-link a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .alert { padding: 12px 16px; border-radius: 14px; margin-bottom: 24px; font-size: 14px; display: none; }
+    .alert.show { display: block; }
+    .alert-error { background: #FEF2F2; color: #991B1B; border-left: 4px solid #EF4444; }
+    .alert-success { background: #ECFDF5; color: #065F46; border-left: 4px solid #10B981; }
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .legal-footer { text-align: center; margin-top: 24px; font-size: 12px; color: rgba(255,255,255,0.8); }
+    .security-note { background: var(--gray-50); border-radius: 12px; padding: 10px 14px; margin-top: 16px; font-size: 11px; color: var(--gray-500); text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    @media (max-width: 480px) { .card { padding: 24px 20px; } }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="card">
       <div class="logo">
-        <h1>Join Buy Uganda</h1>
-        <p>Connect with 5,000+ Ugandan businesses</p>
+        <h1>Buy Uganda</h1>
+        <p>Uganda's Premier B2B Marketplace</p>
       </div>
 
       <div class="brand-badge">
-        🇺🇬 Uganda's Largest B2B Marketplace 🇺🇬
+        🇺🇬 Trusted by 5,000+ Ugandan Businesses 🇺🇬
       </div>
 
       <div id="alert" class="alert"></div>
 
-      <!-- Google Sign Up Button -->
-      <button id="googleSignUpBtn" class="google-btn">
+      <button id="googleSignInBtn" class="google-btn">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
         Continue with Google
       </button>
 
-      <div class="divider">
-        <span>or create account with email</span>
-      </div>
-
-      <!-- Account Type Selector -->
-      <div class="role-selector" id="roleSelector">
-        <div class="role-option selected" data-role="buyer" data-supplier="false" data-admin="false">
-          <span class="emoji">🛒</span>
-          <span class="title">Buyer</span>
-          <span class="desc">Purchase products & get quotes</span>
-        </div>
-        <div class="role-option" data-role="supplier" data-supplier="true" data-admin="false">
-          <span class="emoji">🏭</span>
-          <span class="title">Supplier</span>
-          <span class="desc">Sell products & reach buyers</span>
-        </div>
-      </div>
-
-      <!-- Registration Form -->
-      <form id="registerForm">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Full Name <span class="optional">(required)</span></label>
-            <input type="text" id="fullName" placeholder="John Doe" autocomplete="name">
-            <div class="error-message" id="fullNameError"></div>
-          </div>
-          <div class="form-group">
-            <label>Phone Number <span class="optional">(optional)</span></label>
-            <input type="tel" id="phone" placeholder="+256 7XX XXX XXX" autocomplete="tel">
-            <div class="error-message" id="phoneError"></div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="email" placeholder="you@company.com" autocomplete="email">
-          <div class="error-message" id="emailError"></div>
-        </div>
-
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="password" placeholder="Create a strong password" autocomplete="new-password">
-          <div class="error-message" id="passwordError"></div>
-        </div>
-
-        <!-- Supplier-only fields (hidden by default) -->
-        <div id="supplierFields" style="display: none;">
-          <div class="form-group">
-            <label>Business Name</label>
-            <input type="text" id="businessName" placeholder="Your registered business name">
-            <div class="error-message" id="businessNameError"></div>
-          </div>
-          <div class="form-group">
-            <label>TIN Number <span class="optional">(optional)</span></label>
-            <input type="text" id="tinNumber" placeholder="Tax Identification Number">
-            <div class="error-message" id="tinNumberError"></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Business Type</label>
-              <select id="businessType">
-                <option value="">Select...</option>
-                <option value="manufacturer">Manufacturer</option>
-                <option value="distributor">Distributor/Wholesaler</option>
-                <option value="retailer">Retailer</option>
-                <option value="contractor">Contractor</option>
-                <option value="exporter">Exporter</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Year Established</label>
-              <select id="yearEstablished">
-                <option value="">Select year</option>
-                <option value="2025">2025</option>
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-                <option value="2021">2021</option>
-                <option value="2020">2020</option>
-                <option value="2019">2019</option>
-                <option value="2018">2018</option>
-                <option value="2017">2017</option>
-                <option value="2016">2016</option>
-                <option value="2015">2015</option>
-                <option value="2014">2014</option>
-                <option value="2013">2013</option>
-                <option value="2012">2012</option>
-                <option value="2011">2011</option>
-                <option value="2010">2010</option>
-                <option value="2009">2009</option>
-                <option value="2008">2008</option>
-                <option value="2007">2007</option>
-                <option value="2006">2006</option>
-                <option value="2005">2005</option>
-                <option value="2000">2000 or earlier</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Business Location (District)</label>
-            <select id="district">
-              <option value="">Select district...</option>
-              <option value="Kampala">Kampala</option>
-              <option value="Wakiso">Wakiso</option>
-              <option value="Mukono">Mukono</option>
-              <option value="Jinja">Jinja</option>
-              <option value="Mbarara">Mbarara</option>
-              <option value="Gulu">Gulu</option>
-              <option value="Entebbe">Entebbe</option>
-              <option value="Masaka">Masaka</option>
-              <option value="Fort Portal">Fort Portal</option>
-              <option value="Arua">Arua</option>
-              <option value="Lira">Lira</option>
-              <option value="Soroti">Soroti</option>
-              <option value="Mbale">Mbale</option>
-              <option value="Kasese">Kasese</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="checkbox-group">
-          <input type="checkbox" id="termsCheckbox">
-          <label for="termsCheckbox">
-            I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and 
-            <a href="privacy.html" target="_blank">Privacy Policy</a>
-          </label>
-        </div>
-
-        <button type="submit" class="btn-primary" id="submitBtn">Create Account</button>
-      </form>
-
-      <div class="login-link">
-        <p>Already have an account? <a href="login.html">Sign in</a></p>
+      <div class="register-link">
+        <p>New to Buy Uganda? <a href="register.html">Create Business Account</a></p>
       </div>
 
       <div class="security-note">
         <span>🔒</span>
-        <span>Your information is secure. We'll never share your data.</span>
+        <span>Your data is encrypted and secure. We never share your information.</span>
       </div>
+    </div>
+
+    <div class="legal-footer">
+      <p>© 2026 Buy Uganda. All rights reserved.</p>
+      <p><a href="terms.html">Terms of Service</a> | <a href="privacy.html">Privacy Policy</a></p>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      
-      // Supabase Configuration (same as login.html)
+    (async function() {
       const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
 
-      // Initialize Supabase client
-      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: {
-          autoRefreshToken: true,
-          persistSession: true,
-          detectSessionInUrl: true,
-          storage: localStorage
-        }
+      const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true, storage: localStorage }
       });
 
-      // DOM Elements
-      const googleBtn = document.getElementById('googleSignUpBtn');
-      const registerForm = document.getElementById('registerForm');
-      const submitBtn = document.getElementById('submitBtn');
+      const googleBtn = document.getElementById('googleSignInBtn');
       const alertDiv = document.getElementById('alert');
-      const roleOptions = document.querySelectorAll('.role-option');
-      const supplierFields = document.getElementById('supplierFields');
-      
-      let selectedRole = { isSupplier: false, isAdmin: false };
-
-      // Role selector logic
-      roleOptions.forEach(option => {
-        option.addEventListener('click', () => {
-          roleOptions.forEach(opt => opt.classList.remove('selected'));
-          option.classList.add('selected');
-          
-          const isSupplier = option.dataset.supplier === 'true';
-          const isAdmin = option.dataset.admin === 'true';
-          selectedRole = { isSupplier, isAdmin };
-          
-          // Show/hide supplier-specific fields
-          supplierFields.style.display = isSupplier ? 'block' : 'none';
-          
-          // Update required attributes
-          const businessName = document.getElementById('businessName');
-          if (isSupplier) {
-            businessName.required = true;
-          } else {
-            businessName.required = false;
-          }
-        });
-      });
 
       function showAlert(message, type = 'error') {
         alertDiv.textContent = message;
         alertDiv.className = `alert alert-${type} show`;
-        if (type !== 'error') {
-          setTimeout(() => alertDiv.classList.remove('show'), 5000);
-        }
+        setTimeout(() => alertDiv.classList.remove('show'), 5000);
       }
 
       function setLoading(isLoading) {
-        submitBtn.disabled = isLoading;
         googleBtn.disabled = isLoading;
-        submitBtn.textContent = isLoading ? '<span class="spinner"></span> Creating account...' : 'Create Account';
+        googleBtn.innerHTML = isLoading ? 
+          '<span class="spinner"></span> Signing in...' : 
+          '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
       }
 
-      // Validate email format
-      function isValidEmail(email) {
-        return /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(email);
-      }
-
-      // Validate phone number (Ugandan format)
-      function isValidPhone(phone) {
-        if (!phone) return true; // Optional field
-        return /^(\+256|0)[7-9][0-9]{8}$/.test(phone.replace(/\s/g, ''));
-      }
-
-      // Validate form
-      function validateForm() {
-        let isValid = true;
-        
-        // Full name
-        const fullName = document.getElementById('fullName').value.trim();
-        if (!fullName) {
-          document.getElementById('fullNameError').textContent = 'Full name is required';
-          document.getElementById('fullNameError').classList.add('visible');
-          isValid = false;
-        } else {
-          document.getElementById('fullNameError').classList.remove('visible');
-        }
-        
-        // Email
-        const email = document.getElementById('email').value.trim();
-        if (!email) {
-          document.getElementById('emailError').textContent = 'Email is required';
-          document.getElementById('emailError').classList.add('visible');
-          isValid = false;
-        } else if (!isValidEmail(email)) {
-          document.getElementById('emailError').textContent = 'Enter a valid email address';
-          document.getElementById('emailError').classList.add('visible');
-          isValid = false;
-        } else {
-          document.getElementById('emailError').classList.remove('visible');
-        }
-        
-        // Phone (optional but validate if provided)
-        const phone = document.getElementById('phone').value.trim();
-        if (phone && !isValidPhone(phone)) {
-          document.getElementById('phoneError').textContent = 'Enter a valid Ugandan phone number (e.g., +2567XXXXXXX or 07XXXXXXXX)';
-          document.getElementById('phoneError').classList.add('visible');
-          isValid = false;
-        } else {
-          document.getElementById('phoneError').classList.remove('visible');
-        }
-        
-        // Password (at least 6 characters)
-        const password = document.getElementById('password').value;
-        if (!password) {
-          document.getElementById('passwordError').textContent = 'Password is required';
-          document.getElementById('passwordError').classList.add('visible');
-          isValid = false;
-        } else if (password.length < 6) {
-          document.getElementById('passwordError').textContent = 'Password must be at least 6 characters';
-          document.getElementById('passwordError').classList.add('visible');
-          isValid = false;
-        } else {
-          document.getElementById('passwordError').classList.remove('visible');
-        }
-        
-        // Terms checkbox
-        const termsCheckbox = document.getElementById('termsCheckbox');
-        if (!termsCheckbox.checked) {
-          showAlert('You must agree to the Terms of Service and Privacy Policy', 'error');
-          isValid = false;
-        }
-        
-        // Supplier-specific validation
-        if (selectedRole.isSupplier) {
-          const businessName = document.getElementById('businessName').value.trim();
-          if (!businessName) {
-            document.getElementById('businessNameError').textContent = 'Business name is required for suppliers';
-            document.getElementById('businessNameError').classList.add('visible');
-            isValid = false;
-          } else {
-            document.getElementById('businessNameError').classList.remove('visible');
-          }
-        }
-        
-        return isValid;
-      }
-
-      // Create profile in database
-      async function createProfile(userId, userMetadata, isSupplier = false) {
-        const fullName = document.getElementById('fullName').value.trim() || userMetadata.full_name || userMetadata.name;
-        const phone = document.getElementById('phone').value.trim() || null;
-        
-        // Base profile data
-        const profileData = {
-          id: userId,
-          email: userMetadata.email,
-          full_name: fullName,
-          phone: phone,
-          is_supplier: isSupplier,
-          is_admin: false,
-          is_verified: false,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        };
-        
-        // Add supplier-specific fields if supplier
-        if (isSupplier) {
-          profileData.business_name = document.getElementById('businessName').value.trim();
-          profileData.tin_number = document.getElementById('tinNumber').value.trim() || null;
-          profileData.business_type = document.getElementById('businessType').value || null;
-          profileData.year_established = document.getElementById('yearEstablished').value ? parseInt(document.getElementById('yearEstablished').value) : null;
-          profileData.district = document.getElementById('district').value || null;
-          profileData.verification_status = 'pending';
-        }
-        
-        const { error } = await supabase
-          .from('profiles')
-          .insert([profileData]);
-        
-        if (error) {
-          console.error('Profile creation error:', error);
-          throw new Error('Failed to create user profile');
-        }
-        
-        return true;
-      }
-
-      // Email/Password Registration
-      async function handleEmailRegistration(e) {
-        e.preventDefault();
-        
-        if (!validateForm()) return;
-        
-        setLoading(true);
-        
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const fullName = document.getElementById('fullName').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const isSupplier = selectedRole.isSupplier;
-        
+      async function redirectToDashboard(userId) {
         try {
-          // Create user with Supabase Auth
-          const { data, error } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-              data: {
-                full_name: fullName,
-                phone: phone,
-                is_supplier: isSupplier
-              }
-            }
-          });
-          
-          if (error) throw error;
-          
-          if (data.user) {
-            // Create profile
-            await createProfile(
-              data.user.id,
-              { email: email, full_name: fullName, name: fullName },
-              isSupplier
-            );
-            
-            showAlert('Account created successfully! Redirecting...', 'success');
-            
-            setTimeout(() => {
-              window.location.href = isSupplier ? 'supplier-dashboard.html' : 'index.html';
-            }, 2000);
-          }
-        } catch (error) {
-          console.error('Registration error:', error);
-          if (error.message.includes('already registered')) {
-            showAlert('An account with this email already exists. Please sign in instead.', 'error');
-          } else {
-            showAlert(error.message || 'Registration failed. Please try again.', 'error');
-          }
-          setLoading(false);
+          const { data: profile } = await sb
+            .from('profiles')
+            .select('is_supplier, is_admin')
+            .eq('id', userId)
+            .single();
+
+          const role = profile?.is_admin ? 'admin' : profile?.is_supplier ? 'supplier' : 'buyer';
+          const dashboards = { admin: 'admin-dashboard.html', supplier: 'supplier-dashboard.html', buyer: 'index.html' };
+          window.location.href = dashboards[role] || 'index.html';
+        } catch (err) {
+          window.location.href = 'index.html';
         }
       }
 
-      // Google Sign Up Handler
-      async function handleGoogleSignUp() {
-        setLoading(true);
-        
-        try {
-          const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-              redirectTo: `${window.location.origin}/register.html`,
-              queryParams: {
-                access_type: 'offline',
-                prompt: 'consent',
-              }
-            }
-          });
-          
-          if (error) throw error;
-          // Redirect to Google - no further code runs
-        } catch (error) {
-          console.error('Google sign up error:', error);
-          showAlert(error.message || 'Failed to sign up with Google', 'error');
-          setLoading(false);
-        }
-      }
-
-      // Handle OAuth callback (after Google redirects back)
       async function handleOAuthCallback() {
         try {
-          const { data: { session }, error } = await supabase.auth.getSession();
+          const { data: { session }, error } = await sb.auth.getSession();
           
           if (error) throw error;
-          
-          if (session?.user) {
-            // Check if profile exists
-            const { data: existingProfile, error: profileError } = await supabase
-              .from('profiles')
-              .select('*')
-              .eq('id', session.user.id)
-              .single();
-            
-            // If profile already exists, just redirect
-            if (existingProfile) {
-              showAlert('Welcome back! Redirecting...', 'success');
-              setTimeout(() => {
-                const isSupplier = existingProfile.is_supplier;
-                window.location.href = isSupplier ? 'supplier-dashboard.html' : 'index.html';
-              }, 1000);
-              return;
-            }
-            
-            // New user - create profile with role selection
-            const userMetadata = session.user.user_metadata;
-            const email = session.user.email;
-            const fullName = userMetadata.full_name || userMetadata.name;
-            
-            // Store OAuth user data in localStorage temporarily
-            localStorage.setItem('oauth_user_data', JSON.stringify({
-              id: session.user.id,
-              email: email,
-              full_name: fullName,
-              user_metadata: userMetadata
-            }));
-            
-            // Show role selection modal or redirect to role selection page
-            showRoleSelectionDialog(session.user.id, email, fullName, userMetadata);
+          if (!session?.user) {
+            window.location.href = 'login.html';
+            return;
           }
+
+          // Profile is auto-created by database trigger
+          // Just wait a moment for the trigger to complete
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          showAlert('Welcome! Redirecting...', 'success');
+          setTimeout(() => redirectToDashboard(session.user.id), 1000);
+          
         } catch (err) {
-          console.error('OAuth callback error:', err);
+          console.error('OAuth error:', err);
+          showAlert('Authentication failed. Please try again.');
+          window.location.href = 'login.html';
         }
-      }
-      
-      // Show role selection dialog for Google sign-ups
-      function showRoleSelectionDialog(userId, email, fullName, userMetadata) {
-        // Create modal dynamically
-        const modalHtml = `
-          <div id="roleModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;">
-            <div style="background:white;border-radius:28px;padding:32px;max-width:400px;width:90%;margin:16px;">
-              <h2 style="margin-bottom:16px;">Complete Your Profile</h2>
-              <p style="color:var(--gray-600);margin-bottom:24px;">Welcome ${fullName || email}! Choose how you'll use Buy Uganda.</p>
-              <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
-                <button id="roleBuyerBtn" style="padding:16px;border:2px solid var(--gray-200);border-radius:16px;background:white;cursor:pointer;text-align:left;display:flex;gap:12px;align-items:center;">
-                  <span style="font-size:28px;">🛒</span>
-                  <div><strong style="display:block;">Buyer</strong><span style="font-size:13px;color:var(--gray-500);">Purchase products & get quotes</span></div>
-                </button>
-                <button id="roleSupplierBtn" style="padding:16px;border:2px solid var(--gray-200);border-radius:16px;background:white;cursor:pointer;text-align:left;display:flex;gap:12px;align-items:center;">
-                  <span style="font-size:28px;">🏭</span>
-                  <div><strong style="display:block;">Supplier</strong><span style="font-size:13px;color:var(--gray-500);">Sell products & reach buyers</span></div>
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
-        
-        document.getElementById('roleBuyerBtn').onclick = async () => {
-          document.getElementById('roleModal').remove();
-          await createProfile(userId, { ...userMetadata, email: email, full_name: fullName, name: fullName }, false);
-          showAlert('Account created! Redirecting...', 'success');
-          setTimeout(() => window.location.href = 'index.html', 1500);
-        };
-        
-        document.getElementById('roleSupplierBtn').onclick = async () => {
-          document.getElementById('roleModal').remove();
-          // Redirect to supplier registration page to collect business details
-          localStorage.setItem('pending_supplier_user', JSON.stringify({ userId, email, fullName }));
-          window.location.href = 'supplier-register.html';
-        };
       }
 
-      // Check for OAuth callback
-      if (window.location.hash || window.location.search.includes('code')) {
-        handleOAuthCallback();
-      }
-      
-      // Check if user is already logged in
-      async function checkExistingSession() {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
-          // Check if profile exists
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('is_supplier')
-            .eq('id', session.user.id)
-            .single();
-          
-          if (profile) {
-            window.location.href = profile.is_supplier ? 'supplier-dashboard.html' : 'index.html';
-          }
+      async function handleGoogleSignIn() {
+        setLoading(true);
+        
+        try {
+          const { error } = await sb.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+              redirectTo: `${window.location.origin}/login.html`,
+              queryParams: { access_type: 'offline', prompt: 'select_account' }
+            }
+          });
+          if (error) throw error;
+        } catch (err) {
+          console.error('Google sign in error:', err);
+          showAlert(err.message || 'Failed to sign in with Google');
+          setLoading(false);
         }
       }
-      checkExistingSession();
+
+      const isOAuthRedirect = window.location.hash || window.location.search.includes('code');
       
-      // Event listeners
-      registerForm.addEventListener('submit', handleEmailRegistration);
-      googleBtn.addEventListener('click', handleGoogleSignUp);
-      
-    });
+      if (isOAuthRedirect) {
+        googleBtn.disabled = true;
+        googleBtn.innerHTML = '<span class="spinner"></span> Completing sign in...';
+        await handleOAuthCallback();
+      } else {
+        const { data: { session } } = await sb.auth.getSession();
+        if (session?.user) {
+          redirectToDashboard(session.user.id);
+        }
+      }
+
+      googleBtn.addEventListener('click', handleGoogleSignIn);
+    })();
   </script>
 </body>
 </html>
