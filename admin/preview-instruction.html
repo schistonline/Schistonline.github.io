@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Instruction - BuyUganda Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F3F4F6;
+            padding: 20px;
+        }
+
+        .preview-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .preview-header {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .preview-header h1 {
+            font-size: 20px;
+            color: #1F2937;
+        }
+
+        .preview-header h1 i {
+            color: #6B21E5;
+            margin-right: 8px;
+        }
+
+        .back-btn {
+            background: #6B21E5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: #4A0D9C;
+        }
+
+        /* Guide Card Preview */
+        .guide-wrapper {
+            padding: 12px 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .guide-card {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+            border-radius: 24px;
+            padding: 20px 24px;
+            margin: 12px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(107, 33, 229, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guide-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+        }
+
+        .guide-card:hover {
+            box-shadow: 0 8px 30px rgba(107, 33, 229, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .guide-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .guide-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+            box-shadow: 0 6px 14px rgba(107, 33, 229, 0.25);
+        }
+
+        .guide-title h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1F2937;
+            margin: 0 0 4px 0;
+        }
+
+        .guide-title p {
+            font-size: 13px;
+            color: #6B7280;
+            margin: 0;
+        }
+
+        .guide-actions {
+            margin-left: auto;
+        }
+
+        .guide-dismiss {
+            background: none;
+            border: none;
+            color: #9CA3AF;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 30px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .guide-dismiss:hover {
+            background: #F3F4F6;
+            color: #6B21E5;
+        }
+
+        .guide-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 20px 0 16px;
+        }
+
+        .guide-step {
+            flex: 1;
+            min-width: 170px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: #F9FAFB;
+            border-radius: 16px;
+            transition: all 0.2s;
+        }
+
+        .guide-step:hover {
+            background: #F3F4F6;
+            transform: translateX(4px);
+        }
+
+        .step-number {
+            width: 34px;
+            height: 34px;
+            background: #6B21E5;
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 2px;
+        }
+
+        .step-desc {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        .guide-tip {
+            background: #FFFBEB;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 3px solid #F59E0B;
+        }
+
+        .guide-tip i {
+            font-size: 20px;
+            color: #F59E0B;
+        }
+
+        .tip-content {
+            flex: 1;
+        }
+
+        .tip-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #92400E;
+            margin-bottom: 2px;
+        }
+
+        .tip-text {
+            font-size: 12px;
+            color: #78350F;
+        }
+
+        .need-help {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            color: #6B21E5;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 10px 0 4px;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+
+        .need-help:hover {
+            color: #9B4DFF;
+            gap: 12px;
+        }
+
+        /* Contact Info Card */
+        .contact-info {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .contact-info h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #1F2937;
+        }
+
+        .contact-info p {
+            color: #6B7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .contact-info i {
+            width: 24px;
+            color: #6B21E5;
+        }
+
+        .json-preview {
+            background: #1F2937;
+            color: #10B981;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .json-preview h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .guide-card {
+                padding: 16px;
+            }
+            
+            .guide-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .guide-actions {
+                margin-left: 0;
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+            }
+            
+            .guide-steps {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .guide-step {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <div class="preview-header">
+            <h1>
+                <i class="fas fa-eye"></i> 
+                Instruction Preview
+                <span id="pageNameDisplay" style="font-size: 14px; color: #6B7280; margin-left: 10px;"></span>
+            </h1>
+            <button class="back-btn" onclick="window.close()">
+                <i class="fas fa-times"></i> Close Preview
+            </button>
+        </div>
+
+        <div class="guide-wrapper">
+            <div id="guideContainer"></div>
+        </div>
+
+        <!-- Contact Info (from instruction data) -->
+        <div class="contact-info" id="contactInfo" style="display: none;">
+            <h3><i class="fas fa-headset"></i> Support Contact</h3>
+            <p><i class="fas fa-envelope"></i> <span id="supportEmail"></span></p>
+            <p><i class="fas fa-phone"></i> <span id="supportPhone"></span></p>
+            <p><i class="fas fa-clock"></i> <span id="supportHours"></span></p>
+        </div>
+
+        <!-- Raw JSON Preview (for admin debugging) -->
+        <div class="json-preview" id="jsonPreview" style="display: none;">
+            <h3><i class="fas fa-code"></i> Raw Instruction Data</h3>
+            <pre id="jsonContent"></pre>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://uufhvmmgwzkxvvdbqemz.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc";
+        
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Get page name from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageName = urlParams.get('page');
+
+        if (!pageName) {
+            document.getElementById('guideContainer').innerHTML = `
+                <div class="guide-card" style="text-align: center;">
+                    <div class="guide-icon" style="margin: 0 auto 16px;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h2>No Page Specified</h2>
+                    <p>Please provide a page parameter: ?page=homepage</p>
+                </div>
+            `;
+        } else {
+            loadInstruction();
+        }
+
+        async function loadInstruction() {
+            try {
+                const { data, error } = await sb
+                    .from('page_instructions')
+                    .select('*')
+                    .eq('page_name', pageName)
+                    .single();
+
+                if (error) {
+                    document.getElementById('guideContainer').innerHTML = `
+                        <div class="guide-card" style="text-align: center;">
+                            <div class="guide-icon" style="margin: 0 auto 16px;">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h2>Instruction Not Found</h2>
+                            <p>No instruction found for page: <strong>${escapeHtml(pageName)}</strong></p>
+                            <button class="back-btn" onclick="window.close()" style="margin-top: 16px;">Close Preview</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                document.getElementById('pageNameDisplay').textContent = `(${data.page_name})`;
+                
+                // Display contact info
+                if (data.support_email || data.support_phone || data.support_hours) {
+                    document.getElementById('contactInfo').style.display = 'block';
+                    document.getElementById('supportEmail').textContent = data.support_email || 'Not set';
+                    document.getElementById('supportPhone').textContent = data.support_phone || 'Not set';
+                    document.getElementById('supportHours').textContent = data.support_hours || 'Not set';
+                }
+                
+                // Show JSON preview (toggle with ?debug=true)
+                if (urlParams.get('debug') === 'true') {
+                    document.getElementById('jsonPreview').style.display = 'block';
+                    document.getElementById('jsonContent').textContent = JSON.stringify(data, null, 2);
+                }
+                
+                // Render the guide card
+                renderGuideCard(data);
+                
+            } catch (error) {
+                console.error('Error loading instruction:', error);
+                document.getElementById('guideContainer').innerHTML = `
+                    <div class="guide-card" style="text-align: center;">
+                        <div class="guide-icon" style="margin: 0 auto 16px;">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <h2>Error Loading Instruction</h2>
+                        <p>${escapeHtml(error.message)}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderGuideCard(instruction) {
+            const container = document.getElementById('guideContainer');
+            
+            const stepsHtml = (instruction.steps || []).map(step => `
+                <div class="guide-step">
+                    <div class="step-number">${step.number}</div>
+                    <div class="step-content">
+                        <div class="step-title">${escapeHtml(step.title)}</div>
+                        <div class="step-desc">${escapeHtml(step.description)}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = `
+                <div class="guide-card" id="guide_${instruction.page_name}">
+                    <div class="guide-header">
+                        <div class="guide-icon">
+                            <i class="fas ${instruction.page_icon || 'fa-store'}"></i>
+                        </div>
+                        <div class="guide-title">
+                            <h2>${escapeHtml(instruction.page_title)}</h2>
+                            <p>${escapeHtml(instruction.page_description || '')}</p>
+                        </div>
+                        <div class="guide-actions">
+                            <button class="guide-dismiss" onclick="alert('This is just a preview. Dismiss will work on the actual page.')">
+                                <i class="fas fa-times"></i> Dismiss
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-steps">
+                        ${stepsHtml || '<div style="color: #9CA3AF; text-align: center; padding: 20px;">No steps added yet.</div>'}
+                    </div>
+                    
+                    ${instruction.tip_content ? `
+                        <div class="guide-tip">
+                            <i class="fas ${instruction.tip_icon || 'fa-lightbulb'}"></i>
+                            <div class="tip-content">
+                                <div class="tip-label">${escapeHtml(instruction.tip_title || '💡 Pro Tip')}</div>
+                                <div class="tip-text">${escapeHtml(instruction.tip_content)}</div>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <button class="need-help" onclick="alert('In the live site, this would show a help modal with:\\n\\n${escapeHtml(instruction.help_modal_content || 'Contact support for assistance.')}')">
+                        <i class="fas fa-question-circle"></i> Need help? Contact support
+                    </button>
+                </div>
+            `;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Page Instructions | BuyUganda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F3F4F6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #6B21E5;
+            font-size: 24px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #6B21E5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4A0D9C;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid #D1D5DB;
+            color: #374151;
+        }
+
+        .btn-outline:hover {
+            background: #F3F4F6;
+        }
+
+        .btn-danger {
+            background: #EF4444;
+            color: white;
+        }
+
+        .btn-success {
+            background: #10B981;
+            color: white;
+        }
+
+        .instructions-list {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .instruction-item {
+            border-bottom: 1px solid #E5E7EB;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .instruction-item:hover {
+            background: #F9FAFB;
+        }
+
+        .instruction-info h3 {
+            font-size: 18px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instruction-info p {
+            color: #6B7280;
+            font-size: 13px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-inactive {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .instruction-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: #F3F4F6;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: #E5E7EB;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .steps-container {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .step-item {
+            background: white;
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .step-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .step-number-input {
+            width: 60px;
+        }
+
+        .step-title-input {
+            flex: 2;
+        }
+
+        .step-desc-input {
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .remove-step {
+            background: #FEE2E2;
+            color: #EF4444;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .add-step-btn {
+            background: #F3F4F6;
+            border: 1px dashed #D1D5DB;
+            padding: 10px;
+            border-radius: 10px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1F2937;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            z-index: 1100;
+            display: none;
+        }
+
+        .toast.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-book-open"></i> Page Instructions Manager</h1>
+            <button class="btn btn-primary" onclick="openEditModal(null)">
+                <i class="fas fa-plus"></i> New Instruction
+            </button>
+        </div>
+
+        <div class="instructions-list" id="instructionsList">
+            <div style="text-align: center; padding: 40px;">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Edit Page Instruction</h3>
+                <button class="icon-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="instructionForm">
+                    <input type="hidden" id="instructionId">
+                    
+                    <div class="form-group">
+                        <label>Page Name (unique identifier)</label>
+                        <input type="text" id="pageName" placeholder="e.g., homepage, supplier-dashboard" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Page Title</label>
+                        <input type="text" id="pageTitle" placeholder="Display title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Page Icon (Font Awesome)</label>
+                        <input type="text" id="pageIcon" value="fa-store" placeholder="fa-store">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Page Description</label>
+                        <textarea id="pageDescription" placeholder="Short description of this page"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Steps (User instructions)</label>
+                        <div id="stepsContainer"></div>
+                        <button type="button" class="add-step-btn" onclick="addStep()">
+                            <i class="fas fa-plus"></i> Add Step
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tip Title</label>
+                        <input type="text" id="tipTitle" value="💡 Pro Tip">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tip Content</label>
+                        <textarea id="tipContent" rows="2"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tip Icon</label>
+                        <input type="text" id="tipIcon" value="fa-lightbulb">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Support Email</label>
+                        <input type="email" id="supportEmail" value="support@buyuganda.online">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Support Phone</label>
+                        <input type="text" id="supportPhone" value="+256 700 123456">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Support Hours</label>
+                        <input type="text" id="supportHours" value="Mon-Fri: 9AM - 6PM">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Help Modal Content (HTML allowed)</label>
+                        <textarea id="helpModalContent" rows="5" placeholder="Detailed help content for the modal"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="isActive">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveInstruction()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://uufhvmmgwzkxvvdbqemz.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc";
+        
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        let currentSteps = [];
+
+        async function loadInstructions() {
+            const { data, error } = await sb
+                .from('page_instructions')
+                .select('*')
+                .order('page_name');
+            
+            if (error) {
+                console.error('Error:', error);
+                return;
+            }
+            
+            const container = document.getElementById('instructionsList');
+            if (data.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px;">No instructions found. Click "New Instruction" to create one.</div>';
+                return;
+            }
+            
+            container.innerHTML = data.map(item => `
+                <div class="instruction-item">
+                    <div class="instruction-info">
+                        <h3>
+                            <i class="fas ${item.page_icon}"></i> 
+                            ${escapeHtml(item.page_title)}
+                            <span class="status-badge ${item.is_active ? 'status-active' : 'status-inactive'}">
+                                ${item.is_active ? 'Active' : 'Inactive'}
+                            </span>
+                        </h3>
+                        <p>Page: ${escapeHtml(item.page_name)}</p>
+                    </div>
+                    <div class="instruction-actions">
+                        <button class="icon-btn" onclick="previewInstruction('${item.page_name}')" title="Preview">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="icon-btn" onclick="openEditModal(${item.id})" title="Edit">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="icon-btn" onclick="deleteInstruction(${item.id})" title="Delete" style="color: #EF4444;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let stepsArray = [];
+
+        function addStep(stepData = null) {
+            const stepNumber = stepsArray.length + 1;
+            const step = stepData || {
+                number: stepNumber,
+                title: 'New Step',
+                description: 'Step description'
+            };
+            
+            if (!stepData) stepsArray.push(step);
+            
+            renderSteps();
+        }
+
+        function removeStep(index) {
+            stepsArray.splice(index, 1);
+            // Renumber remaining steps
+            stepsArray.forEach((step, i) => {
+                step.number = i + 1;
+            });
+            renderSteps();
+        }
+
+        function updateStep(index, field, value) {
+            stepsArray[index][field] = value;
+        }
+
+        function renderSteps() {
+            const container = document.getElementById('stepsContainer');
+            container.innerHTML = stepsArray.map((step, index) => `
+                <div class="step-item">
+                    <div class="step-header">
+                        <input type="number" class="step-number-input" value="${step.number}" 
+                               onchange="updateStep(${index}, 'number', parseInt(this.value))" min="1" max="10">
+                        <input type="text" class="step-title-input" value="${escapeHtml(step.title)}" 
+                               placeholder="Step title" onchange="updateStep(${index}, 'title', this.value)">
+                        <button type="button" class="remove-step" onclick="removeStep(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <textarea class="step-desc-input" rows="2" 
+                              placeholder="Step description" 
+                              onchange="updateStep(${index}, 'description', this.value)">${escapeHtml(step.description)}</textarea>
+                </div>
+            `).join('');
+            
+            if (stepsArray.length === 0) {
+                container.innerHTML = '<div style="color: #9CA3AF; text-align: center; padding: 20px;">No steps added. Click "Add Step" to create instructions.</div>';
+            }
+        }
+
+        async function openEditModal(id) {
+            if (id) {
+                const { data, error } = await sb
+                    .from('page_instructions')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+                
+                if (error) {
+                    showToast('Error loading instruction', 'error');
+                    return;
+                }
+                
+                document.getElementById('instructionId').value = data.id;
+                document.getElementById('pageName').value = data.page_name;
+                document.getElementById('pageTitle').value = data.page_title;
+                document.getElementById('pageIcon').value = data.page_icon || 'fa-store';
+                document.getElementById('pageDescription').value = data.page_description || '';
+                document.getElementById('tipTitle').value = data.tip_title || '💡 Pro Tip';
+                document.getElementById('tipContent').value = data.tip_content || '';
+                document.getElementById('tipIcon').value = data.tip_icon || 'fa-lightbulb';
+                document.getElementById('supportEmail').value = data.support_email || 'support@buyuganda.online';
+                document.getElementById('supportPhone').value = data.support_phone || '+256 700 123456';
+                document.getElementById('supportHours').value = data.support_hours || 'Mon-Fri: 9AM - 6PM';
+                document.getElementById('helpModalContent').value = data.help_modal_content || '';
+                document.getElementById('isActive').value = data.is_active ? 'true' : 'false';
+                
+                stepsArray = data.steps || [];
+                renderSteps();
+            } else {
+                document.getElementById('instructionId').value = '';
+                document.getElementById('pageName').value = '';
+                document.getElementById('pageTitle').value = '';
+                document.getElementById('pageIcon').value = 'fa-store';
+                document.getElementById('pageDescription').value = '';
+                document.getElementById('tipTitle').value = '💡 Pro Tip';
+                document.getElementById('tipContent').value = '';
+                document.getElementById('tipIcon').value = 'fa-lightbulb';
+                document.getElementById('supportEmail').value = 'support@buyuganda.online';
+                document.getElementById('supportPhone').value = '+256 700 123456';
+                document.getElementById('supportHours').value = 'Mon-Fri: 9AM - 6PM';
+                document.getElementById('helpModalContent').value = '';
+                document.getElementById('isActive').value = 'true';
+                
+                stepsArray = [
+                    { number: 1, title: 'Step 1', description: 'Description here' },
+                    { number: 2, title: 'Step 2', description: 'Description here' },
+                    { number: 3, title: 'Step 3', description: 'Description here' },
+                    { number: 4, title: 'Step 4', description: 'Description here' }
+                ];
+                renderSteps();
+            }
+            
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        async function saveInstruction() {
+            const id = document.getElementById('instructionId').value;
+            const data = {
+                page_name: document.getElementById('pageName').value,
+                page_title: document.getElementById('pageTitle').value,
+                page_icon: document.getElementById('pageIcon').value,
+                page_description: document.getElementById('pageDescription').value,
+                steps: stepsArray,
+                tip_title: document.getElementById('tipTitle').value,
+                tip_content: document.getElementById('tipContent').value,
+                tip_icon: document.getElementById('tipIcon').value,
+                support_email: document.getElementById('supportEmail').value,
+                support_phone: document.getElementById('supportPhone').value,
+                support_hours: document.getElementById('supportHours').value,
+                help_modal_content: document.getElementById('helpModalContent').value,
+                is_active: document.getElementById('isActive').value === 'true',
+                updated_at: new Date().toISOString()
+            };
+            
+            let error;
+            if (id) {
+                const result = await sb.from('page_instructions').update(data).eq('id', id);
+                error = result.error;
+            } else {
+                const result = await sb.from('page_instructions').insert([data]);
+                error = result.error;
+            }
+            
+            if (error) {
+                showToast('Error saving: ' + error.message, 'error');
+            } else {
+                showToast('Saved successfully!', 'success');
+                closeModal();
+                loadInstructions();
+            }
+        }
+
+        async function deleteInstruction(id) {
+            if (!confirm('Delete this instruction permanently?')) return;
+            
+            const { error } = await sb.from('page_instructions').delete().eq('id', id);
+            
+            if (error) {
+                showToast('Error deleting', 'error');
+            } else {
+                showToast('Deleted successfully', 'success');
+                loadInstructions();
+            }
+        }
+
+        function previewInstruction(pageName) {
+            window.open(`preview-instruction.html?page=${pageName}`, '_blank');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('show');
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.background = type === 'error' ? '#EF4444' : '#10B981';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        loadInstructions();
+    </script>
+</body>
+</html>
