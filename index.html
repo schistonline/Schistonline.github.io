@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/png" href="/favicon.png">
@@ -15,13 +14,267 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/index.css">
+    
+    <!-- Guide System CSS (add to your index.css or keep here) -->
+    <style>
+        /* ============================================
+           BEAUTIFUL GUIDE CARD STYLES
+        ============================================ */
+        .guide-wrapper {
+            padding: 12px 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .guide-card {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+            border-radius: 24px;
+            padding: 20px 24px;
+            margin: 12px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(107, 33, 229, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guide-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+        }
+
+        .guide-card:hover {
+            box-shadow: 0 8px 30px rgba(107, 33, 229, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .guide-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .guide-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+            box-shadow: 0 6px 14px rgba(107, 33, 229, 0.25);
+        }
+
+        .guide-title h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1F2937;
+            margin: 0 0 4px 0;
+        }
+
+        .guide-title p {
+            font-size: 13px;
+            color: #6B7280;
+            margin: 0;
+        }
+
+        .guide-actions {
+            margin-left: auto;
+        }
+
+        .guide-dismiss {
+            background: none;
+            border: none;
+            color: #9CA3AF;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 30px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .guide-dismiss:hover {
+            background: #F3F4F6;
+            color: #6B21E5;
+        }
+
+        .guide-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 20px 0 16px;
+        }
+
+        .guide-step {
+            flex: 1;
+            min-width: 170px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: #F9FAFB;
+            border-radius: 16px;
+            transition: all 0.2s;
+        }
+
+        .guide-step:hover {
+            background: #F3F4F6;
+            transform: translateX(4px);
+        }
+
+        .step-number {
+            width: 34px;
+            height: 34px;
+            background: #6B21E5;
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 2px;
+        }
+
+        .step-desc {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        .guide-tip {
+            background: #FFFBEB;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 3px solid #F59E0B;
+        }
+
+        .guide-tip i {
+            font-size: 20px;
+            color: #F59E0B;
+        }
+
+        .tip-content {
+            flex: 1;
+        }
+
+        .tip-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #92400E;
+            margin-bottom: 2px;
+        }
+
+        .tip-text {
+            font-size: 12px;
+            color: #78350F;
+        }
+
+        .need-help {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            color: #6B21E5;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 10px 0 4px;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+
+        .need-help:hover {
+            color: #9B4DFF;
+            gap: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .guide-card {
+                padding: 16px;
+            }
+            
+            .guide-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .guide-actions {
+                margin-left: 0;
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+            }
+            
+            .guide-steps {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .guide-step {
+                min-width: auto;
+            }
+            
+            .guide-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
+            
+            .guide-title h2 {
+                font-size: 18px;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .guide-card {
+            animation: slideDown 0.4s ease;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
     <header class="header">
         <div class="header-container">
             <div class="logo">
-                <!-- 3D Cube Logo inspired by logo.html -->
+                <!-- 3D Cube Logo -->
                 <div class="logo-cube">
                     <div class="cube">
                         <div class="face front"></div>
@@ -47,6 +300,11 @@
         <a href="product-videos.html" class="nav-tab">Discover</a>
         <a href="discover.html" class="nav-tab">What's Popping</a>
     </div>
+
+    <!-- ============================================ -->
+    <!-- GUIDE CONTAINER - INSTRUCTIONS WILL APPEAR HERE -->
+    <!-- ============================================ -->
+    <div id="guideContainer"></div>
 
     <!-- Banners Carousel -->
     <div class="swiper banner-swiper">
@@ -218,7 +476,7 @@
             </div>
         </div>
 
-        <!-- Meta AI Credit (from logo.html) -->
+        <!-- Meta AI Credit -->
         <div class="meta-credit">
             <span>◆</span>BuyUganda.online
         </div>
@@ -226,37 +484,37 @@
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-    <a href="index.html" class="nav-item">
-        <i class="fas fa-home"></i>
-        <span>Home</span>
-    </a>
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
 
-    <a href="silverlands-gateway.html" class="nav-item">
-        <i class="fas fa-store"></i>
-        <span>Silverlands</span>
-    </a>
+        <a href="silverlands-gateway.html" class="nav-item">
+            <i class="fas fa-store"></i>
+            <span>Silverlands</span>
+        </a>
 
-    <a href="suppliers.html" class="nav-item">
-        <i class="fas fa-warehouse"></i>
-        <span>Suppliers</span>
-    </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
 
-    <a href="chat-inbox.html" class="nav-item">
-        <i class="fas fa-comment-dots"></i>
-        <span>Messages</span>
-        <span class="chat-badge" id="chatUnreadBadge" style="display: none;">0</span>
-    </a>
+        <a href="chat-inbox.html" class="nav-item">
+            <i class="fas fa-comment-dots"></i>
+            <span>Messages</span>
+            <span class="chat-badge" id="chatUnreadBadge" style="display: none;">0</span>
+        </a>
 
-    <a href="help.html" class="nav-item">
-        <i class="fas fa-question-circle"></i>
-        <span>Help</span>
-    </a>
+        <a href="help.html" class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+        </a>
 
-    <a href="xprofile.html" class="nav-item">
-        <i class="fas fa-user"></i>
-        <span>My Account</span>
-    </a>
-</nav>
+        <a href="xprofile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>My Account</span>
+        </a>
+    </nav>
 
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
@@ -270,6 +528,112 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <!-- Guide System Loader -->
+    <script>
+        // Guide System Functions
+        const GUIDE_SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const GUIDE_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const guideSb = window.supabase.createClient(GUIDE_SUPABASE_URL, GUIDE_SUPABASE_ANON_KEY);
+
+        async function loadPageInstructions(pageName) {
+            try {
+                const { data, error } = await guideSb
+                    .from('page_instructions')
+                    .select('*')
+                    .eq('page_name', pageName)
+                    .eq('is_active', true)
+                    .single();
+                
+                if (error) return null;
+                return data;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function dismissGuide(pageName) {
+            localStorage.setItem(`guide_dismissed_${pageName}`, 'true');
+            const container = document.getElementById('guideContainer');
+            if (container) container.style.display = 'none';
+        }
+
+        function renderGuideCard(instruction, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const dismissed = localStorage.getItem(`guide_dismissed_${instruction.page_name}`);
+            if (dismissed === 'true') {
+                container.style.display = 'none';
+                return;
+            }
+            
+            const stepsHtml = (instruction.steps || []).map(step => `
+                <div class="guide-step">
+                    <div class="step-number">${step.number}</div>
+                    <div class="step-content">
+                        <div class="step-title">${escapeHtml(step.title)}</div>
+                        <div class="step-desc">${escapeHtml(step.description)}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = `
+                <div class="guide-wrapper">
+                    <div class="guide-card">
+                        <div class="guide-header">
+                            <div class="guide-icon">
+                                <i class="fas ${instruction.page_icon || 'fa-store'}"></i>
+                            </div>
+                            <div class="guide-title">
+                                <h2>${escapeHtml(instruction.page_title)}</h2>
+                                <p>${escapeHtml(instruction.page_description || '')}</p>
+                            </div>
+                            <div class="guide-actions">
+                                <button class="guide-dismiss" onclick="dismissGuide('${instruction.page_name}')">
+                                    <i class="fas fa-times"></i> Dismiss
+                                </button>
+                            </div>
+                        </div>
+                        <div class="guide-steps">
+                            ${stepsHtml || '<div style="color: #9CA3AF; text-align: center; padding: 20px;">No steps added yet.</div>'}
+                        </div>
+                        ${instruction.tip_content ? `
+                            <div class="guide-tip">
+                                <i class="fas ${instruction.tip_icon || 'fa-lightbulb'}"></i>
+                                <div class="tip-content">
+                                    <div class="tip-label">${escapeHtml(instruction.tip_title || '💡 Pro Tip')}</div>
+                                    <div class="tip-text">${escapeHtml(instruction.tip_content)}</div>
+                                </div>
+                            </div>
+                        ` : ''}
+                        <button class="need-help" onclick="alert('📞 Need help?\\n\\nEmail: ${instruction.support_email || 'support@buyuganda.online'}\\nPhone: ${instruction.support_phone || '+256 700 123456'}\\nHours: ${instruction.support_hours || 'Mon-Fri 9AM-6PM'}')">
+                            <i class="fas fa-question-circle"></i> Need help? Contact support
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            container.style.display = 'block';
+        }
+
+        // Load homepage instructions when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            const instruction = await loadPageInstructions('homepage');
+            if (instruction) {
+                renderGuideCard(instruction, 'guideContainer');
+            }
+        });
+    </script>
+    
     <script src="js/index.js"></script>
 </body>
 </html>
