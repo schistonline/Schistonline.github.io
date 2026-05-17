@@ -3,13 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>My Profile - SourceX B2B Marketplace</title>
+    <title>My Profile - BuyUganda B2B Marketplace</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/profile.css">
+    
+    <!-- Guide System CSS -->
+    <style>
+        /* ============================================
+           BEAUTIFUL GUIDE CARD STYLES
+        ============================================ */
+        .guide-wrapper {
+            padding: 12px 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .guide-card {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+            border-radius: 24px;
+            padding: 20px 24px;
+            margin: 12px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(107, 33, 229, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guide-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+        }
+
+        .guide-card:hover {
+            box-shadow: 0 8px 30px rgba(107, 33, 229, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .guide-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .guide-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #6B21E5, #9B4DFF);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+            box-shadow: 0 6px 14px rgba(107, 33, 229, 0.25);
+        }
+
+        .guide-title h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1F2937;
+            margin: 0 0 4px 0;
+        }
+
+        .guide-title p {
+            font-size: 13px;
+            color: #6B7280;
+            margin: 0;
+        }
+
+        .guide-actions {
+            margin-left: auto;
+        }
+
+        .guide-dismiss {
+            background: none;
+            border: none;
+            color: #9CA3AF;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 30px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .guide-dismiss:hover {
+            background: #F3F4F6;
+            color: #6B21E5;
+        }
+
+        .guide-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 20px 0 16px;
+        }
+
+        .guide-step {
+            flex: 1;
+            min-width: 170px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: #F9FAFB;
+            border-radius: 16px;
+            transition: all 0.2s;
+        }
+
+        .guide-step:hover {
+            background: #F3F4F6;
+            transform: translateX(4px);
+        }
+
+        .step-number {
+            width: 34px;
+            height: 34px;
+            background: #6B21E5;
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 2px;
+        }
+
+        .step-desc {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        .guide-tip {
+            background: #FFFBEB;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 3px solid #F59E0B;
+        }
+
+        .guide-tip i {
+            font-size: 20px;
+            color: #F59E0B;
+        }
+
+        .tip-content {
+            flex: 1;
+        }
+
+        .tip-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #92400E;
+            margin-bottom: 2px;
+        }
+
+        .tip-text {
+            font-size: 12px;
+            color: #78350F;
+        }
+
+        .need-help {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            color: #6B21E5;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 10px 0 4px;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+
+        .need-help:hover {
+            color: #9B4DFF;
+            gap: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .guide-card {
+                padding: 16px;
+            }
+            .guide-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .guide-actions {
+                margin-left: 0;
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+            }
+            .guide-steps {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .guide-step {
+                min-width: auto;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Mobile Header -->
@@ -26,7 +251,7 @@
                         <div class="face top"></div>
                     </div>
                 </div>
-                <span class="logo-text">Source<span>X</span></span>
+                <span class="logo-text">Buy<span>Uganda</span></span>
             </a>
             <button class="menu-btn" id="menuToggle">
                 <i class="fas fa-ellipsis-v"></i>
@@ -39,6 +264,11 @@
             <p>Manage your account and view activity</p>
         </div>
     </header>
+
+    <!-- ============================================ -->
+    <!-- GUIDE CONTAINER - INSTRUCTIONS WILL APPEAR HERE -->
+    <!-- ============================================ -->
+    <div id="guideContainer"></div>
 
     <!-- Main Content -->
     <main class="main-content" id="mainContent">
@@ -87,54 +317,43 @@
                 </div>
             </div>
 
-            <!-- Account Details Section (shows active account types) -->
+            <!-- Account Details Section -->
             <div class="account-types-section">
                 <h3><i class="fas fa-user-circle"></i> Account Types</h3>
-                <div class="account-types-grid" id="accountTypesGrid">
-                    <!-- Populated by JS - shows all account types the user has -->
-                </div>
+                <div class="account-types-grid" id="accountTypesGrid"></div>
             </div>
 
-            <!-- Role-Specific Dashboard (based on primary account type) -->
-            <div class="dashboard-section" id="dashboardSection">
-                <!-- Dynamic dashboard based on account type -->
-            </div>
+            <!-- Role-Specific Dashboard -->
+            <div class="dashboard-section" id="dashboardSection"></div>
 
             <!-- Available Accounts to Activate -->
             <div class="available-accounts-section">
                 <h3><i class="fas fa-plus-circle"></i> Available Account Types</h3>
-                <div class="available-accounts-grid" id="availableAccountsGrid">
-                    <!-- Populated by JS - shows account types user can sign up for -->
-                </div>
+                <div class="available-accounts-grid" id="availableAccountsGrid"></div>
             </div>
 
-            <!-- Quick Actions Grid (Common for all users) -->
+            <!-- Quick Actions Grid -->
             <div class="actions-grid">
-                <!-- Messenger -->
                 <a href="chat.html" class="action-card">
                     <div class="action-icon messenger">
                         <i class="fas fa-comment-dots"></i>
                     </div>
                     <div class="action-content">
                         <h4>Messages</h4>
-                        <p>Chat with suppliers and buyers</p>
+                        <p>Chat with suppliers</p>
                     </div>
                     <span class="action-badge" id="messageBadge">0</span>
                 </a>
-
-                <!-- My Inquiries -->
                 <a href="my-inquiries.html" class="action-card">
                     <div class="action-icon inquiry">
                         <i class="fas fa-file-invoice"></i>
                     </div>
                     <div class="action-content">
                         <h4>My Inquiries</h4>
-                        <p>Track your buying requests</p>
+                        <p>Track your requests</p>
                     </div>
                     <span class="action-badge" id="inquiryBadge">0</span>
                 </a>
-
-                <!-- Saved Items -->
                 <a href="saved-items.html" class="action-card">
                     <div class="action-icon saved">
                         <i class="fas fa-bookmark"></i>
@@ -145,8 +364,6 @@
                     </div>
                     <span class="action-badge" id="savedBadge">0</span>
                 </a>
-
-                <!-- Notifications -->
                 <a href="notifications.html" class="action-card">
                     <div class="action-icon notification">
                         <i class="far fa-bell"></i>
@@ -162,10 +379,7 @@
             <!-- Recent Activity -->
             <div class="recent-activity">
                 <h3><i class="fas fa-history"></i> Recent Activity</h3>
-                <div class="activity-list" id="activityList">
-                    <!-- Populated by JS -->
-                    <div class="loading-spinner"></div>
-                </div>
+                <div class="activity-list" id="activityList"></div>
                 <a href="#" class="view-all-link">View All Activity</a>
             </div>
 
@@ -225,7 +439,7 @@
         </div>
     </main>
 
-    <!-- Professional B2B Footer -->
+    <!-- Footer -->
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-grid">
@@ -238,17 +452,16 @@
                                 <div class="face top"></div>
                             </div>
                         </div>
-                        <span class="footer-logo-text">Source<span>X</span></span>
+                        <span class="footer-logo-text">Buy<span>Uganda</span></span>
                     </div>
                     <p class="footer-about">Uganda's premier B2B marketplace connecting verified suppliers with serious buyers. Trusted by 5,000+ businesses.</p>
                     <div class="footer-social">
                         <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
                         <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/buyuganda.online?igsh=MW9sY2ZybXk3ZnU2dw==" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
-
                 <div class="footer-col">
                     <h4 class="footer-title">Quick Links</h4>
                     <ul class="footer-links">
@@ -259,7 +472,6 @@
                         <li><a href="help.html"><i class="fas fa-chevron-right"></i> Help Center</a></li>
                     </ul>
                 </div>
-
                 <div class="footer-col">
                     <h4 class="footer-title">For Buyers</h4>
                     <ul class="footer-links">
@@ -267,51 +479,21 @@
                         <li><a href="request-quote.html"><i class="fas fa-chevron-right"></i> Request for Quote</a></li>
                         <li><a href="supplier-verification.html"><i class="fas fa-chevron-right"></i> Supplier Verification</a></li>
                         <li><a href="buyer-protection.html"><i class="fas fa-chevron-right"></i> Buyer Protection</a></li>
-                        <li><a href="trade-assurance.html"><i class="fas fa-chevron-right"></i> Trade Assurance</a></li>
                     </ul>
                 </div>
-
-                <div class="footer-col">
-                    <h4 class="footer-title">For Suppliers</h4>
-                    <ul class="footer-links">
-                        <li><a href="sell-on-sourcex.html"><i class="fas fa-chevron-right"></i> Sell on SourceX</a></li>
-                        <li><a href="supplier-success.html"><i class="fas fa-chevron-right"></i> Supplier Success</a></li>
-                        <li><a href="advertise.html"><i class="fas fa-chevron-right"></i> Advertising</a></li>
-                        <li><a href="logistics-partner.html"><i class="fas fa-chevron-right"></i> Logistics Partner</a></li>
-                        <li><a href="supplier-standards.html"><i class="fas fa-chevron-right"></i> Supplier Standards</a></li>
-                    </ul>
-                </div>
-
                 <div class="footer-col">
                     <h4 class="footer-title">Contact Us</h4>
                     <ul class="footer-contact">
                         <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
                         <li><i class="fas fa-phone"></i> +256 700 123456</li>
-                        <li><i class="fas fa-envelope"></i> info@sourcex.ug</li>
+                        <li><i class="fas fa-envelope"></i> info@buyuganda.ug</li>
                         <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 6:00 PM</li>
                     </ul>
-                    <div class="footer-badge">
-                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=ISO" alt="ISO Certified">
-                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=SSL" alt="SSL Secure">
-                    </div>
                 </div>
             </div>
-
             <div class="footer-bottom">
-                <div class="footer-bottom-content">
-                    <p>&copy; 2026 SourceX. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
-                    <div class="footer-bottom-links">
-                        <a href="privacy.html">Privacy Policy</a>
-                        <a href="terms.html">Terms of Service</a>
-                        <a href="disclaimer.html">Disclaimer</a>
-                        <a href="sitemap.html">Sitemap</a>
-                    </div>
-                </div>
+                <p>&copy; 2026 BuyUganda. All rights reserved.</p>
             </div>
-        </div>
-
-        <div class="meta-credit">
-            <span>◆</span> Meta AI
         </div>
     </footer>
 
@@ -339,37 +521,136 @@
         </a>
     </nav>
 
-    <!-- Delete Account Confirmation Modal -->
+    <!-- Delete Account Modal -->
     <div class="modal" id="deleteModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Delete Account</h3>
-                <button class="modal-close" onclick="ProfileManager.closeDeleteModal()">&times;</button>
+                <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="delete-icon">
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
                 <p class="delete-message">Are you sure you want to delete your account?</p>
-                <p class="delete-warning">This action cannot be undone. All your data will be permanently removed.</p>
-                
+                <p class="delete-warning">This action cannot be undone.</p>
                 <div class="form-group">
-                    <label>Please type "DELETE" to confirm</label>
+                    <label>Type "DELETE" to confirm</label>
                     <input type="text" id="deleteConfirm" placeholder="DELETE">
                 </div>
-                
                 <div class="modal-actions">
-                    <button class="btn-danger" id="confirmDeleteBtn" disabled>Permanently Delete</button>
-                    <button class="btn-secondary" onclick="ProfileManager.closeDeleteModal()">Cancel</button>
+                    <button class="btn-danger" id="confirmDeleteBtn" disabled>Delete Account</button>
+                    <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
+    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/profile.js"></script>
+    
+    <!-- Guide System Loader -->
+    <script>
+        // Guide System Functions
+        const GUIDE_SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const GUIDE_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const guideSb = window.supabase.createClient(GUIDE_SUPABASE_URL, GUIDE_SUPABASE_ANON_KEY);
+
+        async function loadPageInstructions(pageName) {
+            try {
+                const { data, error } = await guideSb
+                    .from('page_instructions')
+                    .select('*')
+                    .eq('page_name', pageName)
+                    .eq('is_active', true)
+                    .single();
+                if (error) return null;
+                return data;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function dismissGuide(pageName) {
+            localStorage.setItem(`guide_dismissed_${pageName}`, 'true');
+            const container = document.getElementById('guideContainer');
+            if (container) container.style.display = 'none';
+        }
+
+        function renderGuideCard(instruction, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const dismissed = localStorage.getItem(`guide_dismissed_${instruction.page_name}`);
+            if (dismissed === 'true') {
+                container.style.display = 'none';
+                return;
+            }
+            
+            const stepsHtml = (instruction.steps || []).map(step => `
+                <div class="guide-step">
+                    <div class="step-number">${step.number}</div>
+                    <div class="step-content">
+                        <div class="step-title">${escapeHtml(step.title)}</div>
+                        <div class="step-desc">${escapeHtml(step.description)}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = `
+                <div class="guide-wrapper">
+                    <div class="guide-card">
+                        <div class="guide-header">
+                            <div class="guide-icon">
+                                <i class="fas ${instruction.page_icon || 'fa-user-circle'}"></i>
+                            </div>
+                            <div class="guide-title">
+                                <h2>${escapeHtml(instruction.page_title)}</h2>
+                                <p>${escapeHtml(instruction.page_description || '')}</p>
+                            </div>
+                            <div class="guide-actions">
+                                <button class="guide-dismiss" onclick="dismissGuide('${instruction.page_name}')">
+                                    <i class="fas fa-times"></i> Dismiss
+                                </button>
+                            </div>
+                        </div>
+                        <div class="guide-steps">${stepsHtml}</div>
+                        ${instruction.tip_content ? `
+                            <div class="guide-tip">
+                                <i class="fas ${instruction.tip_icon || 'fa-lightbulb'}"></i>
+                                <div class="tip-content">
+                                    <div class="tip-label">${escapeHtml(instruction.tip_title || '💡 Pro Tip')}</div>
+                                    <div class="tip-text">${escapeHtml(instruction.tip_content)}</div>
+                                </div>
+                            </div>
+                        ` : ''}
+                        <button class="need-help" onclick="alert('📞 Need help?\\n\\nEmail: ${instruction.support_email || 'support@buyuganda.ug'}\\nPhone: ${instruction.support_phone || '+256 700 123456'}')">
+                            <i class="fas fa-question-circle"></i> Need help? Contact support
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.style.display = 'block';
+        }
+
+        // Load profile page instructions
+        document.addEventListener('DOMContentLoaded', async function() {
+            const instruction = await loadPageInstructions('profile');
+            if (instruction) {
+                renderGuideCard(instruction, 'guideContainer');
+            }
+        });
+    </script>
 </body>
 </html>
