@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+        }
+        .loader {
+            text-align: center;
+            color: white;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        h2 {
+            margin-bottom: 10px;
+        }
+        p {
+            opacity: 0.9;
+        }
+        .error {
+            background: rgba(255,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <h2>Loading supplier store...</h2>
+        <p>Please wait while we redirect you</p>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        async function redirectToSupplier() {
+            // Get the full path
+            const path = window.location.pathname;
+            const slug = path.substring(1); // Remove leading slash
+            
+            console.log('Looking for supplier with slug:', slug);
+            
+            if (!slug || slug === '' || slug === 'go.html') {
+                window.location.href = '/index.html';
+                return;
+            }
+            
+            try {
+                // Try to find by shop_slug
+                let { data: supplier, error } = await sb
+                    .from('suppliers')
+                    .select('id, business_name, shop_slug')
+                    .eq('shop_slug', slug)
+                    .maybeSingle();
+                
+                // If not found by slug, try by ID
+                if (!supplier && !error) {
+                    const { data: byId } = await sb
+                        .from('suppliers')
+                        .select('id, business_name, shop_slug')
+                        .eq('id', slug)
+                        .maybeSingle();
+                    supplier = byId;
+                }
+                
+                if (supplier) {
+                    console.log('Found supplier:', supplier.business_name);
+                    // Redirect to supplier detail page
+                    window.location.href = `/supplier-detail.html?id=${supplier.id}`;
+                } else {
+                    // Show error
+                    document.getElementById('loader').innerHTML = `
+                        <div class="error">
+                            <h2>⚠️ Supplier Not Found</h2>
+                            <p>The store "${slug}" does not exist on BuyUganda</p>
+                            <button onclick="window.location.href='/index.html'" style="margin-top:20px; padding:10px 20px; background:white; border:none; border-radius:5px; cursor:pointer;">Go to Homepage</button>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loader').innerHTML = `
+                    <div class="error">
+                        <h2>⚠️ Error Loading Store</h2>
+                        <p>Something went wrong. Please try again.</p>
+                        <button onclick="window.location.href='/index.html'" style="margin-top:20px; padding:10px 20px; background:white; border:none; border-radius:5px; cursor:pointer;">Go to Homepage</button>
+                    </div>
+                `;
+            }
+        }
+        
+        redirectToSupplier();
+    </script>
+</body>
+</html>
