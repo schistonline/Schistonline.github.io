@@ -1,5 +1,5 @@
 // ============================================
-// SUPPLIER PRODUCTS MANAGEMENT - COMPLETE FIXED
+// SUPPLIER PRODUCTS MANAGEMENT - WITH PAGE NAVIGATION
 // ============================================
 
 console.log('🚀 Supplier Products loading...');
@@ -33,9 +33,6 @@ let SupplierProducts = {
         maxPrice: null,
         stockStatus: 'all'
     },
-    selectedFiles: [],
-    bulkTiers: [],
-    imageUrls: [],
     
     // ============================================
     // INITIALIZATION
@@ -107,17 +104,10 @@ let SupplierProducts = {
             
             this.categories = data || [];
             
-            // Populate category dropdown
-            const categorySelect = document.getElementById('productCategory');
-            if (categorySelect) {
-                categorySelect.innerHTML = '<option value="">Select category</option>' + 
-                    this.categories.map(c => `<option value="${c.id}">${c.display_name || c.name}</option>`).join('');
-            }
-            
             // Populate category filters
             const filterContainer = document.getElementById('categoryFilters');
             if (filterContainer) {
-                filterContainer.innerHTML = this.categories.map(c => `
+                filterContainer.innerHTML = this.categories.filter(c => !c.parent_id).map(c => `
                     <label class="filter-option">
                         <input type="checkbox" value="${c.id}" class="category-filter">
                         <span>${c.display_name || c.name}</span>
@@ -130,39 +120,25 @@ let SupplierProducts = {
         }
     },
     
-    async loadSubcategories(categoryId) {
-        try {
-            const { data, error } = await sb
-                .from('categories')
-                .select('*')
-                .eq('parent_id', categoryId)
-                .eq('is_active', true)
-                .order('name');
-            
-            if (error) throw error;
-            
-            this.subcategories = data || [];
-            
-            const subcatSelect = document.getElementById('productSubcategory');
-            if (subcatSelect) {
-                subcatSelect.innerHTML = '<option value="">Select subcategory</option>' + 
-                    this.subcategories.map(c => `<option value="${c.id}">${c.display_name || c.name}</option>`).join('');
-            }
-            
-        } catch (error) {
-            console.error('Error loading subcategories:', error);
-        }
+    // ============================================
+    // NAVIGATION TO ADD/EDIT PRODUCTS
+    // ============================================
+    goToAddProduct() {
+        window.location.href = 'supplier-add-product.html';
+    },
+    
+    goToEditProduct(productId) {
+        window.location.href = `supplier-add-product.html?edit=${productId}`;
     },
     
     // ============================================
-    // LOAD PRODUCTS - FIXED WITH NULL CHECKS
+    // LOAD PRODUCTS
     // ============================================
     async loadProducts(reset = true) {
         if (!this.supplier || this.isLoading) return;
         
         this.isLoading = true;
         
-        // Safely get DOM elements with null checks
         const loadingEl = document.getElementById('loadingState');
         const productsGrid = document.getElementById('productsGrid');
         const emptyEl = document.getElementById('emptyState');
@@ -172,7 +148,6 @@ let SupplierProducts = {
             this.currentPage = 1;
             this.hasMore = true;
             
-            // Only access style if elements exist
             if (loadingEl) loadingEl.style.display = 'block';
             if (productsGrid) productsGrid.innerHTML = '';
             if (emptyEl) emptyEl.style.display = 'none';
@@ -245,18 +220,9 @@ let SupplierProducts = {
             this.updateStats();
             this.renderProducts();
             
-            // Hide loading state
             if (loadingEl) loadingEl.style.display = 'none';
-            
-            // Show/hide empty state
-            if (emptyEl) {
-                emptyEl.style.display = this.filteredProducts.length === 0 ? 'block' : 'none';
-            }
-            
-            // Show/hide load more button
-            if (loadMoreEl) {
-                loadMoreEl.style.display = this.hasMore ? 'block' : 'none';
-            }
+            if (emptyEl) emptyEl.style.display = this.filteredProducts.length === 0 ? 'block' : 'none';
+            if (loadMoreEl) loadMoreEl.style.display = this.hasMore ? 'block' : 'none';
             
         } catch (error) {
             console.error('Error loading products:', error);
@@ -325,7 +291,7 @@ let SupplierProducts = {
                             <i class="far fa-clock"></i> ${this.formatDate(product.created_at)}
                         </div>
                         <div class="product-actions" onclick="event.stopPropagation()">
-                            <button class="btn-icon" onclick="SupplierProducts.editProduct(${product.id})" title="Edit">
+                            <button class="btn-icon" onclick="SupplierProducts.goToEditProduct(${product.id})" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button class="btn-icon" onclick="SupplierProducts.duplicateProduct(${product.id})" title="Duplicate">
@@ -347,201 +313,6 @@ let SupplierProducts = {
     // ============================================
     // PRODUCT CRUD OPERATIONS
     // ============================================
-    openProductModal(product = null) {
-        this.resetForm();
-        
-        if (product) {
-            // Edit mode
-            this.currentProduct = product;
-            document.getElementById('modalTitle').textContent = 'Edit Product';
-            document.getElementById('productId').value = product.id;
-            document.getElementById('productTitle').value = product.title || '';
-            document.getElementById('productDescription').value = product.description || '';
-            document.getElementById('productCategory').value = product.category_id || '';
-            document.getElementById('productSubcategory').value = product.subcategory_id || '';
-            document.getElementById('productSku').value = product.sku || '';
-            document.getElementById('productBrand').value = product.brand || '';
-            document.getElementById('productModel').value = product.model || '';
-            document.getElementById('productCondition').value = product.condition || 'new';
-            document.getElementById('productTags').value = (product.tags || []).join(', ');
-            document.getElementById('regularPrice').value = product.price || '';
-            document.getElementById('wholesalePrice').value = product.wholesale_price || '';
-            document.getElementById('stockQuantity').value = product.stock_quantity || 0;
-            document.getElementById('lowStockThreshold').value = product.low_stock_threshold || 10;
-            document.getElementById('moq').value = product.moq || 1;
-            document.getElementById('maxOrderQty').value = product.max_order_quantity || '';
-            document.getElementById('leadTime').value = product.lead_time_days || 3;
-            document.getElementById('region').value = product.region || 'Central';
-            document.getElementById('district').value = product.district || 'Kampala';
-            document.getElementById('specificLocation').value = product.specific_location || '';
-            document.getElementById('metaTitle').value = product.meta_title || '';
-            document.getElementById('metaDescription').value = product.meta_description || '';
-            document.getElementById('isActive').checked = product.status === 'active';
-            document.getElementById('isBulkOnly').checked = product.is_bulk_only || false;
-            document.getElementById('isNegotiable').checked = product.is_negotiable || false;
-            
-            // Load subcategories
-            if (product.category_id) {
-                this.loadSubcategories(product.category_id);
-            }
-            
-            // Load images
-            if (product.image_urls && product.image_urls.length > 0) {
-                this.imageUrls = product.image_urls;
-                this.renderImageList();
-            }
-            
-            // Load bulk pricing tiers
-            if (product.bulk_pricing) {
-                this.bulkTiers = product.bulk_pricing;
-                this.renderBulkTiers();
-            }
-            
-        } else {
-            // Create mode
-            this.currentProduct = null;
-            document.getElementById('modalTitle').textContent = 'Add New Product';
-        }
-        
-        document.getElementById('productModal').classList.add('show');
-    },
-    
-    closeProductModal() {
-        document.getElementById('productModal').classList.remove('show');
-        this.resetForm();
-    },
-    
-    resetForm() {
-        const form = document.getElementById('productForm');
-        if (form) form.reset();
-        
-        const productId = document.getElementById('productId');
-        if (productId) productId.value = '';
-        
-        const imageUrls = document.getElementById('imageUrls');
-        if (imageUrls) imageUrls.value = '[]';
-        
-        this.imageUrls = [];
-        this.bulkTiers = [];
-        this.selectedFiles = [];
-        
-        const imageList = document.getElementById('imageList');
-        if (imageList) imageList.innerHTML = '';
-        
-        const bulkTiersContainer = document.getElementById('bulkTiersContainer');
-        if (bulkTiersContainer) bulkTiersContainer.innerHTML = '';
-        
-        const imagesPreview = document.getElementById('imagesPreview');
-        if (imagesPreview) {
-            imagesPreview.innerHTML = `
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Click to upload product images</p>
-                <small>You can select multiple images (Max 5)</small>
-            `;
-        }
-    },
-    
-    async saveProduct(status = 'active') {
-        const title = document.getElementById('productTitle').value;
-        const description = document.getElementById('productDescription').value;
-        const categoryId = document.getElementById('productCategory').value;
-        const price = parseFloat(document.getElementById('regularPrice').value);
-        const stockQuantity = parseInt(document.getElementById('stockQuantity').value);
-        
-        if (!title || !description || !categoryId || !price || stockQuantity === undefined) {
-            this.showToast('Please fill in all required fields', 'error');
-            return;
-        }
-        
-        const productId = document.getElementById('productId').value;
-        const subcategoryId = document.getElementById('productSubcategory').value || null;
-        const wholesalePrice = parseFloat(document.getElementById('wholesalePrice').value) || null;
-        const moq = parseInt(document.getElementById('moq').value) || 1;
-        const maxOrderQty = parseInt(document.getElementById('maxOrderQty').value) || null;
-        const leadTime = parseInt(document.getElementById('leadTime').value) || 3;
-        const lowStockThreshold = parseInt(document.getElementById('lowStockThreshold').value) || 10;
-        const tags = document.getElementById('productTags').value.split(',').map(t => t.trim()).filter(t => t);
-        
-        const productData = {
-            supplier_id: this.supplier.id,
-            seller_id: this.currentUser.id,
-            title: title,
-            description: description,
-            category_id: parseInt(categoryId),
-            subcategory_id: subcategoryId ? parseInt(subcategoryId) : null,
-            price: price,
-            wholesale_price: wholesalePrice,
-            currency: 'UGX',
-            stock_quantity: stockQuantity,
-            low_stock_threshold: lowStockThreshold,
-            moq: moq,
-            max_order_quantity: maxOrderQty,
-            lead_time_days: leadTime,
-            sku: document.getElementById('productSku').value || null,
-            brand: document.getElementById('productBrand').value || null,
-            model: document.getElementById('productModel').value || null,
-            condition: document.getElementById('productCondition').value,
-            tags: tags,
-            region: document.getElementById('region').value,
-            district: document.getElementById('district').value,
-            specific_location: document.getElementById('specificLocation').value || null,
-            image_urls: this.imageUrls,
-            is_bulk_only: document.getElementById('isBulkOnly').checked,
-            is_negotiable: document.getElementById('isNegotiable').checked,
-            status: status,
-            updated_at: new Date().toISOString()
-        };
-        
-        if (document.getElementById('isActive').checked) {
-            productData.status = 'active';
-        }
-        
-        try {
-            let result;
-            
-            if (productId) {
-                // Update
-                result = await sb
-                    .from('ads')
-                    .update(productData)
-                    .eq('id', productId);
-            } else {
-                // Create
-                productData.created_at = new Date().toISOString();
-                productData.view_count = 0;
-                productData.click_count = 0;
-                
-                result = await sb
-                    .from('ads')
-                    .insert([productData]);
-            }
-            
-            if (result.error) throw result.error;
-            
-            // Save bulk pricing tiers if any
-            if (this.bulkTiers.length > 0) {
-                const productId = result.data?.[0]?.id || productId;
-                await this.saveBulkTiers(productId);
-            }
-            
-            this.closeProductModal();
-            this.showToast(`Product ${productId ? 'updated' : 'created'} successfully`, 'success');
-            await this.loadProducts(true);
-            
-        } catch (error) {
-            console.error('Error saving product:', error);
-            this.showToast('Error saving product', 'error');
-        }
-    },
-    
-    saveAsDraft() {
-        this.saveProduct('draft');
-    },
-    
-    saveAndPublish() {
-        this.saveProduct('active');
-    },
-    
     async viewProduct(productId) {
         const product = this.products.find(p => p.id === productId);
         if (!product) return;
@@ -557,11 +328,12 @@ let SupplierProducts = {
             modalBody.innerHTML = `
                 ${images.length > 0 ? `
                     <div class="view-product-images">
-                        ${images.map(url => `
+                        ${images.slice(0, 4).map(url => `
                             <div class="view-product-image">
                                 <img src="${url}" alt="${product.title}">
                             </div>
                         `).join('')}
+                        ${images.length > 4 ? `<div class="view-product-image">+${images.length - 4} more</div>` : ''}
                     </div>
                 ` : ''}
                 
@@ -638,7 +410,7 @@ let SupplierProducts = {
                 
                 ${product.tags && product.tags.length > 0 ? `
                     <div style="margin-top: 20px;">
-                        ${product.tags.map(tag => `<span style="background: var(--gray-100); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-right: 8px;">#${tag}</span>`).join('')}
+                        ${product.tags.map(tag => `<span style="background: var(--gray-100); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-right: 8px;">#${this.escapeHtml(tag)}</span>`).join('')}
                     </div>
                 ` : ''}
             `;
@@ -651,17 +423,10 @@ let SupplierProducts = {
         if (viewModal) viewModal.classList.add('show');
     },
     
-    editProduct(productId) {
-        const product = this.products.find(p => p.id === productId);
-        if (product) {
-            this.openProductModal(product);
-        }
-    },
-    
     editFromView() {
         this.closeViewModal();
         if (this.currentProduct) {
-            this.openProductModal(this.currentProduct);
+            this.goToEditProduct(this.currentProduct.id);
         }
     },
     
@@ -669,26 +434,33 @@ let SupplierProducts = {
         const product = this.products.find(p => p.id === productId);
         if (!product) return;
         
-        const { id, created_at, updated_at, view_count, click_count, ...productData } = product;
+        this.showToast('Opening product editor with copy...', 'info');
         
-        productData.title = `${productData.title} (Copy)`;
-        productData.status = 'draft';
-        productData.sku = productData.sku ? `${productData.sku}-COPY` : null;
+        // Store product data in sessionStorage for pre-filling the add form
+        const productCopy = {
+            title: `${product.title} (Copy)`,
+            description: product.description,
+            category_id: product.category_id,
+            subcategory_id: product.subcategory_id,
+            price: product.price,
+            wholesale_price: product.wholesale_price,
+            stock_quantity: product.stock_quantity,
+            moq: product.moq,
+            lead_time_days: product.lead_time_days,
+            sku: product.sku ? `${product.sku}-COPY` : null,
+            brand: product.brand,
+            model: product.model,
+            condition: product.condition,
+            tags: product.tags,
+            region: product.region,
+            district: product.district,
+            specific_location: product.specific_location,
+            is_negotiable: product.is_negotiable,
+            is_bulk_only: product.is_bulk_only
+        };
         
-        try {
-            const { error } = await sb
-                .from('ads')
-                .insert([productData]);
-            
-            if (error) throw error;
-            
-            this.showToast('Product duplicated successfully', 'success');
-            await this.loadProducts(true);
-            
-        } catch (error) {
-            console.error('Error duplicating product:', error);
-            this.showToast('Error duplicating product', 'error');
-        }
+        sessionStorage.setItem('duplicateProduct', JSON.stringify(productCopy));
+        window.location.href = 'supplier-add-product.html?duplicate=true';
     },
     
     async toggleStatus(productId) {
@@ -748,160 +520,6 @@ let SupplierProducts = {
             console.error('Error deleting product:', error);
             this.showToast('Error deleting product', 'error');
         }
-    },
-    
-    // ============================================
-    // IMAGE UPLOAD
-    // ============================================
-    async uploadImages(files) {
-        try {
-            this.showToast('Compressing images...', 'info');
-            
-            for (const file of files) {
-                const compressedFile = await this.compressImage(file, 800, 0.8);
-                const fileName = `products/${this.supplier.id}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-                
-                const { error } = await sb.storage
-                    .from('product-images')
-                    .upload(fileName, compressedFile);
-                
-                if (error) throw error;
-                
-                const { data: { publicUrl } } = sb.storage
-                    .from('product-images')
-                    .getPublicUrl(fileName);
-                
-                this.imageUrls.push(publicUrl);
-            }
-            
-            this.renderImageList();
-            this.showToast(`${files.length} image(s) uploaded`, 'success');
-            
-        } catch (error) {
-            console.error('Error uploading images:', error);
-            this.showToast('Error uploading images', 'error');
-        }
-    },
-    
-    compressImage(file, maxWidth, quality) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-                    
-                    if (width > maxWidth) {
-                        height = Math.round((height * maxWidth) / width);
-                        width = maxWidth;
-                    }
-                    
-                    canvas.width = width;
-                    canvas.height = height;
-                    
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    canvas.toBlob((blob) => {
-                        const compressedFile = new File([blob], file.name, {
-                            type: 'image/jpeg',
-                            lastModified: Date.now()
-                        });
-                        resolve(compressedFile);
-                    }, 'image/jpeg', quality);
-                };
-                img.onerror = reject;
-            };
-            reader.onerror = reject;
-        });
-    },
-    
-    renderImageList() {
-        const container = document.getElementById('imageList');
-        if (!container) return;
-        
-        container.innerHTML = this.imageUrls.map((url, index) => `
-            <div class="image-item">
-                <img src="${url}" alt="Product image ${index + 1}">
-                <button class="remove-image" onclick="SupplierProducts.removeImage(${index})">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `).join('');
-        
-        const imageUrls = document.getElementById('imageUrls');
-        if (imageUrls) imageUrls.value = JSON.stringify(this.imageUrls);
-    },
-    
-    removeImage(index) {
-        this.imageUrls.splice(index, 1);
-        this.renderImageList();
-    },
-    
-    // ============================================
-    // BULK PRICING TIERS
-    // ============================================
-    addBulkTier() {
-        this.bulkTiers.push({
-            min_quantity: 10,
-            max_quantity: null,
-            price_per_unit: 0,
-            discount_percentage: 0
-        });
-        this.renderBulkTiers();
-    },
-    
-    removeBulkTier(button) {
-        const index = button.closest('.bulk-tier-item')?.dataset.index;
-        if (index !== undefined) {
-            this.bulkTiers.splice(index, 1);
-            this.renderBulkTiers();
-        }
-    },
-    
-    renderBulkTiers() {
-        const container = document.getElementById('bulkTiersContainer');
-        if (!container) return;
-        
-        container.innerHTML = this.bulkTiers.map((tier, index) => `
-            <div class="bulk-tier-item" data-index="${index}">
-                <div class="bulk-tier-fields">
-                    <input type="number" class="tier-min-qty" value="${tier.min_quantity}" placeholder="Min Qty" min="1" onchange="SupplierProducts.updateBulkTier(${index}, 'min_quantity', this.value)">
-                    <input type="number" class="tier-max-qty" value="${tier.max_quantity || ''}" placeholder="Max Qty" min="1" onchange="SupplierProducts.updateBulkTier(${index}, 'max_quantity', this.value)">
-                    <input type="number" class="tier-price" value="${tier.price_per_unit}" placeholder="Price" min="0" step="100" onchange="SupplierProducts.updateBulkTier(${index}, 'price_per_unit', this.value)">
-                    <input type="number" class="tier-discount" value="${tier.discount_percentage || 0}" placeholder="Discount %" min="0" max="100" step="0.1" onchange="SupplierProducts.updateBulkTier(${index}, 'discount_percentage', this.value)">
-                </div>
-                <button type="button" class="btn-icon btn-danger" onclick="SupplierProducts.removeBulkTier(this)">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `).join('');
-    },
-    
-    updateBulkTier(index, field, value) {
-        if (this.bulkTiers[index]) {
-            this.bulkTiers[index][field] = value === '' ? null : parseFloat(value);
-        }
-    },
-    
-    async saveBulkTiers(productId) {
-        const tiers = this.bulkTiers.map(tier => ({
-            ad_id: productId,
-            min_quantity: tier.min_quantity,
-            max_quantity: tier.max_quantity || null,
-            price_per_unit: tier.price_per_unit,
-            discount_percentage: tier.discount_percentage || 0
-        }));
-        
-        const { error } = await sb
-            .from('bulk_pricing')
-            .insert(tiers);
-        
-        if (error) throw error;
     },
     
     // ============================================
@@ -1033,11 +651,6 @@ let SupplierProducts = {
         this.currentProduct = null;
     },
     
-    closeSuccessModal() {
-        const modal = document.getElementById('successModal');
-        if (modal) modal.classList.remove('show');
-    },
-    
     // ============================================
     // UTILITY FUNCTIONS
     // ============================================
@@ -1106,41 +719,12 @@ let SupplierProducts = {
             });
         }
         
-        // Category change - load subcategories
-        const categorySelect = document.getElementById('productCategory');
-        if (categorySelect) {
-            categorySelect.addEventListener('change', (e) => {
-                if (e.target.value) {
-                    this.loadSubcategories(e.target.value);
-                }
-            });
-        }
-        
-        // Image upload
-        const uploadArea = document.getElementById('productImagesUpload');
-        const fileInput = document.getElementById('productImages');
-        
-        if (uploadArea && fileInput) {
-            uploadArea.addEventListener('click', () => fileInput.click());
-            
-            fileInput.addEventListener('change', async (e) => {
-                const files = Array.from(e.target.files);
-                if (files.length > 5) {
-                    this.showToast('Maximum 5 images allowed', 'error');
-                    return;
-                }
-                await this.uploadImages(files);
-            });
-        }
-        
         // Close modals on outside click
         document.querySelectorAll('.modal').forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
-                    this.closeProductModal();
                     this.closeViewModal();
                     this.closeDeleteModal();
-                    this.closeSuccessModal();
                 }
             });
         });
@@ -1156,10 +740,8 @@ let SupplierProducts = {
         // Handle escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                this.closeProductModal();
                 this.closeViewModal();
                 this.closeDeleteModal();
-                this.closeSuccessModal();
             }
         });
     }
@@ -1174,16 +756,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Global functions
 window.SupplierProducts = SupplierProducts;
-window.openProductModal = () => SupplierProducts.openProductModal();
-window.closeProductModal = () => SupplierProducts.closeProductModal();
+window.goToAddProduct = () => SupplierProducts.goToAddProduct();
+window.goToEditProduct = (id) => SupplierProducts.goToEditProduct(id);
 window.closeViewModal = () => SupplierProducts.closeViewModal();
 window.closeDeleteModal = () => SupplierProducts.closeDeleteModal();
-window.saveAsDraft = () => SupplierProducts.saveAsDraft();
-window.saveAndPublish = () => SupplierProducts.saveAndPublish();
-window.addBulkTier = () => SupplierProducts.addBulkTier();
-window.removeBulkTier = (btn) => SupplierProducts.removeBulkTier(btn);
-window.updateBulkTier = (index, field, value) => SupplierProducts.updateBulkTier(index, field, value);
-window.removeImage = (index) => SupplierProducts.removeImage(index);
 window.applyFilters = () => SupplierProducts.applyFilters();
 window.resetFilters = () => SupplierProducts.resetFilters();
 window.loadMoreProducts = () => SupplierProducts.loadMoreProducts();
