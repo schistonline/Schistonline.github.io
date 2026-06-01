@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Send Inquiry - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/product-inquiry.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="header-title">Send Inquiry</div>
+        <div class="step-indicator" id="stepIndicator">Step 1 of 3</div>
+    </header>
+
+    <!-- Progress Steps -->
+    <div class="progress-container">
+        <div class="progress-steps">
+            <div class="step active" id="step1Indicator">
+                <span class="step-number">1</span>
+                <span class="step-label">Product</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step2Indicator">
+                <span class="step-number">2</span>
+                <span class="step-label">Your Info</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step3Indicator">
+                <span class="step-number">3</span>
+                <span class="step-label">Message</span>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading product information...</p>
+        </div>
+
+        <!-- Step 1: Product Information -->
+        <div class="step-content active" id="step1">
+            <div class="product-summary-card" id="productSummaryCard"></div>
+            
+            <div class="form-section">
+                <h3><i class="fas fa-box"></i> Product Details</h3>
+                
+                <div class="info-row">
+                    <span class="info-label">Product Title:</span>
+                    <span class="info-value" id="productTitle"></span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Price:</span>
+                    <span class="info-value price" id="productPrice"></span>
+                </div>
+                
+                <div class="info-row" id="variantRow" style="display: none;">
+                    <span class="info-label">Variant:</span>
+                    <span class="info-value" id="productVariant"></span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Quantity:</span>
+                    <span class="info-value" id="displayQuantity"></span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Supplier:</span>
+                    <span class="info-value" id="supplierName"></span>
+                </div>
+            </div>
+
+            <div class="form-navigation">
+                <button class="btn-secondary" onclick="window.history.back()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn-primary" id="continueToStep2">
+                    Continue <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Your Information -->
+        <div class="step-content" id="step2">
+            <div class="form-section">
+                <h3><i class="fas fa-user"></i> Your Information</h3>
+                <p class="section-note">Please provide your contact details so the supplier can respond</p>
+                
+                <div class="form-group">
+                    <label class="form-label required">Full Name</label>
+                    <input type="text" id="buyerName" class="form-input" placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label required">Email Address</label>
+                    <input type="email" id="buyerEmail" class="form-input" placeholder="you@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" id="buyerPhone" class="form-input" placeholder="+256 XXX XXX XXX">
+                    <small class="hint">For quick responses via WhatsApp or call</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Company Name (Optional)</label>
+                    <input type="text" id="companyName" class="form-input" placeholder="Your company name">
+                </div>
+            </div>
+
+            <div class="form-navigation">
+                <button class="btn-secondary" id="backToStep1">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="btn-primary" id="continueToStep3">
+                    Continue <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Message -->
+        <div class="step-content" id="step3">
+            <div class="form-section">
+                <h3><i class="fas fa-comment-dots"></i> Your Message</h3>
+                
+                <!-- Preset Questions -->
+                <div class="preset-questions">
+                    <label class="form-label">Quick Questions (Click to use)</label>
+                    <div class="preset-buttons" id="presetButtons">
+                        <button type="button" class="preset-btn" data-message="Is this product currently in stock?">
+                            <i class="fas fa-warehouse"></i> Check Stock
+                        </button>
+                        <button type="button" class="preset-btn" data-message="What's the minimum order quantity?">
+                            <i class="fas fa-boxes"></i> MOQ Inquiry
+                        </button>
+                        <button type="button" class="preset-btn" data-message="Can you provide a quote including shipping to my location?">
+                            <i class="fas fa-truck"></i> Shipping Quote
+                        </button>
+                        <button type="button" class="preset-btn" data-message="Do you offer bulk discounts for larger orders?">
+                            <i class="fas fa-tags"></i> Bulk Discount
+                        </button>
+                        <button type="button" class="preset-btn" data-message="What payment methods do you accept?">
+                            <i class="fas fa-credit-card"></i> Payment Methods
+                        </button>
+                        <button type="button" class="preset-btn" data-message="Can I get a sample before placing a bulk order?">
+                            <i class="fas fa-flask"></i> Sample Request
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label required">Your Message</label>
+                    <textarea id="inquiryMessage" class="form-textarea" rows="6" placeholder="Type your message here..."></textarea>
+                    <div class="char-counter"><span id="messageCount">0</span>/1000 characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="sendCopyToEmail">
+                        <span>Send a copy of this inquiry to my email</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-navigation">
+                <button class="btn-secondary" id="backToStep2">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="btn-primary" id="submitInquiryBtn">
+                    <i class="fas fa-paper-plane"></i> Send Inquiry
+                </button>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div class="modal" id="successModal">
+            <div class="modal-overlay" onclick="closeSuccessModal()"></div>
+            <div class="modal-content success-modal">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>Inquiry Sent!</h3>
+                <p id="successMessage">Your inquiry has been sent to the supplier.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="redirectToChat()">
+                        <i class="fas fa-comment-dots"></i> Go to Chat
+                    </button>
+                    <button class="btn btn-outline" onclick="closeSuccessModalAndRedirect()">
+                        <i class="fas fa-store"></i> Continue Browsing
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div class="modal" id="errorModal">
+            <div class="modal-overlay" onclick="closeErrorModal()"></div>
+            <div class="modal-content error-modal">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <h3>Something went wrong</h3>
+                <p id="errorMessage">Failed to send inquiry. Please try again.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="closeErrorModal()">Try Again</button>
+                    <button class="btn btn-outline" onclick="window.history.back()">Go Back</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div class="toast" id="toast"></div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/product-inquiry.js"></script>
+</body>
+</html>
