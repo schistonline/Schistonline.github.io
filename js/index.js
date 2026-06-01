@@ -36,13 +36,16 @@ const REASON_LABELS = {
     'popular': 'Popular products'
 };
 
+// Placeholder SVG for progressive images (1x1 transparent grey)
+const PLACEHOLDER_SVG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"%3E%3Crect width="200" height="200" fill="%23f3f4f6"/%3E%3C/svg%3E';
+
 // ============================================
 // INITIALIZATION - Alibaba Style
 // ============================================
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('🚀 BuyUganda.online loading...');
     
-    // Step 1: Show skeletons immediately (no spinner)
+    // Step 1: Show skeletons immediately (text first, images later)
     showSkeletons();
     
     // Step 2: Check auth in background
@@ -79,7 +82,61 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 // ============================================
-// SHOW SKELETONS FIRST (Alibaba style)
+// ALIBABA-STYLE PROGRESSIVE IMAGE LOADER
+// ============================================
+function createProgressiveImage(imageUrl, productTitle, size = 'medium') {
+    if (!imageUrl || imageUrl === '') {
+        imageUrl = 'https://via.placeholder.com/200x200?text=No+Image';
+    }
+    
+    return `
+        <img 
+            src="${PLACEHOLDER_SVG}"
+            data-src="${imageUrl}"
+            alt="${escapeHtml(productTitle)}"
+            class="lazy-image"
+            loading="lazy"
+            onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
+    `;
+}
+
+function initLazyLoading() {
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    const src = img.getAttribute('data-src');
+                    if (src && src !== PLACEHOLDER_SVG) {
+                        img.src = src;
+                        img.removeAttribute('data-src');
+                        img.classList.add('image-loaded');
+                    }
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '100px', // Start loading 100px before visible
+            threshold: 0.01
+        });
+        
+        document.querySelectorAll('.lazy-image').forEach(img => {
+            imageObserver.observe(img);
+        });
+    } else {
+        // Fallback for older browsers
+        document.querySelectorAll('.lazy-image').forEach(img => {
+            const src = img.getAttribute('data-src');
+            if (src && src !== PLACEHOLDER_SVG) {
+                img.src = src;
+                img.classList.add('image-loaded');
+            }
+        });
+    }
+}
+
+// ============================================
+// SHOW SKELETONS FIRST (Alibaba style - text visible immediately)
 // ============================================
 function showSkeletons() {
     // Banners skeleton
@@ -136,14 +193,15 @@ function getSkeletonItems(count, type) {
                 </div>
             `;
         } else if (type === 'product') {
+            // Alibaba style: show text skeletons immediately, image placeholder later
             html += `
                 <div class="swiper-slide">
                     <div class="product-card skeleton-card">
-                        <div class="product-image skeleton"></div>
+                        <div class="product-image skeleton" style="background: #e5e7eb; min-height: 160px;"></div>
                         <div class="product-info">
-                            <div class="skeleton-text" style="width: 90%; height: 16px;"></div>
-                            <div class="skeleton-text" style="width: 60%; height: 20px; margin-top: 8px;"></div>
-                            <div class="skeleton-text" style="width: 40%; height: 12px; margin-top: 4px;"></div>
+                            <div class="skeleton-text" style="width: 90%; height: 16px; margin-bottom: 8px;"></div>
+                            <div class="skeleton-text" style="width: 60%; height: 20px; margin-bottom: 4px;"></div>
+                            <div class="skeleton-text" style="width: 40%; height: 12px;"></div>
                         </div>
                     </div>
                 </div>
@@ -167,10 +225,7 @@ function getSkeletonItems(count, type) {
 // ============================================
 async function loadContentProgressively() {
     // Load sections in order of importance (visible first)
-    // Banner is most important
     await loadBanners();
-    
-    // Quick actions (second)
     await loadQuickActions();
     
     // Then load the rest in parallel but with staggered display
@@ -186,6 +241,9 @@ async function loadContentProgressively() {
     } else {
         setTimeout(() => loadPopularProducts(), 400);
     }
+    
+    // Initialize lazy loading after content is added
+    setTimeout(() => initLazyLoading(), 500);
 }
 
 // ============================================
@@ -394,7 +452,7 @@ async function loadBanners() {
             var buttonText = banner.button_text;
             
             var imageHtml = banner.image_url ? 
-                '<img src="' + banner.image_url + '" alt="' + escapeHtml(banner.title) + '" loading="lazy">' : '';
+                '<img src="' + banner.image_url + '" alt="' + escapeHtml(banner.title) + '" loading="lazy" style="opacity:0.8;">' : '';
             
             var buttonHtml = (buttonText && linkUrl !== '#') ? 
                 '<a href="' + linkUrl + '" class="banner-btn" style="background: white; color: ' + bgColor + ';">' + escapeHtml(buttonText) + '</a>' : '';
@@ -470,7 +528,7 @@ async function loadQuickActions() {
 }
 
 // ============================================
-// LOAD FEATURED DEALS
+// LOAD FEATURED DEALS (Alibaba style - text first)
 // ============================================
 async function loadFeaturedDeals() {
     try {
@@ -501,17 +559,15 @@ async function loadFeaturedDeals() {
         }
 
         var dealsHtml = dealsData.data.map(function(deal) {
-            var imageUrl = (deal.image_urls && deal.image_urls[0]) ? deal.image_urls[0] : 'https://via.placeholder.com/200';
+            var imageUrl = (deal.image_urls && deal.image_urls[0]) ? deal.image_urls[0] : 'https://via.placeholder.com/200x200?text=No+Image';
+            var progressiveImage = createProgressiveImage(imageUrl, deal.title, 'medium');
             var moqHtml = deal.moq ? '<div class="product-moq">MOQ: ' + deal.moq + '</div>' : '';
             
             return `
                 <div class="swiper-slide">
                     <a href="B2B-product-detail.html?id=${deal.id}" class="product-card" onclick="trackProductView(${deal.id})">
                         <div class="product-image">
-                            <img src="${imageUrl}" 
-                                 alt="${escapeHtml(deal.title)}"
-                                 loading="lazy"
-                                 onerror="this.src='https://via.placeholder.com/200'">
+                            ${progressiveImage}
                             <span class="product-badge featured">FEATURED</span>
                         </div>
                         <div class="product-info">
@@ -556,7 +612,7 @@ async function loadCategories() {
         var categoriesHtml = categoriesData.data.map(function(cat) {
             var imageHtml = '';
             if (cat.image_url) {
-                imageHtml = '<img src="' + cat.image_url + '" alt="' + escapeHtml(cat.name) + '" loading="lazy">';
+                imageHtml = `<img src="${cat.image_url}" alt="${escapeHtml(cat.name)}" loading="lazy" class="lazy-category-image" style="width:100%;height:100%;object-fit:cover;">`;
             } else {
                 var iconColor = cat.color_hex || '#6B21E5';
                 var iconClass = cat.icon || 'fa-tag';
@@ -636,7 +692,7 @@ async function loadHotSuppliers() {
 
             var avatarHtml = '';
             if (avatarUrl) {
-                avatarHtml = '<img src="' + avatarUrl + '" alt="' + escapeHtml(supplier.business_name) + '">';
+                avatarHtml = `<img src="${PLACEHOLDER_SVG}" data-src="${avatarUrl}" alt="${escapeHtml(supplier.business_name)}" class="lazy-image" style="border-radius:50%;">`;
             } else {
                 avatarHtml = '<span>' + initials + '</span>';
             }
@@ -665,7 +721,7 @@ async function loadHotSuppliers() {
 }
 
 // ============================================
-// LOAD RECENT ITEMS
+// LOAD RECENT ITEMS (Alibaba style - text first)
 // ============================================
 async function loadRecentItems() {
     try {
@@ -696,17 +752,15 @@ async function loadRecentItems() {
         }
 
         var productsHtml = productsData.data.map(function(product) {
-            var imageUrl = (product.image_urls && product.image_urls[0]) ? product.image_urls[0] : 'https://via.placeholder.com/200';
+            var imageUrl = (product.image_urls && product.image_urls[0]) ? product.image_urls[0] : 'https://via.placeholder.com/200x200?text=No+Image';
+            var progressiveImage = createProgressiveImage(imageUrl, product.title, 'medium');
             var moqHtml = product.moq ? '<div class="product-moq">MOQ: ' + product.moq + '</div>' : '';
             
             return `
                 <div class="swiper-slide">
                     <a href="B2B-product-detail.html?id=${product.id}" class="product-card" onclick="trackProductView(${product.id})">
                         <div class="product-image">
-                            <img src="${imageUrl}" 
-                                 alt="${escapeHtml(product.title)}"
-                                 loading="lazy"
-                                 onerror="this.src='https://via.placeholder.com/200'">
+                            ${progressiveImage}
                             <span class="product-badge new">NEW</span>
                         </div>
                         <div class="product-info">
@@ -727,7 +781,7 @@ async function loadRecentItems() {
 }
 
 // ============================================
-// LOAD RECOMMENDATIONS
+// LOAD RECOMMENDATIONS (Alibaba style - text first)
 // ============================================
 async function loadRecommendations() {
     if (!currentUser) return;
@@ -825,17 +879,15 @@ async function loadRecommendations() {
         
         var recommendationsHtml = recommendations.map(function(product) {
             var reasonIcon = REASON_ICONS[recommendationReason] || '✨';
-            var imageUrl = (product.image_urls && product.image_urls[0]) ? product.image_urls[0] : 'https://via.placeholder.com/200';
+            var imageUrl = (product.image_urls && product.image_urls[0]) ? product.image_urls[0] : 'https://via.placeholder.com/200x200?text=No+Image';
+            var progressiveImage = createProgressiveImage(imageUrl, product.title, 'medium');
             var moqHtml = product.moq ? '<div class="product-moq">MOQ: ' + product.moq + '</div>' : '';
             
             return `
                 <div class="swiper-slide">
                     <a href="B2B-product-detail.html?id=${product.id}" class="product-card" onclick="trackProductView(${product.id})">
                         <div class="product-image">
-                            <img src="${imageUrl}" 
-                                 alt="${escapeHtml(product.title)}"
-                                 loading="lazy"
-                                 onerror="this.src='https://via.placeholder.com/200'">
+                            ${progressiveImage}
                             <span class="product-badge recommendation" title="${REASON_LABELS[recommendationReason]}">${reasonIcon}</span>
                         </div>
                         <div class="product-info">
@@ -872,6 +924,7 @@ async function loadRecommendations() {
                     freeMode: true
                 });
             }
+            initLazyLoading();
         }, 100);
         
     } catch (error) {
@@ -881,7 +934,7 @@ async function loadRecommendations() {
 }
 
 // ============================================
-// LOAD POPULAR PRODUCTS
+// LOAD POPULAR PRODUCTS (Alibaba style - text first)
 // ============================================
 async function loadPopularProducts() {
     try {
@@ -913,17 +966,15 @@ async function loadPopularProducts() {
         }
         
         var productsHtml = productsData.data.map(function(product) {
-            var imageUrl = (product.image_urls && product.image_urls[0]) ? product.image_urls[0] : 'https://via.placeholder.com/200';
+            var imageUrl = (product.image_urls && product.image_urls[0]) ? product.image_urls[0] : 'https://via.placeholder.com/200x200?text=No+Image';
+            var progressiveImage = createProgressiveImage(imageUrl, product.title, 'medium');
             var moqHtml = product.moq ? '<div class="product-moq">MOQ: ' + product.moq + '</div>' : '';
             
             return `
                 <div class="swiper-slide">
                     <a href="B2B-product-detail.html?id=${product.id}" class="product-card" onclick="trackProductView(${product.id})">
                         <div class="product-image">
-                            <img src="${imageUrl}" 
-                                 alt="${escapeHtml(product.title)}"
-                                 loading="lazy"
-                                 onerror="this.src='https://via.placeholder.com/200'">
+                            ${progressiveImage}
                             <span class="product-badge recommendation" title="Popular products">🔥</span>
                         </div>
                         <div class="product-info">
@@ -960,6 +1011,7 @@ async function loadPopularProducts() {
                     freeMode: true
                 });
             }
+            initLazyLoading();
         }, 100);
         
     } catch (error) {
@@ -968,7 +1020,7 @@ async function loadPopularProducts() {
 }
 
 // ============================================
-// LOAD CATEGORY PRODUCTS
+// LOAD CATEGORY PRODUCTS (Alibaba style - text first)
 // ============================================
 async function loadCategoryProducts() {
     try {
@@ -1009,16 +1061,14 @@ async function loadCategoryProducts() {
 
             if (productsData.data && productsData.data.length > 0) {
                 var productsHtml = productsData.data.map(function(product) {
-                    var imageUrl = (product.image_urls && product.image_urls[0]) ? product.image_urls[0] : 'https://via.placeholder.com/200';
+                    var imageUrl = (product.image_urls && product.image_urls[0]) ? product.image_urls[0] : 'https://via.placeholder.com/200x200?text=No+Image';
+                    var progressiveImage = createProgressiveImage(imageUrl, product.title, 'medium');
                     var moqHtml = product.moq ? '<div class="product-moq">MOQ: ' + product.moq + '</div>' : '';
                     
                     return `
                         <a href="B2B-product-detail.html?id=${product.id}" class="product-card" onclick="trackProductView(${product.id})">
                             <div class="product-image">
-                                <img src="${imageUrl}" 
-                                     alt="${escapeHtml(product.title)}"
-                                     loading="lazy"
-                                     onerror="this.src='https://via.placeholder.com/200'">
+                                ${progressiveImage}
                             </div>
                             <div class="product-info">
                                 <div class="product-title">${escapeHtml(product.title.substring(0, 20))}${product.title.length > 20 ? '...' : ''}</div>
@@ -1048,6 +1098,7 @@ async function loadCategoryProducts() {
         }
 
         container.innerHTML = html;
+        initLazyLoading();
         
     } catch (error) {
         console.error('Error loading category products:', error);
