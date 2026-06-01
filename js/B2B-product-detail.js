@@ -12,6 +12,61 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const chatSupabase = window.supabase.createClient(CHAT_SUPABASE_URL, CHAT_SUPABASE_KEY);
 
 // ============================================
+// ALIBABA-STYLE PROGRESSIVE IMAGE LOADER
+// ============================================
+const PLACEHOLDER_SVG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"%3E%3Crect width="400" height="400" fill="%23f3f4f6"/%3E%3C/svg%3E';
+
+function createProgressiveImage(imageUrl, altText, size = 'medium') {
+    if (!imageUrl || imageUrl === '') {
+        imageUrl = 'https://via.placeholder.com/400x400?text=No+Image';
+    }
+    
+    return `
+        <img 
+            src="${PLACEHOLDER_SVG}"
+            data-src="${imageUrl}"
+            alt="${escapeHtml(altText)}"
+            class="lazy-image"
+            loading="lazy"
+            onerror="this.src='https://via.placeholder.com/400x400?text=No+Image'">
+    `;
+}
+
+function initLazyLoading() {
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    const src = img.getAttribute('data-src');
+                    if (src && src !== PLACEHOLDER_SVG) {
+                        img.src = src;
+                        img.removeAttribute('data-src');
+                        img.classList.add('image-loaded');
+                    }
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '100px',
+            threshold: 0.01
+        });
+        
+        document.querySelectorAll('.lazy-image').forEach(img => {
+            imageObserver.observe(img);
+        });
+    } else {
+        document.querySelectorAll('.lazy-image').forEach(img => {
+            const src = img.getAttribute('data-src');
+            if (src && src !== PLACEHOLDER_SVG) {
+                img.src = src;
+                img.classList.add('image-loaded');
+            }
+        });
+    }
+}
+
+// ============================================
 // STATE MANAGEMENT
 // ============================================
 const ProductDetail = {
@@ -172,6 +227,7 @@ const ProductDetail = {
             // Initialize Swiper after content is rendered
             setTimeout(() => {
                 this.initGallerySwiper();
+                initLazyLoading(); // Initialize lazy loading for all images
             }, 100);
 
         } catch (error) {
@@ -184,7 +240,7 @@ const ProductDetail = {
                     <div style="text-align: center; padding: 50px 20px;">
                         <i class="fas fa-exclamation-circle" style="font-size: 48px; color: #EF4444; margin-bottom: 16px;"></i>
                         <h3>Error Loading Product</h3>
-                        <p style="color: #6B7280; margin-top: 8px;">${error.message}</p>
+                        <p style="color: #6B7280; margin-top: 8px;">${escapeHtml(error.message)}</p>
                         <button onclick="window.history.back()" class="btn btn-primary" style="margin-top: 20px;">Go Back</button>
                     </div>
                 `;
@@ -363,7 +419,7 @@ const ProductDetail = {
     },
 
     // ============================================
-    // LOAD RELATED PRODUCTS
+    // LOAD RELATED PRODUCTS (with progressive images)
     // ============================================
     async loadRelatedProducts(categoryId, currentProductId) {
         try {
@@ -396,19 +452,18 @@ const ProductDetail = {
 
             if (wrapper) {
                 wrapper.innerHTML = products.map(product => {
-                    const imageUrl = product.image_urls?.[0] || 'https://via.placeholder.com/140';
+                    const imageUrl = product.image_urls?.[0] || 'https://via.placeholder.com/140x140?text=No+Image';
                     const price = product.wholesale_price || product.price || 0;
+                    const progressiveImage = createProgressiveImage(imageUrl, product.title, 'small');
+                    
                     return `
                         <div class="swiper-slide">
                             <a href="B2B-product-detail.html?id=${product.id}" class="related-card">
                                 <div class="related-image">
-                                    <img src="${imageUrl}" 
-                                         alt="${this.escapeHtml(product.title)}"
-                                         loading="lazy"
-                                         onerror="this.src='https://via.placeholder.com/140'">
+                                    ${progressiveImage}
                                 </div>
                                 <div class="related-info">
-                                    <div class="related-title">${this.escapeHtml(product.title.substring(0, 20))}${product.title.length > 20 ? '...' : ''}</div>
+                                    <div class="related-title">${escapeHtml(product.title.substring(0, 20))}${product.title.length > 20 ? '...' : ''}</div>
                                     <div class="related-price">UGX ${this.formatNumber(price)}</div>
                                 </div>
                             </a>
@@ -429,6 +484,7 @@ const ProductDetail = {
                             768: { slidesPerView: 4.5 }
                         }
                     });
+                    initLazyLoading();
                 }
             }, 100);
 
@@ -491,7 +547,7 @@ const ProductDetail = {
     },
 
     // ============================================
-    // RENDER PRODUCT
+    // RENDER PRODUCT (text first, images progressive)
     // ============================================
     renderProduct() {
         if (!this.productData) return;
@@ -499,14 +555,14 @@ const ProductDetail = {
         const ad = this.productData;
         const seller = ad.seller;
         
-        // Basic info
+        // Basic info (text loads immediately)
         const titleEl = document.getElementById('productTitle');
         const descEl = document.getElementById('productDescription');
         
         if (titleEl) titleEl.textContent = ad.title || '';
         if (descEl) descEl.textContent = ad.description || 'No description available';
         
-        // Price
+        // Price (text)
         const wholesalePrice = ad.wholesale_price || ad.price;
         const wholesalePriceEl = document.getElementById('wholesalePrice');
         if (wholesalePriceEl) wholesalePriceEl.textContent = this.formatNumber(wholesalePrice);
@@ -526,7 +582,7 @@ const ProductDetail = {
         // Render variants
         this.renderVariants();
         
-        // MOQ and Stock
+        // MOQ and Stock (text)
         const moqEl = document.getElementById('moqValue');
         const stockEl = document.getElementById('stockValue');
         const leadTimeEl = document.getElementById('leadTimeValue');
@@ -543,20 +599,20 @@ const ProductDetail = {
             this.selectedQuantity = ad.moq || 1;
         }
         
-        // Location
+        // Location (text)
         const locationEl = document.getElementById('productLocation');
         if (locationEl) {
             locationEl.textContent = `${ad.district || seller?.district || 'Kampala'}, ${ad.region || 'Uganda'}`;
         }
         
-        // Date
+        // Date (text)
         const dateEl = document.getElementById('postedDate');
         if (dateEl && ad.created_at) {
             const date = new Date(ad.created_at);
             dateEl.textContent = this.formatDate(date);
         }
         
-        // Badges
+        // Badges (text)
         const featuredBadge = document.getElementById('featuredBadge');
         const urgentBadge = document.getElementById('urgentBadge');
         const verifiedBadge = document.getElementById('verifiedBadge');
@@ -573,7 +629,7 @@ const ProductDetail = {
         if (ad.is_bulk_only && bulkBadge) bulkBadge.style.display = 'block';
         if (ad.is_negotiable && negotiableBadge) negotiableBadge.style.display = 'inline-flex';
         
-        // Tags
+        // Tags (text)
         if (ad.tags && ad.tags.length > 0) {
             const tagsSection = document.getElementById('tagsSection');
             const tagsContainer = document.getElementById('tagsContainer');
@@ -581,24 +637,24 @@ const ProductDetail = {
             if (tagsSection) tagsSection.style.display = 'block';
             if (tagsContainer) {
                 tagsContainer.innerHTML = ad.tags.map(tag => 
-                    `<span class="tag">${this.escapeHtml(tag)}</span>`
+                    `<span class="tag">${escapeHtml(tag)}</span>`
                 ).join('');
             }
         }
         
-        // Images
+        // Images (progressive - placeholder first)
         this.renderImages(ad.image_urls || []);
         
-        // Videos
+        // Videos (progressive)
         this.renderVideos();
         
-        // Specifications
+        // Specifications (text)
         this.renderSpecifications(ad);
         
-        // Bulk pricing table
+        // Bulk pricing table (text)
         this.renderBulkPricing();
         
-        // Supplier info
+        // Supplier info (text first, avatar progressive)
         this.renderSupplierInfo(seller);
     },
 
@@ -657,7 +713,7 @@ const ProductDetail = {
         document.querySelectorAll('.color-option').forEach(btn => btn.classList.remove('selected'));
         document.querySelector(`[data-variant-id="${variant.id}"]`)?.classList.add('selected');
         
-        // Update main image
+        // Update main image with progressive loading
         this.updateMainImage(variant.image_url);
         
         // Update selected color text
@@ -673,7 +729,7 @@ const ProductDetail = {
     },
 
     // ============================================
-    // RENDER VIDEOS
+    // RENDER VIDEOS (with progressive thumbnails)
     // ============================================
     renderVideos() {
         const videosSection = document.getElementById('videosSection');
@@ -688,16 +744,23 @@ const ProductDetail = {
         
         videosSection.style.display = 'block';
         
-        videosGrid.innerHTML = this.productVideos.map(video => `
-            <div class="video-thumbnail-card" onclick="ProductDetail.playVideo('${video.video_url}', '${this.escapeHtml(video.caption || '')}', ${video.duration || 0})">
-                <div class="video-thumbnail">
-                    <img src="${video.thumbnail_url || 'https://via.placeholder.com/300x200'}" alt="Video thumbnail">
-                    <span class="video-duration">${this.formatDuration(video.duration || 0)}</span>
-                    <span class="play-icon"><i class="fas fa-play"></i></span>
+        videosGrid.innerHTML = this.productVideos.map(video => {
+            const thumbnailUrl = video.thumbnail_url || 'https://via.placeholder.com/300x200?text=Video';
+            const progressiveThumb = createProgressiveImage(thumbnailUrl, video.caption || 'Video thumbnail', 'small');
+            
+            return `
+                <div class="video-thumbnail-card" onclick="ProductDetail.playVideo('${video.video_url}', '${escapeHtml(video.caption || '')}', ${video.duration || 0})">
+                    <div class="video-thumbnail">
+                        ${progressiveThumb}
+                        <span class="video-duration">${this.formatDuration(video.duration || 0)}</span>
+                        <span class="play-icon"><i class="fas fa-play"></i></span>
+                    </div>
+                    <div class="video-caption">${escapeHtml(video.caption || '').substring(0, 50)}${video.caption?.length > 50 ? '...' : ''}</div>
                 </div>
-                <div class="video-caption">${this.escapeHtml(video.caption || '').substring(0, 50)}${video.caption?.length > 50 ? '...' : ''}</div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
+        
+        setTimeout(() => initLazyLoading(), 100);
     },
 
     // ============================================
@@ -713,7 +776,6 @@ const ProductDetail = {
         // Check if video is YouTube or direct MP4
         let videoHtml;
         if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
-            // Extract YouTube ID
             const videoId = this.extractYouTubeId(videoUrl);
             videoHtml = `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
         } else {
@@ -724,7 +786,7 @@ const ProductDetail = {
         
         if (infoEl) {
             infoEl.innerHTML = `
-                <p><strong>${caption || 'Product Video'}</strong></p>
+                <p><strong>${escapeHtml(caption) || 'Product Video'}</strong></p>
                 <p class="video-meta">Duration: ${this.formatDuration(duration)}</p>
             `;
         }
@@ -766,7 +828,7 @@ const ProductDetail = {
     },
 
     // ============================================
-    // RENDER IMAGES
+    // RENDER IMAGES (progressive loading)
     // ============================================
     renderImages(images) {
         const wrapper = document.getElementById('galleryWrapper');
@@ -775,7 +837,7 @@ const ProductDetail = {
         if (images.length === 0) {
             wrapper.innerHTML = `
                 <div class="swiper-slide">
-                    <img src="https://via.placeholder.com/400?text=No+Image" alt="No image available">
+                    ${createProgressiveImage('https://via.placeholder.com/400x400?text=No+Image', 'No image available', 'large')}
                 </div>
             `;
             return;
@@ -783,9 +845,11 @@ const ProductDetail = {
         
         wrapper.innerHTML = images.map(img => `
             <div class="swiper-slide">
-                <img src="${img}" alt="Product image" loading="lazy">
+                ${createProgressiveImage(img, 'Product image', 'large')}
             </div>
         `).join('');
+        
+        setTimeout(() => initLazyLoading(), 50);
     },
 
     // ============================================
@@ -794,9 +858,11 @@ const ProductDetail = {
     updateMainImage(imageUrl) {
         if (!this.swiperInstance) return;
         
+        // Find slide with matching image and navigate to it
         const slides = document.querySelectorAll('.gallery-swiper .swiper-slide img');
         for (let i = 0; i < slides.length; i++) {
-            if (slides[i].src === imageUrl) {
+            const dataSrc = slides[i].getAttribute('data-src');
+            if (dataSrc === imageUrl || slides[i].src === imageUrl) {
                 this.swiperInstance.slideTo(i);
                 break;
             }
@@ -821,8 +887,8 @@ const ProductDetail = {
         
         specsGrid.innerHTML = specs.map(spec => `
             <div class="spec-item">
-                <div class="spec-label">${spec.label}</div>
-                <div class="spec-value">${this.escapeHtml(spec.value)}</div>
+                <div class="spec-label">${escapeHtml(spec.label)}</div>
+                <div class="spec-value">${escapeHtml(spec.value)}</div>
             </div>
         `).join('');
     },
@@ -859,7 +925,7 @@ const ProductDetail = {
     },
 
     // ============================================
-    // RENDER SUPPLIER INFO
+    // RENDER SUPPLIER INFO (avatar progressive)
     // ============================================
     renderSupplierInfo(seller) {
         if (!seller) return;
@@ -881,10 +947,12 @@ const ProductDetail = {
         const supplierAvatar = document.getElementById('supplierAvatar');
         if (supplierAvatar) {
             if (seller.avatar_url) {
+                const progressiveAvatar = createProgressiveImage(seller.avatar_url, supplierName, 'small');
                 supplierAvatar.innerHTML = `
-                    <img src="${seller.avatar_url}" alt="${this.escapeHtml(supplierName)}">
+                    ${progressiveAvatar}
                     ${seller.is_verified ? '<span class="verified-badge"><i class="fas fa-check"></i></span>' : ''}
                 `;
+                setTimeout(() => initLazyLoading(), 50);
             }
         }
         
@@ -925,14 +993,15 @@ const ProductDetail = {
             tr.style.background = '';
         });
         
-        event.currentTarget.style.background = '#F3F4F6';
+        if (event && event.currentTarget) {
+            event.currentTarget.style.background = '#F3F4F6';
+        }
     },
 
     // ============================================
-    // CONTACT SUPPLIER - Redirect to inquiry page
+    // CONTACT SUPPLIER
     // ============================================
     contactSupplier() {
-        // Build query parameters for the inquiry page
         const params = new URLSearchParams();
         params.append('product_id', this.productId);
         params.append('quantity', this.selectedQuantity);
@@ -941,15 +1010,10 @@ const ProductDetail = {
             params.append('variant', this.currentVariant.color_name);
         }
         
-        // Redirect to the inquiry page
         window.location.href = `product-inquiry.html?${params.toString()}`;
     },
 
-    // ============================================
-    // SEND INQUIRY - Redirect to inquiry page (NEW)
-    // ============================================
     quickInquiryWithPreset() {
-        // Build query parameters for the inquiry page
         const params = new URLSearchParams();
         params.append('product_id', this.productId);
         params.append('quantity', this.selectedQuantity);
@@ -958,7 +1022,6 @@ const ProductDetail = {
             params.append('variant', this.currentVariant.color_name);
         }
         
-        // Redirect to the inquiry page
         window.location.href = `product-inquiry.html?${params.toString()}`;
     },
 
@@ -969,7 +1032,6 @@ const ProductDetail = {
         const pendingProduct = sessionStorage.getItem('pendingProductInquiry');
         if (pendingProduct && this.currentUser) {
             sessionStorage.removeItem('pendingProductInquiry');
-            // If it's a quick inquiry, redirect to inquiry page
             const inquiry = JSON.parse(pendingProduct);
             const params = new URLSearchParams();
             params.append('product_id', inquiry.productId);
@@ -1144,13 +1206,6 @@ const ProductDetail = {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     },
 
-    escapeHtml(text) {
-        if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    },
-
     getColorFromName(colorName) {
         const colors = {
             'red': '#EF4444',
@@ -1197,6 +1252,16 @@ const ProductDetail = {
 };
 
 // ============================================
+// ESCAPE HTML HELPER (global)
+// ============================================
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ============================================
 // INITIALIZATION
 // ============================================
 if (document.readyState === 'loading') {
@@ -1207,3 +1272,4 @@ if (document.readyState === 'loading') {
 
 // Make functions globally available
 window.ProductDetail = ProductDetail;
+window.escapeHtml = escapeHtml;
