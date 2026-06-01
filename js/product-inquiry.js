@@ -1,5 +1,5 @@
 // ============================================
-// PRODUCT INQUIRY PAGE - STEP-BY-STEP
+// PRODUCT INQUIRY PAGE - SAVES TO NEW TABLES
 // ============================================
 
 const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
@@ -74,7 +74,7 @@ const InquiryPage = {
         try {
             const { data, error } = await sb
                 .from('profiles')
-                .select('full_name, email, phone')
+                .select('id, full_name, email, phone, location, district')
                 .eq('id', this.currentUser.id)
                 .single();
             
@@ -82,6 +82,7 @@ const InquiryPage = {
                 document.getElementById('buyerName').value = data.full_name || '';
                 document.getElementById('buyerEmail').value = data.email || '';
                 document.getElementById('buyerPhone').value = data.phone || '';
+                document.getElementById('buyerLocation').value = data.location || data.district || '';
             }
         } catch (error) {
             console.error('Error loading profile:', error);
@@ -104,6 +105,10 @@ const InquiryPage = {
                         email,
                         phone,
                         avatar_url
+                    ),
+                    suppliers!inner (
+                        id,
+                        business_name
                     )
                 `)
                 .eq('id', this.productId)
@@ -113,31 +118,13 @@ const InquiryPage = {
             
             this.productData = data;
             this.supplierData = data.seller;
-            
-            // Get supplier ID
-            await this.getSupplierId(data.seller_id);
+            this.supplierId = data.suppliers?.id;
             
             this.renderProductSummary();
             
         } catch (error) {
             console.error('Error loading product:', error);
             this.showToast('Error loading product', 'error');
-        }
-    },
-    
-    async getSupplierId(profileId) {
-        try {
-            const { data, error } = await sb
-                .from('suppliers')
-                .select('id')
-                .eq('profile_id', profileId)
-                .maybeSingle();
-            
-            if (!error && data) {
-                this.supplierId = data.id;
-            }
-        } catch (error) {
-            console.error('Error getting supplier ID:', error);
         }
     },
     
@@ -215,7 +202,7 @@ const InquiryPage = {
     // VALIDATION
     // ============================================
     validateStep1() {
-        return true; // Product info is already loaded
+        return true;
     },
     
     validateStep2() {
@@ -301,7 +288,7 @@ const InquiryPage = {
     },
     
     // ============================================
-    // SEND INQUIRY
+    // SEND INQUIRY - SAVES TO NEW TABLES
     // ============================================
     async sendInquiry() {
         if (!this.validateStep3()) return;
@@ -309,6 +296,7 @@ const InquiryPage = {
         const name = document.getElementById('buyerName').value.trim();
         const email = document.getElementById('buyerEmail').value.trim();
         const phone = document.getElementById('buyerPhone').value.trim();
+        const location = document.getElementById('buyerLocation').value.trim();
         const company = document.getElementById('companyName').value.trim();
         const message = document.getElementById('inquiryMessage').value.trim();
         const sendCopy = document.getElementById('sendCopyToEmail').checked;
@@ -316,35 +304,111 @@ const InquiryPage = {
         this.showToast('Sending inquiry...', 'info');
         
         try {
-            // Save inquiry to database
-            const { error: inquiryError } = await sb
+            // Get or create buyer profile
+            let buyerId = this.currentUser?.id;
+            
+            if (!buyerId && email) {
+                // Check if profile exists with this email
+                const { data: existingProfile } = await sb
+                    .from('profiles')
+                    .select('id')
+                    .eq('email', email)
+                    .maybeSingle();
+                
+                if (existingProfile) {
+                    buyerId = existingProfile.id;
+                }
+            }
+            
+            // 1. Create inquiry request
+            const expiresAt = new Date();
+            expiresAt.setDate(expiresAt.getDate() + 7); // Expires in 7 days
+            
+            const { data: inquiryRequest, error: inquiryError } = await sb
+                .from('inquiry_requests')
+                .insert({
+                    buyer_id: buyerId || null,
+                    title: `Inquiry: ${this.productData.title.substring(0, 80)}`,
+                    description: message,
+                    status: 'pending',
+                    expires_at: expiresAt.toISOString(),
+                    shipping_address: location || null,
+                    shipping_district: location ? location.split(',')[0] : null,
+                    created_at: new Date().toISOString()
+                })
+                .select()
+                .single();
+            
+            if (inquiryError) throw inquiryError;
+            
+            console.log('✅ Inquiry request created:', inquiryRequest.id);
+            
+            // 2. Create inquiry item
+            const price = this.productData.wholesale_price || this.productData.price || 0;
+            
+            const { data: inquiryItem, error: itemError } = await sb
+                .from('inquiry_items')
+                .insert({
+                    inquiry_id: inquiryRequest.id,
+                    product_id: parseInt(this.productId),
+                    product_name: this.productData.title,
+                    quantity: this.quantity,
+                    preferred_unit_price: price,
+                    notes: this.variant && this.variant !== 'Default' ? `Variant: ${this.variant}` : null
+                })
+                .select()
+                .single();
+            
+            if (itemError) throw itemError;
+            
+            console.log('✅ Inquiry item created:', inquiryItem.id);
+            
+            // 3. Create supplier match (if supplier exists)
+            if (this.supplierId) {
+                const { error: matchError } = await sb
+                    .from('inquiry_supplier_matches')
+                    .insert({
+                        inquiry_id: inquiryRequest.id,
+                        supplier_id: this.supplierId,
+                        has_quoted: false,
+                        created_at: new Date().toISOString()
+                    });
+                
+                if (matchError) {
+                    console.error('Error creating supplier match:', matchError);
+                } else {
+                    console.log('✅ Supplier match created');
+                }
+            }
+            
+            // 4. Also save to simple inquiries table for backward compatibility
+            await sb
                 .from('inquiries')
                 .insert({
-                    product_id: this.productId,
+                    product_id: parseInt(this.productId),
                     buyer_name: name,
                     buyer_email: email,
                     buyer_phone: phone || null,
-                    buyer_company: company || null,
                     buyer_message: message,
                     quantity: this.quantity,
-                    variant: this.variant,
+                    variant: this.variant || null,
                     status: 'new',
+                    action: 'inquiry',
                     created_at: new Date().toISOString()
                 });
             
-            if (inquiryError) console.error('Error saving inquiry:', inquiryError);
-            
-            // Send copy to email if requested
+            // 5. Send copy to email if requested
             if (sendCopy) {
                 await this.sendEmailCopy(name, email, message);
             }
             
-            // If user is logged in, create chat conversation
+            // 6. If user is logged in, create chat conversation
             if (this.currentUser && this.supplierId) {
-                await this.createChatConversation(name, email, phone, company, message);
+                await this.createChatConversation(inquiryRequest.id, name, email, phone, company, message);
             } else {
                 // Store inquiry in session storage for after login
                 sessionStorage.setItem('pendingInquiry', JSON.stringify({
+                    inquiryId: inquiryRequest.id,
                     productId: this.productId,
                     productTitle: this.productData.title,
                     quantity: this.quantity,
@@ -358,8 +422,8 @@ const InquiryPage = {
                 }));
             }
             
-            // Track the inquiry
-            await this.trackInquiry();
+            // 7. Track the inquiry
+            await this.trackInquiry(inquiryRequest.id);
             
             this.showSuccessModal();
             
@@ -369,7 +433,7 @@ const InquiryPage = {
         }
     },
     
-    async createChatConversation(name, email, phone, company, message) {
+    async createChatConversation(inquiryId, name, email, phone, company, message) {
         try {
             // Check if conversation exists
             const { data: existing } = await chatSb
@@ -387,10 +451,11 @@ const InquiryPage = {
                 const { data: conversation, error: convError } = await chatSb
                     .from('conversations')
                     .insert({
-                        title: `${this.productData.title.substring(0, 50)} - Inquiry`,
+                        title: `Inquiry #${inquiryId}: ${this.productData.title.substring(0, 40)}`,
                         created_by: this.currentUser.id,
                         marketplace_user_id: this.currentUser.id,
-                        listing_id: this.productId
+                        listing_id: this.productId,
+                        inquiry_id: inquiryId
                     })
                     .select()
                     .single();
@@ -406,8 +471,14 @@ const InquiryPage = {
             }
             
             // Format full message with inquiry details
+            const price = this.productData.wholesale_price || this.productData.price || 0;
             const fullMessage = `
-**Product Inquiry - ${this.productData.title}**
+**New Inquiry #${inquiryId}**
+
+**Product:** ${this.productData.title}
+**Quantity:** ${this.quantity} unit(s)
+${this.variant && this.variant !== 'Default' ? `**Variant:** ${this.variant}` : ''}
+**Price:** UGX ${this.formatNumber(price)} per unit
 
 **Buyer Information:**
 • Name: ${name}
@@ -415,14 +486,11 @@ const InquiryPage = {
 ${phone ? `• Phone: ${phone}` : ''}
 ${company ? `• Company: ${company}` : ''}
 
-**Order Details:**
-• Product: ${this.productData.title}
-• Quantity: ${this.quantity} unit(s)
-${this.variant && this.variant !== 'Default' ? `• Variant: ${this.variant}` : ''}
-• Price: UGX ${this.formatNumber(this.productData.wholesale_price || this.productData.price)} per unit
-
 **Message:**
 ${message}
+
+---
+*This inquiry was sent via the product inquiry form.*
             `.trim();
             
             // Send message
@@ -435,9 +503,10 @@ ${message}
                 product_data: {
                     product_id: this.productId,
                     product_title: this.productData.title,
-                    product_price: this.productData.wholesale_price || this.productData.price,
+                    product_price: price,
                     quantity: this.quantity,
-                    variant: this.variant
+                    variant: this.variant,
+                    inquiry_id: inquiryId
                 }
             });
             
@@ -460,12 +529,12 @@ ${message}
     },
     
     async sendEmailCopy(name, email, message) {
-        // This would typically call a Supabase Edge Function
-        // For now, we'll just log it
+        // This would call a Supabase Edge Function
         console.log('Would send email copy to:', email);
+        console.log('Email content:', { name, message });
     },
     
-    async trackInquiry() {
+    async trackInquiry(inquiryId) {
         try {
             await sb.from('ad_engagement').insert({
                 ad_id: this.productId,
@@ -474,7 +543,8 @@ ${message}
                 metadata: {
                     quantity: this.quantity,
                     variant: this.variant,
-                    source: 'inquiry_page'
+                    source: 'inquiry_page',
+                    inquiry_id: inquiryId
                 },
                 performed_at: new Date().toISOString()
             });
@@ -490,9 +560,9 @@ ${message}
         const modal = document.getElementById('successModal');
         const messageEl = document.getElementById('successMessage');
         
-        messageEl.textContent = this.currentUser ? 
-            'Your inquiry has been sent. The supplier will respond shortly.' :
-            'Your inquiry has been saved. Please login to continue the conversation.';
+        messageEl.innerHTML = this.currentUser ? 
+            'Your inquiry has been sent successfully! The supplier will respond shortly.' :
+            'Your inquiry has been saved. <a href="login.html" style="color: var(--primary);">Login</a> to track your inquiries and chat with suppliers.';
         
         modal.classList.add('show');
     },
