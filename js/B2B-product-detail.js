@@ -849,7 +849,7 @@ const ProductDetail = {
             
             return `
                 <tr onclick="ProductDetail.selectBulkTier(${tier.min_quantity})">
-                    <td><strong>${tier.min_quantity}</strong>${tier.max_quantity ? ` - ${tier.max_quantity}` : '+'}</td>
+                    <td><strong>${tier.min_quantity}</strong>${tier.max_quantity ? ` - ${tier.max_quantity}` : '+'}<\/td>
                     <td>UGX ${this.formatNumber(tier.price_per_unit)}<\/td>
                     <td>UGX ${this.formatNumber(totalPrice)}<\/td>
                     <td class="savings-cell">Save ${savings}%<\/td>
@@ -929,345 +929,55 @@ const ProductDetail = {
     },
 
     // ============================================
-    // CONTACT SUPPLIER (Old behaviour – redirect to supplier-contact.html)
+    // CONTACT SUPPLIER - Redirect to inquiry page
     // ============================================
-    async contactSupplier() {
-        // If user is not logged in, redirect to login first
-        if (!this.currentUser) {
-            sessionStorage.setItem('redirectAfterLogin', `B2B-product-detail.html?id=${this.productId}`);
-            sessionStorage.setItem('pendingProductInquiry', JSON.stringify({
-                productId: this.productId,
-                productTitle: this.productData?.title,
-                quantity: this.selectedQuantity,
-                variant: this.currentVariant?.color_name !== 'Default' ? this.currentVariant?.color_name : null
-            }));
-            window.location.href = `login.html`;
-            return;
-        }
-
-        // Build query parameters for the contact page
+    contactSupplier() {
+        // Build query parameters for the inquiry page
         const params = new URLSearchParams();
         params.append('product_id', this.productId);
-        params.append('product_title', this.productData?.title || '');
         params.append('quantity', this.selectedQuantity);
+        
         if (this.currentVariant?.color_name !== 'Default') {
             params.append('variant', this.currentVariant.color_name);
         }
-        if (this.supplierId) {
-            params.append('supplier_id', this.supplierId);
-        }
-        // Redirect to the old contact page
-        window.location.href = `supplier-contact.html?${params.toString()}`;
+        
+        // Redirect to the inquiry page
+        window.location.href = `product-inquiry.html?${params.toString()}`;
     },
 
     // ============================================
-    // SEND INQUIRY (New chat system)
+    // SEND INQUIRY - Redirect to inquiry page (NEW)
     // ============================================
     quickInquiryWithPreset() {
-        if (!this.currentUser) {
-            sessionStorage.setItem('redirectAfterLogin', `B2B-product-detail.html?id=${this.productId}`);
-            sessionStorage.setItem('pendingProductInquiry', JSON.stringify({
-                productId: this.productId,
-                productTitle: this.productData?.title,
-                quantity: this.selectedQuantity,
-                variant: this.currentVariant?.color_name !== 'Default' ? this.currentVariant?.color_name : null,
-                action: 'quick_inquiry'
-            }));
-            window.location.href = `login.html`;
-            return;
-        }
-        this.showQuickInquiryModal();
-    },
-
-    // ============================================
-    // CHAT HELPER FUNCTIONS (used only by Send Inquiry)
-    // ============================================
-
-    // Find existing conversation with supplier
-    async findExistingConversation() {
-        try {
-            const { data, error } = await chatSupabase
-                .from('conversation_participants')
-                .select('conversation_id')
-                .eq('user_id', this.supplierId);
-            
-            if (error) {
-                console.error('Error finding conversation:', error);
-                return null;
-            }
-            
-            if (data && data.length > 0) {
-                const conversationId = data[0].conversation_id;
-                const { data: userInConv, error: userError } = await chatSupabase
-                    .from('conversation_participants')
-                    .select('conversation_id')
-                    .eq('conversation_id', conversationId)
-                    .eq('user_id', this.currentUser.id);
-                
-                if (!userError && userInConv && userInConv.length > 0) {
-                    return conversationId;
-                }
-            }
-            return null;
-        } catch (error) {
-            console.error('Error in findExistingConversation:', error);
-            return null;
-        }
-    },
-
-    // Create new conversation
-    async createNewConversation() {
-        try {
-            const supplierName = this.supplierProfile?.business_name || 
-                                this.supplierProfile?.full_name || 
-                                'Supplier';
-            
-            const { data: conversation, error: convError } = await chatSupabase
-                .from('conversations')
-                .insert({
-                    title: `${supplierName} - ${this.productData?.title || 'Product Inquiry'}`,
-                    created_by: this.currentUser.id,
-                    last_message: `Inquiry about ${this.productData?.title || 'product'}`,
-                    last_message_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString()
-                })
-                .select()
-                .single();
-            
-            if (convError) throw convError;
-            
-            await chatSupabase
-                .from('conversation_participants')
-                .insert([
-                    { 
-                        conversation_id: conversation.id, 
-                        user_id: this.currentUser.id, 
-                        user_type: 'buyer',
-                        unread_count: 0,
-                        is_admin: true
-                    },
-                    { 
-                        conversation_id: conversation.id, 
-                        user_id: this.supplierId, 
-                        user_type: 'supplier',
-                        unread_count: 1,
-                        is_admin: false
-                    }
-                ]);
-            
-            return conversation.id;
-        } catch (error) {
-            console.error('Error creating conversation:', error);
-            return null;
-        }
-    },
-
-    // Generate inquiry message
-    generateInquiryMessage() {
-        const productTitle = this.productData?.title || 'this product';
-        const quantity = this.selectedQuantity || (this.productData?.moq || 1);
-        const variant = this.currentVariant?.color_name !== 'Default' ? this.currentVariant?.color_name : null;
-        const price = this.productData?.wholesale_price || this.productData?.price || 0;
+        // Build query parameters for the inquiry page
+        const params = new URLSearchParams();
+        params.append('product_id', this.productId);
+        params.append('quantity', this.selectedQuantity);
         
-        let message = `Hello! I'm interested in ${productTitle}.\n\n`;
-        message += `📦 Product Details:\n`;
-        message += `• Product: ${productTitle}\n`;
-        message += `• Quantity: ${quantity} unit(s)\n`;
-        if (variant) {
-            message += `• Color/Variant: ${variant}\n`;
+        if (this.currentVariant?.color_name !== 'Default') {
+            params.append('variant', this.currentVariant.color_name);
         }
-        message += `• Price: UGX ${this.formatNumber(price)} per unit\n\n`;
-        message += `I would like to inquire about:\n`;
-        message += `• Current availability\n`;
-        message += `• Shipping options to my location\n`;
-        message += `• Payment terms\n\n`;
-        message += `Please let me know if you need any additional information.`;
-        return message;
+        
+        // Redirect to the inquiry page
+        window.location.href = `product-inquiry.html?${params.toString()}`;
     },
 
-    // Send initial chat message
-    async sendInitialChatMessage(conversationId, message) {
-        try {
-            const { error } = await chatSupabase
-                .from('messages')
-                .insert({
-                    conversation_id: conversationId,
-                    sender_id: this.currentUser.id,
-                    sender_type: 'buyer',
-                    content: message,
-                    message_type: 'text',
-                    product_data: {
-                        product_id: this.productId,
-                        product_title: this.productData?.title,
-                        product_price: this.productData?.wholesale_price || this.productData?.price,
-                        quantity: this.selectedQuantity,
-                        variant: this.currentVariant?.color_name !== 'Default' ? this.currentVariant?.color_name : null,
-                        image_url: this.currentVariant?.image_url || this.productData?.image_urls?.[0]
-                    }
-                });
-            if (error) throw error;
-            
-            await chatSupabase
-                .from('conversations')
-                .update({
-                    last_message: message,
-                    last_message_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString()
-                })
-                .eq('id', conversationId);
-            
-            return true;
-        } catch (error) {
-            console.error('Error sending initial message:', error);
-            return false;
-        }
-    },
-
-    // Check for pending inquiry after login
+    // ============================================
+    // CHECK FOR PENDING INQUIRY AFTER LOGIN
+    // ============================================
     async checkPendingInquiry() {
-        const pendingMessage = sessionStorage.getItem('pendingChatMessage');
-        const pendingConvId = sessionStorage.getItem('pendingConversationId');
-        
-        if (pendingMessage && pendingConvId && this.currentUser) {
-            sessionStorage.removeItem('pendingChatMessage');
-            sessionStorage.removeItem('pendingConversationId');
-            await this.sendInitialChatMessage(pendingConvId, pendingMessage);
-        }
-        
         const pendingProduct = sessionStorage.getItem('pendingProductInquiry');
         if (pendingProduct && this.currentUser) {
             sessionStorage.removeItem('pendingProductInquiry');
-            // If it's a quick inquiry, open the modal; otherwise, contact supplier?
+            // If it's a quick inquiry, redirect to inquiry page
             const inquiry = JSON.parse(pendingProduct);
-            if (inquiry.action === 'quick_inquiry') {
-                this.showQuickInquiryModal();
-            } else {
-                this.contactSupplier();
+            const params = new URLSearchParams();
+            params.append('product_id', inquiry.productId);
+            params.append('quantity', inquiry.quantity);
+            if (inquiry.variant) {
+                params.append('variant', inquiry.variant);
             }
-        }
-    },
-
-    // Show quick inquiry modal
-    showQuickInquiryModal() {
-        const modal = document.getElementById('quickInquiryModal');
-        if (!modal) return;
-        
-        // Update product summary preview
-        const previewContainer = document.getElementById('productSummaryPreview');
-        if (previewContainer && this.productData) {
-            const imageUrl = this.currentVariant?.image_url || this.productData.image_urls?.[0] || 'https://via.placeholder.com/60';
-            const price = this.productData.wholesale_price || this.productData.price || 0;
-            
-            previewContainer.innerHTML = `
-                <img src="${imageUrl}" alt="${this.escapeHtml(this.productData.title)}">
-                <div style="flex: 1;">
-                    <h4>${this.escapeHtml(this.productData.title)}</h4>
-                    <p>Quantity: ${this.selectedQuantity} unit(s)</p>
-                    <p>Price: UGX ${this.formatNumber(price)} per unit</p>
-                    ${this.currentVariant?.color_name !== 'Default' ? `<p>Color: ${this.currentVariant.color_name}</p>` : ''}
-                    <div class="price">Total: UGX ${this.formatNumber(price * this.selectedQuantity)}</div>
-                </div>
-            `;
-            previewContainer.style.display = 'flex';
-        }
-        
-        // Set preset messages
-        const presetMessages = [
-            "Hi, I'm interested in this product. Is it currently in stock?",
-            "What's the minimum order quantity for this item?",
-            "Can you provide a quote including shipping to Kampala?",
-            "Do you offer bulk discounts for larger orders?",
-            "What payment methods do you accept?",
-            "Can I get a sample before placing a bulk order?"
-        ];
-        
-        const presetContainer = document.getElementById('presetMessagesList');
-        if (presetContainer) {
-            presetContainer.innerHTML = presetMessages.map(msg => `
-                <button class="preset-message-btn" onclick="ProductDetail.selectPresetMessage('${this.escapeHtml(msg)}')">
-                    ${this.escapeHtml(msg)}
-                </button>
-            `).join('');
-        }
-        
-        modal.classList.add('show');
-    },
-
-    // Select preset message
-    selectPresetMessage(message) {
-        const textarea = document.getElementById('customMessageInput');
-        if (textarea) {
-            textarea.value = message;
-            textarea.focus();
-            textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    },
-
-    // Close quick inquiry modal
-    closeQuickInquiryModal() {
-        const modal = document.getElementById('quickInquiryModal');
-        if (modal) modal.classList.remove('show');
-    },
-
-    // Send custom inquiry from modal
-    sendCustomInquiry: async function() {
-        const textarea = document.getElementById('customMessageInput');
-        const message = textarea?.value.trim();
-        
-        if (!message) {
-            this.showToast('Please enter a message', 'warning');
-            return;
-        }
-        
-        this.closeQuickInquiryModal();
-        this.showToast('Sending inquiry...', 'info');
-        
-        try {
-            let conversationId = await this.findExistingConversation();
-            if (!conversationId) {
-                conversationId = await this.createNewConversation();
-            }
-            
-            if (conversationId) {
-                const { error } = await chatSupabase
-                    .from('messages')
-                    .insert({
-                        conversation_id: conversationId,
-                        sender_id: this.currentUser.id,
-                        sender_type: 'buyer',
-                        content: message,
-                        message_type: 'text',
-                        product_data: {
-                            product_id: this.productId,
-                            product_title: this.productData?.title,
-                            product_price: this.productData?.wholesale_price || this.productData?.price,
-                            quantity: this.selectedQuantity,
-                            variant: this.currentVariant?.color_name !== 'Default' ? this.currentVariant?.color_name : null,
-                            image_url: this.currentVariant?.image_url || this.productData?.image_urls?.[0]
-                        }
-                    });
-                
-                if (error) throw error;
-                
-                await chatSupabase
-                    .from('conversations')
-                    .update({
-                        last_message: message,
-                        last_message_at: new Date().toISOString(),
-                        updated_at: new Date().toISOString()
-                    })
-                    .eq('id', conversationId);
-                
-                this.showToast('Message sent! Redirecting to chat...', 'success');
-                setTimeout(() => {
-                    window.location.href = `chat-room.html?conversation=${conversationId}&product=${this.productId}`;
-                }, 1500);
-            } else {
-                throw new Error('Could not create conversation');
-            }
-        } catch (error) {
-            console.error('Error sending inquiry:', error);
-            this.showToast('Failed to send inquiry. Please try again.', 'error');
+            window.location.href = `product-inquiry.html?${params.toString()}`;
         }
     },
 
@@ -1474,7 +1184,6 @@ const ProductDetail = {
             if (e.target.classList.contains('modal-overlay')) {
                 this.closeSuccessModal();
                 this.closeVideoModal();
-                this.closeQuickInquiryModal();
             }
         });
         
@@ -1482,7 +1191,6 @@ const ProductDetail = {
             if (e.key === 'Escape') {
                 this.closeSuccessModal();
                 this.closeVideoModal();
-                this.closeQuickInquiryModal();
             }
         });
     }
