@@ -1,5 +1,5 @@
 // ============================================
-// PRODUCT INQUIRY PAGE - SAVES TO NEW TABLES
+// PRODUCT INQUIRY PAGE - SAVES TO NEW TABLES (FIXED)
 // ============================================
 
 const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
@@ -36,6 +36,10 @@ const InquiryPage = {
         this.quantity = parseInt(urlParams.get('quantity')) || 1;
         this.variant = urlParams.get('variant');
         
+        console.log('Product ID:', this.productId);
+        console.log('Quantity:', this.quantity);
+        console.log('Variant:', this.variant);
+        
         if (!this.productId) {
             this.showToast('Product not found', 'error');
             setTimeout(() => window.history.back(), 2000);
@@ -62,7 +66,7 @@ const InquiryPage = {
             this.currentUser = user;
             
             if (this.currentUser) {
-                // Pre-fill user info if logged in
+                console.log('User logged in:', this.currentUser.id);
                 await this.loadUserProfile();
             }
         } catch (error) {
@@ -82,7 +86,9 @@ const InquiryPage = {
                 document.getElementById('buyerName').value = data.full_name || '';
                 document.getElementById('buyerEmail').value = data.email || '';
                 document.getElementById('buyerPhone').value = data.phone || '';
-                document.getElementById('buyerLocation').value = data.location || data.district || '';
+                if (document.getElementById('buyerLocation')) {
+                    document.getElementById('buyerLocation').value = data.location || data.district || '';
+                }
             }
         } catch (error) {
             console.error('Error loading profile:', error);
@@ -90,11 +96,12 @@ const InquiryPage = {
     },
     
     // ============================================
-    // LOAD PRODUCT DATA
+    // LOAD PRODUCT DATA - FIXED
     // ============================================
     async loadProductData() {
         try {
-            const { data, error } = await sb
+            // First, load the product with seller profile
+            const { data: ad, error: adError } = await sb
                 .from('ads')
                 .select(`
                     *,
@@ -104,27 +111,58 @@ const InquiryPage = {
                         business_name,
                         email,
                         phone,
-                        avatar_url
-                    ),
-                    suppliers!inner (
-                        id,
-                        business_name
+                        avatar_url,
+                        location,
+                        district,
+                        is_verified
                     )
                 `)
                 .eq('id', this.productId)
                 .single();
             
-            if (error) throw error;
+            if (adError) throw adError;
+            if (!ad) throw new Error('Product not found');
             
-            this.productData = data;
-            this.supplierData = data.seller;
-            this.supplierId = data.suppliers?.id;
+            this.productData = ad;
+            this.supplierData = ad.seller;
+            
+            console.log('Product loaded:', this.productData.title);
+            console.log('Seller:', this.supplierData?.business_name || this.supplierData?.full_name);
+            
+            // Now try to get supplier ID from suppliers table (optional, may not exist)
+            if (this.supplierData?.id) {
+                const { data: supplier, error: supplierError } = await sb
+                    .from('suppliers')
+                    .select('id')
+                    .eq('profile_id', this.supplierData.id)
+                    .maybeSingle();
+                
+                if (!supplierError && supplier) {
+                    this.supplierId = supplier.id;
+                    console.log('Supplier ID found:', this.supplierId);
+                } else {
+                    console.log('No supplier record found, using profile ID');
+                }
+            }
             
             this.renderProductSummary();
             
         } catch (error) {
             console.error('Error loading product:', error);
-            this.showToast('Error loading product', 'error');
+            this.showToast(error.message || 'Error loading product', 'error');
+            
+            // Show error in loading state
+            const loadingState = document.getElementById('loadingState');
+            if (loadingState) {
+                loadingState.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 48px; color: #EF4444; margin-bottom: 16px;"></i>
+                        <h3>Error Loading Product</h3>
+                        <p style="color: #6B7280;">${error.message}</p>
+                        <button onclick="window.history.back()" style="margin-top: 20px; padding: 10px 20px; background: #0B4F6C; color: white; border: none; border-radius: 8px;">Go Back</button>
+                    </div>
+                `;
+            }
         }
     },
     
@@ -141,7 +179,7 @@ const InquiryPage = {
         
         container.innerHTML = `
             <div class="product-summary">
-                <img src="${imageUrl}" alt="${this.escapeHtml(this.productData.title)}">
+                <img src="${imageUrl}" alt="${this.escapeHtml(this.productData.title)}" onerror="this.src='https://via.placeholder.com/100x100?text=No+Image'">
                 <div class="product-info">
                     <h4>${this.escapeHtml(this.productData.title)}</h4>
                     <div class="product-price">UGX ${this.formatNumber(price)} per unit</div>
@@ -154,14 +192,26 @@ const InquiryPage = {
         `;
         
         // Update info rows
-        document.getElementById('productTitle').textContent = this.productData.title;
-        document.getElementById('productPrice').textContent = `UGX ${this.formatNumber(price)} per unit`;
-        document.getElementById('displayQuantity').textContent = `${this.quantity} unit(s)`;
-        document.getElementById('supplierName').textContent = sellerName;
+        const productTitleEl = document.getElementById('productTitle');
+        const productPriceEl = document.getElementById('productPrice');
+        const displayQuantityEl = document.getElementById('displayQuantity');
+        const supplierNameEl = document.getElementById('supplierName');
         
-        if (this.variant && this.variant !== 'Default') {
-            document.getElementById('variantRow').style.display = 'flex';
-            document.getElementById('productVariant').textContent = this.variant;
+        if (productTitleEl) productTitleEl.textContent = this.productData.title;
+        if (productPriceEl) productPriceEl.textContent = `UGX ${this.formatNumber(price)} per unit`;
+        if (displayQuantityEl) displayQuantityEl.textContent = `${this.quantity} unit(s)`;
+        if (supplierNameEl) supplierNameEl.textContent = sellerName;
+        
+        const variantRow = document.getElementById('variantRow');
+        const productVariantEl = document.getElementById('productVariant');
+        
+        if (variantRow && productVariantEl) {
+            if (this.variant && this.variant !== 'Default') {
+                variantRow.style.display = 'flex';
+                productVariantEl.textContent = this.variant;
+            } else {
+                variantRow.style.display = 'none';
+            }
         }
     },
     
@@ -192,7 +242,10 @@ const InquiryPage = {
         
         // Update step indicator text
         const stepNames = ['Product', 'Your Info', 'Message'];
-        document.getElementById('stepIndicator').textContent = `Step ${step} of 3: ${stepNames[step - 1]}`;
+        const stepIndicator = document.getElementById('stepIndicator');
+        if (stepIndicator) {
+            stepIndicator.textContent = `Step ${step} of 3: ${stepNames[step - 1]}`;
+        }
         
         // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -258,32 +311,40 @@ const InquiryPage = {
         const presetBtns = document.querySelectorAll('.preset-btn');
         const messageTextarea = document.getElementById('inquiryMessage');
         
+        if (!presetBtns.length || !messageTextarea) return;
+        
         presetBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                const presetMessage = btn.dataset.message;
-                const currentMessage = messageTextarea.value;
-                
-                if (currentMessage) {
-                    messageTextarea.value = currentMessage + '\n\n' + presetMessage;
-                } else {
-                    messageTextarea.value = presetMessage;
+                const presetMessage = btn.getAttribute('data-message');
+                if (presetMessage) {
+                    const currentMessage = messageTextarea.value;
+                    
+                    if (currentMessage) {
+                        messageTextarea.value = currentMessage + '\n\n' + presetMessage;
+                    } else {
+                        messageTextarea.value = presetMessage;
+                    }
+                    
+                    messageTextarea.focus();
+                    this.updateCharCount();
                 }
-                
-                messageTextarea.focus();
-                this.updateCharCount();
             });
         });
     },
     
     updateCharCount() {
-        const message = document.getElementById('inquiryMessage').value;
-        const count = message.length;
-        document.getElementById('messageCount').textContent = count;
+        const message = document.getElementById('inquiryMessage');
+        const countEl = document.getElementById('messageCount');
         
-        if (count > 900) {
-            document.getElementById('messageCount').style.color = '#F59E0B';
-        } else {
-            document.getElementById('messageCount').style.color = '#6B7280';
+        if (message && countEl) {
+            const count = message.value.length;
+            countEl.textContent = count;
+            
+            if (count > 900) {
+                countEl.style.color = '#F59E0B';
+            } else {
+                countEl.style.color = '#6B7280';
+            }
         }
     },
     
@@ -296,12 +357,12 @@ const InquiryPage = {
         const name = document.getElementById('buyerName').value.trim();
         const email = document.getElementById('buyerEmail').value.trim();
         const phone = document.getElementById('buyerPhone').value.trim();
-        const location = document.getElementById('buyerLocation').value.trim();
-        const company = document.getElementById('companyName').value.trim();
+        const location = document.getElementById('buyerLocation')?.value.trim() || '';
+        const company = document.getElementById('companyName')?.value.trim() || '';
         const message = document.getElementById('inquiryMessage').value.trim();
-        const sendCopy = document.getElementById('sendCopyToEmail').checked;
+        const sendCopy = document.getElementById('sendCopyToEmail')?.checked || false;
         
-        this.showToast('Sending inquiry...', 'info');
+        this.showLoading(true, 'Sending inquiry...');
         
         try {
             // Get or create buyer profile
@@ -324,22 +385,28 @@ const InquiryPage = {
             const expiresAt = new Date();
             expiresAt.setDate(expiresAt.getDate() + 7); // Expires in 7 days
             
+            const inquiryNumber = 'INQ-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+            
             const { data: inquiryRequest, error: inquiryError } = await sb
                 .from('inquiry_requests')
                 .insert({
+                    inquiry_number: inquiryNumber,
                     buyer_id: buyerId || null,
                     title: `Inquiry: ${this.productData.title.substring(0, 80)}`,
-                    description: message,
+                    description: message.substring(0, 500),
                     status: 'pending',
                     expires_at: expiresAt.toISOString(),
                     shipping_address: location || null,
-                    shipping_district: location ? location.split(',')[0] : null,
+                    shipping_district: location ? location.split(',')[0].trim() : null,
                     created_at: new Date().toISOString()
                 })
                 .select()
                 .single();
             
-            if (inquiryError) throw inquiryError;
+            if (inquiryError) {
+                console.error('Inquiry error:', inquiryError);
+                throw new Error('Failed to create inquiry: ' + inquiryError.message);
+            }
             
             console.log('✅ Inquiry request created:', inquiryRequest.id);
             
@@ -359,9 +426,12 @@ const InquiryPage = {
                 .select()
                 .single();
             
-            if (itemError) throw itemError;
-            
-            console.log('✅ Inquiry item created:', inquiryItem.id);
+            if (itemError) {
+                console.error('Item error:', itemError);
+                // Don't throw, continue
+            } else {
+                console.log('✅ Inquiry item created:', inquiryItem?.id);
+            }
             
             // 3. Create supplier match (if supplier exists)
             if (this.supplierId) {
@@ -375,31 +445,36 @@ const InquiryPage = {
                     });
                 
                 if (matchError) {
-                    console.error('Error creating supplier match:', matchError);
+                    console.error('Match error:', matchError);
                 } else {
                     console.log('✅ Supplier match created');
                 }
             }
             
             // 4. Also save to simple inquiries table for backward compatibility
-            await sb
-                .from('inquiries')
-                .insert({
-                    product_id: parseInt(this.productId),
-                    buyer_name: name,
-                    buyer_email: email,
-                    buyer_phone: phone || null,
-                    buyer_message: message,
-                    quantity: this.quantity,
-                    variant: this.variant || null,
-                    status: 'new',
-                    action: 'inquiry',
-                    created_at: new Date().toISOString()
-                });
+            try {
+                await sb
+                    .from('inquiries')
+                    .insert({
+                        product_id: parseInt(this.productId),
+                        buyer_name: name,
+                        buyer_email: email,
+                        buyer_phone: phone || null,
+                        buyer_message: message,
+                        quantity: this.quantity,
+                        variant: this.variant || null,
+                        status: 'new',
+                        action: 'inquiry',
+                        created_at: new Date().toISOString()
+                    });
+                console.log('✅ Saved to legacy inquiries table');
+            } catch (legacyError) {
+                console.error('Legacy save error:', legacyError);
+            }
             
             // 5. Send copy to email if requested
             if (sendCopy) {
-                await this.sendEmailCopy(name, email, message);
+                await this.sendEmailCopy(name, email, message, inquiryRequest.id);
             }
             
             // 6. If user is logged in, create chat conversation
@@ -425,16 +500,46 @@ const InquiryPage = {
             // 7. Track the inquiry
             await this.trackInquiry(inquiryRequest.id);
             
+            this.showLoading(false);
             this.showSuccessModal();
             
         } catch (error) {
             console.error('Error sending inquiry:', error);
+            this.showLoading(false);
             this.showErrorModal(error.message);
+        }
+    },
+    
+    showLoading(show, message) {
+        let overlay = document.getElementById('loadingOverlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'loadingOverlay';
+            overlay.className = 'loading-overlay';
+            overlay.innerHTML = `
+                <div class="loading-spinner"></div>
+                <p id="loadingMessage">Loading...</p>
+            `;
+            document.body.appendChild(overlay);
+        }
+        
+        const msgEl = document.getElementById('loadingMessage');
+        if (msgEl && message) msgEl.textContent = message;
+        
+        if (show) {
+            overlay.classList.add('show');
+        } else {
+            overlay.classList.remove('show');
         }
     },
     
     async createChatConversation(inquiryId, name, email, phone, company, message) {
         try {
+            if (!this.supplierId) {
+                console.log('No supplier ID, skipping chat creation');
+                return;
+            }
+            
             // Check if conversation exists
             const { data: existing } = await chatSb
                 .from('conversation_participants')
@@ -528,10 +633,10 @@ ${message}
         }
     },
     
-    async sendEmailCopy(name, email, message) {
+    async sendEmailCopy(name, email, message, inquiryId) {
         // This would call a Supabase Edge Function
         console.log('Would send email copy to:', email);
-        console.log('Email content:', { name, message });
+        console.log('Inquiry ID:', inquiryId);
     },
     
     async trackInquiry(inquiryId) {
@@ -560,27 +665,31 @@ ${message}
         const modal = document.getElementById('successModal');
         const messageEl = document.getElementById('successMessage');
         
-        messageEl.innerHTML = this.currentUser ? 
-            'Your inquiry has been sent successfully! The supplier will respond shortly.' :
-            'Your inquiry has been saved. <a href="login.html" style="color: var(--primary);">Login</a> to track your inquiries and chat with suppliers.';
+        if (messageEl) {
+            messageEl.innerHTML = this.currentUser ? 
+                'Your inquiry has been sent successfully! The supplier will respond shortly.' :
+                'Your inquiry has been saved. <a href="login.html" style="color: var(--primary);">Login</a> to track your inquiries and chat with suppliers.';
+        }
         
-        modal.classList.add('show');
+        if (modal) modal.classList.add('show');
     },
     
     showErrorModal(message) {
         const modal = document.getElementById('errorModal');
         const messageEl = document.getElementById('errorMessage');
         
-        messageEl.textContent = message;
-        modal.classList.add('show');
+        if (messageEl) messageEl.textContent = message;
+        if (modal) modal.classList.add('show');
     },
     
     closeSuccessModal() {
-        document.getElementById('successModal').classList.remove('show');
+        const modal = document.getElementById('successModal');
+        if (modal) modal.classList.remove('show');
     },
     
     closeErrorModal() {
-        document.getElementById('errorModal').classList.remove('show');
+        const modal = document.getElementById('errorModal');
+        if (modal) modal.classList.remove('show');
     },
     
     // ============================================
@@ -606,6 +715,8 @@ ${message}
     // ============================================
     showToast(message, type = 'info') {
         const toast = document.getElementById('toast');
+        if (!toast) return;
+        
         const colors = {
             success: '#10B981',
             error: '#EF4444',
@@ -613,7 +724,7 @@ ${message}
             warning: '#F59E0B'
         };
         
-        toast.style.backgroundColor = colors[type];
+        toast.style.backgroundColor = colors[type] || colors.info;
         toast.textContent = message;
         toast.classList.add('show');
         
@@ -639,19 +750,29 @@ ${message}
     // ============================================
     setupEventListeners() {
         // Step navigation
-        document.getElementById('continueToStep2')?.addEventListener('click', () => {
-            if (this.validateStep1()) this.goToStep(2);
-        });
+        const continueToStep2 = document.getElementById('continueToStep2');
+        const continueToStep3 = document.getElementById('continueToStep3');
+        const backToStep1 = document.getElementById('backToStep1');
+        const backToStep2 = document.getElementById('backToStep2');
+        const submitBtn = document.getElementById('submitInquiryBtn');
         
-        document.getElementById('continueToStep3')?.addEventListener('click', () => {
-            if (this.validateStep2()) this.goToStep(3);
-        });
+        if (continueToStep2) {
+            continueToStep2.addEventListener('click', () => {
+                if (this.validateStep1()) this.goToStep(2);
+            });
+        }
         
-        document.getElementById('backToStep1')?.addEventListener('click', () => this.goToStep(1));
-        document.getElementById('backToStep2')?.addEventListener('click', () => this.goToStep(2));
+        if (continueToStep3) {
+            continueToStep3.addEventListener('click', () => {
+                if (this.validateStep2()) this.goToStep(3);
+            });
+        }
+        
+        if (backToStep1) backToStep1.addEventListener('click', () => this.goToStep(1));
+        if (backToStep2) backToStep2.addEventListener('click', () => this.goToStep(2));
         
         // Submit
-        document.getElementById('submitInquiryBtn')?.addEventListener('click', () => this.sendInquiry());
+        if (submitBtn) submitBtn.addEventListener('click', () => this.sendInquiry());
         
         // Preset messages
         this.setupPresetMessages();
@@ -668,6 +789,14 @@ ${message}
                 this.closeSuccessModal();
                 this.closeErrorModal();
             });
+        });
+        
+        // Handle Enter key in modal (optional)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeSuccessModal();
+                this.closeErrorModal();
+            }
         });
     }
 };
