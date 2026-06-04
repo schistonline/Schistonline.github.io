@@ -1273,3 +1273,138 @@ if (document.readyState === 'loading') {
 // Make functions globally available
 window.ProductDetail = ProductDetail;
 window.escapeHtml = escapeHtml;
+
+// ============================================
+// DYNAMIC SEO UPDATE FUNCTION FOR BuyUganda.online
+// Add this to your B2B-product-detail.js
+// ============================================
+
+updateSEOTags() {
+    if (!this.productData) return;
+    
+    const product = this.productData;
+    const price = product.wholesale_price || product.price || 0;
+    const supplierName = product.seller?.business_name || product.seller?.full_name || 'Supplier';
+    const imageUrl = product.image_urls?.[0] || 'https://buyuganda.online/images/og-default.jpg';
+    const condition = product.condition || 'new';
+    const availability = product.stock_quantity > 0 ? 'InStock' : 'OutOfStock';
+    const productUrl = `https://buyuganda.online/B2B-product-detail.html?id=${this.productId}`;
+    
+    // Escape special characters for meta tags
+    const safeTitle = this.escapeHtml(product.title || 'Product Details').substring(0, 60);
+    const safeDescription = this.escapeHtml((product.description || 'View product details on BuyUganda.online, Uganda\'s premier B2B marketplace').substring(0, 160));
+    
+    // Update Title
+    document.title = `${safeTitle} | BuyUganda.online - Uganda's B2B Marketplace`;
+    
+    // Update Meta Description
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', safeDescription);
+    
+    // Update Canonical URL
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+        canonical.setAttribute('href', productUrl);
+    }
+    
+    // Update Open Graph Tags
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    const ogImg = document.querySelector('meta[property="og:image"]');
+    const ogPrice = document.querySelector('meta[property="og:price:amount"]');
+    const ogAvailability = document.querySelector('meta[property="product:availability"]');
+    const ogCondition = document.querySelector('meta[property="product:condition"]');
+    
+    if (ogTitle) ogTitle.setAttribute('content', `${safeTitle} | BuyUganda.online`);
+    if (ogDesc) ogDesc.setAttribute('content', safeDescription);
+    if (ogImg) ogImg.setAttribute('content', imageUrl);
+    if (ogPrice) ogPrice.setAttribute('content', price);
+    if (ogAvailability) ogAvailability.setAttribute('content', availability === 'InStock' ? 'in stock' : 'out of stock');
+    if (ogCondition) ogCondition.setAttribute('content', condition);
+    
+    // Update Twitter Tags
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+    const twitterImg = document.querySelector('meta[name="twitter:image"]');
+    
+    if (twitterTitle) twitterTitle.setAttribute('content', safeTitle);
+    if (twitterDesc) twitterDesc.setAttribute('content', safeDescription);
+    if (twitterImg) twitterImg.setAttribute('content', imageUrl);
+    
+    // Update Product Schema (JSON-LD)
+    const productSchema = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": product.title,
+        "image": imageUrl,
+        "description": product.description || 'Product description',
+        "sku": product.sku || `PROD-${product.id}`,
+        "mpn": product.model || product.sku || `MPN-${product.id}`,
+        "brand": {
+            "@type": "Brand",
+            "name": product.brand || 'Ugandan Supplier'
+        },
+        "offers": {
+            "@type": "Offer",
+            "url": productUrl,
+            "priceCurrency": "UGX",
+            "price": price,
+            "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            "availability": `https://schema.org/${availability}`,
+            "itemCondition": `https://schema.org/${condition === 'new' ? 'NewCondition' : 'UsedCondition'}`,
+            "seller": {
+                "@type": "Organization",
+                "name": supplierName,
+                "url": `https://buyuganda.online/go/${supplierName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
+            }
+        }
+    };
+    
+    // Add aggregate rating if available
+    if (product.avg_rating) {
+        productSchema.aggregateRating = {
+            "@type": "AggregateRating",
+            "ratingValue": product.avg_rating,
+            "reviewCount": product.review_count || 0
+        };
+    }
+    
+    const schemaScript = document.getElementById('productSchema');
+    if (schemaScript) {
+        schemaScript.textContent = JSON.stringify(productSchema, null, 2);
+    }
+    
+    // Update Breadcrumb Schema
+    const categoryName = product.category?.display_name || product.category?.name || 'Products';
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://buyuganda.online"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": categoryName,
+                "item": `https://buyuganda.online/category.html?id=${product.category_id}`
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": product.title.substring(0, 60),
+                "item": productUrl
+            }
+        ]
+    };
+    
+    const breadcrumbScript = document.getElementById('breadcrumbSchema');
+    if (breadcrumbScript) {
+        breadcrumbScript.textContent = JSON.stringify(breadcrumbSchema, null, 2);
+    }
+    
+    console.log('✅ BuyUganda.online SEO tags updated for:', product.title);
+}
