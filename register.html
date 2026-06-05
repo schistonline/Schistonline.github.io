@@ -3,9 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>Sign In - Buy Uganda B2B Marketplace</title>
+  <title>Sign Up - Buy Uganda B2B Marketplace</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     :root {
       --primary: #0B4F6C;
@@ -14,6 +18,7 @@
       --primary-gradient: linear-gradient(135deg, #0B4F6C 0%, #1a6b8a 100%);
       --success: #10B981;
       --danger: #EF4444;
+      --warning: #F59E0B;
       --gray-50: #F9FAFB;
       --gray-100: #F3F4F6;
       --gray-200: #E5E7EB;
@@ -23,6 +28,7 @@
       --gray-600: #4B5563;
       --gray-700: #374151;
       --gray-800: #1F2937;
+      --gray-900: #111827;
     }
 
     body {
@@ -32,31 +38,263 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      min-height: 100dvh;
       padding: 16px;
     }
 
-    .container { max-width: 440px; width: 100%; }
-    .card { background: white; border-radius: 28px; padding: 32px 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
-    .logo { text-align: center; margin-bottom: 28px; }
-    .logo h1 { font-size: 28px; font-weight: 700; background: var(--primary-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .logo p { color: var(--gray-500); font-size: 13px; margin-top: 6px; }
-    .brand-badge { display: inline-block; background: var(--gray-100); color: var(--gray-600); font-size: 12px; padding: 6px 14px; border-radius: 30px; margin-bottom: 24px; text-align: center; width: 100%; }
-    .google-btn { width: 100%; padding: 14px; background: white; color: var(--gray-700); border: 2px solid var(--gray-300); border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
-    .google-btn:hover { background: var(--gray-50); border-color: var(--gray-400); transform: translateY(-1px); }
-    .google-btn:active { transform: scale(0.98); }
-    .google-btn:disabled { opacity: 0.7; cursor: not-allowed; }
-    .register-link { text-align: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--gray-200); }
-    .register-link p { color: var(--gray-600); font-size: 14px; }
-    .register-link a { color: var(--primary); text-decoration: none; font-weight: 600; }
-    .alert { padding: 12px 16px; border-radius: 14px; margin-bottom: 24px; font-size: 14px; display: none; }
-    .alert.show { display: block; }
-    .alert-error { background: #FEF2F2; color: #991B1B; border-left: 4px solid #EF4444; }
-    .alert-success { background: #ECFDF5; color: #065F46; border-left: 4px solid #10B981; }
-    .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .legal-footer { text-align: center; margin-top: 24px; font-size: 12px; color: rgba(255,255,255,0.8); }
-    .security-note { background: var(--gray-50); border-radius: 12px; padding: 10px 14px; margin-top: 16px; font-size: 11px; color: var(--gray-500); text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    @media (max-width: 480px) { .card { padding: 24px 20px; } }
+    .container {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 28px;
+      padding: 32px 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .logo h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .logo p {
+      color: var(--gray-500);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .brand-badge {
+      display: inline-block;
+      background: var(--gray-100);
+      color: var(--gray-600);
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 30px;
+      margin-bottom: 24px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .referral-info {
+      background: linear-gradient(135deg, #FEF3C7 0%, #FFFBEB 100%);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      border-left: 4px solid #F59E0B;
+    }
+
+    .referral-info.show {
+      display: flex;
+    }
+
+    .referral-icon {
+      width: 36px;
+      height: 36px;
+      background: #F59E0B;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+    }
+
+    .referral-text {
+      flex: 1;
+    }
+
+    .referral-text strong {
+      display: block;
+      font-size: 13px;
+      color: #92400E;
+    }
+
+    .referral-text span {
+      font-size: 11px;
+      color: #B45309;
+    }
+
+    .google-btn {
+      width: 100%;
+      padding: 14px;
+      background: white;
+      color: var(--gray-700);
+      border: 2px solid var(--gray-300);
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .google-btn:hover {
+      background: var(--gray-50);
+      border-color: var(--gray-400);
+      transform: translateY(-1px);
+    }
+
+    .google-btn:active {
+      transform: scale(0.98);
+    }
+
+    .google-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .divider span {
+      padding: 0 10px;
+      color: var(--gray-500);
+      font-size: 12px;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .login-link p {
+      color: var(--gray-600);
+      font-size: 14px;
+    }
+
+    .login-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 14px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    .alert-error {
+      background: #FEF2F2;
+      color: #991B1B;
+      border-left: 4px solid var(--danger);
+    }
+
+    .alert-success {
+      background: #ECFDF5;
+      color: #065F46;
+      border-left: 4px solid var(--success);
+    }
+
+    .alert-info {
+      background: #EFF6FF;
+      color: #1E40AF;
+      border-left: 4px solid var(--primary);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .legal-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .legal-footer p {
+      margin-bottom: 8px;
+    }
+
+    .legal-footer a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+    }
+
+    .legal-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .security-note {
+      background: var(--gray-50);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-top: 16px;
+      font-size: 11px;
+      color: var(--gray-500);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 24px 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -68,18 +306,30 @@
       </div>
 
       <div class="brand-badge">
-        🇺🇬 Trusted by 5,000+ Ugandan Businesses 🇺🇬
+        🇺🇬 Join 5,000+ Ugandan Businesses 🇺🇬
+      </div>
+
+      <!-- Referral Info Banner -->
+      <div id="referralInfo" class="referral-info">
+        <div class="referral-icon">
+          <i class="fas fa-gift">🎁</i>
+        </div>
+        <div class="referral-text">
+          <strong>You were referred!</strong>
+          <span id="referrerName">Someone</span> will earn rewards when you join
+        </div>
       </div>
 
       <div id="alert" class="alert"></div>
 
-      <button id="googleSignInBtn" class="google-btn">
+      <!-- Google Sign Up Button -->
+      <button id="googleSignUpBtn" class="google-btn">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
         Continue with Google
       </button>
 
-      <div class="register-link">
-        <p>New to Buy Uganda? <a href="register.html">Create Business Account</a></p>
+      <div class="login-link">
+        <p>Already have an account? <a href="login.html">Sign in</a></p>
       </div>
 
       <div class="security-note">
@@ -90,109 +340,464 @@
 
     <div class="legal-footer">
       <p>© 2026 Buy Uganda. All rights reserved.</p>
-      <p><a href="terms.html">Terms of Service</a> | <a href="privacy.html">Privacy Policy</a></p>
+      <p>
+        <a href="terms.html">Terms of Service</a> | 
+        <a href="privacy.html">Privacy Policy</a> | 
+        <a href="contact.html">Contact Us</a>
+      </p>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     (async function() {
+      // Supabase Configuration
       const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
 
+      // Initialize Supabase client
       const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true, storage: localStorage }
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true,
+          storage: localStorage
+        }
       });
 
-      const googleBtn = document.getElementById('googleSignInBtn');
+      // DOM Elements
+      const googleBtn = document.getElementById('googleSignUpBtn');
       const alertDiv = document.getElementById('alert');
+      const referralInfo = document.getElementById('referralInfo');
+      const referrerNameSpan = document.getElementById('referrerName');
+
+      // Store referral code from URL
+      let storedReferralCode = null;
+      let referrerProfile = null;
 
       function showAlert(message, type = 'error') {
         alertDiv.textContent = message;
         alertDiv.className = `alert alert-${type} show`;
-        setTimeout(() => alertDiv.classList.remove('show'), 5000);
+        if (type !== 'error') {
+          setTimeout(() => alertDiv.classList.remove('show'), 5000);
+        }
       }
 
       function setLoading(isLoading) {
         googleBtn.disabled = isLoading;
         googleBtn.innerHTML = isLoading ? 
-          '<span class="spinner"></span> Signing in...' : 
+          '<span class="spinner"></span> Creating account...' : 
           '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
       }
 
-      async function redirectToDashboard(userId) {
+      // Get referrer info from referral code
+      async function loadReferrerInfo(referralCode) {
         try {
+          const { data: referralCodeData, error: codeError } = await sb
+            .from('referral_codes')
+            .select('user_id, code')
+            .eq('code', referralCode)
+            .eq('is_active', true)
+            .single();
+
+          if (codeError || !referralCodeData) {
+            console.log('Invalid referral code:', codeError);
+            return null;
+          }
+
+          const { data: profile, error: profileError } = await sb
+            .from('profiles')
+            .select('full_name, business_name')
+            .eq('id', referralCodeData.user_id)
+            .single();
+
+          if (profileError) {
+            console.log('Profile not found:', profileError);
+            return { user_id: referralCodeData.user_id, name: 'a user' };
+          }
+
+          return {
+            user_id: referralCodeData.user_id,
+            name: profile.full_name || profile.business_name || 'a user'
+          };
+        } catch (err) {
+          console.error('Error loading referrer info:', err);
+          return null;
+        }
+      }
+
+      // Create referral record after user signs up
+      async function createReferralRecord(newUserId, referralCode, referrerUserId) {
+        try {
+          // Check if referral already exists
+          const { data: existing } = await sb
+            .from('referrals')
+            .select('id')
+            .eq('referred_user_id', newUserId)
+            .maybeSingle();
+
+          if (existing) {
+            console.log('Referral record already exists');
+            return true;
+          }
+
+          // Determine account type (default to buyer, will be updated later if supplier)
           const { data: profile } = await sb
+            .from('profiles')
+            .select('is_supplier')
+            .eq('id', newUserId)
+            .single();
+
+          const referralType = profile?.is_supplier === true ? 'supplier' : 'buyer';
+
+          // Create referral record
+          const { error: insertError } = await sb
+            .from('referrals')
+            .insert({
+              referrer_id: referrerUserId,
+              referred_user_id: newUserId,
+              referral_code: referralCode,
+              type: referralType,
+              status: referralType === 'buyer' ? 'verified' : 'pending', // Buyers get instant credits
+              verified_at: referralType === 'buyer' ? new Date().toISOString() : null,
+              created_at: new Date().toISOString()
+            });
+
+          if (insertError) {
+            console.error('Error creating referral record:', insertError);
+            return false;
+          }
+
+          // If buyer referral, award credits immediately
+          if (referralType === 'buyer') {
+            await awardReferralReward(referrerUserId, newUserId, 'buyer');
+          }
+
+          return true;
+        } catch (err) {
+          console.error('Error in createReferralRecord:', err);
+          return false;
+        }
+      }
+
+      // Award referral reward
+      async function awardReferralReward(referrerId, referredUserId, type) {
+        try {
+          // Get referral settings
+          const { data: settings } = await sb
+            .from('referral_settings')
+            .select('*')
+            .eq('id', 1)
+            .single();
+
+          const buyerCredits = settings?.buyer_credits_per_signup || 30;
+
+          if (type === 'buyer') {
+            // Award credits to referrer
+            const { data: existingCredits } = await sb
+              .from('user_credits')
+              .select('credit_balance')
+              .eq('user_id', referrerId)
+              .single();
+
+            if (existingCredits) {
+              await sb
+                .from('user_credits')
+                .update({
+                  credit_balance: (existingCredits.credit_balance || 0) + buyerCredits,
+                  total_credited: (existingCredits.total_credited || 0) + buyerCredits,
+                  lifetime_referrals: (existingCredits.lifetime_referrals || 0) + 1,
+                  updated_at: new Date().toISOString()
+                })
+                .eq('user_id', referrerId);
+            } else {
+              await sb
+                .from('user_credits')
+                .insert({
+                  user_id: referrerId,
+                  credit_balance: buyerCredits,
+                  total_credited: buyerCredits,
+                  lifetime_referrals: 1,
+                  cash_balance: 0,
+                  total_earned: 0
+                });
+            }
+
+            // Record transaction
+            await sb
+              .from('credit_transactions')
+              .insert({
+                user_id: referrerId,
+                amount: buyerCredits,
+                type: 'earn',
+                source: 'buyer_referral',
+                status: 'completed',
+                completed_at: new Date().toISOString()
+              });
+
+            showAlert(`You earned ${buyerCredits} credits for referring a buyer!`, 'success');
+          }
+
+          return true;
+        } catch (err) {
+          console.error('Error awarding reward:', err);
+          return false;
+        }
+      }
+
+      // Award supplier referral reward (call this when supplier is verified)
+      async function awardSupplierReferralReward(referrerId, supplierId) {
+        try {
+          // Get referral settings
+          const { data: settings } = await sb
+            .from('referral_settings')
+            .select('*')
+            .eq('id', 1)
+            .single();
+
+          const supplierReward = settings?.supplier_reward_min || 5000;
+
+          // Update referral status to verified
+          await sb
+            .from('referrals')
+            .update({
+              status: 'verified',
+              verified_at: new Date().toISOString(),
+              reward_amount: supplierReward
+            })
+            .eq('referred_user_id', supplierId)
+            .eq('type', 'supplier');
+
+          // Award cash to referrer
+          const { data: existingCredits } = await sb
+            .from('user_credits')
+            .select('cash_balance, total_earned')
+            .eq('user_id', referrerId)
+            .single();
+
+          if (existingCredits) {
+            await sb
+              .from('user_credits')
+              .update({
+                cash_balance: (existingCredits.cash_balance || 0) + supplierReward,
+                total_earned: (existingCredits.total_earned || 0) + supplierReward,
+                lifetime_referrals: (existingCredits.lifetime_referrals || 0) + 1,
+                updated_at: new Date().toISOString()
+              })
+              .eq('user_id', referrerId);
+          } else {
+            await sb
+              .from('user_credits')
+              .insert({
+                user_id: referrerId,
+                cash_balance: supplierReward,
+                total_earned: supplierReward,
+                lifetime_referrals: 1,
+                credit_balance: 0,
+                total_credited: 0
+              });
+          }
+
+          // Also update wallet
+          const { data: existingWallet } = await sb
+            .from('wallets')
+            .select('marketer_balance, total_earned')
+            .eq('user_id', referrerId)
+            .single();
+
+          if (existingWallet) {
+            await sb
+              .from('wallets')
+              .update({
+                marketer_balance: (existingWallet.marketer_balance || 0) + supplierReward,
+                total_earned: (existingWallet.total_earned || 0) + supplierReward,
+                updated_at: new Date().toISOString()
+              })
+              .eq('user_id', referrerId);
+          }
+
+          console.log(`Supplier referral reward awarded: UGX ${supplierReward} to ${referrerId}`);
+          return true;
+        } catch (err) {
+          console.error('Error awarding supplier reward:', err);
+          return false;
+        }
+      }
+
+      async function getUserRole(userId) {
+        try {
+          const { data: profile, error } = await sb
             .from('profiles')
             .select('is_supplier, is_admin')
             .eq('id', userId)
             .single();
 
-          const role = profile?.is_admin ? 'admin' : profile?.is_supplier ? 'supplier' : 'buyer';
-          const dashboards = { admin: 'admin-dashboard.html', supplier: 'supplier-dashboard.html', buyer: 'index.html' };
-          window.location.href = dashboards[role] || 'index.html';
+          if (error) return 'buyer';
+          if (profile?.is_admin === true) return 'admin';
+          if (profile?.is_supplier === true) return 'supplier';
+          return 'buyer';
         } catch (err) {
-          window.location.href = 'index.html';
+          return 'buyer';
         }
       }
 
+      async function redirectToDashboard(userId) {
+        const role = await getUserRole(userId);
+        const dashboards = {
+          admin: 'admin-dashboard.html',
+          supplier: 'supplier-dashboard.html',
+          buyer: 'index.html'
+        };
+        window.location.href = dashboards[role] || 'index.html';
+      }
+
+      async function checkExistingSession() {
+        try {
+          const { data: { session } } = await sb.auth.getSession();
+          if (session?.user) {
+            showAlert('Already logged in. Redirecting...', 'success');
+            setTimeout(() => redirectToDashboard(session.user.id), 1500);
+          }
+        } catch (err) {
+          console.error('Session check error:', err);
+        }
+      }
+
+      // Handle OAuth callback and create referral
       async function handleOAuthCallback() {
         try {
           const { data: { session }, error } = await sb.auth.getSession();
           
-          if (error) throw error;
-          if (!session?.user) {
-            window.location.href = 'login.html';
+          if (error) {
+            console.error('Session error:', error);
             return;
           }
 
-          // Profile is auto-created by database trigger
-          // Just wait a moment for the trigger to complete
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
-          showAlert('Welcome! Redirecting...', 'success');
-          setTimeout(() => redirectToDashboard(session.user.id), 1000);
-          
+          if (session?.user) {
+            // Check if profile exists
+            let { data: profile, error: profileError } = await sb
+              .from('profiles')
+              .select('*')
+              .eq('id', session.user.id)
+              .single();
+
+            if (profileError && profileError.code === 'PGRST116') {
+              // Profile doesn't exist, create it
+              const userMetadata = session.user.user_metadata;
+              const { error: insertError } = await sb
+                .from('profiles')
+                .insert([{
+                  id: session.user.id,
+                  email: session.user.email,
+                  full_name: userMetadata.full_name || userMetadata.name,
+                  avatar_url: userMetadata.avatar_url || userMetadata.picture,
+                  is_supplier: false,
+                  is_admin: false,
+                  is_buyer: true,
+                  created_at: new Date().toISOString(),
+                  updated_at: new Date().toISOString()
+                }]);
+
+              if (insertError) {
+                console.error('Error creating profile:', insertError);
+              }
+            }
+
+            // Create referral record if referral code exists
+            if (storedReferralCode && referrerProfile) {
+              await createReferralRecord(session.user.id, storedReferralCode, referrerProfile.user_id);
+              // Clear stored referral code
+              localStorage.removeItem('pending_referral_code');
+              localStorage.removeItem('referrer_id');
+            }
+            
+            showAlert('Account created! Redirecting...', 'success');
+            setTimeout(() => redirectToDashboard(session.user.id), 1000);
+          }
         } catch (err) {
-          console.error('OAuth error:', err);
-          showAlert('Authentication failed. Please try again.');
-          window.location.href = 'login.html';
+          console.error('OAuth callback error:', err);
         }
       }
 
-      async function handleGoogleSignIn() {
+      // Initialize referral code from URL
+      async function initReferralCode() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCode = urlParams.get('ref');
+        
+        // Also check localStorage for pending referral (in case of redirect)
+        const pendingCode = localStorage.getItem('pending_referral_code');
+        const finalCode = refCode || pendingCode;
+        
+        if (finalCode) {
+          storedReferralCode = finalCode;
+          referrerProfile = await loadReferrerInfo(finalCode);
+          
+          if (referrerProfile) {
+            referralInfo.classList.add('show');
+            referrerNameSpan.textContent = referrerProfile.name || 'someone';
+            // Store for after OAuth
+            localStorage.setItem('pending_referral_code', finalCode);
+            localStorage.setItem('referrer_id', referrerProfile.user_id);
+          }
+        }
+      }
+
+      async function handleGoogleSignUp() {
         setLoading(true);
         
         try {
-          const { error } = await sb.auth.signInWithOAuth({
+          // Store referral code before OAuth redirect
+          if (storedReferralCode) {
+            localStorage.setItem('pending_referral_code', storedReferralCode);
+            if (referrerProfile) {
+              localStorage.setItem('referrer_id', referrerProfile.user_id);
+            }
+          }
+
+          const { data, error } = await sb.auth.signInWithOAuth({
             provider: 'google',
             options: {
-              redirectTo: `${window.location.origin}/login.html`,
-              queryParams: { access_type: 'offline', prompt: 'select_account' }
+              redirectTo: `${window.location.origin}/register.html`,
+              queryParams: {
+                access_type: 'offline',
+                prompt: 'consent',
+              }
             }
           });
-          if (error) throw error;
+
+          if (error) {
+            console.error('Google sign up error:', error);
+            showAlert(error.message || 'Failed to sign up with Google', 'error');
+            setLoading(false);
+          }
+          
         } catch (err) {
-          console.error('Google sign in error:', err);
-          showAlert(err.message || 'Failed to sign in with Google');
+          console.error('Google sign up exception:', err);
+          showAlert('Network error. Please try again.', 'error');
           setLoading(false);
         }
       }
 
+      // Check for OAuth callback on page load
       const isOAuthRedirect = window.location.hash || window.location.search.includes('code');
+      
+      // Initialize referral code first
+      await initReferralCode();
       
       if (isOAuthRedirect) {
         googleBtn.disabled = true;
-        googleBtn.innerHTML = '<span class="spinner"></span> Completing sign in...';
+        googleBtn.innerHTML = '<span class="spinner"></span> Completing sign up...';
         await handleOAuthCallback();
       } else {
-        const { data: { session } } = await sb.auth.getSession();
-        if (session?.user) {
-          redirectToDashboard(session.user.id);
-        }
+        await checkExistingSession();
       }
 
-      googleBtn.addEventListener('click', handleGoogleSignIn);
+      // Setup event listeners
+      googleBtn.addEventListener('click', handleGoogleSignUp);
+      
+      // Make awardSupplierReferralReward available globally for verification triggers
+      window.awardSupplierReferralReward = awardSupplierReferralReward;
+      
     })();
   </script>
 </body>
