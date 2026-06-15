@@ -1,5 +1,6 @@
 // ============================================
-// SIMPLE RFQ SYSTEM - LIKE MADE-IN-CHINA.COM
+// PROFESSIONAL RFQ SYSTEM - SINGLE PAGE VERSION
+// BuyUganda.online
 // ============================================
 
 const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
@@ -10,98 +11,58 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // ============================================
 // STATE MANAGEMENT
 // ============================================
-const RFQSimple = {
+const RFQSystem = {
     currentUser: null,
-    currentStep: 1,
-    products: [], // Products added by user
+    products: [],
     categories: [],
     districts: [],
-    uploadedFiles: [],
-    
-    // Buyer information
-    buyerInfo: {
-        name: '',
-        company: '',
-        email: '',
-        phone: '',
-        countryCode: '+256',
-        contactPreference: 'email'
-    },
-    
-    // RFQ data
-    rfqData: {
-        title: '',
-        description: '',
-        categoryId: '',
-        expectedDelivery: '',
-        shippingAddress: '',
-        shippingDistrict: ''
-    },
+    attachments: [],
+    selectedContactMethod: null,
+    isSubmitting: false,
 
-    // ============================================
-    // INITIALIZATION
-    // ============================================
     async init() {
-        console.log('🚀 Initializing RFQ System...');
+        console.log('🚀 RFQ System initializing...');
         
         try {
             await this.checkAuth();
             await this.loadCategories();
             await this.loadDistricts();
             this.setupEventListeners();
-            this.setMinDates();
-            
-            // Add first product row
+            this.setupContactPreference();
+            this.setupCharacterCounter();
+            this.setupFileUpload();
             this.addProductRow();
-            
-            console.log('✅ RFQ System initialized');
+            console.log('✅ RFQ System ready');
         } catch (error) {
-            console.error('❌ Error initializing:', error);
-            this.showToast('Error loading data', 'error');
+            console.error('Error initializing:', error);
+            this.showToast('Error loading form', 'error');
         }
     },
 
     async checkAuth() {
         try {
-            const { data: { user }, error } = await sb.auth.getUser();
-            if (error || !user) {
-                window.location.href = 'login.html?redirect=request-quote.html';
-                return;
-            }
+            const { data: { user } } = await sb.auth.getUser();
             this.currentUser = user;
-            
-            // Pre-fill buyer info from profile
-            await this.loadUserProfile();
-            
+            if (user) await this.loadUserProfile();
         } catch (error) {
             console.error('Auth error:', error);
-            window.location.href = 'login.html';
         }
     },
 
     async loadUserProfile() {
+        if (!this.currentUser) return;
+        
         try {
-            const { data, error } = await sb
+            const { data: profile } = await sb
                 .from('profiles')
-                .select('full_name, email, phone, country_code, business_name')
+                .select('full_name, email, business_name')
                 .eq('id', this.currentUser.id)
                 .single();
                 
-            if (error) throw error;
-            
-            if (data) {
-                this.buyerInfo.name = data.full_name || '';
-                this.buyerInfo.email = data.email || '';
-                this.buyerInfo.phone = data.phone ? data.phone.replace(/^\+\d+/, '') : '';
-                this.buyerInfo.countryCode = data.country_code || '+256';
-                this.buyerInfo.company = data.business_name || '';
-                
-                // Pre-fill form
-                document.getElementById('buyerName').value = this.buyerInfo.name;
-                document.getElementById('companyName').value = this.buyerInfo.company;
-                document.getElementById('buyerEmail').value = this.buyerInfo.email;
-                document.getElementById('countryCode').value = this.buyerInfo.countryCode;
-                document.getElementById('buyerPhone').value = this.buyerInfo.phone;
+            if (profile) {
+                if (profile.full_name) document.getElementById('buyerName').value = profile.full_name;
+                if (profile.email) document.getElementById('buyerEmail').value = profile.email;
+                if (profile.business_name) document.getElementById('companyName').value = profile.business_name;
             }
         } catch (error) {
             console.error('Error loading profile:', error);
@@ -110,23 +71,18 @@ const RFQSimple = {
 
     async loadCategories() {
         try {
-            const { data, error } = await sb
+            const { data } = await sb
                 .from('categories')
                 .select('id, name, display_name')
                 .eq('is_active', true)
-                .order('display_order');
+                .order('display_order')
+                .limit(50);
                 
-            if (error) throw error;
-            
             this.categories = data || [];
-            
             const select = document.getElementById('categoryId');
-            if (select) {
-                let options = '<option value="">Select category (optional)</option>';
-                this.categories.forEach(cat => {
-                    options += `<option value="${cat.id}">${cat.display_name || cat.name}</option>`;
-                });
-                select.innerHTML = options;
+            if (select && this.categories.length) {
+                select.innerHTML = '<option value="">Category (optional)</option>' +
+                    this.categories.map(c => `<option value="${c.id}">${c.display_name || c.name}</option>`).join('');
             }
         } catch (error) {
             console.error('Error loading categories:', error);
@@ -135,118 +91,173 @@ const RFQSimple = {
 
     async loadDistricts() {
         try {
-            const { data, error } = await sb
+            const { data } = await sb
                 .from('districts')
-                .select('name, region:regions(name)')
+                .select('name')
                 .order('name');
                 
-            if (error) throw error;
-            
             this.districts = data || [];
-            
             const select = document.getElementById('shippingDistrict');
-            if (!select) return;
-            
-            let options = '<option value="">Select district</option>';
-            
-            if (this.districts.length > 0) {
-                const grouped = {};
-                this.districts.forEach(d => {
-                    const region = d.region?.name || 'Other';
-                    if (!grouped[region]) grouped[region] = [];
-                    grouped[region].push(d.name);
-                });
-                
-                Object.keys(grouped).sort().forEach(region => {
-                    options += `<optgroup label="${region}">`;
-                    grouped[region].sort().forEach(district => {
-                        options += `<option value="${district}">${district}</option>`;
-                    });
-                    options += '</optgroup>';
-                });
+            if (select) {
+                select.innerHTML = '<option value="">Select district</option>' +
+                    this.districts.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
             }
-            
-            select.innerHTML = options;
         } catch (error) {
             console.error('Error loading districts:', error);
         }
     },
 
-    // ============================================
-    // PRODUCT MANAGEMENT
-    // ============================================
-    addProductRow(productData = null) {
-        const container = document.getElementById('productsContainer');
-        const productId = Date.now() + Math.floor(Math.random() * 1000);
+    setupContactPreference() {
+        const options = document.querySelectorAll('.contact-option');
+        const emailGroup = document.getElementById('emailGroup');
+        const phoneGroup = document.getElementById('phoneGroup');
         
-        const product = {
-            id: productId,
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                const radio = option.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = true;
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    this.selectedContactMethod = radio.value;
+                    
+                    // Show/hide contact fields based on selection
+                    if (this.selectedContactMethod === 'whatsapp') {
+                        if (phoneGroup) phoneGroup.style.display = 'block';
+                        if (emailGroup) emailGroup.style.display = 'none';
+                    } else if (this.selectedContactMethod === 'both') {
+                        if (phoneGroup) phoneGroup.style.display = 'block';
+                        if (emailGroup) emailGroup.style.display = 'block';
+                    } else if (this.selectedContactMethod === 'email') {
+                        if (emailGroup) emailGroup.style.display = 'block';
+                        if (phoneGroup) phoneGroup.style.display = 'none';
+                    } else if (this.selectedContactMethod === 'platform') {
+                        if (emailGroup) emailGroup.style.display = 'block';
+                        if (phoneGroup) phoneGroup.style.display = 'none';
+                    }
+                    
+                    // Update submit button state
+                    this.updateSubmitButton();
+                }
+            });
+        });
+        
+        // Set default selection to email
+        const defaultOption = document.querySelector('.contact-option[data-method="email"]');
+        if (defaultOption) {
+            defaultOption.click();
+        }
+    },
+
+    setupCharacterCounter() {
+        const textarea = document.getElementById('rfqDescription');
+        const counter = document.getElementById('charCount');
+        if (textarea && counter) {
+            textarea.addEventListener('input', () => {
+                counter.textContent = textarea.value.length;
+            });
+        }
+    },
+
+    setupFileUpload() {
+        const fileInput = document.getElementById('fileInput');
+        const uploadBox = document.querySelector('.upload-box');
+        
+        if (uploadBox) {
+            uploadBox.addEventListener('click', () => fileInput?.click());
+        }
+        
+        if (fileInput) {
+            fileInput.addEventListener('change', async (e) => {
+                const files = Array.from(e.target.files);
+                for (const file of files) {
+                    if (file.size > 10 * 1024 * 1024) {
+                        this.showToast(`${file.name} exceeds 10MB`, 'error');
+                        continue;
+                    }
+                    this.attachments.push({ file, name: file.name, size: file.size, type: file.type });
+                }
+                this.renderFileList();
+                fileInput.value = '';
+            });
+        }
+    },
+
+    renderFileList() {
+        const container = document.getElementById('fileList');
+        if (!container) return;
+        
+        if (this.attachments.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
+        
+        container.innerHTML = this.attachments.map((file, index) => `
+            <div class="file-item">
+                <i class="fas ${this.getFileIcon(file.type)}"></i>
+                <span style="flex:1">${this.escapeHtml(file.name)}</span>
+                <span style="font-size:11px;color:#999">${this.formatFileSize(file.size)}</span>
+                <button class="remove-file" onclick="RFQSystem.removeAttachment(${index})">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `).join('');
+    },
+
+    removeAttachment(index) {
+        this.attachments.splice(index, 1);
+        this.renderFileList();
+    },
+
+    addProductRow(productData = null) {
+        this.products.push({
+            id: Date.now() + Math.random(),
             name: productData?.name || '',
             quantity: productData?.quantity || '',
             unit: productData?.unit || 'pcs',
-            specifications: productData?.specifications || ''
-        };
-        
-        this.products.push(product);
-        this.renderProductRows();
+            targetPrice: productData?.targetPrice || '',
+            specs: productData?.specs || ''
+        });
+        this.renderProducts();
     },
 
-    renderProductRows() {
+    renderProducts() {
         const container = document.getElementById('productsContainer');
+        if (!container) return;
+        
+        if (this.products.length === 0) {
+            container.innerHTML = '<div style="padding:40px;text-align:center;color:#999;">Click "Add Product" to start</div>';
+            return;
+        }
         
         container.innerHTML = this.products.map((product, index) => `
-            <div class="product-row" data-product-id="${product.id}">
-                <div class="product-row-header">
-                    <h4>Product ${index + 1}</h4>
+            <div class="product-item" data-product-id="${product.id}">
+                <div class="product-header">
+                    <span class="product-title">Product ${index + 1}</span>
                     ${this.products.length > 1 ? `
-                        <button class="remove-product-btn" onclick="RFQSimple.removeProduct(${index})">
-                            <i class="fas fa-times"></i>
+                        <button type="button" class="remove-product" onclick="RFQSystem.removeProduct(${index})">
+                            <i class="fas fa-trash-alt"></i> Remove
                         </button>
                     ` : ''}
                 </div>
-                
-                <div class="form-row">
-                    <div class="form-group" style="flex: 2;">
-                        <label>Product Name <span class="required">*</span></label>
-                        <input type="text" 
-                               class="form-control product-name" 
-                               value="${this.escapeHtml(product.name)}"
-                               placeholder="e.g., Office Chair, Laptop, etc."
-                               onchange="RFQSimple.updateProduct(${index}, 'name', this.value)">
-                    </div>
-                    
-                    <div class="form-group" style="flex: 1;">
-                        <label>Quantity <span class="required">*</span></label>
-                        <input type="number" 
-                               class="form-control product-quantity" 
-                               value="${product.quantity}"
-                               min="1"
-                               placeholder="Qty"
-                               onchange="RFQSimple.updateProduct(${index}, 'quantity', this.value)">
-                    </div>
-                    
-                    <div class="form-group" style="flex: 1;">
-                        <label>Unit</label>
-                        <select class="form-control product-unit" onchange="RFQSimple.updateProduct(${index}, 'unit', this.value)">
-                            <option value="pcs" ${product.unit === 'pcs' ? 'selected' : ''}>Pieces</option>
-                            <option value="kg" ${product.unit === 'kg' ? 'selected' : ''}>Kilograms</option>
-                            <option value="ton" ${product.unit === 'ton' ? 'selected' : ''}>Tons</option>
-                            <option value="meter" ${product.unit === 'meter' ? 'selected' : ''}>Meters</option>
-                            <option value="liter" ${product.unit === 'liter' ? 'selected' : ''}>Liters</option>
-                            <option value="carton" ${product.unit === 'carton' ? 'selected' : ''}>Cartons</option>
-                        </select>
-                    </div>
+                <div class="product-fields">
+                    <input type="text" placeholder="Product name *" value="${this.escapeHtml(product.name)}" onchange="RFQSystem.updateProduct(${index}, 'name', this.value)">
+                    <input type="number" placeholder="Quantity *" value="${product.quantity}" min="1" onchange="RFQSystem.updateProduct(${index}, 'quantity', this.value)">
                 </div>
-                
-                <div class="form-group">
-                    <label>Specifications (Optional)</label>
-                    <textarea class="form-control product-specs" 
-                              rows="2"
-                              placeholder="Size, color, material, quality requirements, etc."
-                              onchange="RFQSimple.updateProduct(${index}, 'specifications', this.value)">${this.escapeHtml(product.specifications)}</textarea>
+                <div class="product-fields">
+                    <select onchange="RFQSystem.updateProduct(${index}, 'unit', this.value)">
+                        <option value="pcs" ${product.unit === 'pcs' ? 'selected' : ''}>Piece(s)</option>
+                        <option value="kg" ${product.unit === 'kg' ? 'selected' : ''}>Kilogram(s)</option>
+                        <option value="tons" ${product.unit === 'tons' ? 'selected' : ''}>Ton(s)</option>
+                        <option value="meters" ${product.unit === 'meters' ? 'selected' : ''}>Meter(s)</option>
+                        <option value="liters" ${product.unit === 'liters' ? 'selected' : ''}>Liter(s)</option>
+                        <option value="cartons" ${product.unit === 'cartons' ? 'selected' : ''}>Carton(s)</option>
+                    </select>
+                    <input type="number" placeholder="Target price (UGX) - optional" value="${product.targetPrice}" min="0" onchange="RFQSystem.updateProduct(${index}, 'targetPrice', this.value)">
                 </div>
-                
-                ${index < this.products.length - 1 ? '<hr class="product-divider">' : ''}
+                <div class="product-fields full-width">
+                    <textarea rows="2" placeholder="Specifications (size, color, quality, etc.)" onchange="RFQSystem.updateProduct(${index}, 'specs', this.value)">${this.escapeHtml(product.specs)}</textarea>
+                </div>
             </div>
         `).join('');
     },
@@ -254,145 +265,146 @@ const RFQSimple = {
     updateProduct(index, field, value) {
         if (this.products[index]) {
             this.products[index][field] = value;
+            this.updateSubmitButton();
         }
     },
 
     removeProduct(index) {
-        this.products.splice(index, 1);
-        this.renderProductRows();
+        if (this.products.length > 1) {
+            this.products.splice(index, 1);
+            this.renderProducts();
+            this.updateSubmitButton();
+        } else {
+            this.showToast('You need at least one product', 'error');
+        }
     },
 
-    // ============================================
-    // STEP NAVIGATION
-    // ============================================
-    updateStep(step) {
-        this.currentStep = step;
-        
-        // Update progress indicators
-        document.querySelectorAll('.step').forEach((el, index) => {
-            const stepNum = index + 1;
-            el.classList.toggle('active', stepNum === step);
-        });
-        
-        // Update step content
-        document.querySelectorAll('.step-content').forEach((el, index) => {
-            const stepNum = index + 1;
-            el.classList.toggle('active', stepNum === step);
-        });
-        
-        // Scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    },
-
-    validateStep1() {
-        const name = document.getElementById('buyerName')?.value.trim();
-        const email = document.getElementById('buyerEmail')?.value.trim();
-        const preference = document.querySelector('input[name="contactPreference"]:checked')?.value;
-        
-        if (!name) {
-            this.showToast('Please enter your name', 'error');
-            return false;
-        }
-        
-        if (!email || !this.validateEmail(email)) {
-            this.showToast('Please enter a valid email address', 'error');
-            return false;
-        }
-        
-        if (!preference) {
-            this.showToast('Please select your contact preference', 'error');
-            return false;
-        }
-        
-        // Save buyer info
-        this.buyerInfo.name = name;
-        this.buyerInfo.email = email;
-        this.buyerInfo.company = document.getElementById('companyName')?.value || '';
-        this.buyerInfo.countryCode = document.getElementById('countryCode')?.value || '+256';
-        this.buyerInfo.phone = document.getElementById('buyerPhone')?.value || '';
-        this.buyerInfo.contactPreference = preference;
-        
-        return true;
-    },
-
-    validateStep2() {
-        // Check if at least one product has name and quantity
-        let valid = false;
-        
+    validateForm() {
+        // Check products
+        let hasValidProduct = false;
         for (const product of this.products) {
-            if (product.name && product.name.trim() && product.quantity && parseInt(product.quantity) > 0) {
-                valid = true;
+            if (product.name?.trim() && product.quantity > 0) {
+                hasValidProduct = true;
                 break;
             }
         }
+        if (!hasValidProduct) return false;
         
-        if (!valid) {
-            this.showToast('Please add at least one product with name and quantity', 'error');
-            return false;
+        // Check contact method
+        if (!this.selectedContactMethod) return false;
+        
+        // Check name
+        const name = document.getElementById('buyerName')?.value.trim();
+        if (!name) return false;
+        
+        // Check email if needed
+        if (this.selectedContactMethod === 'email' || this.selectedContactMethod === 'both') {
+            const email = document.getElementById('buyerEmail')?.value.trim();
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
         }
         
-        return true;
-    },
-
-    validateStep3() {
+        // Check phone if needed
+        if (this.selectedContactMethod === 'whatsapp' || this.selectedContactMethod === 'both') {
+            const phone = document.getElementById('buyerPhone')?.value.trim();
+            if (!phone) return false;
+        }
+        
+        // Check title
         const title = document.getElementById('rfqTitle')?.value.trim();
+        if (!title) return false;
+        
+        // Check terms
         const terms = document.getElementById('acceptTerms')?.checked;
-        
-        if (!title) {
-            this.showToast('Please enter an RFQ title', 'error');
-            return false;
-        }
-        
-        if (!terms) {
-            this.showToast('Please accept the terms', 'error');
-            return false;
-        }
+        if (!terms) return false;
         
         return true;
     },
 
-    // ============================================
-    // SUBMIT RFQ
-    // ============================================
-    async submitRFQ() {
-        // Validate all steps
-        if (!this.validateStep1() || !this.validateStep2() || !this.validateStep3()) {
+    updateSubmitButton() {
+        const submitBtn = document.getElementById('submitRfq');
+        if (submitBtn) {
+            submitBtn.disabled = !this.validateForm();
+        }
+    },
+
+    async uploadAttachments(rfqId) {
+        const uploadedUrls = [];
+        for (const attachment of this.attachments) {
+            try {
+                const fileName = `rfq_attachments/${rfqId}/${Date.now()}_${attachment.file.name}`;
+                const { error } = await sb.storage
+                    .from('rfq-attachments')
+                    .upload(fileName, attachment.file);
+                    
+                if (error) throw error;
+                
+                const { data: { publicUrl } } = sb.storage
+                    .from('rfq-attachments')
+                    .getPublicUrl(fileName);
+                    
+                uploadedUrls.push({ name: attachment.name, url: publicUrl, size: attachment.size });
+            } catch (error) {
+                console.error('Upload error:', error);
+            }
+        }
+        return uploadedUrls;
+    },
+
+    async submitRFQ(e) {
+        e.preventDefault();
+        
+        if (this.isSubmitting) return;
+        if (!this.validateForm()) {
+            this.showToast('Please fill in all required fields', 'error');
             return;
         }
         
-        // Show loading
+        this.isSubmitting = true;
         this.showLoading(true);
         
         try {
-            // Collect all data
-            this.rfqData.title = document.getElementById('rfqTitle')?.value || '';
-            this.rfqData.description = document.getElementById('rfqDescription')?.value || '';
-            this.rfqData.categoryId = document.getElementById('categoryId')?.value || null;
-            this.rfqData.expectedDelivery = document.getElementById('expectedDelivery')?.value || null;
-            this.rfqData.shippingAddress = document.getElementById('shippingAddress')?.value || '';
-            this.rfqData.shippingDistrict = document.getElementById('shippingDistrict')?.value || '';
+            const name = document.getElementById('buyerName').value.trim();
+            const email = document.getElementById('buyerEmail')?.value.trim() || '';
+            const phone = document.getElementById('buyerPhone')?.value.trim() || '';
+            const countryCode = document.getElementById('countryCode')?.value || '+256';
+            const company = document.getElementById('companyName')?.value.trim() || '';
+            const title = document.getElementById('rfqTitle').value.trim();
+            const description = document.getElementById('rfqDescription')?.value.trim() || '';
+            const categoryId = document.getElementById('categoryId')?.value || null;
+            const expectedDelivery = document.getElementById('expectedDelivery')?.value || null;
+            const shippingAddress = document.getElementById('shippingAddress')?.value.trim() || '';
+            const shippingDistrict = document.getElementById('shippingDistrict')?.value || '';
             
-            // 1. Create RFQ request
+            const fullPhone = phone ? countryCode + phone : null;
+            
+            // Calculate budget
+            let budgetMin = null, budgetMax = null;
+            for (const product of this.products) {
+                if (product.targetPrice && product.quantity) {
+                    const total = parseFloat(product.quantity) * parseFloat(product.targetPrice);
+                    if (budgetMin === null || total < budgetMin) budgetMin = total;
+                    if (budgetMax === null || total > budgetMax) budgetMax = total;
+                }
+            }
+            
+            // Create RFQ
             const { data: rfq, error: rfqError } = await sb
                 .from('rfq_requests')
                 .insert({
-                    buyer_id: this.currentUser.id,
-                    buyer_name: this.buyerInfo.name,
-                    buyer_email: this.buyerInfo.email,
-                    buyer_phone: this.buyerInfo.phone ? this.buyerInfo.countryCode + this.buyerInfo.phone : null,
-                    buyer_company: this.buyerInfo.company || null,
-                    preferred_contact: this.buyerInfo.contactPreference,
-                    contact_details: {
-                        email: this.buyerInfo.email,
-                        phone: this.buyerInfo.phone ? this.buyerInfo.countryCode + this.buyerInfo.phone : null,
-                        whatsapp: this.buyerInfo.phone ? this.buyerInfo.countryCode + this.buyerInfo.phone : null
-                    },
-                    title: this.rfqData.title,
-                    description: this.rfqData.description || null,
-                    category_id: this.rfqData.categoryId || null,
-                    expected_delivery_date: this.rfqData.expectedDelivery,
-                    shipping_address: this.rfqData.shippingAddress || null,
-                    shipping_district: this.rfqData.shippingDistrict || null,
+                    buyer_id: this.currentUser?.id || null,
+                    buyer_name: name,
+                    buyer_email: email,
+                    buyer_phone: fullPhone,
+                    buyer_company: company || null,
+                    preferred_contact: this.selectedContactMethod,
+                    contact_details: { email, phone: fullPhone },
+                    title: title,
+                    description: description || null,
+                    shipping_address: shippingAddress || null,
+                    shipping_district: shippingDistrict || null,
+                    expected_delivery_date: expectedDelivery || null,
+                    budget_min: budgetMin,
+                    budget_max: budgetMax,
                     status: 'pending'
                 })
                 .select()
@@ -400,207 +412,129 @@ const RFQSimple = {
                 
             if (rfqError) throw rfqError;
             
-            // 2. Create RFQ items
+            // Create items
             for (const product of this.products) {
                 if (!product.name || !product.quantity) continue;
-                
-                const { error: itemError } = await sb
-                    .from('rfq_items')
-                    .insert({
-                        rfq_id: rfq.id,
-                        product_name: product.name,
-                        quantity: parseInt(product.quantity),
-                        unit: product.unit || 'pcs',
-                        specifications: product.specifications ? { details: product.specifications } : null
-                    });
-                    
-                if (itemError) throw itemError;
+                await sb.from('rfq_items').insert({
+                    rfq_id: rfq.id,
+                    product_name: product.name,
+                    quantity: parseInt(product.quantity),
+                    unit: product.unit || 'pcs',
+                    preferred_unit_price: product.targetPrice ? parseFloat(product.targetPrice) : null,
+                    specifications: product.specs || null,
+                    category_id: categoryId
+                });
             }
             
-            // 3. Upload attachments
-            if (this.uploadedFiles.length > 0) {
-                for (const file of this.uploadedFiles) {
-                    const filePath = `rfqs/${rfq.id}/${Date.now()}_${file.name}`;
-                    
-                    const { error: uploadError } = await sb.storage
-                        .from('rfq-attachments')
-                        .upload(filePath, file);
-                        
-                    if (uploadError) throw uploadError;
-                    
-                    const { data: { publicUrl } } = sb.storage
-                        .from('rfq-attachments')
-                        .getPublicUrl(filePath);
-                    
-                    await sb
-                        .from('rfq_attachments')
-                        .insert({
-                            rfq_id: rfq.id,
-                            file_url: publicUrl,
-                            file_name: file.name,
-                            file_size: file.size,
-                            file_type: file.type
-                        });
+            // Upload attachments
+            if (this.attachments.length > 0) {
+                const uploaded = await this.uploadAttachments(rfq.id);
+                if (uploaded.length) {
+                    await sb.from('rfq_requests').update({ attachments: uploaded }).eq('id', rfq.id);
                 }
             }
             
-            // 4. Find matching suppliers (background process)
-            // Update status to matching
-            await sb
-                .from('rfq_requests')
-                .update({ status: 'matching' })
-                .eq('id', rfq.id);
+            // Log activity
+            await sb.from('rfq_activity_log').insert({
+                rfq_id: rfq.id,
+                user_id: this.currentUser?.id || null,
+                user_type: 'buyer',
+                action: 'created',
+                details: { title, product_count: this.products.length }
+            });
             
-            // Call the matching function (this could be done via Edge Function or background job)
-            // For now, we'll do it synchronously
-            const { data: matches, error: matchError } = await sb
-                .rpc('find_matching_suppliers', { rfq_id: rfq.id });
-                
-            if (!matchError && matches && matches.length > 0) {
-                // Insert matches
-                const matchInserts = matches.map(m => ({
-                    rfq_id: rfq.id,
-                    supplier_id: m.supplier_id,
-                    match_score: m.match_score,
-                    status: 'pending'
-                }));
-                
-                await sb.from('rfq_matches').insert(matchInserts);
-                
-                // Create notifications for suppliers
-                const notifications = matches.map(m => ({
-                    user_id: m.supplier_id,
-                    type: 'new_rfq',
-                    title: 'New RFQ Matching Your Products',
-                    message: `You've received a new request for quotation: ${this.rfqData.title}`,
-                    link: `/supplier-rfq.html?id=${rfq.id}`
-                }));
-                
-                await sb.from('notifications').insert(notifications);
-                
-                // Update RFQ status
-                await sb
-                    .from('rfq_requests')
-                    .update({ 
-                        status: 'sent',
-                        sent_at: new Date().toISOString()
-                    })
-                    .eq('id', rfq.id);
-                
-                // Update match status to sent
-                await sb
-                    .from('rfq_matches')
-                    .update({ 
-                        status: 'sent',
-                        sent_at: new Date().toISOString()
-                    })
-                    .eq('rfq_id', rfq.id);
-                
-                // Show success with supplier count
-                document.getElementById('supplierCount').textContent = matches.length;
-            } else {
-                // No matches found
-                document.getElementById('supplierCount').textContent = '0';
-            }
-            
-            // Show success modal
+            // Show success
             document.getElementById('rfqNumber').textContent = rfq.rfq_number;
+            document.getElementById('supplierCount').textContent = '5+';
             document.getElementById('successModal').classList.add('show');
             
+            // Reset form
+            this.resetForm();
+            
         } catch (error) {
-            console.error('Error submitting RFQ:', error);
-            this.showToast('Error submitting RFQ: ' + error.message, 'error');
+            console.error('Submit error:', error);
+            this.showToast(error.message || 'Error submitting request', 'error');
         } finally {
+            this.isSubmitting = false;
             this.showLoading(false);
         }
     },
 
-    // ============================================
-    // FILE UPLOAD
-    // ============================================
-    setupFileUpload() {
-        const uploadArea = document.getElementById('fileUploadArea');
-        const fileInput = document.getElementById('fileInput');
+    resetForm() {
+        this.products = [];
+        this.attachments = [];
+        this.selectedContactMethod = null;
+        this.addProductRow();
         
-        if (!uploadArea || !fileInput) return;
+        document.getElementById('buyerName').value = '';
+        document.getElementById('buyerEmail').value = '';
+        document.getElementById('buyerPhone').value = '';
+        document.getElementById('companyName').value = '';
+        document.getElementById('rfqTitle').value = '';
+        document.getElementById('rfqDescription').value = '';
+        document.getElementById('shippingAddress').value = '';
+        document.getElementById('expectedDelivery').value = '';
         
-        uploadArea.addEventListener('click', () => fileInput.click());
+        const terms = document.getElementById('acceptTerms');
+        if (terms) terms.checked = false;
         
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'var(--primary)';
-        });
+        // Reset contact preference
+        const defaultOption = document.querySelector('.contact-option[data-method="email"]');
+        if (defaultOption) defaultOption.click();
         
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.style.borderColor = 'var(--gray-300)';
-        });
-        
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'var(--gray-300)';
-            this.handleFiles(Array.from(e.dataTransfer.files));
-        });
-        
-        fileInput.addEventListener('change', (e) => {
-            this.handleFiles(Array.from(e.target.files));
-        });
+        this.updateSubmitButton();
     },
 
-    handleFiles(files) {
-        const maxSize = 10 * 1024 * 1024; // 10MB
+    setupEventListeners() {
+        // Add product button
+        const addProductBtn = document.getElementById('addProductBtn');
+        if (addProductBtn) {
+            addProductBtn.addEventListener('click', () => this.addProductRow());
+        }
         
-        files.forEach(file => {
-            if (file.size > maxSize) {
-                this.showToast(`File ${file.name} exceeds 10MB`, 'error');
-                return;
+        // Form submit
+        const form = document.getElementById('rfqForm');
+        if (form) {
+            form.addEventListener('submit', (e) => this.submitRFQ(e));
+        }
+        
+        // Real-time validation on inputs
+        const inputs = ['buyerName', 'buyerEmail', 'buyerPhone', 'rfqTitle', 'acceptTerms'];
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', () => this.updateSubmitButton());
+                if (el.type === 'checkbox') {
+                    el.addEventListener('change', () => this.updateSubmitButton());
+                }
             }
-            this.uploadedFiles.push(file);
         });
         
-        this.renderFileList();
-    },
-
-    renderFileList() {
-        const fileList = document.getElementById('fileList');
-        if (!fileList) return;
-        
-        if (this.uploadedFiles.length === 0) {
-            fileList.innerHTML = '';
-            return;
+        // Close modal on overlay click
+        const modal = document.getElementById('successModal');
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('show');
+            });
         }
-        
-        fileList.innerHTML = this.uploadedFiles.map((file, index) => `
-            <div class="file-item">
-                <i class="fas ${this.getFileIcon(file.type)}"></i>
-                <span class="file-name">${file.name}</span>
-                <span class="file-size">${this.formatFileSize(file.size)}</span>
-                <i class="fas fa-times remove-file" onclick="RFQSimple.removeFile(${index})"></i>
-            </div>
-        `).join('');
     },
 
-    removeFile(index) {
-        this.uploadedFiles.splice(index, 1);
-        this.renderFileList();
-    },
-
-    // ============================================
-    // UTILITY FUNCTIONS
-    // ============================================
-    validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    },
-
-    setMinDates() {
-        const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        
-        const expectedDelivery = document.getElementById('expectedDelivery');
-        if (expectedDelivery) {
-            expectedDelivery.min = tomorrow.toISOString().split('T')[0];
+    showLoading(show) {
+        const overlay = document.getElementById('loadingOverlay');
+        if (overlay) {
+            overlay.classList.toggle('show', show);
         }
+    },
+
+    showToast(message, type = 'info') {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        
+        const colors = { success: '#4caf50', error: '#ff4444', info: '#0B4F6C' };
+        toast.textContent = message;
+        toast.style.backgroundColor = colors[type] || colors.info;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
     },
 
     formatFileSize(bytes) {
@@ -609,10 +543,10 @@ const RFQSimple = {
         return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
     },
 
-    getFileIcon(mimeType) {
-        if (mimeType?.includes('pdf')) return 'fa-file-pdf';
-        if (mimeType?.includes('excel') || mimeType?.includes('sheet')) return 'fa-file-excel';
-        if (mimeType?.includes('image')) return 'fa-file-image';
+    getFileIcon(type) {
+        if (type?.includes('pdf')) return 'fa-file-pdf';
+        if (type?.includes('excel') || type?.includes('sheet')) return 'fa-file-excel';
+        if (type?.includes('image')) return 'fa-file-image';
         return 'fa-file';
     },
 
@@ -621,94 +555,20 @@ const RFQSimple = {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
-    },
-
-    showLoading(show) {
-        const overlay = document.getElementById('loadingOverlay');
-        if (overlay) {
-            overlay.style.display = show ? 'flex' : 'none';
-        }
-    },
-
-    showToast(message, type = 'info') {
-        const toast = document.getElementById('toast');
-        if (!toast) return;
-        
-        const colors = {
-            success: '#10B981',
-            error: '#EF4444',
-            info: '#0B4F6C',
-            warning: '#F59E0B'
-        };
-        
-        toast.textContent = message;
-        toast.style.backgroundColor = colors[type] || colors.info;
-        toast.classList.add('show');
-        
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
-    },
-
-    // ============================================
-    // EVENT LISTENERS
-    // ============================================
-    setupEventListeners() {
-        // Step navigation
-        document.getElementById('continueToStep2')?.addEventListener('click', () => {
-            if (this.validateStep1()) {
-                this.updateStep(2);
-            }
-        });
-        
-        document.getElementById('continueToStep3')?.addEventListener('click', () => {
-            if (this.validateStep2()) {
-                this.updateStep(3);
-            }
-        });
-        
-        document.getElementById('backToStep1')?.addEventListener('click', () => this.updateStep(1));
-        document.getElementById('backToStep2')?.addEventListener('click', () => this.updateStep(2));
-        
-        // Add product
-        document.getElementById('addProductBtn')?.addEventListener('click', () => {
-            this.addProductRow();
-        });
-        
-        // Terms checkbox
-        document.getElementById('acceptTerms')?.addEventListener('change', (e) => {
-            const submitBtn = document.getElementById('submitRfq');
-            if (submitBtn) {
-                submitBtn.disabled = !e.target.checked;
-            }
-        });
-        
-        // Submit
-        document.getElementById('submitRfq')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.submitRFQ();
-        });
-        
-        // File upload
-        this.setupFileUpload();
-        
-        // Close modals
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('show');
-                }
-            });
-        });
     }
 };
 
-// ============================================
-// INITIALIZATION
-// ============================================
-document.addEventListener('DOMContentLoaded', () => {
-    RFQSimple.init();
-});
+// Global functions
+window.RFQSystem = RFQSystem;
+window.removeAttachment = (i) => RFQSystem.removeAttachment(i);
+window.removeProduct = (i) => RFQSystem.removeProduct(i);
+window.updateProduct = (i, f, v) => RFQSystem.updateProduct(i, f, v);
+window.closeSuccessModal = () => {
+    const modal = document.getElementById('successModal');
+    if (modal) modal.classList.remove('show');
+};
 
-// Make functions available globally
-window.RFQSimple = RFQSimple;
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    RFQSystem.init();
+});
