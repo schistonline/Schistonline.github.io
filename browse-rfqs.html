@@ -1,231 +1,595 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Browse RFQs - SourceX B2B</title>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/browse-rfqs.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+  <title>Browse RFQs - BuyUganda.online</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 450px;
+      margin: auto;
+      background: #fff;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 80px;
+    }
+
+    /* Header */
+    .header {
+      background: white;
+      padding: 16px 20px;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: #0B4F6C;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 18px;
+      color: #0B4F6C;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    /* Stats Row */
+    .stats-row {
+      display: flex;
+      gap: 12px;
+      padding: 16px 20px;
+      background: white;
+      border-bottom: 1px solid #eee;
+    }
+
+    .stat-card {
+      flex: 1;
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #0B4F6C;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      padding: 16px 20px;
+      background: white;
+      border-bottom: 1px solid #eee;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: #f5f5f5;
+      border-radius: 30px;
+      padding: 12px 16px;
+      gap: 10px;
+    }
+
+    .search-box i {
+      color: #999;
+    }
+
+    .search-box input {
+      flex: 1;
+      border: none;
+      background: none;
+      outline: none;
+      font-size: 15px;
+    }
+
+    /* Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 12px 20px;
+      overflow-x: auto;
+      background: white;
+      border-bottom: 1px solid #eee;
+      scrollbar-width: none;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-chip {
+      padding: 8px 16px;
+      background: #f5f5f5;
+      border-radius: 30px;
+      font-size: 13px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-chip.active {
+      background: #0B4F6C;
+      color: white;
+    }
+
+    /* RFQ List */
+    .rfq-list {
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* RFQ Card */
+    .rfq-card {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid #eee;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .rfq-card:active {
+      transform: scale(0.98);
+    }
+
+    .rfq-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .rfq-title {
+      font-weight: 600;
+      font-size: 16px;
+      color: #1a1a1a;
+      flex: 1;
+    }
+
+    .match-badge {
+      background: #e8f5e9;
+      color: #4caf50;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      margin-left: 8px;
+    }
+
+    .match-badge.high {
+      background: #e8f5e9;
+      color: #4caf50;
+    }
+
+    .match-badge.medium {
+      background: #fff3e0;
+      color: #ff9800;
+    }
+
+    .match-badge.low {
+      background: #ffebee;
+      color: #f44336;
+    }
+
+    .buyer-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .buyer-info i {
+      width: 16px;
+      color: #0B4F6C;
+    }
+
+    .products-preview {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .preview-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 6px 0;
+    }
+
+    .preview-item:not(:last-child) {
+      border-bottom: 1px solid #eee;
+    }
+
+    .product-name {
+      color: #333;
+      flex: 1;
+    }
+
+    .product-qty {
+      font-weight: 600;
+      color: #0B4F6C;
+    }
+
+    .more-items {
+      font-size: 12px;
+      color: #999;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .rfq-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #eee;
+    }
+
+    .date {
+      font-size: 11px;
+      color: #999;
+    }
+
+    .quote-btn {
+      background: #0B4F6C;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quote-btn:active {
+      transform: scale(0.95);
+      background: #083b4f;
+    }
+
+    /* Loading State */
+    .loading-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #eee;
+      border-top-color: #0B4F6C;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 16px;
+      color: #ddd;
+    }
+
+    .empty-state h3 {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 400px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: white;
+    }
+
+    .modal-header h3 {
+      font-size: 18px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-footer {
+      padding: 16px 20px;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 12px;
+    }
+
+    .detail-row {
+      display: flex;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+
+    .detail-label {
+      width: 100px;
+      color: #666;
+    }
+
+    .detail-value {
+      flex: 1;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .items-list {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .item-row:last-child {
+      border-bottom: none;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: #0B4F6C;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      background: #f0f0f0;
+      color: #333;
+      border: none;
+      padding: 12px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 20px;
+      right: 20px;
+      background: #333;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 14px;
+      text-align: center;
+      z-index: 300;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: #4caf50;
+    }
+
+    .toast.error {
+      background: #ff4444;
+    }
+  </style>
 </head>
+
 <body>
-    <!-- Compact Header -->
-    <header class="compact-header">
-        <div class="compact-header-content">
-            <button class="back-btn" onclick="window.history.back()">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <div class="compact-logo">
-                <div class="logo-cube">
-                    <div class="cube">
-                        <div class="face front"></div>
-                        <div class="face right"></div>
-                        <div class="face top"></div>
-                    </div>
-                </div>
-                <span class="logo-text">Source<span>X</span></span>
-            </div>
-            <button class="filter-icon" id="filterBtn">
-                <i class="fas fa-sliders-h"></i>
-            </button>
-        </div>
-        
-        <!-- Quick Stats -->
-        <div class="compact-stats">
-            <div class="stat-chip" onclick="filterRFQs('all')">
-                <span class="stat-value" id="totalRFQs">0</span>
-                <span>All RFQs</span>
-            </div>
-            <div class="stat-chip" onclick="filterRFQs('new')">
-                <span class="stat-value" id="newRFQs">0</span>
-                <span>New</span>
-            </div>
-            <div class="stat-chip" onclick="filterRFQs('matching')">
-                <span class="stat-value" id="matchingRFQs">0</span>
-                <span>Matching</span>
-            </div>
-            <div class="stat-chip" onclick="filterRFQs('my_category')">
-                <span class="stat-value" id="myCategoryRFQs">0</span>
-                <span>My Category</span>
-            </div>
-        </div>
-        
-        <!-- Search Bar -->
-        <div class="compact-search">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Search RFQs by title, buyer, or product...">
-        </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="main-content" id="mainContent">
-        <!-- Loading State -->
-        <div class="loading-state" id="loadingState">
-            <div class="spinner"></div>
-            <p>Loading available RFQs...</p>
-        </div>
-
-        <!-- Categories Filter -->
-        <div class="categories-filter">
-            <div class="filter-header">
-                <i class="fas fa-tags"></i>
-                <span>Filter by Category</span>
-                <button class="clear-categories" id="clearCategories">Clear</button>
-            </div>
-            <div class="categories-list" id="categoriesList">
-                <!-- Populated by JS -->
-                <div class="category-skeleton"></div>
-                <div class="category-skeleton"></div>
-                <div class="category-skeleton"></div>
-            </div>
-        </div>
-
-        <!-- RFQs List -->
-        <div class="rfqs-list" id="rfqsList"></div>
-
-        <!-- Empty State -->
-        <div class="empty-state" id="emptyState" style="display: none;">
-            <i class="fas fa-search"></i>
-            <h3>No RFQs found</h3>
-            <p>Check back later for new requests from buyers</p>
-            <button class="refresh-btn" onclick="location.reload()">
-                <i class="fas fa-sync-alt"></i> Refresh
-            </button>
-        </div>
-
-        <!-- Load More -->
-        <div class="load-more" id="loadMore" style="display: none;">
-            <button class="load-more-btn" onclick="loadMoreRFQs()">Load More</button>
-        </div>
-    </main>
-
-    <!-- RFQ Detail Modal -->
-    <div class="modal" id="rfqModal">
-        <div class="modal-overlay" onclick="closeRFQModal()"></div>
-        <div class="modal-content modal-lg">
-            <div class="modal-header">
-                <h3>Request for Quotation Details</h3>
-                <button class="modal-close" onclick="closeRFQModal()">&times;</button>
-            </div>
-            <div class="modal-body" id="rfqModalBody"></div>
-            <div class="modal-footer" id="rfqModalFooter"></div>
-        </div>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <button class="back-btn" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="logo">
+        <div class="logo-icon">B</div>
+        <span class="logo-text">BuyUganda</span>
+      </div>
+      <div style="width: 32px;"></div>
     </div>
+  </div>
 
-    <!-- Create Quote Modal -->
-    <div class="modal" id="createQuoteModal">
-        <div class="modal-overlay" onclick="closeCreateQuoteModal()"></div>
-        <div class="modal-content modal-lg">
-            <div class="modal-header">
-                <h3>Create Quotation</h3>
-                <button class="modal-close" onclick="closeCreateQuoteModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="quoteForm">
-                    <input type="hidden" id="rfqId">
-                    
-                    <!-- Buyer Info -->
-                    <div class="buyer-info-card" id="buyerInfoCard">
-                        <h4>Buyer Information</h4>
-                        <div class="buyer-info" id="buyerInfo"></div>
-                        <div class="contact-preference-badge" id="contactPreference"></div>
-                    </div>
-
-                    <!-- Quote Items -->
-                    <div class="form-section">
-                        <h4>Items</h4>
-                        <div id="quoteItemsContainer"></div>
-                        <button type="button" class="add-item-btn" onclick="addQuoteItem()">
-                            <i class="fas fa-plus"></i> Add Item
-                        </button>
-                    </div>
-
-                    <!-- Terms -->
-                    <div class="form-section">
-                        <h4>Terms</h4>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Valid Until <span class="required">*</span></label>
-                                <input type="date" id="validUntil" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Lead Time (days)</label>
-                                <input type="number" id="leadTime" class="form-control" min="1" value="7">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Payment Terms</label>
-                                <select id="paymentTerms" class="form-control">
-                                    <option value="advance_full">100% Advance</option>
-                                    <option value="advance_partial">50% Advance</option>
-                                    <option value="credit_7">7 Days Credit</option>
-                                    <option value="credit_15">15 Days Credit</option>
-                                    <option value="credit_30">30 Days Credit</option>
-                                    <option value="negotiable">Negotiable</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Delivery Terms</label>
-                                <select id="deliveryTerms" class="form-control">
-                                    <option value="ex_warehouse">Ex-Warehouse</option>
-                                    <option value="fob">FOB</option>
-                                    <option value="cif">CIF</option>
-                                    <option value="door_delivery">Door Delivery</option>
-                                    <option value="pickup">Buyer Pickup</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Additional Notes</label>
-                            <textarea id="quoteNotes" class="form-control" rows="3" placeholder="Warranty, specifications, delivery details, etc."></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Summary -->
-                    <div class="quote-summary">
-                        <div class="summary-row">
-                            <span>Subtotal:</span>
-                            <span id="summarySubtotal">UGX 0</span>
-                        </div>
-                        <div class="summary-row total">
-                            <span>Total:</span>
-                            <span id="summaryTotal">UGX 0</span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-secondary" onclick="saveQuoteAsDraft()">Save Draft</button>
-                <button class="btn-primary" onclick="sendQuote()">Send Quote</button>
-                <button class="btn-secondary" onclick="closeCreateQuoteModal()">Cancel</button>
-            </div>
-        </div>
+  <!-- Stats Row -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-number" id="totalCount">0</div>
+      <div class="stat-label">Total RFQs</div>
     </div>
-
-    <!-- Success Modal -->
-    <div class="modal" id="successModal">
-        <div class="modal-overlay" onclick="closeSuccessModal()"></div>
-        <div class="modal-content">
-            <div class="modal-icon success">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h3>Quote Sent Successfully!</h3>
-            <p id="successMessage">Your quotation has been sent to the buyer</p>
-            <div class="modal-actions">
-                <button class="btn-primary" onclick="closeSuccessModal()">Continue Browsing</button>
-                <button class="btn-secondary" onclick="window.location.href='supplier-quotations.html'">View My Quotes</button>
-            </div>
-        </div>
+    <div class="stat-card">
+      <div class="stat-number" id="newCount">0</div>
+      <div class="stat-label">New</div>
     </div>
+    <div class="stat-card">
+      <div class="stat-number" id="matchingCount">0</div>
+      <div class="stat-label">High Match</div>
+    </div>
+  </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast"></div>
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search by product or buyer...">
+    </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/browse-rfqs.js"></script>
+  <!-- Filter Tabs -->
+  <div class="filter-tabs">
+    <div class="filter-chip active" data-filter="all">All RFQs</div>
+    <div class="filter-chip" data-filter="new">New</div>
+    <div class="filter-chip" data-filter="high_match">High Match</div>
+    <div class="filter-chip" data-filter="my_category">My Category</div>
+  </div>
+
+  <!-- RFQ List -->
+  <div class="rfq-list" id="rfqList"></div>
+
+  <!-- Loading State -->
+  <div class="loading-state" id="loadingState">
+    <div class="spinner"></div>
+    <p>Loading RFQs...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState" style="display: none;">
+    <i class="fas fa-inbox"></i>
+    <h3>No RFQs Found</h3>
+    <p>Check back later for new requests</p>
+  </div>
+
+  <!-- RFQ Detail Modal -->
+  <div class="modal" id="rfqModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>RFQ Details</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal()">Close</button>
+        <button class="btn-primary" id="quoteNowBtn">Quote Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/browse-rfqs.js"></script>
 </body>
 </html>
