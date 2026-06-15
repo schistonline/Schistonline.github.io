@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+  <title>Create Quote - BuyUganda.online</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 450px;
+      margin: auto;
+      background: #fff;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 30px;
+    }
+
+    /* Header */
+    .header {
+      background: white;
+      padding: 16px 20px;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: #0B4F6C;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 18px;
+      color: #0B4F6C;
+    }
+
+    /* Buyer Info Card */
+    .buyer-card {
+      background: linear-gradient(135deg, #0B4F6C 0%, #1a6b8a 100%);
+      color: white;
+      padding: 20px;
+      margin: 16px;
+      border-radius: 20px;
+    }
+
+    .buyer-card h3 {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+
+    .buyer-name {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .buyer-contact {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pref-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    /* Form Sections */
+    .form-section {
+      padding: 0 16px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title i {
+      color: #0B4F6C;
+    }
+
+    /* Items */
+    .items-container {
+      background: #f8f9fa;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .quote-item {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid #eee;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #0B4F6C;
+    }
+
+    .item-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .item-row input, .item-row select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .item-price-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .item-price-row input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .remove-item {
+      background: none;
+      border: none;
+      color: #f44336;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .add-item-btn {
+      width: 100%;
+      padding: 14px;
+      background: white;
+      border: 1.5px dashed #0B4F6C;
+      border-radius: 30px;
+      color: #0B4F6C;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    /* Terms Section */
+    .terms-section {
+      background: #f8f9fa;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .term-row {
+      margin-bottom: 16px;
+    }
+
+    .term-row label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .term-row input, .term-row select, .term-row textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    /* Summary */
+    .summary-card {
+      background: #f8f9fa;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .summary-row.total {
+      border-bottom: none;
+      font-weight: 700;
+      font-size: 18px;
+      color: #0B4F6C;
+      padding-top: 12px;
+      margin-top: 4px;
+    }
+
+    /* Contact Actions */
+    .contact-actions {
+      padding: 0 16px;
+      margin-bottom: 24px;
+    }
+
+    .contact-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .contact-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .contact-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .contact-btn.whatsapp {
+      background: #25D366;
+      color: white;
+    }
+
+    .contact-btn.email {
+      background: #0B4F6C;
+      color: white;
+    }
+
+    .contact-btn.message {
+      background: #6B21E5;
+      color: white;
+    }
+
+    .contact-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      padding: 0 16px;
+      margin-bottom: 30px;
+    }
+
+    .btn-draft {
+      flex: 1;
+      background: #f0f0f0;
+      color: #333;
+      border: none;
+      padding: 14px;
+      border-radius: 30px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-send {
+      flex: 2;
+      background: #0B4F6C;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 30px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-draft:active, .btn-send:active {
+      transform: scale(0.98);
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(5px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .loading-overlay.show {
+      display: flex;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid #fff;
+      border-top-color: #0B4F6C;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-overlay p {
+      color: white;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 20px;
+      right: 20px;
+      background: #333;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 14px;
+      text-align: center;
+      z-index: 300;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: #4caf50;
+    }
+
+    .toast.error {
+      background: #ff4444;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .contact-buttons {
+        flex-direction: column;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .btn-draft, .btn-send {
+        width: 100%;
+      }
+      
+      .item-price-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <button class="back-btn" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="logo-icon">B</div>
+      <span class="logo-text">Create Quotation</span>
+    </div>
+  </div>
+
+  <!-- Buyer Info Card -->
+  <div class="buyer-card" id="buyerCard">
+    <h3>Buyer Information</h3>
+    <div class="buyer-name" id="buyerName">Loading...</div>
+    <div class="buyer-contact" id="buyerContact"></div>
+    <div class="pref-badge" id="prefBadge">
+      <i class="fas fa-bell"></i>
+      <span>Preferred contact: </span>
+      <strong id="prefMethod">-</strong>
+    </div>
+  </div>
+
+  <!-- Quote Items Section -->
+  <div class="form-section">
+    <div class="section-title">
+      <i class="fas fa-box"></i> Quote Items
+    </div>
+    <div class="items-container">
+      <div id="quoteItemsList"></div>
+      <button class="add-item-btn" id="addItemBtn">
+        <i class="fas fa-plus"></i> Add Item
+      </button>
+    </div>
+  </div>
+
+  <!-- Terms Section -->
+  <div class="form-section">
+    <div class="section-title">
+      <i class="fas fa-file-contract"></i> Terms & Conditions
+    </div>
+    <div class="terms-section">
+      <div class="term-row">
+        <label>Valid Until <span style="color:#ff4444">*</span></label>
+        <input type="date" id="validUntil">
+      </div>
+      <div class="term-row">
+        <label>Payment Terms</label>
+        <select id="paymentTerms">
+          <option value="advance_full">100% Advance Payment</option>
+          <option value="advance_partial">50% Advance, 50% upon delivery</option>
+          <option value="credit_7">7 Days Credit</option>
+          <option value="credit_15">15 Days Credit</option>
+          <option value="credit_30">30 Days Credit</option>
+          <option value="negotiable">Negotiable</option>
+        </select>
+      </div>
+      <div class="term-row">
+        <label>Delivery Terms</label>
+        <select id="deliveryTerms">
+          <option value="ex_warehouse">Ex-Warehouse (Buyer picks up)</option>
+          <option value="door_delivery">Door Delivery (Supplier delivers)</option>
+          <option value="pickup">Buyer Pickup</option>
+          <option value="fob">FOB (Free on Board)</option>
+          <option value="cif">CIF (Cost, Insurance & Freight)</option>
+        </select>
+      </div>
+      <div class="term-row">
+        <label>Lead Time (days)</label>
+        <input type="number" id="leadTime" value="7" min="1">
+      </div>
+      <div class="term-row">
+        <label>Additional Notes</label>
+        <textarea id="quoteNotes" rows="3" placeholder="Warranty information, specifications, delivery details, etc."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="form-section">
+    <div class="section-title">
+      <i class="fas fa-calculator"></i> Quote Summary
+    </div>
+    <div class="summary-card">
+      <div class="summary-row">
+        <span>Subtotal:</span>
+        <span id="subtotal">UGX 0</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total Amount:</span>
+        <span id="total">UGX 0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Actions (After Quote is Saved) -->
+  <div class="contact-actions" id="contactActions" style="display: none;">
+    <div class="contact-title">
+      <i class="fas fa-headset"></i> Contact Buyer
+    </div>
+    <div class="contact-buttons">
+      <button class="contact-btn whatsapp" id="whatsappBtn">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </button>
+      <button class="contact-btn email" id="emailBtn">
+        <i class="fas fa-envelope"></i> Email
+      </button>
+      <button class="contact-btn message" id="messageBtn">
+        <i class="fas fa-comment-dots"></i> Message
+      </button>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    <button class="btn-draft" id="saveDraftBtn">
+      <i class="fas fa-save"></i> Save Draft
+    </button>
+    <button class="btn-send" id="sendQuoteBtn">
+      <i class="fas fa-paper-plane"></i> Save & Send
+    </button>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p id="loadingMessage">Processing...</p>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/create-quote.js"></script>
+</body>
+</html>
