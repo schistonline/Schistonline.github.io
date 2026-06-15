@@ -3,26 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
-    <script>
-        // Get referral code from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const refCode = urlParams.get('ref');
-        
-        if (refCode) {
-            // Store referral code in localStorage for registration
-            localStorage.setItem('referral_code', refCode);
-            // Redirect to registration page
-            window.location.href = `register.html?ref=${refCode}`;
-        } else {
-            window.location.href = 'index.html';
+    <title>Redirecting - Buy Uganda</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0B4F6C 0%, #1a6b8a 100%);
+            margin: 0;
+            padding: 20px;
         }
-    </script>
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 28px;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #E5E7EB;
+            border-top-color: #0B4F6C;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        h2 {
+            color: #1F2937;
+            margin-bottom: 8px;
+        }
+        p {
+            color: #6B7280;
+            margin-bottom: 16px;
+        }
+        .referral-badge {
+            background: #FEF3C7;
+            color: #92400E;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
-    <div style="text-align: center; padding: 50px;">
-        <div class="loading-spinner"></div>
-        <p>Redirecting...</p>
+    <div class="container">
+        <div class="spinner"></div>
+        <h2>Redirecting you...</h2>
+        <p>You're being redirected to create your account</p>
+        <div id="referralBadge" class="referral-badge" style="display: none;">
+            🎁 You were referred! Get special rewards.
+        </div>
     </div>
+
+    <script>
+        (function() {
+            // Get referral code from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref');
+            
+            if (refCode) {
+                // Store referral code for registration
+                localStorage.setItem('pending_referral_code', refCode);
+                
+                // Show referral badge
+                const badge = document.getElementById('referralBadge');
+                if (badge) badge.style.display = 'inline-block';
+                
+                // Redirect to registration page with referral param
+                setTimeout(() => {
+                    window.location.href = `register.html?ref=${refCode}`;
+                }, 1500);
+            } else {
+                // No referral code, just go to register
+                setTimeout(() => {
+                    window.location.href = 'register.html';
+                }, 1000);
+            }
+        })();
+    </script>
 </body>
 </html>
