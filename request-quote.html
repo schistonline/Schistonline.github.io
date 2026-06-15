@@ -1,258 +1,871 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Request for Quotation - iBlue B2B</title>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/request-quote.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+  <title>Request for Quotation - BuyUganda.online</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 450px;
+      margin: auto;
+      background: #fff;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 30px;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      position: relative;
+      height: 260px;
+      background: linear-gradient(135deg, #0B4F6C 0%, #1a6b8a 100%);
+      color: white;
+      padding: 30px 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero small {
+      font-size: 14px;
+      opacity: 0.85;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: 28px;
+      margin: 12px 0 25px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .stats {
+      display: flex;
+      gap: 40px;
+    }
+
+    .stat h2 {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .stat p {
+      font-size: 13px;
+      margin-top: 5px;
+      line-height: 1.3;
+      opacity: 0.85;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
+    }
+
+    /* FORM SECTIONS */
+    .form-section {
+      background: #fff;
+    }
+
+    .section-title {
+      padding: 20px 20px 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0B4F6C;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #fff;
+    }
+
+    .input-box {
+      border-bottom: 1px solid #eee;
+      padding: 16px 20px;
+      background: #fff;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      color: #333;
+      background: transparent;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #bbb;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    .half {
+      width: 50%;
+    }
+
+    .half:first-child {
+      border-right: 1px solid #eee;
+    }
+
+    .half .input-box {
+      border-bottom: none;
+    }
+
+    .select-style {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .select-style select {
+      width: auto;
+      flex: 1;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .arrow {
+      font-size: 20px;
+      color: #bbb;
+    }
+
+    textarea {
+      resize: none;
+      height: 100px;
+      font-size: 16px;
+    }
+
+    .counter {
+      text-align: right;
+      color: #bbb;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+
+    /* PRODUCTS SECTION */
+    .products-container {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .product-item {
+      border-bottom: 1px solid #eee;
+      padding: 16px 20px;
+      background: #fafafa;
+    }
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .product-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: #0B4F6C;
+    }
+
+    .remove-product {
+      background: none;
+      border: none;
+      color: #ff4444;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .product-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .product-fields.full-width {
+      grid-template-columns: 1fr;
+    }
+
+    .product-fields input,
+    .product-fields select,
+    .product-fields textarea {
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .add-product-btn {
+      width: calc(100% - 40px);
+      margin: 16px 20px;
+      padding: 14px;
+      background: white;
+      border: 1.5px dashed #0B4F6C;
+      border-radius: 30px;
+      color: #0B4F6C;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* CONTACT PREFERENCE */
+    .contact-preference-section {
+      padding: 20px;
+      background: #f8f9fa;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+
+    .contact-preference-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+    }
+
+    .contact-preference-title i {
+      color: #0B4F6C;
+      margin-right: 8px;
+    }
+
+    .contact-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .contact-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .contact-option.selected {
+      border-color: #0B4F6C;
+      background: #f0f7fa;
+    }
+
+    .contact-option input[type="radio"] {
+      display: none;
+    }
+
+    .contact-option i {
+      font-size: 24px;
+      width: 32px;
+    }
+
+    .contact-option i.fa-whatsapp {
+      color: #25D366;
+    }
+
+    .contact-option i.fa-envelope {
+      color: #0B4F6C;
+    }
+
+    .contact-option i.fa-comment-dots {
+      color: #6B21E5;
+    }
+
+    .contact-option span {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .contact-option small {
+      font-size: 11px;
+      color: #999;
+      margin-left: auto;
+    }
+
+    /* CONTACT DETAILS */
+    .contact-details-section {
+      padding: 20px;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+    }
+
+    .contact-details-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .contact-details-title i {
+      color: #0B4F6C;
+      margin-right: 8px;
+    }
+
+    .contact-input-group {
+      margin-bottom: 15px;
+    }
+
+    .contact-input-group label {
+      display: block;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .contact-input-group input {
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 16px;
+      background: #fff;
+      width: 100%;
+    }
+
+    .contact-input-group input:focus {
+      border-color: #0B4F6C;
+      outline: none;
+    }
+
+    .phone-wrapper {
+      display: flex;
+      gap: 10px;
+    }
+
+    .phone-wrapper select {
+      width: 100px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .phone-wrapper input {
+      flex: 1;
+    }
+
+    /* UPLOAD SECTION */
+    .upload-section {
+      padding: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .upload-box {
+      width: 100px;
+      height: 100px;
+      border: 2px dashed #ddd;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      background: #fafafa;
+      transition: all 0.2s;
+    }
+
+    .upload-box:hover {
+      border-color: #0B4F6C;
+      background: #f0f7fa;
+    }
+
+    .plus {
+      font-size: 48px;
+      color: #bbb;
+      font-weight: 300;
+    }
+
+    .upload-text {
+      margin-top: 12px;
+      color: #999;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .file-list {
+      margin-top: 15px;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .file-item i {
+      color: #0B4F6C;
+    }
+
+    .file-item .remove-file {
+      margin-left: auto;
+      color: #ff4444;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 14px;
+    }
+
+    /* TERMS */
+    .terms-section {
+      padding: 20px;
+      background: #fafafa;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .checkbox-label input {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* SUBMIT BUTTON */
+    .submit-btn {
+      width: calc(100% - 40px);
+      margin: 25px auto 40px;
+      display: block;
+      background: #0B4F6C;
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 40px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #083b4f;
+    }
+
+    .submit-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* LOADING OVERLAY */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(5px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .loading-overlay.show {
+      display: flex;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid #fff;
+      border-top-color: #0B4F6C;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-overlay p {
+      color: white;
+      font-size: 14px;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 320px;
+      padding: 30px 25px;
+      text-align: center;
+    }
+
+    .modal-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+
+    .modal-icon.success {
+      background: #e8f5e9;
+      color: #4caf50;
+    }
+
+    .modal h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .modal p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .rfq-number {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0B4F6C;
+      margin: 16px 0;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: #0B4F6C;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 20px;
+      right: 20px;
+      background: #333;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 14px;
+      text-align: center;
+      z-index: 1200;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: #4caf50;
+    }
+
+    .toast.error {
+      background: #ff4444;
+    }
+  </style>
 </head>
+
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <button class="back-btn" onclick="window.history.back()">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <a href="index.html" class="logo">
-                <div class="logo-circle">i</div>
-                <span class="logo-text">iBlue<span>B2B</span></span>
-            </a>
-            <div class="header-actions">
-                <span class="rfq-badge">Get Quotes</span>
-            </div>
+
+<div class="container">
+  <button class="back-btn" onclick="window.history.back()">
+    <i class="fas fa-arrow-left"></i>
+  </button>
+
+  <!-- HERO SECTION -->
+  <div class="hero">
+    <div class="hero-content">
+      <small>Request for Quotation</small>
+      <h1>One Request,<br>Multiple Quotes</h1>
+      <div class="stats">
+        <div class="stat">
+          <h2>7+</h2>
+          <p>Avg<br>Quotes Received</p>
         </div>
-    </header>
-
-    <main class="main-content">
-        <!-- Hero Section -->
-        <div class="hero-section">
-            <h1>Get Multiple Quotes from Verified Suppliers</h1>
-            <p>Post your requirements once and receive quotes from multiple suppliers</p>
+        <div class="stat">
+          <h2>&lt;12h</h2>
+          <p>Avg<br>Quotation Duration</p>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <!-- Progress Steps -->
-        <div class="progress-steps">
-            <div class="step active" data-step="1">
-                <div class="step-number">1</div>
-                <div class="step-label">Your Details</div>
-            </div>
-            <div class="step-line"></div>
-            <div class="step" data-step="2">
-                <div class="step-number">2</div>
-                <div class="step-label">Product Details</div>
-            </div>
-            <div class="step-line"></div>
-            <div class="step" data-step="3">
-                <div class="step-number">3</div>
-                <div class="step-label">Requirements</div>
-            </div>
-        </div>
-
-        <!-- Step 1: Buyer Details -->
-        <div class="step-content active" id="step1">
-            <div class="form-card">
-                <h2><i class="fas fa-user-circle"></i> Your Contact Information</h2>
-                <p>Suppliers will use this information to send you quotes</p>
-
-                <div class="form-group">
-                    <label>Your Name <span class="required">*</span></label>
-                    <input type="text" id="buyerName" class="form-control" placeholder="Enter your full name">
-                </div>
-
-                <div class="form-group">
-                    <label>Company Name (Optional)</label>
-                    <input type="text" id="companyName" class="form-control" placeholder="Your business name">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Email Address <span class="required">*</span></label>
-                        <input type="email" id="buyerEmail" class="form-control" placeholder="your@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <div class="phone-input">
-                            <select id="countryCode" class="country-code">
-                                <option value="+256">+256 (UG)</option>
-                                <option value="+254">+254 (KE)</option>
-                                <option value="+255">+255 (TZ)</option>
-                                <option value="+250">+250 (RW)</option>
-                            </select>
-                            <input type="tel" id="buyerPhone" class="form-control" placeholder="712345678">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>How would you like to receive quotes? <span class="required">*</span></label>
-                    <div class="contact-preference">
-                        <label class="preference-option">
-                            <input type="radio" name="contactPreference" value="email" checked>
-                            <i class="fas fa-envelope"></i>
-                            <span>Email</span>
-                        </label>
-                        <label class="preference-option">
-                            <input type="radio" name="contactPreference" value="whatsapp">
-                            <i class="fab fa-whatsapp"></i>
-                            <span>WhatsApp</span>
-                        </label>
-                        <label class="preference-option">
-                            <input type="radio" name="contactPreference" value="both">
-                            <i class="fas fa-envelope"></i>
-                            <i class="fab fa-whatsapp"></i>
-                            <span>Both</span>
-                        </label>
-                        <label class="preference-option">
-                            <input type="radio" name="contactPreference" value="platform">
-                            <i class="fas fa-comment-dots"></i>
-                            <span>Platform Only</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button class="btn-primary" id="continueToStep2">
-                        Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Step 2: Product Details -->
-        <div class="step-content" id="step2">
-            <div class="form-card">
-                <h2><i class="fas fa-box"></i> What products do you need?</h2>
-                <p>Add one or more products you want to get quotes for</p>
-
-                <div id="productsContainer">
-                    <!-- Products will be added here dynamically -->
-                </div>
-
-                <button class="add-product-btn" id="addProductBtn">
-                    <i class="fas fa-plus-circle"></i> Add Another Product
-                </button>
-
-                <div class="form-actions">
-                    <button class="btn-secondary" id="backToStep1">
-                        <i class="fas fa-arrow-left"></i> Back
-                    </button>
-                    <button class="btn-primary" id="continueToStep3">
-                        Continue <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Step 3: Additional Requirements -->
-        <div class="step-content" id="step3">
-            <div class="form-card">
-                <h2><i class="fas fa-clipboard-list"></i> Additional Requirements</h2>
-                <p>Provide more details to help suppliers quote accurately</p>
-
-                <div class="form-group">
-                    <label>RFQ Title <span class="required">*</span></label>
-                    <input type="text" id="rfqTitle" class="form-control" placeholder="e.g., Bulk order of office furniture">
-                </div>
-
-                <div class="form-group">
-                    <label>Detailed Requirements</label>
-                    <textarea id="rfqDescription" rows="4" class="form-control" 
-                              placeholder="Describe your requirements, quality standards, packaging preferences, etc."></textarea>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Category</label>
-                        <select id="categoryId" class="form-control">
-                            <option value="">Select category (optional)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Expected Delivery</label>
-                        <input type="date" id="expectedDelivery" class="form-control">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Shipping Address</label>
-                    <textarea id="shippingAddress" rows="2" class="form-control" 
-                              placeholder="Where should the goods be delivered?"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>District</label>
-                    <select id="shippingDistrict" class="form-control">
-                        <option value="">Select district</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Attachments (Optional)</label>
-                    <div class="file-upload-area" id="fileUploadArea">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Click to upload specifications, drawings, or documents</p>
-                        <small>PDF, Images, Excel (Max 10MB)</small>
-                        <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.xls,.xlsx" style="display: none;">
-                    </div>
-                    <div class="file-list" id="fileList"></div>
-                </div>
-
-                <div class="terms-section">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="acceptTerms">
-                        <span>I confirm that this is a genuine business inquiry</span>
-                    </label>
-                </div>
-
-                <div class="form-actions">
-                    <button class="btn-secondary" id="backToStep2">
-                        <i class="fas fa-arrow-left"></i> Back
-                    </button>
-                    <button class="btn-primary btn-large" id="submitRfq" disabled>
-                        <i class="fas fa-paper-plane"></i> Submit Request for Quotes
-                    </button>
-                </div>
-
-                <div class="info-note">
-                    <i class="fas fa-info-circle"></i>
-                    Your request will be sent to multiple matching suppliers. You'll receive quotes via your chosen contact method.
-                </div>
-            </div>
-        </div>
-
-        <!-- Loading Overlay -->
-        <div class="loading-overlay" id="loadingOverlay" style="display: none;">
-            <div class="spinner"></div>
-            <p>Finding matching suppliers and sending your request...</p>
-        </div>
-    </main>
-
-    <!-- Success Modal -->
-    <div class="modal" id="successModal">
-        <div class="modal-content">
-            <div class="modal-icon success">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h3>Request Sent Successfully!</h3>
-            <p>Your request has been sent to <span id="supplierCount">0</span> matching suppliers</p>
-            <div class="rfq-number" id="rfqNumber">RFQ-2025-00001</div>
-            <p class="info-text">You will receive quotes via your selected contact method</p>
-            <div class="modal-actions">
-                <a href="my-rfqs.html" class="btn-primary">Track Your RFQs</a>
-                <a href="index.html" class="btn-secondary">Browse Products</a>
-            </div>
-        </div>
+  <form id="rfqForm">
+    <!-- PRODUCTS SECTION -->
+    <div class="form-section">
+      <div class="section-title">PRODUCTS YOU NEED</div>
+      <div class="products-container" id="productsContainer"></div>
+      <button type="button" class="add-product-btn" id="addProductBtn">
+        <i class="fas fa-plus-circle"></i> Add Another Product
+      </button>
     </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast"></div>
+    <!-- CONTACT PREFERENCE -->
+    <div class="contact-preference-section">
+      <div class="contact-preference-title">
+        <i class="fas fa-bell"></i> How to reach you
+      </div>
+      <div class="contact-options" id="contactOptions">
+        <label class="contact-option" data-method="email">
+          <input type="radio" name="contactPreference" value="email">
+          <i class="fas fa-envelope"></i>
+          <span>Email</span>
+          <small>Get quotes in inbox</small>
+        </label>
+        <label class="contact-option" data-method="whatsapp">
+          <input type="radio" name="contactPreference" value="whatsapp">
+          <i class="fab fa-whatsapp"></i>
+          <span>WhatsApp</span>
+          <small>Instant replies</small>
+        </label>
+        <label class="contact-option" data-method="both">
+          <input type="radio" name="contactPreference" value="both">
+          <i class="fas fa-envelope"></i> + <i class="fab fa-whatsapp"></i>
+          <span>Both</span>
+          <small>Maximum reach</small>
+        </label>
+        <label class="contact-option" data-method="platform">
+          <input type="radio" name="contactPreference" value="platform">
+          <i class="fas fa-comment-dots"></i>
+          <span>Platform Only</span>
+          <small>In-app messages</small>
+        </label>
+      </div>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/request-quote.js"></script>
+    <!-- CONTACT DETAILS -->
+    <div class="contact-details-section">
+      <div class="contact-details-title">
+        <i class="fas fa-user-check"></i> Your Details
+      </div>
+      
+      <div class="contact-input-group">
+        <label>Your Name <span style="color:#ff4444">*</span></label>
+        <input type="text" id="buyerName" placeholder="Enter your full name">
+      </div>
+      
+      <div class="contact-input-group">
+        <label>Company Name (Optional)</label>
+        <input type="text" id="companyName" placeholder="Your business name">
+      </div>
+      
+      <div class="contact-input-group" id="emailGroup">
+        <label>Email Address <span style="color:#ff4444">*</span></label>
+        <input type="email" id="buyerEmail" placeholder="you@company.com">
+      </div>
+      
+      <div class="contact-input-group" id="phoneGroup" style="display: none;">
+        <label>Phone Number <span style="color:#ff4444">*</span></label>
+        <div class="phone-wrapper">
+          <select id="countryCode">
+            <option value="+256">+256 (UG)</option>
+            <option value="+254">+254 (KE)</option>
+            <option value="+255">+255 (TZ)</option>
+            <option value="+250">+250 (RW)</option>
+          </select>
+          <input type="tel" id="buyerPhone" placeholder="712345678">
+        </div>
+      </div>
+    </div>
+
+    <!-- ADDITIONAL DETAILS -->
+    <div class="form-section">
+      <div class="section-title">ADDITIONAL INFORMATION</div>
+      
+      <div class="input-box">
+        <input type="text" id="rfqTitle" placeholder="RFQ Title (e.g., Bulk order of office furniture)">
+      </div>
+
+      <div class="input-box">
+        <textarea id="rfqDescription" maxlength="4000"
+          placeholder="Describe your requirements, quality standards, packaging preferences, delivery timeline..."></textarea>
+        <div class="counter">
+          <span id="charCount">0</span>/4000
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="half">
+          <div class="input-box">
+            <div class="select-style">
+              <select id="categoryId">
+                <option value="">Category (optional)</option>
+              </select>
+              <span class="arrow">›</span>
+            </div>
+          </div>
+        </div>
+        <div class="half">
+          <div class="input-box">
+            <input type="date" id="expectedDelivery" placeholder="Expected delivery">
+          </div>
+        </div>
+      </div>
+
+      <div class="input-box">
+        <textarea id="shippingAddress" rows="2" placeholder="Shipping address (where goods should be delivered)"></textarea>
+      </div>
+
+      <div class="input-box">
+        <div class="select-style">
+          <select id="shippingDistrict">
+            <option value="">Select district</option>
+          </select>
+          <span class="arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPLOAD SECTION -->
+    <div class="upload-section">
+      <label class="upload-box">
+        <span class="plus">+</span>
+        <input type="file" id="fileInput" hidden multiple accept="image/*,.pdf,.xls,.xlsx">
+      </label>
+      <div class="file-list" id="fileList"></div>
+      <div class="upload-text">
+        <i class="fas fa-info-circle"></i> Product images or files lead to more accurate quotes.
+      </div>
+    </div>
+
+    <!-- TERMS -->
+    <div class="terms-section">
+      <label class="checkbox-label">
+        <input type="checkbox" id="acceptTerms">
+        <span>I confirm that this is a genuine business inquiry and agree to the <a href="#" style="color:#0B4F6C;">Terms</a></span>
+      </label>
+    </div>
+
+    <!-- SUBMIT BUTTON -->
+    <button type="submit" class="submit-btn" id="submitRfq" disabled>
+      Submit RFQ <i class="fas fa-paper-plane"></i>
+    </button>
+  </form>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p>Finding matching suppliers...</p>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon success">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Request Sent!</h3>
+      <p>Your RFQ has been sent to <strong id="supplierCount">0</strong> suppliers</p>
+      <div class="rfq-number" id="rfqNumber">RFQ-XXXX</div>
+      <p style="font-size: 12px;">You'll receive quotes via your selected contact method</p>
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="location.href='my-rfqs.html'">Track RFQs</button>
+        <button class="btn-secondary" onclick="closeSuccessModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/request-quote.js"></script>
 </body>
 </html>
