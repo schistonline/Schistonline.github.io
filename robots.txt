@@ -1,0 +1,15 @@
+# robots.txt for BuyUganda.online
+User-agent: *
+Allow: /
+Disallow: /login.html
+Disallow: /register.html
+Disallow: /profile.html
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+
+# Sitemap location
+Sitemap: https://buyuganda.online/sitemap.xml
+
+# Crawl delay for slower servers
+Crawl-delay: 1
