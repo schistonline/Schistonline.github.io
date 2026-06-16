@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Rate Supplier - Schist.online</title>
+    <title>Rate Supplier - BuyUganda.online</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,14 +19,8 @@
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div class="logo">
-                <div class="logo-cube">
-                    <div class="cube">
-                        <div class="face front"></div>
-                        <div class="face right"></div>
-                        <div class="face top"></div>
-                    </div>
-                </div>
-                <span class="logo-text">Schist<span>.online</span></span>
+                <div class="logo-circle">B</div>
+                <span class="logo-text">BuyUganda<span>.online</span></span>
             </div>
         </div>
     </header>
@@ -42,7 +36,7 @@
                 <h2 id="supplierName">Loading...</h2>
                 <div class="supplier-meta" id="supplierMeta">
                     <span><i class="fas fa-check-circle"></i> Verified Supplier</span>
-                    <span><i class="fas fa-star"></i> 4.8 ★ (124 reviews)</span>
+                    <span id="ratingDisplay"><i class="fas fa-star"></i> Loading...</span>
                 </div>
             </div>
         </div>
@@ -158,14 +152,14 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="submit-rating-btn" id="submitRatingBtn">
+                <button type="submit" class="submit-rating-btn" id="submitRatingBtn" disabled>
                     <i class="fas fa-paper-plane"></i>
                     Submit Review
                 </button>
             </form>
         </div>
 
-        <!-- Recent Reviews Preview -->
+        <!-- Recent Reviews -->
         <div class="recent-reviews-section">
             <h3 class="section-title">
                 <i class="fas fa-comments"></i>
@@ -184,7 +178,7 @@
     <!-- Success Modal -->
     <div class="modal" id="successModal">
         <div class="modal-overlay" onclick="closeSuccessModal()"></div>
-        <div class="modal-content success-modal">
+        <div class="modal-content">
             <div class="success-icon">
                 <i class="fas fa-check-circle"></i>
             </div>
@@ -200,7 +194,6 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/rate-supplier.js"></script>
 </body>
