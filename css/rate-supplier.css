@@ -893,3 +893,128 @@ textarea.form-input {
     }
 }
 
+/* ============================================
+   BuyUganda.online Logo Styles
+   ============================================ */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.logo-circle {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 18px;
+    color: #0B4F6C;
+}
+
+.logo-text span {
+    color: #1a6b8a;
+}
+
+/* ============================================
+   Rating Display
+   ============================================ */
+#ratingDisplay {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#ratingDisplay i {
+    color: #F59E0B;
+}
+
+/* ============================================
+   Loading Overlay
+   ============================================ */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 3000;
+}
+
+.loading-overlay .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-top-color: #6B21E5;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 16px;
+}
+
+.loading-overlay p {
+    color: white;
+    font-size: 16px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   Error State
+   ============================================ */
+.error-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.error-state i {
+    font-size: 48px;
+    color: var(--danger);
+    margin-bottom: 16px;
+}
+
+.error-state h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.error-state p {
+    color: var(--gray-500);
+    margin-bottom: 24px;
+}
+
+.back-btn-large {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #0B4F6C;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.back-btn-large:hover {
+    background: #083b4f;
+    transform: translateY(-2px);
+}
