@@ -1,5 +1,5 @@
 // ============================================
-// RATE SUPPLIER PAGE - FIXED VERSION
+// RATE SUPPLIER PAGE - BuyUganda.online
 // ============================================
 
 console.log('🚀 Rate supplier page loading...');
@@ -8,7 +8,7 @@ console.log('🚀 Rate supplier page loading...');
 const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
 
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ============================================
 // STATE MANAGEMENT
@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     await loadSupplier();
     await loadRecentReviews();
+    await loadExistingUserReview();
     setupEventListeners();
 });
 
@@ -93,6 +94,7 @@ function renderSupplierInfo() {
     const avatarContainer = document.getElementById('supplierAvatar');
     const nameElement = document.getElementById('supplierName');
     const metaElement = document.getElementById('supplierMeta');
+    const ratingDisplay = document.getElementById('ratingDisplay');
     
     if (avatarContainer) {
         avatarContainer.innerHTML = supplier.profiles?.avatar_url ? 
@@ -106,13 +108,17 @@ function renderSupplierInfo() {
     
     if (metaElement) {
         const verified = supplier.verification_status === 'verified';
-        const avgRating = supplier.avg_rating || 0;
-        const reviewCount = supplier.review_count || 0;
         
         metaElement.innerHTML = `
             <span><i class="fas ${verified ? 'fa-check-circle' : 'fa-clock'}"></i> ${verified ? 'Verified Supplier' : 'Pending Verification'}</span>
-            <span><i class="fas fa-star"></i> ${avgRating.toFixed(1)} ★ (${reviewCount} reviews)</span>
         `;
+    }
+    
+    // Update rating display with real data
+    if (ratingDisplay) {
+        const avgRating = supplier.avg_rating || 0;
+        const reviewCount = supplier.review_count || 0;
+        ratingDisplay.innerHTML = `<i class="fas fa-star"></i> ${avgRating.toFixed(1)} ★ (${reviewCount} reviews)`;
     }
 }
 
@@ -121,12 +127,10 @@ function renderSupplierInfo() {
 // ============================================
 async function loadRecentReviews() {
     try {
+        // Get reviews without the profiles join
         const { data, error } = await sb
             .from('reviews')
-            .select(`
-                *,
-                profiles:reviewer_id (full_name, avatar_url)
-            `)
+            .select('*')
             .eq('reviewee_id', supplierId)
             .eq('review_type', 'supplier')
             .order('created_at', { ascending: false })
@@ -135,7 +139,37 @@ async function loadRecentReviews() {
         if (error) throw error;
         
         console.log('Reviews loaded:', data?.length || 0);
-        renderReviews(data || []);
+        
+        // Get reviewer names separately if needed
+        let reviewsWithNames = [];
+        if (data && data.length > 0) {
+            // Get unique reviewer IDs
+            const reviewerIds = [...new Set(data.map(r => r.reviewer_id))];
+            
+            // Fetch profiles for these reviewers
+            const { data: profiles, error: profileError } = await sb
+                .from('profiles')
+                .select('id, full_name, avatar_url')
+                .in('id', reviewerIds);
+            
+            if (!profileError && profiles) {
+                // Create a map of reviewer profiles
+                const profileMap = {};
+                profiles.forEach(p => {
+                    profileMap[p.id] = p;
+                });
+                
+                // Merge reviews with profiles
+                reviewsWithNames = data.map(review => ({
+                    ...review,
+                    profiles: profileMap[review.reviewer_id] || null
+                }));
+            } else {
+                reviewsWithNames = data;
+            }
+        }
+        
+        renderReviews(reviewsWithNames);
         
         // Update review count
         const countElement = document.getElementById('reviewsCount');
@@ -149,6 +183,74 @@ async function loadRecentReviews() {
         if (container) {
             container.innerHTML = '<div class="empty-reviews"><i class="fas fa-exclamation-circle"></i><p>Failed to load reviews</p></div>';
         }
+    }
+}
+
+// ============================================
+// LOAD EXISTING USER REVIEW
+// ============================================
+async function loadExistingUserReview() {
+    try {
+        const { data, error } = await sb
+            .from('reviews')
+            .select('*')
+            .eq('reviewer_id', currentUser.id)
+            .eq('reviewee_id', supplierId)
+            .eq('review_type', 'supplier')
+            .maybeSingle();
+        
+        if (error) throw error;
+        
+        if (data) {
+            // User already reviewed this supplier
+            showToast('You have already reviewed this supplier', 'info');
+            const submitBtn = document.getElementById('submitRatingBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Already Reviewed';
+            }
+            
+            // Pre-fill the form with existing review data
+            if (data.rating) {
+                const overallContainer = document.getElementById('overallRating');
+                updateStarUI(overallContainer, data.rating);
+                ratings.overall = data.rating;
+                document.getElementById('overallHint').textContent = 'Previously rated';
+            }
+            
+            if (data.quality_rating) {
+                const qualityContainer = document.getElementById('qualityRating');
+                updateStarUI(qualityContainer, data.quality_rating);
+                ratings.quality = data.quality_rating;
+            }
+            
+            if (data.communication_rating) {
+                const commContainer = document.getElementById('communicationRating');
+                updateStarUI(commContainer, data.communication_rating);
+                ratings.communication = data.communication_rating;
+            }
+            
+            if (data.delivery_rating) {
+                const deliveryContainer = document.getElementById('deliveryRating');
+                updateStarUI(deliveryContainer, data.delivery_rating);
+                ratings.delivery = data.delivery_rating;
+            }
+            
+            if (data.comment) {
+                document.getElementById('reviewText').value = data.comment;
+            }
+            
+            if (data.title) {
+                document.getElementById('reviewTitle').value = data.title;
+            }
+            
+            if (data.is_anonymous) {
+                document.getElementById('anonymousReview').checked = true;
+            }
+        }
+        
+    } catch (error) {
+        console.error('Error checking existing review:', error);
     }
 }
 
@@ -259,7 +361,7 @@ function setupRatingStars() {
 
 function updateStarUI(container, rating) {
     const stars = container.querySelectorAll('i');
-    stars.forEach((star, index) => {
+    stars.forEach((star) => {
         const starRating = parseInt(star.getAttribute('data-rating'));
         if (starRating <= rating) {
             star.classList.remove('far');
@@ -418,57 +520,68 @@ async function submitReview() {
         const orderReference = document.getElementById('orderReference')?.value.trim();
         const isAnonymous = document.getElementById('anonymousReview')?.checked || false;
         
-        // Upload photos if any (in production, upload to Supabase Storage)
+        // Upload photos if any
         let photoUrls = [];
         for (const photo of uploadedPhotos) {
             photoUrls.push(photo.preview);
         }
         
-        console.log('Submitting review with data:', {
-            reviewer_id: currentUser.id,
-            reviewee_id: supplierId,
-            review_type: 'supplier',
-            rating: ratings.overall,
-            quality_rating: ratings.quality,
-            communication_rating: ratings.communication,
-            delivery_rating: ratings.delivery,
-            title: reviewTitle,
-            comment: reviewText,
-            is_anonymous: isAnonymous,
-            is_verified_purchase: !!orderReference,
-            order_reference: orderReference,
-            photo_urls: photoUrls,
-            is_public: true
-        });
-        
-        // Insert review - using correct column names
-        const { data, error } = await sb
+        // Check if user already reviewed
+        const { data: existing } = await sb
             .from('reviews')
-            .insert({
-                reviewer_id: currentUser.id,
-                reviewee_id: supplierId,
-                review_type: 'supplier',
-                rating: ratings.overall,
-                quality_rating: ratings.quality,
-                communication_rating: ratings.communication,
-                delivery_rating: ratings.delivery,
-                title: reviewTitle,
-                comment: reviewText,
-                is_anonymous: isAnonymous,
-                is_verified_purchase: !!orderReference,
-                order_reference: orderReference,
-                photo_urls: photoUrls,
-                is_public: true
-            })
-            .select()
-            .single();
+            .select('id')
+            .eq('reviewer_id', currentUser.id)
+            .eq('reviewee_id', supplierId)
+            .eq('review_type', 'supplier')
+            .maybeSingle();
         
-        if (error) {
-            console.error('Insert error:', error);
-            throw error;
+        let result;
+        
+        if (existing) {
+            // Update existing review
+            result = await sb
+                .from('reviews')
+                .update({
+                    rating: ratings.overall,
+                    quality_rating: ratings.quality,
+                    communication_rating: ratings.communication,
+                    delivery_rating: ratings.delivery,
+                    title: reviewTitle,
+                    comment: reviewText,
+                    is_anonymous: isAnonymous,
+                    photo_urls: photoUrls,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('id', existing.id)
+                .select()
+                .single();
+        } else {
+            // Insert new review
+            result = await sb
+                .from('reviews')
+                .insert({
+                    reviewer_id: currentUser.id,
+                    reviewee_id: supplierId,
+                    review_type: 'supplier',
+                    rating: ratings.overall,
+                    quality_rating: ratings.quality,
+                    communication_rating: ratings.communication,
+                    delivery_rating: ratings.delivery,
+                    title: reviewTitle,
+                    comment: reviewText,
+                    is_anonymous: isAnonymous,
+                    is_verified_purchase: !!orderReference,
+                    order_reference: orderReference,
+                    photo_urls: photoUrls,
+                    is_public: true
+                })
+                .select()
+                .single();
         }
         
-        console.log('Review submitted successfully:', data);
+        if (result.error) throw result.error;
+        
+        console.log('Review submitted successfully:', result.data);
         
         // Update supplier average rating
         await updateSupplierRating();
@@ -488,8 +601,6 @@ async function submitReview() {
         
         if (error.message) {
             errorMessage += error.message;
-        } else if (error.code === 'PGRST204') {
-            errorMessage += 'Database schema issue. Please contact support.';
         } else {
             errorMessage += 'Please try again.';
         }
@@ -614,7 +725,7 @@ function showToast(message, type) {
         document.body.appendChild(toast);
     }
     
-    const colors = { success: '#10B981', error: '#EF4444', info: '#6B21E5' };
+    const colors = { success: '#10B981', error: '#EF4444', info: '#6B21E5', warning: '#F59E0B' };
     toast.style.backgroundColor = colors[type] || colors.info;
     toast.textContent = message;
     toast.classList.add('show');
