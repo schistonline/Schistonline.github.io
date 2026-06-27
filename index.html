@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>BuyUganda.online - Uganda's B2B Marketplace</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/unified.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-cube">
+                    <div class="cube">
+                        <div class="face front"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                    </div>
+                </div>
+                <span class="logo-text">BuyUganda<span>.online</span></span>
+            </a>
+            
+            <div class="header-right">
+                <button class="search-toggle" id="searchToggle">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Search Bar -->
+        <div class="search-bar" id="searchBar">
+            <input type="text" placeholder="Search suppliers..." id="searchInput">
+            <button class="search-close" id="searchClose"><i class="fas fa-times"></i></button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <a href="#" class="nav-tab active">Suppliers</a>
+        <a href="request-quote.html" class="nav-tab">Request for Quotation</a>
+    </div>
+
+    <!-- Banners Carousel -->
+    <section class="banner-section">
+        <div class="swiper banner-swiper">
+            <div class="swiper-wrapper" id="bannerWrapper">
+                <!-- Banners loaded from database -->
+            </div>
+            <div class="swiper-pagination" id="bannerPagination"></div>
+        </div>
+    </section>
+
+    <!-- Hot Suppliers Carousel -->
+    <section class="hot-suppliers-section">
+        <div class="section-header">
+            <h2 class="section-title"><i class="fas fa-fire"></i> Hot Suppliers</h2>
+            <a href="suppliers.html" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
+        </div>
+        <div class="swiper hot-swiper">
+            <div class="swiper-wrapper" id="hotSuppliersWrapper">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Suppliers Grid -->
+    <section class="suppliers-grid-section">
+        <div class="section-header">
+            <h2 class="section-title"><i class="fas fa-warehouse"></i> Suppliers</h2>
+            <a href="suppliers.html" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
+        </div>
+        <div class="suppliers-grid" id="suppliersGrid">
+            <!-- Populated by JS -->
+            <div class="loading-grid">
+                <div class="spinner"></div>
+                <p>Loading suppliers...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Load More Button -->
+    <div class="load-more">
+        <button class="load-more-btn" id="loadMoreBtn">Load More Suppliers</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="silverlands-gateway.html" class="nav-item">
+            <i class="fas fa-store"></i>
+            <span>Brand 2</span>
+        </a>
+        <a href="rankings.html" class="nav-item">
+            <i class="fas fa-trophy"></i>
+            <span>Rank V</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>My Account</span>
+        </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="js/unified.js"></script>
+</body>
+</html>
