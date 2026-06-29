@@ -50,15 +50,13 @@
         <a href="request-quote.html" class="nav-tab">Request for Quotation</a>
     </div>
 
-    <!-- Banners Carousel -->
-    <section class="banner-section">
-        <div class="swiper banner-swiper">
-            <div class="swiper-wrapper" id="bannerWrapper">
-                <!-- Banners loaded from database -->
-            </div>
-            <div class="swiper-pagination" id="bannerPagination"></div>
+    <!-- Banners Carousel - MATCHES INDEX.HTML EXACTLY -->
+    <div class="swiper banner-swiper">
+        <div class="swiper-wrapper" id="bannerWrapper">
+            <!-- Banners loaded from database -->
         </div>
-    </section>
+        <div class="swiper-pagination"></div>
+    </div>
 
     <!-- Hot Suppliers Carousel -->
     <section class="hot-suppliers-section">
@@ -76,15 +74,11 @@
     <!-- Suppliers Grid -->
     <section class="suppliers-grid-section">
         <div class="section-header">
-            <h2 class="section-title"><i class="fas fa-warehouse"></i> Suppliers</h2>
+            <h2 class="section-title"><i class="fas fa-warehouse"></i> All Suppliers</h2>
             <a href="suppliers.html" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
         </div>
         <div class="suppliers-grid" id="suppliersGrid">
             <!-- Populated by JS -->
-            <div class="loading-grid">
-                <div class="spinner"></div>
-                <p>Loading suppliers...</p>
-            </div>
         </div>
     </section>
 
@@ -93,17 +87,114 @@
         <button class="load-more-btn" id="loadMoreBtn">Load More Suppliers</button>
     </div>
 
+    <!-- Professional B2B Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Company Info -->
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <div class="logo-cube small">
+                            <div class="cube">
+                                <div class="face front"></div>
+                                <div class="face right"></div>
+                                <div class="face top"></div>
+                            </div>
+                        </div>
+                        <span class="footer-logo-text">BuyUganda<span>.online</span></span>
+                    </div>
+                    <p class="footer-about">Uganda's premier B2B marketplace connecting verified suppliers with serious buyers. Trusted by 5,000+ businesses.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-col">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="how-it-works.html"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                        <li><a href="pricing.html"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+                        <li><a href="become-supplier.html"><i class="fas fa-chevron-right"></i> Become a Supplier</a></li>
+                        <li><a href="help.html"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                    </ul>
+                </div>
+
+                <!-- For Buyers -->
+                <div class="footer-col">
+                    <h4 class="footer-title">For Buyers</h4>
+                    <ul class="footer-links">
+                        <li><a href="how-to-buy.html"><i class="fas fa-chevron-right"></i> How to Buy</a></li>
+                        <li><a href="request-quote.html"><i class="fas fa-chevron-right"></i> Request for Quote</a></li>
+                        <li><a href="supplier-verification.html"><i class="fas fa-chevron-right"></i> Supplier Verification</a></li>
+                        <li><a href="buyer-protection.html"><i class="fas fa-chevron-right"></i> Buyer Protection</a></li>
+                        <li><a href="trade-assurance.html"><i class="fas fa-chevron-right"></i> Trade Assurance</a></li>
+                    </ul>
+                </div>
+
+                <!-- For Suppliers -->
+                <div class="footer-col">
+                    <h4 class="footer-title">For Suppliers</h4>
+                    <ul class="footer-links">
+                        <li><a href="sell-on-BuyUganda.online"><i class="fas fa-chevron-right"></i> Sell on BuyUganda</a></li>
+                        <li><a href="supplier-success.html"><i class="fas fa-chevron-right"></i> Supplier Success</a></li>
+                        <li><a href="advertise.html"><i class="fas fa-chevron-right"></i> Advertising</a></li>
+                        <li><a href="logistics-partner.html"><i class="fas fa-chevron-right"></i> Logistics Partner</a></li>
+                        <li><a href="supplier-standards.html"><i class="fas fa-chevron-right"></i> Supplier Standards</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="footer-col">
+                    <h4 class="footer-title">Contact Us</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
+                        <li><i class="fas fa-phone"></i> +256 700 123456</li>
+                        <li><i class="fas fa-envelope"></i> info@BuyUganda.ug</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 6:00 PM</li>
+                    </ul>
+                    <div class="footer-badge">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=ISO" alt="ISO Certified">
+                        <img src="https://via.placeholder.com/80x40/6B21E5/FFFFFF?text=SSL" alt="SSL Secure">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2026 BuyUganda. All rights reserved. Uganda's Trusted B2B Marketplace.</p>
+                    <div class="footer-bottom-links">
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="disclaimer.html">Disclaimer</a>
+                        <a href="sitemap.html">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meta AI Credit -->
+        <div class="meta-credit">
+            <span>◆</span> BuyUganda.online
+        </div>
+    </footer>
+
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active">
             <i class="fas fa-home"></i>
             <span>Home</span>
         </a>
-        <a href="silverlands-gateway.html" class="nav-item">
+        <a href="brand-2.github.io" class="nav-item">
             <i class="fas fa-store"></i>
             <span>Brand 2</span>
         </a>
-        <a href="rankings.html" class="nav-item">
+        <a href="ranka-v.github.io" class="nav-item">
             <i class="fas fa-trophy"></i>
             <span>Rank V</span>
         </a>
@@ -115,6 +206,12 @@
 
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p id="loadingMessage">Loading...</p>
+    </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
