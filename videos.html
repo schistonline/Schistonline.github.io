@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Help Videos - BuyUganda.online</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/videos.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="header-title">Help Videos</div>
+        <div class="header-actions">
+            <button class="header-icon" id="searchToggle">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-bar" id="searchBar">
+        <div class="search-input-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search videos..." oninput="VideoPage.filterVideos()">
+            <button class="search-close" id="searchClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading videos...</p>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="category-filters" id="categoryFilters">
+            <button class="filter-chip active" data-category="all" onclick="VideoPage.filterByCategory('all')">All</button>
+            <button class="filter-chip" data-category="general" onclick="VideoPage.filterByCategory('general')">General</button>
+            <button class="filter-chip" data-category="tutorial" onclick="VideoPage.filterByCategory('tutorial')">Tutorials</button>
+            <button class="filter-chip" data-category="guide" onclick="VideoPage.filterByCategory('guide')">Guides</button>
+            <button class="filter-chip" data-category="faq" onclick="VideoPage.filterByCategory('faq')">FAQ</button>
+            <button class="filter-chip" data-category="product" onclick="VideoPage.filterByCategory('product')">Product Demos</button>
+            <button class="filter-chip" data-category="how-to" onclick="VideoPage.filterByCategory('how-to')">How To</button>
+            <button class="filter-chip" data-category="testimonial" onclick="VideoPage.filterByCategory('testimonial')">Testimonials</button>
+        </div>
+
+        <!-- Videos Grid -->
+        <div class="videos-grid" id="videosGrid">
+            <!-- Videos will be loaded here -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">
+                <i class="fas fa-video"></i>
+            </div>
+            <h3>No Videos Found</h3>
+            <p id="emptyMessage">No videos match your search criteria.</p>
+            <button class="btn-primary" onclick="VideoPage.clearFilters()">
+                <i class="fas fa-undo"></i> Clear Filters
+            </button>
+        </div>
+
+        <!-- Load More -->
+        <div class="load-more" id="loadMoreContainer" style="display: none;">
+            <button class="load-more-btn" id="loadMoreBtn" onclick="VideoPage.loadMore()">
+                Load More Videos
+            </button>
+        </div>
+    </main>
+
+    <!-- Video Player Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-overlay" onclick="VideoPage.closeVideoModal()"></div>
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fab fa-youtube" style="color: #FF0000;"></i> <span id="videoModalTitle">Video</span></h3>
+                <button class="modal-close" onclick="VideoPage.closeVideoModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="video-container" id="videoModalContainer">
+                    <iframe id="videoIframe" 
+                            width="100%" 
+                            height="400" 
+                            frameborder="0" 
+                            allow="autoplay; encrypted-media" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-details" id="videoDetails">
+                    <h4 id="videoDetailTitle"></h4>
+                    <p id="videoDetailDescription"></p>
+                    <div class="video-meta">
+                        <span id="videoDetailViews"><i class="fas fa-eye"></i> 0 views</span>
+                        <span id="videoDetailCategory"><i class="fas fa-tag"></i> General</span>
+                        <span id="videoDetailDate"><i class="fas fa-calendar"></i> </span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="VideoPage.closeVideoModal()">Close</button>
+                <a href="#" target="_blank" class="btn btn-primary" id="watchOnYoutubeBtn">
+                    <i class="fab fa-youtube"></i> Watch on YouTube
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/videos.js"></script>
+</body>
+</html>
