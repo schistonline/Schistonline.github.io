@@ -1,0 +1,1557 @@
+h<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Logistics Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* ============================================
+           LOGISTICS PROVIDER DASHBOARD - MOBILE FIRST
+           ============================================ */
+
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f3f4f6;
+            color: #1f2937;
+            padding-bottom: 80px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== LOADING OVERLAY ===== */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 9999;
+        }
+        .loading-overlay.show {
+            display: flex;
+        }
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #0B4F6C;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .loading-overlay p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            background: white;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            min-height: 56px;
+        }
+        .top-bar .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+        .company-logo {
+            width: 38px;
+            height: 38px;
+            background: #0B4F6C;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .company-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .company-info h1 {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .company-info p {
+            font-size: 11px;
+            color: #6b7280;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .top-bar .right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #10b981;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .status-badge.offline {
+            background: #9ca3af;
+        }
+        .status-badge i {
+            font-size: 7px;
+        }
+        .status-badge .status-text {
+            display: none;
+        }
+        .profile-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #0B4F6C;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            flex-shrink: 0;
+        }
+
+        /* ===== WELCOME BANNER ===== */
+        .welcome-banner {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            padding: 16px 20px;
+            margin: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .welcome-banner h2 {
+            font-size: 17px;
+            font-weight: 600;
+        }
+        .welcome-banner h2 span {
+            font-weight: 400;
+        }
+        .welcome-banner p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+        .welcome-banner .btn {
+            background: white;
+            color: #0B4F6C;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+            transition: transform 0.15s;
+        }
+        .welcome-banner .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== STATS GRID ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 0 16px 12px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 12px 8px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e5e7eb;
+            transition: transform 0.15s;
+        }
+        .stat-card:active {
+            transform: scale(0.96);
+        }
+        .stat-card .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0B4F6C;
+            line-height: 1.2;
+        }
+        .stat-card .label {
+            font-size: 10px;
+            color: #6b7280;
+            margin-top: 2px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== TAB BAR (Bottom Navigation) ===== */
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            border-top: 1px solid #e5e7eb;
+            z-index: 200;
+            padding: 4px 0 env(safe-area-inset-bottom);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.04);
+        }
+        .tab-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6px 0 4px;
+            font-size: 10px;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            position: relative;
+            gap: 1px;
+        }
+        .tab-item i {
+            font-size: 20px;
+            transition: 0.2s;
+        }
+        .tab-item.active {
+            color: #0B4F6C;
+        }
+        .tab-item.active i {
+            color: #0B4F6C;
+        }
+        .tab-item .tab-badge {
+            position: absolute;
+            top: 2px;
+            right: 50%;
+            transform: translateX(calc(50% + 20px));
+            background: #ef4444;
+            color: white;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 30px;
+            min-width: 16px;
+            text-align: center;
+            line-height: 14px;
+        }
+        .tab-item:active {
+            transform: scale(0.92);
+        }
+
+        /* ===== LIST CONTAINER ===== */
+        .list-container {
+            padding: 0 16px;
+        }
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+        .list-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .list-header .count {
+            background: #e5e7eb;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        /* ===== REQUEST CARDS ===== */
+        .request-card {
+            background: white;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            transition: transform 0.15s;
+        }
+        .request-card:active {
+            transform: scale(0.98);
+        }
+        .request-card.urgent {
+            border-left: 4px solid #ef4444;
+        }
+        .request-card .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .request-card .ref {
+            font-weight: 600;
+            font-size: 14px;
+            color: #1f2937;
+        }
+        .request-card .status-tag {
+            font-size: 11px;
+            background: #e5e7eb;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-weight: 500;
+            text-transform: capitalize;
+            color: #4b5563;
+            flex-shrink: 0;
+        }
+        .request-card .status-tag.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .request-card .status-tag.accepted {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .request-card .status-tag.in_transit {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .request-card .status-tag.delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .request-card .route {
+            font-size: 13px;
+            color: #4b5563;
+            font-weight: 500;
+        }
+        .request-card .meta {
+            font-size: 12px;
+            color: #6b7280;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .request-card .meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .request-card .meta i {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        .request-card .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f3f4f6;
+        }
+        .request-card .actions button {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: opacity 0.15s;
+            min-height: 38px;
+        }
+        .request-card .actions button:active {
+            opacity: 0.7;
+        }
+        .btn-quote {
+            background: #0B4F6C;
+            color: white;
+        }
+        .btn-wa {
+            background: #25D366;
+            color: white;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #d1d5db !important;
+            color: #4b5563;
+        }
+        .btn-outline:hover {
+            background: #f9fafb;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7280;
+        }
+        .empty-state i {
+            font-size: 48px;
+            color: #d1d5db;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 16px 16px 0 0;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px 20px 24px;
+            animation: slideUp 0.25s ease;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .modal-header h3 {
+            font-size: 17px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-header h3 i {
+            color: #0B4F6C;
+        }
+        .modal-header .close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 4px;
+            line-height: 1;
+        }
+        .modal-header .close:active {
+            transform: scale(0.9);
+        }
+        .modal .summary {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+        .modal .summary .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dashed #e5e7eb;
+        }
+        .modal .summary .item:last-child {
+            border-bottom: none;
+        }
+        .modal .summary .item .label {
+            color: #6b7280;
+        }
+        .modal .summary .item .value {
+            font-weight: 500;
+            color: #1f2937;
+        }
+        .modal .form-group {
+            margin-bottom: 14px;
+        }
+        .modal .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 13px;
+            margin-bottom: 4px;
+            color: #374151;
+        }
+        .modal .form-group label .required {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+        .modal .form-group input,
+        .modal .form-group select,
+        .modal .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: 0.2s;
+            background: white;
+            color: #1f2937;
+        }
+        .modal .form-group input:focus,
+        .modal .form-group select:focus,
+        .modal .form-group textarea:focus {
+            outline: none;
+            border-color: #0B4F6C;
+            box-shadow: 0 0 0 3px rgba(11, 79, 108, 0.1);
+        }
+        .modal .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .modal .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .modal .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+        .modal .actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+        .modal .actions button:active {
+            opacity: 0.7;
+        }
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            max-width: 90%;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+        .toast.success {
+            background: #10b981;
+        }
+        .toast.error {
+            background: #ef4444;
+        }
+
+        /* ============================================
+           RESPONSIVE BREAKPOINTS
+           ============================================ */
+
+        /* Small phones */
+        @media (max-width: 380px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            .stat-card .value {
+                font-size: 18px;
+            }
+            .welcome-banner h2 {
+                font-size: 15px;
+            }
+            .welcome-banner p {
+                font-size: 12px;
+            }
+            .top-bar .right .status-badge .status-text {
+                display: none;
+            }
+            .top-bar .right .status-badge {
+                padding: 4px 8px;
+            }
+            .modal .form-row {
+                grid-template-columns: 1fr;
+            }
+            .request-card .meta {
+                gap: 8px;
+                font-size: 11px;
+            }
+        }
+
+        /* Tablets and larger phones */
+        @media (min-width: 480px) {
+            .top-bar .right .status-badge .status-text {
+                display: inline;
+            }
+            .stats-grid {
+                gap: 12px;
+            }
+            .stat-card .value {
+                font-size: 24px;
+            }
+            .stat-card {
+                padding: 16px 12px;
+            }
+            .welcome-banner {
+                padding: 20px 24px;
+                margin: 16px 20px;
+                border-radius: 16px;
+            }
+            .welcome-banner h2 {
+                font-size: 20px;
+            }
+        }
+
+        /* Landscape phones */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .welcome-banner {
+                padding: 12px 16px;
+                margin: 8px 16px;
+            }
+            .welcome-banner h2 {
+                font-size: 15px;
+            }
+            .welcome-banner p {
+                font-size: 12px;
+            }
+            .stats-grid {
+                gap: 6px;
+                padding: 0 16px 8px;
+            }
+            .stat-card {
+                padding: 8px 6px;
+            }
+            .stat-card .value {
+                font-size: 16px;
+            }
+            .stat-card .label {
+                font-size: 9px;
+            }
+            .list-container {
+                padding: 0 16px 8px;
+            }
+            .request-card {
+                padding: 10px 12px;
+                margin-bottom: 8px;
+            }
+            .request-card .actions button {
+                padding: 6px 10px;
+                font-size: 11px;
+                min-height: 32px;
+            }
+            .modal-content {
+                max-height: 80vh;
+                padding: 16px;
+            }
+        }
+
+        /* Desktop */
+        @media (min-width: 768px) {
+            .main-wrapper {
+                max-width: 900px;
+                margin: 0 auto;
+            }
+            .stats-grid {
+                gap: 16px;
+            }
+            .stat-card .value {
+                font-size: 28px;
+            }
+            .request-card {
+                padding: 18px 20px;
+            }
+            .modal-content {
+                border-radius: 16px;
+                padding: 24px;
+            }
+            .modal {
+                align-items: center;
+            }
+            @keyframes slideUp {
+                from {
+                    transform: translateY(20px) scale(0.96);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0) scale(1);
+                    opacity: 1;
+                }
+            }
+        }
+
+        /* Safe area insets */
+        @supports (padding: max(0px)) {
+            .tab-bar {
+                padding-bottom: max(4px, env(safe-area-inset-bottom));
+            }
+            .toast {
+                bottom: max(90px, calc(env(safe-area-inset-bottom) + 80px));
+            }
+        }
+
+        /* Touch improvements */
+        button,
+        .tab-item,
+        .stat-card,
+        .request-card {
+            touch-action: manipulation;
+        }
+
+        /* Scrollbar styling */
+        .modal-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading your dashboard...</p>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Top Bar -->
+    <header class="top-bar">
+        <div class="left">
+            <div class="company-logo" id="companyLogo">S</div>
+            <div class="company-info">
+                <h1 id="companyName">Company</h1>
+                <p id="providerInfo">Code: • Loading...</p>
+            </div>
+        </div>
+        <div class="right">
+            <div class="status-badge" id="statusBadge">
+                <i class="fas fa-circle"></i>
+                <span class="status-text">Online</span>
+            </div>
+            <button class="profile-icon" id="profileIcon" onclick="logout()" aria-label="Logout">
+                <i class="fas fa-sign-out-alt fa-sm"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner" id="welcomeBanner">
+            <div>
+                <h2>Welcome back, <span id="welcomeName">Supplier</span>!</h2>
+                <p>You have <span id="pendingCount">0</span> new shipping requests</p>
+            </div>
+            <button class="btn" onclick="switchTab('pending')">
+                <i class="fas fa-eye"></i> View
+            </button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="value" id="statPending">0</div>
+                <div class="label">Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="value" id="statQuoted">0</div>
+                <div class="label">Quoted</div>
+            </div>
+            <div class="stat-card">
+                <div class="value" id="statActive">0</div>
+                <div class="label">Active</div>
+            </div>
+            <div class="stat-card">
+                <div class="value" id="statRevenue">0</div>
+                <div class="label">Revenue</div>
+            </div>
+        </div>
+
+        <!-- List Container -->
+        <div class="list-container" id="listContainer">
+            <div class="list-header">
+                <h3 id="listTitle">Pending Requests</h3>
+                <span class="count" id="listCount">0</span>
+            </div>
+            <div id="requestList">
+                <!-- Cards rendered here -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="tab-bar" id="tabBar">
+        <button class="tab-item active" data-tab="pending" onclick="switchTab('pending')">
+            <i class="fas fa-clock"></i>
+            <span>Pending</span>
+            <span class="tab-badge" id="pendingBadge" style="display:none;">0</span>
+        </button>
+        <button class="tab-item" data-tab="quoted" onclick="switchTab('quoted')">
+            <i class="fas fa-file-invoice"></i>
+            <span>Quoted</span>
+        </button>
+        <button class="tab-item" data-tab="active" onclick="switchTab('active')">
+            <i class="fas fa-truck"></i>
+            <span>Active</span>
+        </button>
+        <button class="tab-item" data-tab="completed" onclick="switchTab('completed')">
+            <i class="fas fa-check-circle"></i>
+            <span>Done</span>
+        </button>
+    </div>
+
+    <!-- Quote Modal -->
+    <div id="quoteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-tag"></i> Submit Quote</h3>
+                <button class="close" onclick="closeModal()" aria-label="Close">&times;</button>
+            </div>
+            <div class="summary" id="modalSummary">
+                <div class="item"><span class="label">Request #</span><span class="value" id="modalRef">-</span></div>
+                <div class="item"><span class="label">Route</span><span class="value" id="modalRoute">-</span></div>
+                <div class="item"><span class="label">Weight</span><span class="value" id="modalWeight">-</span></div>
+                <div class="item"><span class="label">Items</span><span class="value" id="modalItems">-</span></div>
+            </div>
+            <form id="quoteForm" onsubmit="submitQuote(event)">
+                <div class="form-group">
+                    <label>Amount (UGX) <span class="required">*</span></label>
+                    <input type="number" id="quoteAmount" placeholder="e.g., 750000" min="1" step="1000" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Delivery Days <span class="required">*</span></label>
+                        <input type="number" id="estimatedDays" placeholder="3" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Service</label>
+                        <select id="serviceType">
+                            <option value="standard">Standard</option>
+                            <option value="express">Express</option>
+                            <option value="economy">Economy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="quoteNotes" rows="2" placeholder="Any special conditions..."></textarea>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary" id="submitQuoteBtn">
+                        <i class="fas fa-paper-plane"></i> Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // LOGISTICS PROVIDER DASHBOARD - JAVASCRIPT
+        // ============================================
+
+        // ===== SUPABASE CONFIG =====
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ===== STATE =====
+        let provider = null;
+        let currentTab = 'pending';
+        let requests = [];
+        let myQuotes = [];
+        let activeJobs = [];
+        let completedJobs = [];
+        let currentRequestId = null;
+        let isLoading = false;
+
+        // ===== DOM REFS =====
+        const $ = id => document.getElementById(id);
+        const loadingOverlay = $('loadingOverlay');
+        const toast = $('toast');
+        const companyLogo = $('companyLogo');
+        const companyName = $('companyName');
+        const providerInfo = $('providerInfo');
+        const statusBadge = $('statusBadge');
+        const welcomeName = $('welcomeName');
+        const pendingCount = $('pendingCount');
+        const pendingBadge = $('pendingBadge');
+        const statPending = $('statPending');
+        const statQuoted = $('statQuoted');
+        const statActive = $('statActive');
+        const statRevenue = $('statRevenue');
+        const listTitle = $('listTitle');
+        const listCount = $('listCount');
+        const requestList = $('requestList');
+        const quoteModal = $('quoteModal');
+        const modalRef = $('modalRef');
+        const modalRoute = $('modalRoute');
+        const modalWeight = $('modalWeight');
+        const modalItems = $('modalItems');
+        const quoteAmount = $('quoteAmount');
+        const estimatedDays = $('estimatedDays');
+        const serviceType = $('serviceType');
+        const quoteNotes = $('quoteNotes');
+        const submitQuoteBtn = $('submitQuoteBtn');
+
+        // ===== HELPERS =====
+        function showLoading(show) {
+            loadingOverlay.classList.toggle('show', show);
+        }
+
+        function showToast(msg, type = 'info') {
+            toast.textContent = msg;
+            toast.className = 'toast ' + type;
+            // Force reflow for animation
+            void toast.offsetWidth;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function formatMoney(amount) {
+            if (!amount && amount !== 0) return '0';
+            return Number(amount).toLocaleString('en-UG');
+        }
+
+        function formatDate(date) {
+            if (!date) return 'N/A';
+            try {
+                const d = new Date(date);
+                return d.toLocaleDateString('en-UG', { day: 'numeric', month: 'short' });
+            } catch {
+                return 'N/A';
+            }
+        }
+
+        function timeAgo(date) {
+            if (!date) return 'N/A';
+            try {
+                const diff = Math.floor((Date.now() - new Date(date)) / 1000);
+                if (diff < 60) return 'Just now';
+                if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+                if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+                if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+                return formatDate(date);
+            } catch {
+                return 'N/A';
+            }
+        }
+
+        function isUrgent(request) {
+            if (!request.requested_pickup_date) return false;
+            try {
+                const daysLeft = Math.ceil((new Date(request.requested_pickup_date) - Date.now()) / (1000 * 60 * 60 * 24));
+                return daysLeft <= 2;
+            } catch {
+                return false;
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ===== AUTH & LOAD PROVIDER =====
+        async function init() {
+            showLoading(true);
+            try {
+                const { data: { session }, error } = await sb.auth.getSession();
+                if (error || !session) {
+                    window.location.href = 'logistics-login.html';
+                    return;
+                }
+
+                const { data: p, error: pErr } = await sb
+                    .from('logistics_providers')
+                    .select('*')
+                    .eq('profile_id', session.user.id)
+                    .single();
+
+                if (pErr || !p) {
+                    showToast('Provider not found. Please register.', 'error');
+                    setTimeout(() => window.location.href = 'logistics-register.html', 2000);
+                    return;
+                }
+
+                provider = p;
+
+                // Update UI
+                companyLogo.textContent = p.company_name?.charAt(0) || 'P';
+                companyName.textContent = p.company_name || 'Provider';
+                providerInfo.textContent = `Code: ${p.provider_code || 'N/A'} • ${p.is_active ? 'Active' : 'Inactive'}`;
+                welcomeName.textContent = (p.company_name || 'Supplier').split(' ')[0];
+
+                statusBadge.className = 'status-badge' + (p.is_active ? '' : ' offline');
+                statusBadge.innerHTML = `<i class="fas fa-circle"></i><span class="status-text">${p.is_active ? 'Online' : 'Offline'}</span>`;
+
+                await loadData();
+            } catch (err) {
+                console.error('Init error:', err);
+                showToast('Error loading dashboard', 'error');
+            }
+            showLoading(false);
+        }
+
+        // ===== LOAD DATA =====
+        async function loadData() {
+            if (isLoading) return;
+            isLoading = true;
+
+            try {
+                // 1. Pending requests (status=quoting, not quoted by this provider)
+                const { data: allReqs, error: reqErr } = await sb
+                    .from('shipment_requests')
+                    .select('*, quotes:shipment_quotes(*)')
+                    .eq('status', 'quoting')
+                    .order('created_at', { ascending: false });
+
+                if (reqErr) throw reqErr;
+
+                requests = (allReqs || []).filter(req => {
+                    const hasQuote = req.quotes?.some(q => q.provider_id === provider.id);
+                    return !hasQuote;
+                });
+
+                // 2. My quotes
+                const { data: quotes, error: qErr } = await sb
+                    .from('shipment_quotes')
+                    .select('*, request:shipment_requests(*)')
+                    .eq('provider_id', provider.id)
+                    .in('status', ['pending', 'accepted'])
+                    .order('created_at', { ascending: false });
+
+                if (!qErr) {
+                    myQuotes = quotes || [];
+                }
+
+                // 3. Active jobs (accepted, not delivered)
+                const { data: active, error: aErr } = await sb
+                    .from('shipment_quotes')
+                    .select('*, request:shipment_requests(*)')
+                    .eq('provider_id', provider.id)
+                    .eq('status', 'accepted')
+                    .not('request.status', 'eq', 'delivered')
+                    .order('created_at', { ascending: false });
+
+                if (!aErr) {
+                    activeJobs = active || [];
+                }
+
+                // 4. Completed (delivered)
+                const { data: completed, error: cErr } = await sb
+                    .from('shipment_quotes')
+                    .select('*, request:shipment_requests(*)')
+                    .eq('provider_id', provider.id)
+                    .eq('status', 'accepted')
+                    .eq('request.status', 'delivered')
+                    .order('created_at', { ascending: false });
+
+                if (!cErr) {
+                    completedJobs = completed || [];
+                }
+
+                // Update stats
+                statPending.textContent = requests.length;
+                statQuoted.textContent = myQuotes.length;
+                statActive.textContent = activeJobs.length;
+
+                const revenue = completedJobs.reduce((sum, q) => sum + (q.quoted_amount || 0), 0);
+                statRevenue.textContent = formatMoney(revenue);
+
+                pendingCount.textContent = requests.length;
+
+                // Update badge
+                if (requests.length > 0) {
+                    pendingBadge.style.display = 'block';
+                    pendingBadge.textContent = requests.length;
+                } else {
+                    pendingBadge.style.display = 'none';
+                }
+
+                // Render current tab
+                renderTab(currentTab);
+            } catch (err) {
+                console.error('Load data error:', err);
+                showToast('Failed to load data', 'error');
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        // ===== RENDER TAB =====
+        function renderTab(tab) {
+            currentTab = tab;
+
+            // Update tab buttons
+            document.querySelectorAll('.tab-item').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tab);
+            });
+
+            let items = [];
+            let title = '';
+            let emptyMsg = '';
+
+            switch (tab) {
+                case 'pending':
+                    items = requests;
+                    title = 'Pending Requests';
+                    emptyMsg = 'No pending requests';
+                    break;
+                case 'quoted':
+                    items = myQuotes;
+                    title = 'My Quotes';
+                    emptyMsg = 'No quotes submitted';
+                    break;
+                case 'active':
+                    items = activeJobs;
+                    title = 'Active Jobs';
+                    emptyMsg = 'No active jobs';
+                    break;
+                case 'completed':
+                    items = completedJobs;
+                    title = 'Completed';
+                    emptyMsg = 'No completed jobs';
+                    break;
+                default:
+                    items = [];
+                    title = 'Requests';
+                    emptyMsg = 'No items';
+            }
+
+            listTitle.textContent = title;
+            listCount.textContent = items.length;
+
+            if (items.length === 0) {
+                requestList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>${emptyMsg}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            items.forEach(item => {
+                let request = item;
+                let quote = null;
+                let isQuote = false;
+
+                if (item.request) {
+                    quote = item;
+                    request = item.request;
+                    isQuote = true;
+                }
+
+                if (!request) return;
+
+                const ref = request.request_number || 'N/A';
+                const route = `${request.origin_location || '?'} → ${request.destination_location || '?'}`;
+                const weight = request.estimated_weight_kg || '?';
+                const itemDesc = request.item_description || 'N/A';
+                const pickup = request.requested_pickup_date ? formatDate(request.requested_pickup_date) : 'ASAP';
+                const status = isQuote ? (quote.status || 'pending') : 'pending';
+                const urgent = isUrgent(request);
+
+                let actions = '';
+                let statusClass = 'pending';
+
+                if (tab === 'pending') {
+                    statusClass = 'pending';
+                    actions = `
+                        <button class="btn-quote" onclick="openQuoteModal('${request.id}')">
+                            <i class="fas fa-tag"></i> Quote
+                        </button>
+                        <button class="btn-wa" onclick="contactWhatsApp('${request.buyer_id}')">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                    `;
+                } else if (tab === 'quoted') {
+                    statusClass = quote?.status || 'pending';
+                    actions = `
+                        <button class="btn-outline" onclick="viewQuoteDetails('${quote?.id}')">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                    `;
+                } else if (tab === 'active') {
+                    statusClass = 'in_transit';
+                    actions = `
+                        <button class="btn-outline" onclick="updateTracking('${quote?.id}')">
+                            <i class="fas fa-map-marker-alt"></i> Update
+                        </button>
+                    `;
+                } else if (tab === 'completed') {
+                    statusClass = 'delivered';
+                    actions = `
+                        <button class="btn-outline" onclick="viewInvoice('${quote?.id}')">
+                            <i class="fas fa-file-invoice"></i> Invoice
+                        </button>
+                    `;
+                }
+
+                // Amount display for quotes
+                let amountHtml = '';
+                if (isQuote && quote?.quoted_amount) {
+                    amountHtml = `<span><i class="fas fa-money-bill"></i> UGX ${formatMoney(quote.quoted_amount)}</span>`;
+                }
+
+                html += `
+                    <div class="request-card ${urgent ? 'urgent' : ''}">
+                        <div class="row">
+                            <span class="ref">${escapeHtml(ref)}</span>
+                            <span class="status-tag ${statusClass}">${status.replace('_', ' ')}</span>
+                        </div>
+                        <div class="route">${escapeHtml(route)}</div>
+                        <div class="meta">
+                            <span><i class="fas fa-weight"></i> ${escapeHtml(String(weight))} kg</span>
+                            <span><i class="fas fa-box"></i> ${escapeHtml(itemDesc)}</span>
+                            <span><i class="fas fa-calendar"></i> ${escapeHtml(pickup)}</span>
+                            ${amountHtml}
+                        </div>
+                        <div class="actions">${actions}</div>
+                    </div>
+                `;
+            });
+
+            requestList.innerHTML = html;
+        }
+
+        // ===== TAB SWITCH =====
+        function switchTab(tab) {
+            if (tab === currentTab) return;
+            renderTab(tab);
+        }
+
+        // ===== QUOTE MODAL =====
+        function openQuoteModal(requestId) {
+            const req = requests.find(r => r.id === requestId);
+            if (!req) {
+                showToast('Request not found', 'error');
+                return;
+            }
+
+            currentRequestId = requestId;
+            modalRef.textContent = req.request_number || 'N/A';
+            modalRoute.textContent = `${req.origin_location || '?'} → ${req.destination_location || '?'}`;
+            modalWeight.textContent = `${req.estimated_weight_kg || '?'} kg`;
+            modalItems.textContent = req.item_description || 'N/A';
+
+            quoteAmount.value = '';
+            estimatedDays.value = '';
+            serviceType.value = 'standard';
+            quoteNotes.value = '';
+
+            quoteModal.classList.add('show');
+            // Focus first input after animation
+            setTimeout(() => quoteAmount.focus(), 300);
+        }
+
+        function closeModal() {
+            quoteModal.classList.remove('show');
+            currentRequestId = null;
+        }
+
+        async function submitQuote(e) {
+            e.preventDefault();
+
+            const amount = parseFloat(quoteAmount.value);
+            const days = parseInt(estimatedDays.value);
+            const service = serviceType.value;
+            const notes = quoteNotes.value.trim();
+
+            if (!amount || !days || amount <= 0 || days < 1) {
+                showToast('Please enter valid amount and days', 'error');
+                return;
+            }
+
+            submitQuoteBtn.disabled = true;
+            submitQuoteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+            try {
+                // Check if quote already exists
+                const { data: existing } = await sb
+                    .from('shipment_quotes')
+                    .select('id')
+                    .eq('request_id', currentRequestId)
+                    .eq('provider_id', provider.id)
+                    .maybeSingle();
+
+                let error;
+                if (existing) {
+                    const { error: updErr } = await sb
+                        .from('shipment_quotes')
+                        .update({
+                            quoted_amount: amount,
+                            estimated_days: days,
+                            service_type: service,
+                            notes: notes,
+                            status: 'pending',
+                            updated_at: new Date().toISOString()
+                        })
+                        .eq('id', existing.id);
+                    error = updErr;
+                } else {
+                    const validUntil = new Date(Date.now() + 7 * 86400000).toISOString();
+                    const { error: insErr } = await sb
+                        .from('shipment_quotes')
+                        .insert({
+                            request_id: currentRequestId,
+                            provider_id: provider.id,
+                            quoted_amount: amount,
+                            estimated_days: days,
+                            service_type: service,
+                            notes: notes,
+                            status: 'pending',
+                            valid_until: validUntil,
+                            created_at: new Date().toISOString()
+                        });
+                    error = insErr;
+                }
+
+                if (error) throw error;
+
+                showToast('Quote submitted successfully!', 'success');
+                closeModal();
+                await loadData();
+            } catch (err) {
+                console.error('Submit quote error:', err);
+                showToast(err.message || 'Failed to submit quote', 'error');
+            } finally {
+                submitQuoteBtn.disabled = false;
+                submitQuoteBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit';
+            }
+        }
+
+        // ===== QUOTE ACTIONS (placeholders) =====
+        function viewQuoteDetails(quoteId) {
+            showToast('Quote details coming soon', 'info');
+        }
+
+        function updateTracking(shipmentId) {
+            showToast('Tracking update coming soon', 'info');
+        }
+
+        function viewInvoice(shipmentId) {
+            showToast('Invoice coming soon', 'info');
+        }
+
+        // ===== WHATSAPP CONTACT =====
+        function contactWhatsApp(buyerId) {
+            // In production, fetch buyer's phone from profiles table
+            // For now, show a toast and open a demo WhatsApp link
+            showToast('Opening WhatsApp...', 'info');
+
+            // Get the request to find buyer info
+            const req = requests.find(r => r.buyer_id === buyerId);
+            if (req) {
+                // Try to get buyer phone from profiles
+                sb
+                    .from('profiles')
+                    .select('phone')
+                    .eq('id', buyerId)
+                    .single()
+                    .then(({ data }) => {
+                        const phone = data?.phone || '256700000000';
+                        const message = encodeURIComponent(
+                            `Hello! I'm ${provider.company_name}. I'm interested in providing shipping for your request.\n\n` +
+                            `Request: ${req.request_number || ''}\n` +
+                            `Route: ${req.origin_location || ''} → ${req.destination_location || ''}`
+                        );
+                        window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${message}`, '_blank');
+                    })
+                    .catch(() => {
+                        // Fallback
+                        const message = encodeURIComponent(
+                            `Hello! I'm ${provider.company_name}. I'd like to discuss shipping for your request.`
+                        );
+                        window.open(`https://wa.me/256700000000?text=${message}`, '_blank');
+                    });
+            } else {
+                const message = encodeURIComponent(
+                    `Hello! I'm ${provider.company_name}. I'd like to discuss shipping services.`
+                );
+                window.open(`https://wa.me/256700000000?text=${message}`, '_blank');
+            }
+        }
+
+        // ===== LOGOUT =====
+        async function logout() {
+            if (!confirm('Are you sure you want to logout?')) return;
+            try {
+                await sb.auth.signOut();
+                window.location.href = 'logistics-login.html';
+            } catch (err) {
+                console.error('Logout error:', err);
+                showToast('Error logging out', 'error');
+            }
+        }
+
+        // ===== REAL-TIME UPDATES =====
+        function setupRealtime() {
+            const channel = sb
+                .channel('provider-dashboard')
+                .on(
+                    'postgres_changes',
+                    { event: 'INSERT', schema: 'public', table: 'shipment_requests' },
+                    () => {
+                        showToast('New shipping request received!', 'success');
+                        loadData();
+                    }
+                )
+                .on(
+                    'postgres_changes',
+                    {
+                        event: 'UPDATE',
+                        schema: 'public',
+                        table: 'shipment_quotes',
+                        filter: `provider_id=eq.${provider?.id || 0}`
+                    },
+                    (payload) => {
+                        if (payload.new.status === 'accepted') {
+                            showToast('🎉 Quote accepted!', 'success');
+                        }
+                        loadData();
+                    }
+                )
+                .subscribe();
+        }
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            init().then(() => {
+                if (provider) setupRealtime();
+            });
+        });
+
+        // Close modal on backdrop click
+        quoteModal.addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ===== GLOBAL EXPOSURE =====
+        window.switchTab = switchTab;
+        window.openQuoteModal = openQuoteModal;
+        window.closeModal = closeModal;
+        window.submitQuote = submitQuote;
+        window.contactWhatsApp = contactWhatsApp;
+        window.logout = logout;
+        window.showToast = showToast;
+        window.viewQuoteDetails = viewQuoteDetails;
+        window.updateTracking = updateTracking;
+        window.viewInvoice = viewInvoice;
+    </script>
+</body>
+</html>
