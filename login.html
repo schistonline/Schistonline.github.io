@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  <title>Sign In - Buy Uganda B2B Marketplace</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #0B4F6C;
+      --primary-dark: #083b4f;
+      --primary-light: #1a6b8a;
+      --primary-gradient: linear-gradient(135deg, #0B4F6C 0%, #1a6b8a 100%);
+      --success: #10B981;
+      --danger: #EF4444;
+      --warning: #F59E0B;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --gray-900: #111827;
+      --border-radius: 16px;
+      --border-radius-sm: 12px;
+      --shadow: 0 4px 16px rgba(0,0,0,0.08);
+      --shadow-lg: 0 25px 50px -12px rgba(0,0,0,0.25);
+      --transition: all 0.2s ease;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .container { max-width: 440px; width: 100%; }
+    
+    .card { 
+      background: white; 
+      border-radius: 28px; 
+      padding: 32px 28px; 
+      box-shadow: var(--shadow-lg); 
+    }
+
+    .logo { text-align: center; margin-bottom: 24px; }
+    .logo h1 { 
+      font-size: 28px; 
+      font-weight: 700; 
+      background: var(--primary-gradient); 
+      -webkit-background-clip: text; 
+      background-clip: text; 
+      color: transparent; 
+    }
+    .logo p { color: var(--gray-500); font-size: 13px; margin-top: 6px; }
+
+    .brand-badge { 
+      display: inline-block; 
+      background: var(--gray-100); 
+      color: var(--gray-600); 
+      font-size: 12px; 
+      padding: 6px 14px; 
+      border-radius: 30px; 
+      margin-bottom: 24px; 
+      text-align: center; 
+      width: 100%; 
+    }
+
+    /* Alert */
+    .alert { 
+      padding: 12px 16px; 
+      border-radius: var(--border-radius-sm); 
+      margin-bottom: 20px; 
+      font-size: 14px; 
+      display: none; 
+    }
+    .alert.show { display: block; }
+    .alert-error { background: #FEF2F2; color: #991B1B; border-left: 4px solid #EF4444; }
+    .alert-success { background: #ECFDF5; color: #065F46; border-left: 4px solid #10B981; }
+    .alert-warning { background: #FFFBEB; color: #92400E; border-left: 4px solid #F59E0B; }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+    .divider span {
+      color: var(--gray-400);
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+    }
+    .form-group label .required {
+      color: var(--danger);
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--border-radius-sm);
+      font-size: 15px;
+      transition: var(--transition);
+      background: var(--gray-50);
+      color: var(--gray-800);
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(11, 79, 108, 0.1);
+      background: white;
+    }
+    .form-input::placeholder {
+      color: var(--gray-400);
+    }
+    .form-input.error {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+    }
+
+    .form-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .form-options label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--gray-600);
+      cursor: pointer;
+    }
+    .form-options label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    .forgot-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: var(--border-radius-sm);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: none;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+    }
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(11, 79, 108, 0.3);
+    }
+
+    .btn-google {
+      background: white;
+      color: var(--gray-700);
+      border: 2px solid var(--gray-300);
+    }
+    .btn-google:hover:not(:disabled) {
+      background: var(--gray-50);
+      border-color: var(--gray-400);
+      transform: translateY(-1px);
+    }
+
+    .btn-google img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    .spinner-dark {
+      border: 2px solid rgba(0,0,0,0.1);
+      border-top-color: var(--gray-600);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .register-link {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .register-link p {
+      color: var(--gray-600);
+      font-size: 14px;
+    }
+    .register-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    .security-note {
+      background: var(--gray-50);
+      border-radius: var(--border-radius-sm);
+      padding: 10px 14px;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--gray-500);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .legal-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+    }
+    .legal-footer a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+    }
+    .legal-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Password toggle */
+    .password-wrapper {
+      position: relative;
+    }
+    .password-wrapper .form-input {
+      padding-right: 48px;
+    }
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--gray-400);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px;
+    }
+    .password-toggle:hover {
+      color: var(--gray-600);
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 24px 20px; }
+      .form-options { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="logo">
+        <h1>Buy Uganda</h1>
+        <p>Uganda's Premier B2B Marketplace</p>
+      </div>
+
+      <div class="brand-badge">
+        🇺🇬 Trusted by 5,000+ Ugandan Businesses 🇺🇬
+      </div>
+
+      <div id="alert" class="alert"></div>
+
+      <!-- Email/Password Login -->
+      <form id="loginForm" onsubmit="return false;">
+        <div class="form-group">
+          <label for="emailInput">Email Address <span class="required">*</span></label>
+          <input 
+            type="email" 
+            id="emailInput" 
+            class="form-input" 
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="passwordInput">Password <span class="required">*</span></label>
+          <div class="password-wrapper">
+            <input 
+              type="password" 
+              id="passwordInput" 
+              class="form-input" 
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            >
+            <button type="button" class="password-toggle" id="passwordToggle" aria-label="Toggle password visibility">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label>
+            <input type="checkbox" id="rememberMe" checked>
+            Remember me
+          </label>
+          <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" id="emailSignInBtn" class="btn btn-primary">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span>or continue with</span>
+      </div>
+
+      <!-- Google Sign In -->
+      <button id="googleSignInBtn" class="btn btn-google">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Continue with Google
+      </button>
+
+      <div class="register-link">
+        <p>New to Buy Uganda? <a href="register.html">Create Business Account</a></p>
+      </div>
+
+      <div class="security-note">
+        <span>🔒</span>
+        <span>Your data is encrypted and secure. We never share your information.</span>
+      </div>
+    </div>
+
+    <div class="legal-footer">
+      <p>© 2026 Buy Uganda. All rights reserved.</p>
+      <p><a href="terms.html">Terms of Service</a> | <a href="privacy.html">Privacy Policy</a></p>
+    </div>
+  </div>
+
+  <!-- Font Awesome for password toggle icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (async function() {
+      const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+
+      const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { 
+          autoRefreshToken: true, 
+          persistSession: true, 
+          detectSessionInUrl: true, 
+          storage: localStorage 
+        }
+      });
+
+      // DOM Elements
+      const emailInput = document.getElementById('emailInput');
+      const passwordInput = document.getElementById('passwordInput');
+      const emailSignInBtn = document.getElementById('emailSignInBtn');
+      const googleBtn = document.getElementById('googleSignInBtn');
+      const alertDiv = document.getElementById('alert');
+      const rememberMe = document.getElementById('rememberMe');
+      const passwordToggle = document.getElementById('passwordToggle');
+
+      let isLoading = false;
+
+      // ============================================
+      // UTILITY FUNCTIONS
+      // ============================================
+      function showAlert(message, type = 'error') {
+        alertDiv.textContent = message;
+        alertDiv.className = `alert alert-${type} show`;
+        clearTimeout(window.alertTimeout);
+        window.alertTimeout = setTimeout(() => alertDiv.classList.remove('show'), 5000);
+      }
+
+      function setLoading(loading) {
+        isLoading = loading;
+        emailSignInBtn.disabled = loading;
+        googleBtn.disabled = loading;
+        
+        if (loading) {
+          emailSignInBtn.innerHTML = '<span class="spinner"></span> Signing in...';
+        } else {
+          emailSignInBtn.textContent = 'Sign In';
+        }
+      }
+
+      function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      // ============================================
+      // REDIRECT TO DASHBOARD
+      // ============================================
+      async function redirectToDashboard(userId) {
+        try {
+          // Check if user has a profile
+          const { data: profile, error: profileError } = await sb
+            .from('profiles')
+            .select('is_supplier, is_admin, full_name')
+            .eq('id', userId)
+            .single();
+
+          if (profileError) {
+            console.warn('Profile not found, redirecting to index');
+            window.location.href = 'index.html';
+            return;
+          }
+
+          // Determine role and redirect
+          if (profile?.is_admin) {
+            window.location.href = 'admin-dashboard.html';
+          } else if (profile?.is_supplier) {
+            window.location.href = 'supplier-dashboard.html';
+          } else {
+            window.location.href = 'index.html';
+          }
+        } catch (err) {
+          console.error('Redirect error:', err);
+          window.location.href = 'index.html';
+        }
+      }
+
+      // ============================================
+      // EMAIL SIGN IN
+      // ============================================
+      async function handleEmailSignIn(e) {
+        e.preventDefault();
+        
+        if (isLoading) return;
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        // Validation
+        if (!email) {
+          showAlert('Please enter your email address', 'error');
+          emailInput.focus();
+          return;
+        }
+
+        if (!validateEmail(email)) {
+          showAlert('Please enter a valid email address', 'error');
+          emailInput.focus();
+          return;
+        }
+
+        if (!password) {
+          showAlert('Please enter your password', 'error');
+          passwordInput.focus();
+          return;
+        }
+
+        if (password.length < 6) {
+          showAlert('Password must be at least 6 characters', 'error');
+          passwordInput.focus();
+          return;
+        }
+
+        setLoading(true);
+        showAlert('Signing in...', 'success');
+
+        try {
+          const { data, error } = await sb.auth.signInWithPassword({
+            email: email,
+            password: password,
+          });
+
+          if (error) throw error;
+
+          if (!data?.user) {
+            throw new Error('No user data returned');
+          }
+
+          showAlert('Welcome back! Redirecting...', 'success');
+          
+          // Store remember me preference
+          if (rememberMe.checked) {
+            localStorage.setItem('rememberMe', 'true');
+          } else {
+            localStorage.removeItem('rememberMe');
+          }
+
+          setTimeout(() => redirectToDashboard(data.user.id), 1000);
+
+        } catch (err) {
+          console.error('Email sign in error:', err);
+          
+          let message = 'Failed to sign in. Please check your credentials.';
+          if (err.message.includes('Invalid login credentials')) {
+            message = 'Invalid email or password. Please try again.';
+          } else if (err.message.includes('Email not confirmed')) {
+            message = 'Please verify your email address before signing in. Check your inbox.';
+          } else if (err.message.includes('Too many requests')) {
+            message = 'Too many failed attempts. Please try again later.';
+          }
+          
+          showAlert(message, 'error');
+          setLoading(false);
+        }
+      }
+
+      // ============================================
+      // GOOGLE SIGN IN
+      // ============================================
+      async function handleGoogleSignIn() {
+        if (isLoading) return;
+
+        setLoading(true);
+        showAlert('Redirecting to Google...', 'success');
+
+        try {
+          const { error } = await sb.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+              redirectTo: `${window.location.origin}/login.html`,
+              queryParams: { 
+                access_type: 'offline', 
+                prompt: 'select_account' 
+              }
+            }
+          });
+          
+          if (error) throw error;
+          
+        } catch (err) {
+          console.error('Google sign in error:', err);
+          showAlert(err.message || 'Failed to sign in with Google', 'error');
+          setLoading(false);
+        }
+      }
+
+      // ============================================
+      // HANDLE OAUTH CALLBACK
+      // ============================================
+      async function handleOAuthCallback() {
+        try {
+          const { data: { session }, error } = await sb.auth.getSession();
+          
+          if (error) throw error;
+          
+          if (!session?.user) {
+            window.location.href = 'login.html';
+            return;
+          }
+
+          // Wait for profile trigger to complete
+          await new Promise(resolve => setTimeout(resolve, 800));
+          
+          showAlert('Welcome! Redirecting...', 'success');
+          setTimeout(() => redirectToDashboard(session.user.id), 1000);
+          
+        } catch (err) {
+          console.error('OAuth error:', err);
+          showAlert('Authentication failed. Please try again.', 'error');
+          window.location.href = 'login.html';
+        }
+      }
+
+      // ============================================
+      // PASSWORD TOGGLE
+      // ============================================
+      passwordToggle.addEventListener('click', function() {
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        this.innerHTML = isPassword ? 
+          '<i class="fas fa-eye-slash"></i>' : 
+          '<i class="fas fa-eye"></i>';
+      });
+
+      // ============================================
+      // EVENT LISTENERS
+      // ============================================
+      emailSignInBtn.addEventListener('click', handleEmailSignIn);
+      googleBtn.addEventListener('click', handleGoogleSignIn);
+
+      // Enter key support
+      passwordInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleEmailSignIn(e);
+        }
+      });
+
+      emailInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          passwordInput.focus();
+        }
+      });
+
+      // ============================================
+      // CHECK OAUTH REDIRECT
+      // ============================================
+      const isOAuthRedirect = window.location.hash || 
+                             window.location.search.includes('code') ||
+                             window.location.search.includes('access_token');
+
+      if (isOAuthRedirect) {
+        emailSignInBtn.disabled = true;
+        googleBtn.disabled = true;
+        emailSignInBtn.innerHTML = '<span class="spinner"></span> Completing sign in...';
+        await handleOAuthCallback();
+        return;
+      }
+
+      // ============================================
+      // CHECK EXISTING SESSION
+      // ============================================
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        if (session?.user) {
+          redirectToDashboard(session.user.id);
+          return;
+        }
+      } catch (err) {
+        console.log('No existing session');
+      }
+
+      // ============================================
+      // RESTORE REMEMBER ME
+      // ============================================
+      if (localStorage.getItem('rememberMe') === 'true') {
+        rememberMe.checked = true;
+      }
+
+      // ============================================
+      // FOCUS EMAIL ON LOAD
+      // ============================================
+      if (!isOAuthRedirect) {
+        emailInput.focus();
+      }
+
+      console.log('✅ Login page initialized');
+    })();
+  </script>
+</body>
+</html>
